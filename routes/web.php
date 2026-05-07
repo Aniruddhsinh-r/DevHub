@@ -1,7 +1,26 @@
 <?php
 
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\LoginUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+})->name('home');
+
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
+Route::get('/login', [LoginUserController::class, 'index'])->name('login');
+Route::post('/login', [LoginUserController::class, 'store'])->name('login');
+Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
+
+Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {
+    Route::get('/password/forgot', 'create')->name('password.forgot');
+    Route::post('/password/forgot', 'store')->name('password.forgot.post');
+    Route::get('/password/reset', 'resetform')->name('password.reset');
+    Route::post('/password/reset', 'reset')->name('password.reset.post');
 });
