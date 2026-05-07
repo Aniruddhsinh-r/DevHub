@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\articleController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
@@ -18,6 +19,11 @@ Route::get('/login', [LoginUserController::class, 'index'])->name('login');
 Route::post('/login', [LoginUserController::class, 'store'])->name('login');
 Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
 
+/** articals */
+Route::get('/articles/create', [articleController::class, 'index'])->name('articleForm');
+Route::post('/articles/create', [articleController::class, 'create'])->name('createArticle');
+
+/** forget psswords */
 Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {
     Route::get('/password/forgot', 'create')->name('password.forgot');
     Route::post('/password/forgot', 'store')->name('password.forgot.post');

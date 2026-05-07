@@ -3,7 +3,7 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border border-slate-200/60">
 
-                <div class="h-32 bg-gradient-to-r from-slate-100 to-gray-100 border-b border-slate-200/60 flex items-end px-6 sm:px-10 pb-4">
+                <div class="h-32 bg-linear-to-r from-slate-100 to-gray-100 border-b border-slate-200/60 flex items-end px-6 sm:px-10 pb-4">
                     <div class="text-xs text-slate-400 font-semibold tracking-wider uppercase">User Profile</div>
                 </div>
 
