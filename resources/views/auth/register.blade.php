@@ -20,7 +20,7 @@
                     <x-form.field name="bio" type="textarea" label="Bio" placeholder="Tell us a little about youself..."></x-form.field>
 
                     <div class='space-y-0.5'>
-                        <label for="avtar" class="block font-medium">Profile Pic</label>
+                        <label for="avtar" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Profile Pic</label>
                         <input type="file" id="avtar" name="avtar" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-gray-700 file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Profile Pic" />
                     </div>
 

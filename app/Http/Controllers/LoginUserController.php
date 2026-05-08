@@ -27,7 +27,7 @@ class LoginUserController extends Controller
             'role' => ['required'],
         ]);
 
-        if (Auth::attempt($attempt)) {
+        if (Auth::attempt($attempt, true)) {
             $request->session()->regenerate();
 
             return to_route('home')->with('success','You are loged in sucessfully!');

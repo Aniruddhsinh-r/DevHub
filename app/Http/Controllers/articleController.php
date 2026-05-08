@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateArticle;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,30 +11,30 @@ class articleController extends Controller
 {
     public function index()
     {
-        return view('articles.articleForm');
+        $categories = Category::all();
+
+        return view('articles.articleForm', [
+            'categories' => $categories
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request, $createArtisan)
+    public function create(Request $request, CreateArticle $action)
     {
-        dd($request->all());
-
         $validation = $request->validate([
             'title' => 'required|max:255',
             'excerpt' => 'required|max:500|min:10',
             'body' => 'required|min:10|max:50000',
             'category_id' => 'required|exists:categories,id',
             'status' => 'required',
-            'cover' => 'nullable|image'
+            'cover_path' => 'nullable|image|'
         ]);
 
         if (Auth::check()) {
-            $attempt = $request->all();
-
-            // unset();
-
+            $action->handle($validation);
+            return to_route('home')->with('success', 'Article created successfully.');
         }
         return to_route('register')->with('error','You must be authorize before posting artical');
     }

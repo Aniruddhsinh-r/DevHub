@@ -19,7 +19,7 @@
 
                     <div class="items-center space-y-0.5">
                         <div class="flex items-center gap-4 w-full max-w-md">
-                            <label class="font-medium">Role :</label>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Role :</label>
 
                             <label for="admin" class="ml-3 font-medium cursor-pointer">
                                 <input

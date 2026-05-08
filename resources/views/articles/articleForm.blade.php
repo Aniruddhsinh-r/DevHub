@@ -9,7 +9,7 @@
             </div>
 
             <div class="bg-[#c6caca] rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
-                <form method="POST" action="{{ route('createArticle')}}" class="p-8 md:p-10 space-y-6" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('createArticle')}}" class="p-8 md:p-10 space-y-6" enctype="multipart/form-data" enctype="multipart/form-data">
                     @csrf
 
                     <x-form.field name="title" type="text" label="Headline" placeholder="Enter a captivating title..."></x-form.field>
@@ -19,12 +19,9 @@
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Collection</label>
                             <select name="category_id" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
                                 <option value="" disabled selected>Select Category</option>
-                                <option value="1" selected>Laravel</option>
-                                <option value="2">PHP</option>
-                                <option value="3">React</option>
-                                {{-- @foreach($categories as $category)
+                                @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
 
@@ -42,8 +39,8 @@
                     <x-form.field name="body" type="textarea" label="Story Body" placeholder="Start your story..."></x-form.field>
 
                     <div class="space-y-0.5">
-                        <label for="avtar" class="block font-medium">cover picture</label>
-                        <input type="file" id="avtar" name="avtar" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-black file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Profile Pic" />
+                        <label for="cover_path" class="block text-xs font-bold uppercase tracking-wider text-gray-700">cover picture</label>
+                        <input type="file" id="cover_path" name="cover_path" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-black file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Profile Pic" />
                     </div>
 
                     <div class="pt-6 border-t border-gray-200 flex justify-end">
@@ -51,7 +48,15 @@
                             Create Article
                         </button>
                     </div>
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
                 </form>
             </div>
         </div>
