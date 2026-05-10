@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CreateArticle;
+use App\Models\Article;
 use App\Models\Category;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schedule;
 
 class articleController extends Controller
 {
@@ -24,11 +28,12 @@ class articleController extends Controller
     public function create(Request $request, CreateArticle $action)
     {
         $validation = $request->validate([
-            'title' => 'required|max:255',
-            'excerpt' => 'required|max:500|min:10',
-            'body' => 'required|min:10|max:50000',
+            'title' => 'required|max:255|min:6',
+            'excerpt' => 'required|max:600|min:10',
+            'body' => 'required|min:30|max:50000',
             'category_id' => 'required|exists:categories,id',
             'status' => 'required',
+            'scheduled_hours' => 'required_if:status,scheduled|nullable|integer|min:1|max:48',
             'cover_path' => 'nullable|image|'
         ]);
 
@@ -42,17 +47,33 @@ class articleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Article $article)
     {
-        //
+
+    }
+   
+    public function show(Article $article)
+    {
+        Gate::authorize('workWith', $article);
+        // $this->authorize('workWith', $article);
+
+        return view('articles.show', [
+            'article' => $article,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function showallarticle()
     {
-        //
+        $articles = Article::with(['user', 'category'])
+    ->where('status', 'published')
+    ->latest()
+    ->get();
+        return view('articles.article',[
+            'articles' => $articles
+        ]);
     }
 
     /**

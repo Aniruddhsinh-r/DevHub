@@ -17,7 +17,6 @@ class CreateArticle
     public function handle(array $values, ?User $user = null): void
     {
         unset($values['_token']);
-        $user = Auth::user();
 
         $title = $values['title'];
         $slug = Str::slug($title,'-');
@@ -31,9 +30,14 @@ class CreateArticle
             $data['cover_path'] = $values['cover_path']->store('articleCovers','public');
         }
 
+        if ($values['status'] === 'scheduled' && !empty($values['scheduled_hours'])) {
+            $data['published_at'] = now()->addHours((int)$values['scheduled_hours']);
+        } elseif ($values['status'] === 'published') {
+            $data['published_at'] = now();
+        }
         // dd(['all' => $data]);
 
-        DB::transaction(function () use ($data, $values) {
+        DB::transaction(function () use ($data) {
             $this->user->articles()->create($data);
         });
     }

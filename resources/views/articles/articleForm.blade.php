@@ -9,30 +9,69 @@
             </div>
 
             <div class="bg-[#c6caca] rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
-                <form method="POST" action="{{ route('createArticle')}}" class="p-8 md:p-10 space-y-6" enctype="multipart/form-data" enctype="multipart/form-data">
+                <form x-data="{ status: 'draft' }" method="POST" action="{{ route('createArticle')}}" class="p-8 md:p-10 space-y-6" enctype="multipart/form-data" enctype="multipart/form-data">
                     @csrf
 
                     <x-form.field name="title" type="text" label="Headline" placeholder="Enter a captivating title..."></x-form.field>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Collection</label>
+                            <label for="category_id" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Collection</label>
                             <select name="category_id" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
                                 <option value="" disabled selected>Select Category</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
+                            @error('category_id')
+                                <div class="red text-sm text-red-600">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="space-y-1.5">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Visibility</label>
-                            <select name="status" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
+                            <label for="status" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Visibility</label>
+                            <select x-model="status" name="status" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
                                 <option value="draft">Save as Draft</option>
-                                <option value="published">Publish Now</option>
+                                <option value="published">Published</option>
+                                <option value="scheduled">scheduled</option>
                             </select>
                         </div>
+                        <div x-show="status === 'scheduled'" x-transition style="display: none;" class="space-x-1.5">
+                            <label for="scheduled_hours" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Timelimit</label>
+                            <div
+    x-data="{
+        hours: ''
+    }"
+>
+    <input
+        type="text"
+        name="scheduled_hours"
+        x-model="hours"
+        inputmode="numeric"
+        placeholder="1-48"
+
+        @input="
+            hours = hours.replace(/\D/g, '');
+
+            if (hours.length > 2) {
+                hours = hours.slice(0, 2);
+            }
+
+            if (parseInt(hours) > 48) {
+                hours = '48';
+            }
+        "
+
+        class="border border-gray-400 w-full p-2 font-semibold text-sm text-gray-800 rounded-md shadow-xs focus:outline-none"
+    >
+</div>
+                            @error('scheduled_hours')
+                                <div class="red text-sm text-red-600">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
+                        {{-- <div x-show="status === 'scheduled'" x-transition class="w-1/3 space-y-1.5" style="display: none;"> --}}
+
 
                     <x-form.field name="excerpt" type="text" label="Excerpt" placeholder="Briefly describe the article..."></x-form.field>
 
@@ -48,15 +87,6 @@
                             Create Article
                         </button>
                     </div>
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
                 </form>
             </div>
         </div>

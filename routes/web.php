@@ -7,8 +7,8 @@ use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\LoginUserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/home', function () {
+    return view('components.home');
 })->name('home');
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -22,6 +22,8 @@ Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
 /** articals */
 Route::get('/articles/create', [articleController::class, 'index'])->name('articleForm');
 Route::post('/articles/create', [articleController::class, 'create'])->name('createArticle');
+Route::get('/articles', [articleController::class, 'showallarticle'])->name('showArticle');
+Route::get('/article/{article}', [articleController::class, 'show'])->name('specificArticle');
 
 /** forget psswords */
 Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {

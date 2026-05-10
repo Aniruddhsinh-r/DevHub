@@ -20,7 +20,8 @@ class Article extends Model
         'excerpt',
         'body',
         'status',
-        'cover_path'
+        'cover_path',
+        'published_at'
     ];
 
     /**
@@ -29,5 +30,10 @@ class Article extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }
