@@ -19,19 +19,19 @@ class CreateArticle
         unset($values['_token']);
 
         $title = $values['title'];
-        $slug = Str::slug($title,'-');
 
         $data = collect($values)->only([
             'title', 'excerpt', 'body', 'category_id','status',
         ])->toArray();
 
-        $data['slug'] = $slug;
+        $data['slug'] = Str::slug($title,'-');
+
         if ($values['cover_path'] ?? false) {
             $data['cover_path'] = $values['cover_path']->store('articleCovers','public');
         }
 
-        if ($values['status'] === 'scheduled' && !empty($values['scheduled_hours'])) {
-            $data['published_at'] = now()->addHours((int)$values['scheduled_hours']);
+        if ($values['status'] === 'scheduled' && !empty($values['scheduled_minutes'])) {
+            $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
         } elseif ($values['status'] === 'published') {
             $data['published_at'] = now();
         }

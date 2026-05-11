@@ -7,9 +7,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         @foreach($articles as $article)
         <a class="group bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 cursor-pointer" href="/article/{{ $article->id }}">
-            <div class="relative overflow-hidden">
+            <div class="relative overflow-hidden h-52">
                 @if ($article->cover_path)
-                    <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700">
+                    <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-700">
                 @endif
                 <div class="absolute top-4 right-4 bg-black/75 backdrop-blur-md text-white text-xs font-semibold px-4 py-2 rounded-full">{{ $article->view_count }} Views</div>
             </div>
@@ -23,8 +23,8 @@
                     </div>
                 </div>
 
-                <h3 class="text-xl font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
-                <p class="mt-2 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
+                <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
+                <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
 
                 <div class="mt-5 flex items-center justify-between border-t border-gray-50">
                     <div>

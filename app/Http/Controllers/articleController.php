@@ -33,8 +33,9 @@ class articleController extends Controller
             'body' => 'required|min:30|max:50000',
             'category_id' => 'required|exists:categories,id',
             'status' => 'required',
-            'scheduled_hours' => 'required_if:status,scheduled|nullable|integer|min:1|max:48',
-            'cover_path' => 'nullable|image|'
+            'scheduled_hours' => 'nullable|integer|min:1|max:48',
+            'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
+            'cover_path' => 'nullable|image|',
         ]);
 
         if (Auth::check()) {
@@ -51,12 +52,9 @@ class articleController extends Controller
     {
 
     }
-   
+
     public function show(Article $article)
     {
-        Gate::authorize('workWith', $article);
-        // $this->authorize('workWith', $article);
-
         return view('articles.show', [
             'article' => $article,
         ]);
@@ -67,10 +65,7 @@ class articleController extends Controller
      */
     public function showallarticle()
     {
-        $articles = Article::with(['user', 'category'])
-    ->where('status', 'published')
-    ->latest()
-    ->get();
+        $articles = Article::with(['user', 'category'])->where('status', 'published')->latest()->get();
         return view('articles.article',[
             'articles' => $articles
         ]);
