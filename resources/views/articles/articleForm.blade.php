@@ -31,7 +31,7 @@
                         <div class="space-y-1.5">
                             <label for="status" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Visibility</label>
                             <select x-model="status" name="status" value="{{ old('status', 'published') }}" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
-                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Save as Draft</option>
+                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
                                 <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
                                 <option value="scheduled" {{ old('status') == 'scheduled' ? 'selected' : '' }}>scheduled</option>
                             </select>

@@ -54,7 +54,7 @@
     </div>
 </header>
 
-    {{-- @include('articles.article'); --}}
+    @include('components.draftArticle');
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-100 py-10 mt-20">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">

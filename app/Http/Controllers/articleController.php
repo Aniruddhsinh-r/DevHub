@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\CreateArticle;
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +56,11 @@ class articleController extends Controller
 
     public function show(Article $article)
     {
+        $sessionKey = 'viewed_article_' . $article->id;
+        if (Auth::user()->id && !session()->has($sessionKey)) {
+            DB::table('articles')->where('id', $article->id)->increment('view_count');
+            session()->put($sessionKey, true);
+        }
         return view('articles.show', [
             'article' => $article,
         ]);
@@ -71,12 +77,19 @@ class articleController extends Controller
         ]);
     }
 
+    public function showDraftArticle() {
+        $articles = Article::with(['user', 'category'])->where('status', 'draft')->latest()->get();
+        return view('components.home',[
+            'articles' => $articles
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function editArticle(Article $article)
     {
-        //
+
     }
 
     /**
