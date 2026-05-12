@@ -22,9 +22,12 @@ Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
 /** articals */
 Route::get('/articles/create', [articleController::class, 'index'])->name('articleForm');
 Route::post('/articles/create', [articleController::class, 'create'])->name('createArticle');
-Route::get('/articles', [articleController::class, 'showallarticle'])->name('showArticle');
-Route::get('/home', [articleController::class, 'showDraftarticle'])->name('showDraftArticle');
+Route::get('/articles', [articleController::class, 'displayArticle'])->name('showArticle');
+Route::get('/article/my-published', [articleController::class, 'published'])->name('publishedarticle');
+Route::get('/home', [articleController::class, 'showDraftarticle'])->name('home');
 Route::get('/edit/{article}', [articleController::class, 'editArticle'])->name('editArticle');
+Route::patch('/edit/{article}', [articleController::class, 'update'])->name('updateArticle');
+Route::delete('/delete/{article}', [articleController::class, 'destroy'])->name('deleteArticle');
 Route::get('/article/{article}', [articleController::class, 'show'])->name('specificArticle');
 
 /** forget psswords */

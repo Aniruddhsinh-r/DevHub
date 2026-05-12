@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CreateArticle;
+use App\Actions\UpdateArticle;
+use App\Http\Requests\ArticleValidationRequest;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Action;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
@@ -19,6 +22,7 @@ class articleController extends Controller
         $categories = Category::all();
 
         return view('articles.articleForm', [
+            'article' => new Article(),
             'categories' => $categories
         ]);
     }
@@ -28,27 +32,13 @@ class articleController extends Controller
      */
     public function create(Request $request, CreateArticle $action)
     {
-        $validation = $request->validate([
-            'title' => 'required|max:255|min:6',
-            'excerpt' => 'required|max:600|min:10',
-            'body' => 'required|min:30|max:50000',
-            'category_id' => 'required|exists:categories,id',
-            'status' => 'required',
-            'scheduled_hours' => 'nullable|integer|min:1|max:48',
-            'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
-            'cover_path' => 'nullable|image|',
-        ]);
-
         if (Auth::check()) {
-            $action->handle($validation);
+            $action->handle($request->safe()->all());
             return to_route('home')->with('success', 'Article created successfully.');
         }
         return to_route('register')->with('error','You must be authorize before posting artical');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Article $article)
     {
 
@@ -66,10 +56,22 @@ class articleController extends Controller
         ]);
     }
 
+    public function published(Article $article)
+    {
+        $id = Auth::id();
+        $articles = DB::table('articles')->where('user_id', $id)->get();
+
+        $articles = Auth::user()->articles()->latest()->get();
+
+        if (Auth::check()) {
+            return view('articles.userArticles', ['articles' => $articles]);
+        }
+    }
+
     /**
      * Display the specified resource.
      */
-    public function showallarticle()
+    public function displayArticle()
     {
         $articles = Article::with(['user', 'category'])->where('status', 'published')->latest()->get();
         return view('articles.article',[
@@ -89,22 +91,33 @@ class articleController extends Controller
      */
     public function editArticle(Article $article)
     {
+        $categories = Category::all();
+
+        return view('articles.articleForm', compact('article','categories'));
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ArticleValidationRequest $request, Article $article, UpdateArticle $action)
     {
-        //
+        if (Auth::check()) {
+            $action->handle($request->safe()->all(), $article);
+            return to_route('home')->with('success', 'Article updated successfully.');
+        }
+        return to_route('showArticle')->with('error','You must be authorize before posting artical');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Article $article)
     {
-        //
+        if (Auth::check()) {
+            $article->delete();
+            return back()->with('success','article delete successfully.');
+        }
     }
 }

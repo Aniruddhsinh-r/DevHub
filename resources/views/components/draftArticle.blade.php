@@ -1,4 +1,4 @@
-<section class="max-w-7xl mx-auto px-4 md:px-8 py-14">
+<section class="max-w-7xl mx-auto px-4 md:px-8 py-10">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
         <div>
             <div class="inline-block px-3 py-1 mb-4 text-[9px] font-black tracking-[0.2em] uppercase bg-[#d9d9d7] text-gray-600 rounded-md border border-gray-300">Private Workspace</div>
@@ -27,13 +27,12 @@
                 <div class="pt-4 border-t border-dashed border-gray-300 flex items-center justify-between">
                     <div>
                         <p class="text-[9px] uppercase tracking-[0.18em] text-gray-400 font-black">Updated</p>
-                        <p class="mt-1 text-xs font-bold text-[#111111]">{{ $article->created_at->diffForHumans() }}</p>
+                        <p class="mt-1 text-xs font-bold text-[#111111]">{{ $article->created_at->diffForHumans()}}</p>
                     </div>
 
                     <button class="px-4 py-2.5 rounded-xl bg-[#111111] text-white text-[10px] font-black uppercase tracking-[0.15em] hover:bg-black transition-all duration-300">Continue</button>
                 </div>
-
-            </article>
+            </a>
         @endforeach
     </div>
 </section>
