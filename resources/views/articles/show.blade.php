@@ -131,31 +131,20 @@
                     </article>
 
                     {{-- AUTHOR CARD --}}
-                    <div class="mt-10 bg-white rounded-[2rem] border border-gray-100 shadow-lg shadow-gray-100 p-8 md:p-10">
+                    <a href="/{{ $article->user->name }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0">
 
                         <div class="flex flex-col md:flex-row md:items-center gap-6">
-
-                            <div class="w-24 h-24 rounded-full bg-black text-white flex items-center justify-center text-3xl font-black shrink-0">
-                                {{ strtoupper(substr($article->user->name, 0, 1)) }}
-                            </div>
+                            <div class="w-24 h-24 rounded-full bg-black text-white flex items-center justify-center text-3xl font-black shrink-0 group-hover:scale-110 transition-transform duration-500">{{ strtoupper(substr($article->user->name, 0, 1)) }}</div>
 
                             <div>
-                                <p class="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black mb-2">
-                                    Written By
-                                </p>
-
-                                <h3 class="text-3xl font-black text-gray-900 tracking-tight">
-                                    {{ $article->user->name }}
-                                </h3>
-
+                                <p class="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black mb-2">Written By</p>
+                                <h3 class="text-3xl font-black text-gray-900 tracking-tight">{{ $article->user->name }}</h3>
                                 <p class="mt-4 text-gray-600 leading-8 text-[15px] max-w-3xl">
                                     Passionate content creator focused on writing valuable and insightful articles for readers around the world.
                                 </p>
                             </div>
-
                         </div>
-
-                    </div>
+                    </a>
 
                 </div>
 

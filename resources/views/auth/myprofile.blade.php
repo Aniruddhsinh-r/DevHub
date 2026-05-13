@@ -1,7 +1,7 @@
 <x-layout>
     <div class="min-h-screen py-12 px-4">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
-            <div class="bg-white border border-gray-200 rounded-[2rem] p-8 shadow-sm h-fit">
+            <div class="bg-white border border-gray-200 rounded-[2rem] p-6 shadow-sm h-fit">
                 <div class="flex flex-col items-center text-center">
                     @if ($user->avtar)
                         <img src="{{ asset('storage/' . $user->avtar) }}" class="w-32 h-32 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm">
@@ -11,17 +11,17 @@
                         </div>
                     @endif
 
-                    <div class="mt-6">
-                        <h1 class="text-2xl font-black tracking-tight text-[#111111]">{{ $user->name }}</h1>
+                    <div class="mt-4">
+                        <h1 class="text-xl font-black tracking-tight text-[#111111]">{{ $user->name }}</h1>
                         <p class="text-sm text-gray-500 mt-1">{{ $user->email }}</p>
                     </div>
 
-                    <button class="w-full mt-8 border border-gray-300 rounded-xl py-3 text-sm font-bold text-[#111111] hover:bg-[#111111] hover:text-gray-200 transition-all duration-300">
+                    <div class="w-full mt-7 border border-gray-300 rounded-xl py-2.5 text-sm font-bold text-[#111111]">
                         Account Details
-                    </button>
+                    </div>
                 </div>
 
-                <div class="mt-8 space-y-5 border-t border-gray-200 pt-6">
+                <div class="mt-4 space-y-4 border-t border-gray-200 pt-2">
                     <div class="flex items-center justify-between text-sm">
                         <span class="text-gray-500 font-medium">Joined Date</span>
                         <span class="font-bold text-[#111111]">
@@ -30,9 +30,9 @@
                     </div>
 
                     <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 font-medium">Status</span>
-                        <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold">
-                            Active
+                        <span class="text-gray-500 font-medium">role</span>
+                        <span class="px-3 py-1 rounded-full text-black text-medium font-bold">
+                            {{ $user->role }}
                         </span>
                     </div>
 

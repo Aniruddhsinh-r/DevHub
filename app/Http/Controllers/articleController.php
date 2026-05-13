@@ -14,6 +14,7 @@ use Illuminate\Notifications\Action;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
+use Illuminate\Support\Facades\Storage;
 
 class articleController extends Controller
 {
@@ -106,7 +107,7 @@ class articleController extends Controller
     {
         if (Auth::check()) {
             $action->handle($request->safe()->all(), $article);
-            return to_route('home')->with('success', 'Article updated successfully.');
+            return to_route('publishedarticle')->with('success', 'Article updated successfully.');
         }
         return to_route('showArticle')->with('error','You must be authorize before posting artical');
     }
@@ -117,6 +118,9 @@ class articleController extends Controller
     public function destroy(Article $article)
     {
         if (Auth::check()) {
+            if ($article->cover_path) {
+                Storage::disk('public')->delete($article->cover_path);
+            }
             $article->delete();
             return back()->with('success','article delete successfully.');
         }

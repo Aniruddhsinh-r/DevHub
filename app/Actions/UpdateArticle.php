@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UpdateArticle
@@ -22,10 +23,10 @@ class UpdateArticle
 
         $data['slug'] = Str::slug($values['title'],'-');
 
-        // if ($values['cover_path'] ?? false) {
-        //     $data['cover_path'] = $values['cover_path']->store('articleCovers','public');
-        // }
         if ($this->hasFile($values, 'cover_path')) {
+            if ($article->cover_path) {
+                Storage::disk('public')->delete($article->cover_path);
+            }
             $data['cover_path'] = $values['cover_path']->store('articleCovers', 'public');
         }
 

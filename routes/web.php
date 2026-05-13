@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\articleController;
+use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
@@ -30,6 +31,9 @@ Route::patch('/edit/{article}', [articleController::class, 'update'])->name('upd
 Route::delete('/delete/{article}', [articleController::class, 'destroy'])->name('deleteArticle');
 Route::get('/article/{article}', [articleController::class, 'show'])->name('specificArticle');
 
+Route::get('/{user:name}', [ProfileController::class, 'show'])->name('userprofile');
+
+Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('follow');
 /** forget psswords */
 Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {
     Route::get('/password/forgot', 'create')->name('password.forgot');

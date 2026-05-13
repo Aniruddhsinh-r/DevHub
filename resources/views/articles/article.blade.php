@@ -18,13 +18,15 @@
             </div>
 
             <div class="p-5">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0">{{ substr($article->user->name, 0, 1) }}</div>
-                    <div>
-                        <h3 class="text-sm font-bold text-gray-900">{{ $article->user->name }}</h3>
-                        <p class="text-xs text-gray-400 font-medium">{{ $article->category->name }}</p>
+                {{-- <a href="{{ route('userprofile', $article->user->name) }}"> --}}
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0">{{ substr($article->user->name, 0, 1) }}</div>
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-900">{{ $article->user->name }}</h3>
+                            <p class="text-xs text-gray-400 font-medium">{{ $article->category->name }}</p>
+                        </div>
                     </div>
-                </div>
+                {{-- </a> --}}
 
                 <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
                 <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>

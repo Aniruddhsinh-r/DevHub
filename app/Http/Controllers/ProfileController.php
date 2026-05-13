@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -14,7 +17,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        return view('auth.profile', compact('user'));
+        return view('auth.myprofile', compact('user'));
     }
 
     /**
@@ -36,9 +39,13 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        if (Auth::check()) {
+            $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+            return view('components.profile', compact('user','articles'));
+        }
+        return to_route('register');
     }
 
     /**
