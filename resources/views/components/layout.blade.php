@@ -24,12 +24,11 @@
                     </div>
 
                     <div class="flex items-center gap-8">
-                        @auth
                             <a href="/home" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
                             {{-- <a href="/about" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">about</a> --}}
-                            <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
                             <a href="/articles" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">article</a>
-
+                        @auth
+                            <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
                             <a href="/articles/create"
                                 class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +37,6 @@
                                     </path>
                                 </svg>Create Article
                             </a>
-                        @endauth
 
                             <form action="/logout" method="POST">
                                 @csrf
@@ -47,6 +45,8 @@
                                 </button>
                             </form>
 
+                        @endauth
+                        
                         @guest
                             <a href="/register" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">
                                 Sign Up

@@ -67,6 +67,6 @@ class LoginUserController extends Controller
     {
         Auth::logout();
 
-        return back();
+        return view('components.home');
     }
 }

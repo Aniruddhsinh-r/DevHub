@@ -46,20 +46,22 @@ class articleController extends Controller
 
     public function show(Article $article)
     {
-        $sessionKey = 'viewed_article_' . $article->id;
-        if (Auth::user()->id && !session()->has($sessionKey)) {
-            DB::table('articles')->where('id', $article->id)->increment('view_count');
-            session()->put($sessionKey, true);
+        if (Auth::check()) {
+            $viewed = DB::table('views')->where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
+
+            if (!$viewed) {
+                DB::table('articles')->where('id', $article->id)->increment('view_count');
+                DB::table('views')->insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
+            }
+            return view('articles.show', ['article' => $article]);
         }
-        return view('articles.show', [
-            'article' => $article,
-        ]);
+        return view('auth.register')->with('Please Register to see full article.');
     }
 
     public function published(Article $article)
     {
-        $id = Auth::id();
-        $articles = DB::table('articles')->where('user_id', $id)->get();
+        // $id = Auth::id();
+        // $articles = DB::table('articles')->where('user_id', $id)->get();
 
         $articles = Auth::user()->articles()->latest()->get();
 
@@ -80,7 +82,8 @@ class articleController extends Controller
     }
 
     public function showDraftArticle() {
-        $articles = Article::with(['user', 'category'])->where('status', 'draft')->latest()->get();
+        $id = Auth::id();
+        $articles = Article::with(['user', 'category'])->where(['user_id' => $id,'status' => 'draft'])->latest()->get();
         return view('components.home',[
             'articles' => $articles
         ]);
@@ -94,7 +97,6 @@ class articleController extends Controller
         $categories = Category::all();
 
         return view('articles.articleForm', compact('article','categories'));
-
     }
 
     /**
@@ -107,7 +109,6 @@ class articleController extends Controller
             return to_route('home')->with('success', 'Article updated successfully.');
         }
         return to_route('showArticle')->with('error','You must be authorize before posting artical');
-
     }
 
     /**

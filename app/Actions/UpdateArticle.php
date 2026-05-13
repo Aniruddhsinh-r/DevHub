@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Models\Article;
+use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class UpdateArticle
 {
+    public function __construct(#[CurrentUser] protected User $user) {}
+
     public function handle(array $values, Article $article): void
     {
         $data = collect($values)->only([
@@ -18,8 +22,11 @@ class UpdateArticle
 
         $data['slug'] = Str::slug($values['title'],'-');
 
-        if ($values['cover_path'] ?? false) {
-            $data['cover_path'] = $values['cover_path']->store('articleCovers','public');
+        // if ($values['cover_path'] ?? false) {
+        //     $data['cover_path'] = $values['cover_path']->store('articleCovers','public');
+        // }
+        if ($this->hasFile($values, 'cover_path')) {
+            $data['cover_path'] = $values['cover_path']->store('articleCovers', 'public');
         }
 
         if ($values['status'] === 'scheduled' && !empty($values['scheduled_minutes'])) {
@@ -31,5 +38,10 @@ class UpdateArticle
         DB::transaction(function () use ($article, $data) {
             $article->update($data);
         });
+    }
+    /** Helper to check for valid file */
+    private function hasFile(array $values, string $key): bool
+    {
+        return isset($values[$key]) && $values[$key] instanceof \Illuminate\Http\UploadedFile;
     }
 }

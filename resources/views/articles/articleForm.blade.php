@@ -31,9 +31,9 @@
                             @enderror
                         </div>
 
-                        <div class="space-y-1.5">
+                        <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="space-y-1.5">
                             <label for="status" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Visibility</label>
-                            <select x-model="status" name="status" value="{{ old('status', 'draft') }}" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
+                            <select x-model="status" name="status" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
                                 <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
                                 <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
                                 <option value="scheduled" {{ old('status') == 'scheduled' ? 'selected' : '' }}>scheduled</option>
@@ -65,9 +65,17 @@
 
                     <x-form.field name="body" type="textarea" label="Story Body" :value="$article->body" placeholder="Start your story..."></x-form.field>
 
+                    @if($article->cover_path)
+                        <div class="mb-2">
+                            <p class="text-[10px] text-gray-500 uppercase mb-1">Current Image:</p>
+                            <img src="{{ asset('storage/' . $article->cover_path) }}"
+                                 alt="Current Cover"
+                                 class="w-32 h-20 object-cover rounded-md border border-gray-300 shadow-sm">
+                        </div>
+                    @endif
                     <div class="space-y-0.5">
                         <label for="cover_path" class="block text-xs font-bold uppercase tracking-wider text-gray-700">cover picture</label>
-                        <input type="file" id="cover_path" name="cover_path" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-black file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Profile Pic" />
+                        <input type="file" id="cover_path" name="cover_path" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-black file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Chouse cover page" />
                     </div>
 
                     <div class="pt-6 border-t border-gray-200 flex justify-end">
