@@ -24,7 +24,7 @@
                             <div class="w-px h-10 bg-gray-300"></div>
 
                             <div>
-                                <h2 class="text-xl font-bold text-gray-900">0</h2>
+                                <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->followers()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Followers</p>
                             </div>
                         </div>
@@ -54,7 +54,11 @@
                         </div>
                         <form action="/follow/{{ $user->id }}" method="post">
                             @csrf
-                            <button class="mt-6 bg-gray-900 hover:bg-black transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Follow</button>
+                            @if (auth()->user()->following->contains($user->id))
+                                <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Following</button>
+                            @else
+                                <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Follow</button>
+                            @endif
                         </form>
                     </div>
                 </div>
@@ -96,9 +100,9 @@
                 </div>
 
                 @if ($articles->count() > 3)
-                    <div class="flex justify-center mt-8">
+                    <a href="/user/article/{{ $user }}" class="flex justify-center mt-8">
                         <button class="border border-gray-300 hover:border-black hover:bg-black hover:text-white transition px-6 py-2.5 rounded-xl text-sm font-semibold text-gray-800">Show More Articles</button>
-                    </div>
+                    </a>
                 @endif
             </div>
         </div>

@@ -17,5 +17,4 @@ class FollowerController extends Controller
         }
         return to_route('register')->with('error','You must be authorize before following anyone.');
     }
-    // DB::table('follows')->where(['follower_id' => Auth::id(),'followed_id' => $id]);
 }

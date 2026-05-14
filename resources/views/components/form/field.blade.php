@@ -9,7 +9,7 @@
             <div class="red text-sm text-red-600">{{ $message }}</div>
         @enderror
     @else
-    <input type="{{ $type }}" id="{{ $name }}" name="{{ $name }}" required
+    <input type="{{ $type }}" id="{{ $name }}" name="{{ $name }}"
         class="border border-gray-400 w-full p-2 font-semibold text-sm text-gray-800 rounded-md shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="{{ $placeholder }}" value="{{ old($name,$value) }}"/>
 
     @error($name)

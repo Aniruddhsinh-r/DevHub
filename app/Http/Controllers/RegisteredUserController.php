@@ -23,6 +23,7 @@ class RegisteredUserController extends Controller
             'bio' => ['nullable', 'max:2000', 'string']
         ]);
 
+        dd(['all' => $request]);
         $avatarPath = null;
         if ($request->hasFile('avtar')) {
             $avatarPath = $request->file('avtar')->store('avatars', 'public');

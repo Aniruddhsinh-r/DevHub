@@ -1,8 +1,6 @@
 <x-layout>
     <div class="min-h-screen py-12 px-4 sm:px-6">
-
         <div class="max-w-2xl mx-auto">
-
             <div class="mb-8 border-l-4 border-black pl-5">
                 <h2 class="text-2xl font-black uppercase tracking-tighter text-gray-900">Create Article</h2>
                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Editor Workspace</p>

@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 // })->name('home');
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+Route::get('/profile/edit/{id}', [ProfileController::class, 'edit'])->name('profileedit');
+// Route::patch('/profile/{profile}', [ProfileController::class, 'update'])->name('profile.update');
+Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
@@ -32,6 +35,7 @@ Route::delete('/delete/{article}', [articleController::class, 'destroy'])->name(
 Route::get('/article/{article}', [articleController::class, 'show'])->name('specificArticle');
 
 Route::get('/{user:name}', [ProfileController::class, 'show'])->name('userprofile');
+Route::get('/user/article/{user}', [articleController::class, 'userarticleshow'])->name('userArticle');
 
 Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('follow');
 /** forget psswords */

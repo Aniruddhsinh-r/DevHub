@@ -44,9 +44,7 @@
                     </div>
                 </div>
 
-                <button class="w-full mt-8 bg-[#111111] text-white rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
-                    Edit Profile
-                </button>
+                <a href="/profile/edit/{{ $user->id }}" class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
             </div>
 
             <div class="space-y-8">
@@ -74,27 +72,26 @@
                     {{-- Simple inline stats --}}
                     <div class="border-t border-gray-100 pt-6 flex items-center gap-10">
                         <div class="text-center">
-                            <p class="text-xl font-black text-gray-200">48</p>
+                            <p class="text-xl font-black text-gray-200">{{ $user->articles->count() }}</p>
                             <p class="text-[13px] text-gray-200 mt-0.5">articles</p>
                         </div>
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
                         <div class="text-center">
-                            <p class="text-xl font-black text-gray-200">12.4K</p>
+                            <p class="text-xl font-black text-gray-200">{{ $user->followers->count() }}</p>
                             <p class="text-[13px] text-gray-200 mt-0.5">followers</p>
                         </div>
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
                         <div class="text-center">
-                            <p class="text-xl font-black text-gray-200">324</p>
+                            <p class="text-xl font-black text-gray-200">{{ $user->following->count() }}</p>
                             <p class="text-[13px] text-gray-200 mt-0.5">following</p>
                         </div>
                     </div>
                 </div>
 
-                {{-- ABOUT ME — UNCHANGED --}}
                 <div class="bg-white border border-gray-200 rounded-[2rem] p-6 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-xl font-black tracking-tight text-[#111111]">About Me</h3>

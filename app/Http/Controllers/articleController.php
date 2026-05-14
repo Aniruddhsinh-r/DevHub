@@ -69,6 +69,7 @@ class articleController extends Controller
         if (Auth::check()) {
             return view('articles.userArticles', ['articles' => $articles]);
         }
+        return view('auth.register')->with('Please Register to see articles.');
     }
 
     /**
@@ -90,6 +91,21 @@ class articleController extends Controller
         ]);
     }
 
+    public function userarticleshow(User $user) {
+        if (Auth::check()) {
+            if (Auth::id() == $user->id) {
+                $user = Auth::user();
+                // return to_route('publishedarticle');
+                return view('auth.myprofile', ['user' => $user]);
+            }
+
+            $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+            return view('articles.article',[
+                'articles' => $articles
+            ]);
+        }
+        return view('auth.register')->with('Please Register to see user articles.');
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -121,7 +137,7 @@ class articleController extends Controller
             if ($article->cover_path) {
                 Storage::disk('public')->delete($article->cover_path);
             }
-            $article->delete();
+            // $article->delete();
             return back()->with('success','article delete successfully.');
         }
     }
