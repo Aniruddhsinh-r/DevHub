@@ -9,7 +9,7 @@
                     <p class="text-gray-500 mt-2 font-medium">Manage and monitor the performance of your shared content.</p>
                 </div>
                 <div class="mt-4 md:mt-0">
-                    <a href="" class="px-6 py-3 bg-gray-900 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-200">
+                    <a href="/articles/create" class="px-6 py-3 bg-gray-900 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-200">
                         Create New Article
                     </a>
                 </div>

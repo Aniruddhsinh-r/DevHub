@@ -7,7 +7,7 @@
             </div>
 
             <div class="bg-[#c6caca] rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
-                <form method="POST" action="{{ $article->exists ? route('updateArticle', $article) : route('createArticle') }}" class="p-8 md:p-10 space-y-6" enctype="multipart/form-data" enctype="multipart/form-data">
+                <form method="POST" action="{{ $article->exists ? route('updateArticle', $article) : route('createArticle') }}" class="p-8 md:p-10 space-y-6" enctype="multipart/form-data">
                     @csrf
                     @if ($article->exists)
                         @method('PATCH')

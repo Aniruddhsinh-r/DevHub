@@ -31,7 +31,7 @@ class articleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request, CreateArticle $action)
+    public function create(ArticleValidationRequest $request, CreateArticle $action)
     {
         if (Auth::check()) {
             $action->handle($request->safe()->all());
