@@ -35,7 +35,7 @@ Route::patch('/edit/{article}', [articleController::class, 'update'])->name('upd
 Route::delete('/delete/{article}', [articleController::class, 'destroy'])->name('deleteArticle');
 Route::get('/article/{article}', [articleController::class, 'show'])->name('specificArticle');
 
-Route::get('/{user:name}', [ProfileController::class, 'show'])->name('userprofile');
+Route::get('/user/{user:name}', [ProfileController::class, 'show'])->name('userprofile');
 Route::get('/user/article/{user}', [articleController::class, 'userarticleshow'])->name('userArticle');
 
 Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('follow');

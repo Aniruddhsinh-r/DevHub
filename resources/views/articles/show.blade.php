@@ -73,7 +73,7 @@
                     </article>
 
                     {{-- AUTHOR CARD --}}
-                    <a href="/{{ $article->user->name }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
+                    <a href="/user/{{ $article->user->name }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                         <div class="flex flex-col md:flex-row md:items-center gap-6">
                             <div class="w-24 h-24 rounded-full bg-black text-white flex items-center justify-center text-3xl font-black shrink-0 group-hover:scale-110 transition-transform duration-500">{{ strtoupper(substr($article->user->name, 0, 1)) }}</div>
 
@@ -91,17 +91,10 @@
 
                         <div class="flex items-center justify-between mb-8">
                             <div>
-                                <h3 class="text-2xl font-black tracking-tight text-gray-900">
-                                    Comments
-                                </h3>
-
-                                <p class="text-sm text-gray-500 mt-1">
-                                    Join the discussion
-                                </p>
+                                <h3 class="text-2xl font-black tracking-tight text-gray-900">Comments</h3>
+                                <p class="text-sm text-gray-500 mt-1">Join the discussion</p>
                             </div>
-                            <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-xs font-black">
-                                24 Comments
-                            </span>
+                            <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-xs font-black">24 Comments</span>
                         </div>
 
                         {{-- COMMENT INPUT --}}
@@ -135,84 +128,120 @@
 
                         {{-- COMMENTS LIST --}}
                         <div class="space-y-6">
-                            {{-- COMMENT --}}
+                            @foreach ($comments as $comment)
                             <div class="flex gap-4">
-                                <div class="w-11 h-11 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-black shrink-0">
-                                    J
-                                </div>
+                                <img src="{{ asset('storage/' . $comment->user->avtar) }}" class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm">
 
                                 <div class="flex-1">
-                                    <div class="bg-[#f7f7f7] rounded-2xl p-5">
+                                    <div class="bg-[#f0f0f0] rounded-2xl px-5 py-3">
                                         <div class="flex items-center justify-between mb-2">
-                                            <div>
+                                            <div class="w-full flex justify-between">
                                                 <h4 class="font-black text-gray-900 text-sm">
-                                                    John Carter
+                                                    {{ $comment->user->name }}
                                                 </h4>
 
-                                                <p class="text-xs text-gray-400 mt-1">
-                                                    2 hours ago
+                                                <p class="text-xs font-extrabold text-gray-600">
+                                                    {{ $comment->created_at->diffForHumans() }}
                                                 </p>
                                             </div>
                                         </div>
                                         <p class="text-sm text-gray-700 leading-7">
-                                            This article was incredibly insightful. I really liked the way the concepts were explained with practical examples.
+                                            {{ $comment->body }}
                                         </p>
                                     </div>
 
-                                    <div class="flex items-center gap-5 mt-3 ml-2 text-xs font-bold text-gray-500">
-                                        <button class="hover:text-black transition">
-                                            Like
-                                        </button>
-
-                                        <button class="hover:text-black transition">
-                                            Reply
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- COMMENT --}}
-                            <div class="flex gap-4">
-                                <div class="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-black shrink-0">
-                                    S
-                                </div>
-
-                                <div class="flex-1">
-                                    <div class="bg-[#f7f7f7] rounded-2xl p-5">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <div>
-                                                <h4 class="font-black text-gray-900 text-sm">
-                                                    Sarah Wilson
-                                                </h4>
-
-                                                <p class="text-xs text-gray-400 mt-1">
-                                                    5 hours ago
-                                                </p>
-                                            </div>
+                                    <div x-data="{ activeReply: null, showReplies: false }">
+                                        <div class="flex items-center gap-5 mt-3 ml-2 text-xs font-bold text-gray-500">
+                                            <button class="hover:text-black transition">Like</button>
+                                            <button @click="activeReply = activeReply === {{ $comment->id }} ? null : {{ $comment->id }}" class="hover:text-black transition">Reply</button>
+                                            @if ($comment->replies->count() > 0)
+                                                <button x-show="!showReplies" @click="showReplies = !showReplies" class="hover:text-black transition">View {{ $comment->replies->count() }} more reply</button>
+                                            @endif
                                         </div>
+                                        <div x-show="showReplies" class="py-4">
+                                            @foreach ($replies as $reply)
+                                            <div class="flex gap-4">
+                                                <a href="/user/{{ $reply->user->name }}">
+                                                    <img src="{{ asset('storage/' . $reply->user->avtar) }}" class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm">
+                                                </a>
 
-                                        <p class="text-sm text-gray-700 leading-7">
-                                            Clean writing style and beautiful article design. Looking forward to reading more content like this.
-                                        </p>
-                                    </div>
+                                                <div class="flex-1">
+                                                    <div class="bg-[#f0f0f0] rounded-2xl px-5 py-2 my-2">
+                                                        <div class="flex items-center justify-between mb-2">
+                                                            <div class="w-full flex justify-between">
+                                                                <h4 class="font-black text-gray-900 text-sm">
+                                                                    {{ $reply->user->name }}
+                                                                </h4>
 
-                                    <div class="flex items-center gap-5 mt-3 ml-2 text-xs font-bold text-gray-500">
-                                        <button class="hover:text-black transition">
-                                            Like
-                                        </button>
+                                                                <p class="text-xs font-extrabold text-gray-600">
+                                                                    {{ $reply->created_at->diffForHumans() }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p class="text-sm text-gray-700 leading-7">
+                                                            {{ $reply->body }}
+                                                        </p>
+                                                    </div>
+                                                    <div x-show="showReplies" class="flex items-center gap-5 ml-2 text-xs font-bold text-gray-500">
+                                                        <button class="hover:text-black transition">Like</button>
+                                                        <button @click="activeReply = activeReply === {{ $reply->id }} ? null : {{ $reply->id }}" class="hover:text-black transition">Reply</button>
+                                                    </div>
+                                                    <div x-show="activeReply === {{ $reply->id }}">
+                                                        <form action="/article/comment" method="post">
+                                                            @csrf
+                                                            <div class="w-full flex items-end gap-4">
+                                                                <input type="hidden" name="article_id" value="{{ $article->id }}">
+                                                                <input type="hidden" name="parent_id" value="{{ $reply->id }}">
+                                                                <div class="flex-1 mt-2">
+                                                                    <x-form.field name="body" type="text" label='' placeholder="Reply..."></x-form.field>
+                                                                </div>
 
-                                        <button class="hover:text-black transition">
-                                            Reply
-                                        </button>
+                                                                <button type="submit" class="bg-black hover:bg-gray-900 text-white px-6 h-10 rounded-xl text-sm font-black transition whitespace-nowrap">Comment</button>
+                                                            </div>
+                                                            @if ($errors->any())
+                                                                <div class="text-red-500 mt-2 text-sm">
+                                                                    @foreach ($errors->all() as $error)
+                                                                        <p>{{ $error }}</p>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        <div x-show="activeReply === {{ $comment->id }}">
+                                            <form action="/article/comment" method="post">
+                                                @csrf
+                                                <div class="w-full flex items-end gap-4">
+                                                    <input type="hidden" name="article_id" value="{{ $article->id }}">
+                                                    <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                                    <div class="flex-1 mt-2">
+                                                        <x-form.field name="body" type="text" label='' placeholder="Reply..."></x-form.field>
+                                                    </div>
+
+                                                    <button type="submit" class="bg-black hover:bg-gray-900 text-white px-6 h-10 rounded-xl text-sm font-black transition whitespace-nowrap">Comment</button>
+                                                </div>
+                                                @if ($errors->any())
+                                                    <div class="text-red-500 mt-2 text-sm">
+                                                        @foreach ($errors->all() as $error)
+                                                            <p>{{ $error }}</p>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
 
                 <aside class="lg:col-span-4 space-y-8">
-                    <div class="bg-white rounded-[2rem] border border-gray-100 shadow-lg shadow-gray-100 p-8 sticky top-8">
+                    <div class="bg-white rounded-[2rem] border border-gray-100 shadow-lg shadow-gray-100 p-8 sticky top-20">
                         <div class="border-l-4 border-black pl-4 mb-8">
                             <h3 class="text-2xl font-black tracking-tight text-gray-900">
                                 Article Insights

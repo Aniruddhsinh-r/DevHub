@@ -26,6 +26,10 @@ class comments extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function comment() {
+        return $this->hasMany(comments::class);
+    }
+
     /**
      * Get the article that the comment belongs to.
      */

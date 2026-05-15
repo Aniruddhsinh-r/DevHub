@@ -7,6 +7,7 @@ use App\Actions\UpdateArticle;
 use App\Http\Requests\ArticleValidationRequest;
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\comments;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
@@ -47,16 +48,18 @@ class articleController extends Controller
 
     public function show(Article $article)
     {
-        if (Auth::check()) {
-            $viewed = DB::table('views')->where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
-
-            if (!$viewed) {
-                DB::table('articles')->where('id', $article->id)->increment('view_count');
-                DB::table('views')->insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
-            }
-            return view('articles.show', ['article' => $article]);
+        if (!Auth::check()) {
+            return view('auth.register')->with('Please Register to see full article.');
         }
-        return view('auth.register')->with('Please Register to see full article.');
+
+        $viewed = DB::table('views')->where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
+        $comments = comments::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
+        $replies = comments::where('article_id',$article->id)->whereNotNull('parent_id')->get();
+        if (!$viewed) {
+            DB::table('articles')->where('id', $article->id)->increment('view_count');
+            DB::table('views')->insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
+        }
+        return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies]);
     }
 
     public function published(Article $article)
