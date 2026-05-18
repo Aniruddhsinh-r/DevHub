@@ -30,6 +30,10 @@ class LoginUserController extends Controller
         if (Auth::attempt($attempt, true)) {
             $request->session()->regenerate();
 
+            if ($request->role === 'admin') {
+                return redirect('/adminpanel')->with('success','you register successfully.');
+            }
+            
             return to_route('home')->with('success','You are loged in sucessfully!');
         }
 

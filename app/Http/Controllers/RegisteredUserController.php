@@ -39,6 +39,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user, $remember = true);
 
+        if ($request->role === 'admin') {
+            return redirect('/adminpanel')->with('success','you register successfully.');
+            // return view('admin.admin')->with('success','you register successfully.');
+        }
         return to_route('home')->withInput()->with('success','User register successfully.');
     }
 }

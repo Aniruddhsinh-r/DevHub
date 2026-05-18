@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\articleController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\commentController;
@@ -44,6 +45,8 @@ Route::get('/{user}/bookmark', [BookmarkController::class, 'show'])->name('showB
 Route::get('/user/{user:name}', [ProfileController::class, 'show'])->name('userprofile');
 Route::get('/user/article/{user}', [articleController::class, 'userarticleshow'])->name('userArticle');
 Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('follow');
+
+Route::get('/admin/dashboard', [AdminController::class, 'index']);
 
 /** forget psswords */
 Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {

@@ -18,9 +18,7 @@
                 <div class="flex justify-between items-center h-16">
 
                     <div class="flex items-center">
-                        <a href="/" class="text-2xl font-bold tracking-tighter italic">
-                            DevHub
-                        </a>
+                        <a href="/" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
                     </div>
 
                     <div class="flex items-center gap-8">

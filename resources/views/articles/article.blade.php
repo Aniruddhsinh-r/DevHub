@@ -8,9 +8,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
-        @auth
-            @include('components.articleLayout')
-        @endauth
+        @include('components.articleLayout')
     </div>
 </section>
 </x-layout>
