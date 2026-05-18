@@ -1,14 +1,13 @@
 <x-layout>
     <section class="bg-[#f5f7fb] min-h-screen pb-20">
-
         <div class="relative overflow-hidden bg-black">
             <div class="absolute inset-0 opacity-20">
                 <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
             </div>
 
             <div class="relative max-w-7xl mx-auto px-5 lg:px-8 py-10 lg:py-14">
-                <div class="max-w-4xl">
-                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                <div class="w-full flex flex-wrap items-center mb-5 justify-between">
+                    <div class="flex gap-4">
                         <span class="bg-white/10 backdrop-blur-md border border-white/10 text-white px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.2em]">
                             {{ $article->category->name }}
                         </span>
@@ -16,34 +15,67 @@
                             {{ $article->status }}
                         </span>
                     </div>
-                    <h1 class="text-white text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight max-w-5xl">
-                        {{ $article->title }}
-                    </h1>
-                    <p class="mt-5 text-gray-300 text-base md:text-lg leading-relaxed max-w-3xl font-medium">
-                        {{ $article->excerpt }}
-                    </p>
-                    <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase">
-                                {{ strtoupper(substr($article->user->name, 0, 1)) }}
-                            </div>
-                            <div>
-                                <p class="font-black text-white uppercase tracking-wide text-xs">{{ $article->user->name }}</p>
-                                <p class="text-gray-400 text-xs mt-0.5">Author</p>
-                            </div>
-                        </div>
-                        <div class="h-8 w-px bg-white/10 hidden md:block"></div>
-                        <div>
-                            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Published</p>
-                            <p class="mt-0.5 font-bold text-white text-sm">{{ $article->created_at->format('F d, Y') }}</p>
-                        </div>
-                        <div class="h-8 w-px bg-white/10 hidden md:block"></div>
-                        <div>
-                            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Views</p>
-                            <p class="mt-0.5 font-bold text-white text-sm">{{ number_format($article->view_count) }} Views</p>
-                        </div>
+                    <div class="flex items-center gap-3">
+                        <form action="/article/{{ $article->id }}/like" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
+                                    @if($likes->count()>0)
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-rose-500 scale-110 transition group-hover:scale-125">
+                                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                                        </svg>
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-rose-400 transition group-hover:scale-110">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                        </svg>
+                                    @endif
+                                <span>{{ $likes->count() }} Like</span>
+                            </button>
+                        </form>
+                        <form action="/article/{{ $article->id }}/bookmark" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
+                                @if($article->bookmarked())
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 scale-110 transition group-hover:scale-125">
+                                        <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Saved</span>
+                                @else
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-amber-400 transition group-hover:scale-110">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                                    </svg>
+                                    <span>Bookmark</span>
+                                @endif
+                            </button>
+                        </form>
                     </div>
                 </div>
+                <h1 class="text-white text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight max-w-5xl">
+                    {{ $article->title }}
+                </h1>
+                <p class="mt-5 text-gray-300 text-base md:text-lg leading-relaxed max-w-3xl font-medium">
+                    {{ $article->excerpt }}
+                </p>
+                <a href="/user/{{ $article->user->name }}" class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase">
+                            {{ strtoupper(substr($article->user->name, 0, 1)) }}
+                        </div>
+                        <div>
+                            <p class="font-black text-white uppercase tracking-wide text-xs">{{ $article->user->name }}</p>
+                            <p class="text-gray-400 text-xs mt-0.5">Author</p>
+                        </div>
+                    </div>
+                    <div class="h-8 w-px bg-white/10 hidden md:block"></div>
+                    <div>
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Published</p>
+                        <p class="mt-0.5 font-bold text-white text-sm">{{ $article->created_at->format('F d, Y') }}</p>
+                    </div>
+                    <div class="h-8 w-px bg-white/10 hidden md:block"></div>
+                    <div>
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Views</p>
+                        <p class="mt-0.5 font-bold text-white text-sm">{{ number_format($article->view_count) }} Views</p>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -75,14 +107,12 @@
                     {{-- AUTHOR CARD --}}
                     <a href="/user/{{ $article->user->name }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                         <div class="flex flex-col md:flex-row md:items-center gap-6">
-                            <div class="w-24 h-24 rounded-full bg-black text-white flex items-center justify-center text-3xl font-black shrink-0 group-hover:scale-110 transition-transform duration-500">{{ strtoupper(substr($article->user->name, 0, 1)) }}</div>
+                            <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="auther" class="w-24 h-24 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500">
 
                             <div>
                                 <p class="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black mb-2">Written By</p>
                                 <h3 class="text-3xl font-black text-gray-900 tracking-tight">{{ $article->user->name }}</h3>
-                                <p class="mt-4 text-gray-600 leading-8 text-[15px] max-w-3xl">
-                                    Passionate content creator focused on writing valuable and insightful articles for readers around the world.
-                                </p>
+                                <p class="mt-4 text-gray-600 leading-8 text-[15px] max-w-3xl">{{ $article->user->bio }}</p>
                             </div>
                         </div>
                     </a>

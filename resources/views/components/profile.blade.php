@@ -100,7 +100,7 @@
                 </div>
 
                 @if ($articles->count() > 3)
-                    <a href="/user/article/{{ $user }}" class="flex justify-center mt-8">
+                    <a href="/article/{{ $user->id }}/article" class="flex justify-center mt-8">
                         <button class="border border-gray-300 hover:border-black hover:bg-black hover:text-white transition px-6 py-2.5 rounded-xl text-sm font-semibold text-gray-800">Show More Articles</button>
                     </a>
                 @endif

@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\articleController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\commentController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\LoginUserController;
@@ -28,17 +30,21 @@ Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
 Route::get('/articles/create', [articleController::class, 'index'])->name('articleForm');
 Route::post('/articles/create', [articleController::class, 'create'])->name('createArticle');
 Route::get('/articles', [articleController::class, 'displayArticle'])->name('showArticle');
-Route::get('/article/my-published', [articleController::class, 'published'])->name('publishedarticle');
+Route::get('/article/{user}/article', [articleController::class, 'published'])->name('publishedarticle');
 Route::get('/home', [articleController::class, 'showDraftarticle'])->name('home');
 Route::get('/edit/{article}', [articleController::class, 'editArticle'])->name('editArticle');
 Route::patch('/edit/{article}', [articleController::class, 'update'])->name('updateArticle');
 Route::delete('/delete/{article}', [articleController::class, 'destroy'])->name('deleteArticle');
 Route::get('/article/{article}', [articleController::class, 'show'])->name('specificArticle');
+Route::post('/article/{article}/like', [LikeController::class, 'like'])->name('likearticle');
+Route::post('/article/{article}/bookmark', [BookmarkController::class, 'bookmark'])->name('bookmarkarticle');
+Route::get('/{user}/bookmark', [BookmarkController::class, 'show'])->name('showBookmars');
+
 
 Route::get('/user/{user:name}', [ProfileController::class, 'show'])->name('userprofile');
 Route::get('/user/article/{user}', [articleController::class, 'userarticleshow'])->name('userArticle');
-
 Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('follow');
+
 /** forget psswords */
 Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {
     Route::get('/password/forgot', 'create')->name('password.forgot');

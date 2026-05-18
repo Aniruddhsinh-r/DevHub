@@ -32,8 +32,23 @@ class Article extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function likes(): BelongsTo
+    {
+        return $this->belongsTo(likes::class);
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function bookmarked()
+    {
+        return $this->belongsToMany(User::class, 'bookmarks')->where('user_id', auth()->id())->exists();
+    }
+
+    public function bookmarks()
+{
+    return $this->belongsToMany(User::class, 'bookmarks');
+}
 }

@@ -64,7 +64,7 @@
                             </p>
                         </div>
 
-                        <a href="/article/my-published" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                        <a href="/article/{{ $user->id }}/article" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
                             Manage Articles
                         </a>
                     </div>

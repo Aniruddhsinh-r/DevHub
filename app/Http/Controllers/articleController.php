@@ -8,6 +8,7 @@ use App\Http\Requests\ArticleValidationRequest;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\comments;
+use App\Models\likes;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
@@ -41,11 +42,6 @@ class articleController extends Controller
         return to_route('register')->with('error','You must be authorize before posting artical');
     }
 
-    public function store(Article $article)
-    {
-
-    }
-
     public function show(Article $article)
     {
         if (!Auth::check()) {
@@ -55,19 +51,22 @@ class articleController extends Controller
         $viewed = DB::table('views')->where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
         $comments = comments::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = comments::where('article_id',$article->id)->whereNotNull('parent_id')->get();
+
+        $likes = DB::table('likes')->where('article_id',$article->id)->get();
+
         if (!$viewed) {
             DB::table('articles')->where('id', $article->id)->increment('view_count');
             DB::table('views')->insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
         }
-        return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies]);
+        return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
     }
 
-    public function published(Article $article)
+    public function published(User $user)
     {
-        // $id = Auth::id();
+        $user_id = $user;
         // $articles = DB::table('articles')->where('user_id', $id)->get();
 
-        $articles = Auth::user()->articles()->latest()->get();
+        $articles = $user_id->articles()->latest()->get();
 
         if (Auth::check()) {
             return view('articles.userArticles', ['articles' => $articles]);

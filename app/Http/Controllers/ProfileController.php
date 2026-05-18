@@ -24,26 +24,14 @@ class ProfileController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(User $user)
     {
+        if ($user->id === Auth::id()) {
+            return view('auth.myprofile', compact('user'));
+        }
+
         if (Auth::check()) {
             $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
             return view('components.profile', compact('user','articles'));
@@ -100,13 +88,5 @@ class ProfileController extends Controller
             return to_route('profile')->withInput()->with('success','your profile is sucessfully updated.');
         }
         return back()->with('error',"fail to update profile.");
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

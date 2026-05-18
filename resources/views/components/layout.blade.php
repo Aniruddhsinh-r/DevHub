@@ -38,15 +38,41 @@
                                 </svg>Create Article
                             </a>
 
-                            <form action="/logout" method="POST">
-                                @csrf
-                                <button type="submit" class="text-sm font-medium hover:text-gray-500 transition">
-                                    Logout
+                            <div x-data="{ open: false }" class="relative z-50">
+                                <button @click="open = !open" @click.outside="open = false" class="flex items-center focus:outline-none">
+                                    <img src="{{ asset('storage/' . auth()->user()->avtar) }}" alt="User Profile" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-gray-400 transition">
                                 </button>
-                            </form>
 
+                                <div x-show="open"
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="opacity-0 scale-95"
+                                     x-transition:enter-end="opacity-100 scale-100"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="opacity-100 scale-100"
+                                     x-transition:leave-end="opacity-0 scale-95"
+                                     class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-3 text-left"
+                                     style="display: none;">
+
+                                    <div class="px-4 font-semibold break-all">{{ auth()->user()->email }}</div>
+
+                                    <hr class="border-gray-100 my-1">
+                                    <a href="/{{ auth()->user()->id }}/bookmark" class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
+                                        <svg class="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                        </svg>Bookmark
+                                    </a>
+
+                                    <form action="/logout" method="POST" class="w-full">
+                                        @csrf
+                                        <button type="submit" class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
+                                            <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                            </svg>Logout</button>
+                                    </form>
+                                </div>
+                            </div>
                         @endauth
-                        
+
                         @guest
                             <a href="/register" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">
                                 Sign Up
