@@ -47,6 +47,11 @@ Route::get('/user/article/{user}', [articleController::class, 'userarticleshow']
 Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('follow');
 
 Route::get('/admin/dashboard', [AdminController::class, 'index']);
+Route::get('/admin/user', [AdminController::class, 'user']);
+Route::delete('/admin/user/remove/{user}', [AdminController::class, 'userRemove']);
+Route::get('/admin/categories', [AdminController::class, 'show']);
+Route::post('/admin/categories', [AdminController::class, 'create']);
+Route::delete('/admin/categories/delete/{category}', [AdminController::class, 'destroy']);
 
 /** forget psswords */
 Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {

@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\comments;
 use App\Models\likes;
 use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Action;
@@ -136,11 +137,12 @@ class articleController extends Controller
     public function destroy(Article $article)
     {
         if (Auth::check()) {
-            if ($article->cover_path) {
-                Storage::disk('public')->delete($article->cover_path);
-            }
-            // $article->delete();
+            // if ($article->cover_path) {
+            //     Storage::disk('public')->delete($article->cover_path);
+            // }
+            $article->delete();
             return back()->with('success','article delete successfully.');
         }
+        return back()->with('error', 'Unauthorized action.');
     }
 }

@@ -128,7 +128,7 @@
                         <div class="flex items-center gap-4 text-right">
                             <div>
                                 <span class="text-[9px] uppercase font-black text-gray-400 tracking-wider block">Views</span>
-                                <span class="text-xs font-black text-[#111827]">{{  }}</span>
+                                <span class="text-xs font-black text-[#111827]">{{ $article->view_count }} Views</span>
                             </div>
                         </div>
                     </div>
@@ -137,35 +137,51 @@
             </div>
 
             {{-- RIGHT PANEL (Replicating exact layout tracker elements from your image) --}}
-            <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-5">
-                <div class="border-b border-gray-100 pb-3">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Remaining Drafts</span>
-                    <span class="text-2xl font-extrabold text-[#111827] mt-0.5 block">14</span>
+            <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col gap-6 max-w-sm">
+
+                <div class="flex items-center justify-between border-b border-gray-50 pb-4">
+                    <div>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Remaining Drafts</span>
+                        <span class="text-3xl font-black text-gray-900 tracking-tight">{{ $articles->where('status','draft')->count() }}</span>
+                    </div>
+                    <span class="p-2 bg-amber-50 text-amber-600 rounded-xl text-xs font-semibold">Drafts</span>
                 </div>
 
-                <div class="border-b border-gray-100 pb-3">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Total Likes</span>
-                    <span class="text-2xl font-extrabold text-[#111827] mt-0.5 block">84,320</span>
+                <div class="flex items-center justify-between border-b border-gray-50 pb-4">
+                    <div>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Total Likes</span>
+                        <span class="text-3xl font-black text-gray-900 tracking-tight">{{ $likes->count() }}</span>
+                    </div>
+                    <span class="p-2 bg-rose-50 text-rose-600 rounded-xl text-xs font-semibold">❤️ Likes</span>
                 </div>
 
-                <div>
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Highest Article Poster Name</span>
-                    <div class="flex items-center gap-3 mt-2 bg-[#f3f4f6] p-2.5 rounded-xl border border-gray-100">
-                        <img class="w-8 h-8 rounded-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=60" alt="">
-                        <div class="truncate">
-                            <span class="text-xs font-bold text-[#111827] block truncate">Sarah Jenkins</span>
-                            <span class="text-[10px] text-gray-500 block">42 Articles written</span>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Top Contributor</span>
+                        <span class="text-[9px] font-extrabold bg-emerald-50 text-emerald-700 uppercase tracking-wider px-2 py-0.5 rounded-full border border-emerald-100 animate-pulse">
+                            {{ $topUser->articles_count }} Posts
+                        </span>
+                    </div>
+
+                    <div class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
+                        <div class="relative shrink-0">
+                            <img src="{{ asset('storage/' . $topUser->avtar) }}" alt="{{ $topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-gray-900 tracking-tight hover:text-indigo-600 transition-colors cursor-pointer truncate">
+                                    {{ $topUser->name }}
+                                </span>
+                                <span class="text-[11px] text-gray-400 font-medium tracking-normal truncate mt-0.5">
+                                    {{ $topUser->email }}
+                                </span>
+                            </div>
+
+                            <p class="text-[11px] text-gray-500/90 font-normal mt-2 line-clamp-2 leading-relaxed whitespace-normal pr-1">
+                                {{ $topUser->bio }}
+                            </p>
                         </div>
                     </div>
-                </div>
-
-                <div class="space-y-1.5 pt-1">
-                    <div class="flex items-center gap-4 text-[10px] font-bold text-gray-500">
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-[#2a292e] rounded-sm"></span> High Engagement</span>
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-yellow-400 rounded-sm"></span> In Draft</span>
-                    </div>
-                    <div class="w-full h-8 bg-[#2a292e] rounded-lg"></div>
-                    <div class="w-full h-8 bg-yellow-400 rounded-lg"></div>
                 </div>
             </div>
         </div>

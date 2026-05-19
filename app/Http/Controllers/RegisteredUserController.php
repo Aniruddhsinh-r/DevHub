@@ -20,7 +20,8 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'min:10', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:4', 'max:255'],
             'avtar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-            'bio' => ['nullable', 'max:2000', 'string']
+            'bio' => ['nullable', 'max:2000', 'string'],
+            'role' => ['required']
         ]);
 
         $avatarPath = null;
