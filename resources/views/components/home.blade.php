@@ -50,13 +50,9 @@
                 </div>
             </div>
         </div>
-
     </div>
 </header>
 
-    @auth
-        @include('components.draftArticle')
-    @endauth
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-100 py-10 mt-20">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">

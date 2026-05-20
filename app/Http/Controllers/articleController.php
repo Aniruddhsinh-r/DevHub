@@ -89,7 +89,7 @@ class articleController extends Controller
     public function showDraftArticle() {
         $id = Auth::id();
         $articles = Article::with(['user', 'category'])->where(['user_id' => $id,'status' => 'draft'])->latest()->get();
-        return view('components.home',[
+        return view('components.draftArticle',[
             'articles' => $articles
         ]);
     }
@@ -126,7 +126,7 @@ class articleController extends Controller
     {
         if (Auth::check()) {
             $action->handle($request->safe()->all(), $article);
-            return to_route('publishedarticle')->with('success', 'Article updated successfully.');
+            return to_route('publishedarticle',auth()->user()->id)->with('success', 'Article updated successfully.');
         }
         return to_route('showArticle')->with('error','You must be authorize before posting artical');
     }

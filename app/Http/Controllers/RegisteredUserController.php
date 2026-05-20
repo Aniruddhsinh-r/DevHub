@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegistrationMail;
+use App\Mail\WelcomeBackMail;
 use App\Models\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
-class RegisteredUserController extends Controller
+class RegisteredUserController extends Controller implements ShouldQueue
 {
     public function create() {
         return view('auth.register');
@@ -39,6 +43,11 @@ class RegisteredUserController extends Controller
         ]);
 
         Auth::login($user, $remember = true);
+
+        $to = $request->email;
+        $message = $user->name;
+
+        Mail::to($to)->queue(new RegistrationMail($message));
 
         if ($request->role === 'admin') {
             return redirect('/adminpanel')->with('success','you register successfully.');

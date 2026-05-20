@@ -7,15 +7,17 @@
             @csrf
             @method('PATCH')
 
-            <!-- Avatar Section -->
-            <div class="flex items-center gap-6 mb-6">
+            <div class="flex items-center gap-6 mb-6" x-data="{ imageUrl: '{{ $user->avtar ? asset('storage/' . $user->avtar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name) }}' }">
                 <div class="relative">
-                    <img src="{{ $user->avtar ? asset('storage/' . $user->avtar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name) }}" alt="Profile" class="w-24 h-24 rounded-full object-cover border-2 border-gray-100">
+                    <!-- The src attribute is now bound to our reactive Alpine variable -->
+                    <img :src="imageUrl" alt="Profile" class="w-24 h-24 rounded-full object-cover border-2 border-gray-100">
                 </div>
 
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center gap-3">
-                        <input type="file" name="avtar" id="avtar" class="hidden" accept="image/*">
+                        <!-- @change listens for the file upload and updates our Alpine variable -->
+                        <input type="file" name="avtar" id="avtar" class="hidden" accept="image/*"
+                               @change="imageUrl = URL.createObjectURL($event.target.files[0])">
 
                         <label for="avtar" class="cursor-pointer bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,7 +29,6 @@
                 </div>
             </div>
 
-            <!-- Basic Info -->
             <div class="grid grid-cols-1 gap-6 mb-10">
                 <div>
                     <x-form.field name="name" type='text' label="Full name" placeholder="Enter name" :value="$user->name"></x-form.field>
@@ -49,7 +50,6 @@
                     </div>
                 </div>
 
-                <!-- Password Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <x-form.field name="password" type="password" label="New Password" placeholder="••••••••"></x-form.field>

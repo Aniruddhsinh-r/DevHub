@@ -22,23 +22,32 @@
                     </div>
 
                     <div class="flex items-center gap-8">
+                        @if (auth()->user()?->role === 'admin')
+                            <a href="/admin/dashboard" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">dashboard</a>
+                        @else
                             <a href="/home" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
-                            {{-- <a href="/about" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">about</a> --}}
-                            <a href="/articles" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">article</a>
+                        @endif
+
+                        <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
                         @auth
-                            <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
-                            <a href="/articles/create"
-                                class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
+                        @if (auth()->user()?->role === 'author')
+                            <a href="/articles" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
+                            <a href="/articles/create" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4">
-                                    </path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                 </svg>Create Article
                             </a>
+                        @endif
 
                             <div x-data="{ open: false }" class="relative z-50">
                                 <button @click="open = !open" @click.outside="open = false" class="flex items-center focus:outline-none">
-                                    <img src="{{ asset('storage/' . auth()->user()->avtar) }}" alt="User Profile" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-gray-400 transition">
+                                    @if (auth()->user()->avtar)
+                                        <img src="{{ asset('storage/' . auth()->user()->avtar) }}" alt="User Profile" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-gray-400 transition">
+                                    @else
+                                        <span class="w-10 h-10 rounded-full bg-black text-white border border-gray-400 inline-flex items-center justify-center text-sm font-bold uppercase">
+                                            {{ Str::upper(Str::substr(auth()->user()->name, 0, 2)) }}
+                                        </span>
+                                    @endif
                                 </button>
 
                                 <div x-show="open"
@@ -75,8 +84,7 @@
                             <a href="/register" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">
                                 Sign Up
                             </a>
-                            <a href="/login"
-                                class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
+                            <a href="/login" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                 Sign In
                             </a>
                         @endguest

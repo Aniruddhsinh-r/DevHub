@@ -13,8 +13,8 @@ use Illuminate\Support\Str;
 class AdminController extends Controller
 {
     public function index() {
-        $articles = DB::table('articles')->get();
-        $users = DB::table('users')->get();
+        $articles = DB::table('articles')->whereNull('deleted_at')->get();
+        $users = DB::table('users')->whereNull('deleted_at')->get();
         $comments = DB::table('comments')->get();
         $views = DB::table('views')->get();
         $likes = DB::table('likes')->get();
@@ -54,7 +54,7 @@ class AdminController extends Controller
     }
 
     public function user() {
-        $users = DB::table('users')->latest()->get();
+        $users = DB::table('users')->latest()->whereNull('deleted_at')->get();
 
         return view('admin.users', ['users'=>$users]);
     }
@@ -62,17 +62,23 @@ class AdminController extends Controller
     public function userRemove(User $user) {
 
         if (Auth::check() && Auth::user()->role === 'admin') {
-            DB::table('articles')->where('user_id',$user->id)->delete();
             DB::table('views')->where('user_id',$user->id)->delete();
             DB::table('comments')->where('user_id',$user->id)->delete();
             DB::table('views')->where('user_id',$user->id)->delete();
             DB::table('bookmarks')->where('user_id',$user->id)->delete();
+            DB::table('likes')->where('user_id',$user->id)->delete();
             $user->delete();
             Article::where('user_id',$user->id)->delete();
 
             return back()->with('success','User remove successfully.');
         }
         return back()->with('error','Only admin can perform this task');
+    }
+
+    public function articles() {
+        $articles = Article::where('status', 'published')->get();
+        
+        return view('admin.articles',['articles'=>$articles]);
     }
 
     public function destroy(Category $category) {

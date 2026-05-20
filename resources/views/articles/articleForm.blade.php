@@ -66,9 +66,7 @@
                     @if($article->cover_path)
                         <div class="mb-2">
                             <p class="text-[10px] text-gray-500 uppercase mb-1">Current Image:</p>
-                            <img src="{{ asset('storage/' . $article->cover_path) }}"
-                                 alt="Current Cover"
-                                 class="w-32 h-20 object-cover rounded-md border border-gray-300 shadow-sm">
+                            <img src="{{ asset('storage/' . $article->cover_path) }}" alt="Current Cover" class="w-32 h-20 object-cover rounded-md border border-gray-300 shadow-sm">
                         </div>
                     @endif
                     <div class="space-y-0.5">

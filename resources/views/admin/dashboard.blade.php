@@ -106,18 +106,16 @@
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 items-start">
-            {{-- LATEST ARTICLE ANALYSIS (Shows Top 6 Articles) --}}
             <div class="xl:col-span-2 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                 <div class="mb-4">
                     <h2 class="text-lg font-black text-[#111827]">
                         Latest Article Analysis
                     </h2>
                     <p class="text-xs text-gray-500 mt-0.5">
-                        Performance breakdown of your top 6 highest performing items
+                        Performance breakdown of your latest published articles.
                     </p>
                 </div>
 
-                {{-- ARTICLE ITEMS LIST CONTAINER --}}
                 <div class="space-y-2">
                     @foreach ($articles->sortByDesc('id')->take(4) as $article)
                         <div class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
@@ -136,9 +134,7 @@
                 </div>
             </div>
 
-            {{-- RIGHT PANEL (Replicating exact layout tracker elements from your image) --}}
             <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col gap-6 max-w-sm">
-
                 <div class="flex items-center justify-between border-b border-gray-50 pb-4">
                     <div>
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Remaining Drafts</span>
@@ -187,4 +183,3 @@
         </div>
     </div>
 </x-admin>
-{{-- 248 --}}

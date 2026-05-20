@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeBackMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
-class LoginUserController extends Controller
+class LoginUserController extends Controller implements ShouldQueue
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +18,6 @@ class LoginUserController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $attempt = $request->validate([
@@ -33,35 +33,16 @@ class LoginUserController extends Controller
             if ($request->role === 'admin') {
                 return redirect('/adminpanel')->with('success','you register successfully.');
             }
-            
+
+            $to = $request->email;
+            $message = $request->name;
+            $subject = "Welcome back!";
+
+            Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
+
             return to_route('home')->with('success','You are loged in sucessfully!');
         }
-
         return back()->withInput()->with('error','The provided credentials do not match our records.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**
@@ -71,6 +52,6 @@ class LoginUserController extends Controller
     {
         Auth::logout();
 
-        return view('components.home');
+        return view('components.home')->with('success','Logout successfully!');
     }
 }

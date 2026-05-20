@@ -1,16 +1,14 @@
 <x-layout>
     <div class="min-h-screen bg-gray-50 py-12 px-4">
         <div class="max-w-7xl mx-auto">
-
-            <!-- Page Header -->
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 border-b border-gray-200 pb-8">
                 <div>
                     <h1 class="text-3xl font-black text-gray-900 tracking-tight">Your Publications</h1>
                     <p class="text-gray-500 mt-2 font-medium">Manage and monitor the performance of your shared content.</p>
                 </div>
                 <div class="mt-4 md:mt-0">
-                    <a href="/articles/create" class="px-6 py-3 bg-gray-900 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-200">
-                        Create New Article
+                    <a href="/article/{{ auth()->user()->id }}/drafts" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                        draft
                     </a>
                 </div>
             </div>
@@ -20,7 +18,6 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($articles as $article)
                         <div class="group bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative">
-
                             <a href="/article/{{ $article->id }}" class="block relative overflow-hidden h-52">
                                 @if ($article->cover_path)
                                     <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-700">
@@ -36,7 +33,7 @@
 
                                 <div class="mt-5 flex items-center justify-between border-t border-gray-50 pt-4">
                                     <div>
-                                        <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Published</p>
+                                        <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">{{ $article->status }}</p>
                                         <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->created_at->diffForHumans() }}</p>
                                     </div>
 
@@ -57,7 +54,7 @@
                     @endforeach
                 </div>
             @else
-            
+
                 <!-- Empty State -->
                 <div class="bg-white border border-gray-200 rounded-[3rem] p-20 text-center shadow-sm">
                     <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">

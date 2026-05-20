@@ -43,14 +43,11 @@
                         </span>
                     </div>
                 </div>
-
                 <a href="/profile/edit/{{ $user->id }}" class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
             </div>
 
             <div class="space-y-8">
-
                 <div class=" bg-[#707577] border border-gray-200 rounded-[2rem] p-8 shadow-sm">
-
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
                         <div>
                             <div class="inline-block px-3 py-1 rounded-full bg-[#ececea] text-[10px] font-black uppercase tracking-[0.18em] text-gray-700 border border-gray-300 mb-4">
@@ -64,12 +61,17 @@
                             </p>
                         </div>
 
-                        <a href="/article/{{ $user->id }}/article" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
-                            Manage Articles
-                        </a>
+                        @if (auth()->user()?->role === 'author')
+                            <a href="/article/{{ $user->id }}/article" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                                Manage Articles
+                            </a>
+                        @else
+                            <a href="/admin/articles" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                                see Articles
+                            </a>
+                        @endif
                     </div>
 
-                    {{-- Simple inline stats --}}
                     <div class="border-t border-gray-100 pt-6 flex items-center gap-10">
                         <div class="text-center">
                             <p class="text-xl font-black text-gray-200">{{ $user->articles->count() }}</p>

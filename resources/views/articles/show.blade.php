@@ -57,8 +57,12 @@
                 </p>
                 <a href="/user/{{ $article->user->name }}" class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase">
-                            {{ strtoupper(substr($article->user->name, 0, 1)) }}
+                        <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
+                            @if ($article->cover_path)
+                                <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="{{ $article->user->name }}" class="w-9 h-9">
+                            @else
+                                {{ substr($article->title, 0, 2) }}
+                            @endif
                         </div>
                         <div>
                             <p class="font-black text-white uppercase tracking-wide text-xs">{{ $article->user->name }}</p>
@@ -84,7 +88,9 @@
                 <div class="lg:col-span-8">
                     <article class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/40 border border-gray-100 overflow-hidden">
                         <div class="overflow-hidden">
-                            <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-[250px] md:h-[450px] object-cover hover:scale-105 duration-700">
+                            @if ($article->cover_path)
+                                <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-[250px] md:h-[450px] object-cover hover:scale-105 duration-700">
+                            @endif
                         </div>
 
                         <div class="p-6 md:p-10 lg:p-14">
@@ -107,8 +113,13 @@
                     {{-- AUTHOR CARD --}}
                     <a href="/user/{{ $article->user->name }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                         <div class="flex flex-col md:flex-row md:items-center gap-6">
-                            <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="auther" class="w-24 h-24 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500">
-
+                            <div class="w-24 h-24 rounded-full bg-[#111827] text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-gray-100">
+                                @if ($article->user->avtar)
+                                    <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="{{ $article->user->name }}" class="w-full h-full object-cover">
+                                @else
+                                    <span>{{ Str::upper(Str::substr($article->user->name, 0, 2)) }}</span>
+                                @endif
+                            </div>
                             <div>
                                 <p class="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black mb-2">Written By</p>
                                 <h3 class="text-3xl font-black text-gray-900 tracking-tight">{{ $article->user->name }}</h3>
@@ -116,9 +127,9 @@
                             </div>
                         </div>
                     </a>
+
                     {{-- COMMENTS SECTION --}}
                     <div class="mt-10 bg-white rounded-[2rem] border border-gray-100 shadow-lg shadow-gray-100/50 p-6 md:p-8">
-
                         <div class="flex items-center justify-between mb-8">
                             <div>
                                 <h3 class="text-2xl font-black tracking-tight text-gray-900">Comments</h3>
@@ -129,8 +140,12 @@
 
                         {{-- COMMENT INPUT --}}
                         <div class="flex gap-4 mb-8">
-                            <div class="w-11 h-11 rounded-full bg-black text-white flex items-center justify-center text-sm font-black shrink-0">
-                                A
+                            <div class="w-11 h-11 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
+                                @if (auth()->user()?->avtar)
+                                    <img src="{{ asset('storage/' . auth()->user()?->avtar) }}" alt="{{ auth()->user()?->name }}" class="w-11 h-11">
+                                @else
+                                    {{ substr(auth()->user()?->name, 0, 2) }}
+                                @endif
                             </div>
 
                             <div class="flex-1">
@@ -160,7 +175,13 @@
                         <div class="space-y-6">
                             @foreach ($comments as $comment)
                             <div class="flex gap-4">
-                                <img src="{{ asset('storage/' . $comment->user->avtar) }}" class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm">
+                                <div class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
+                                    @if ($comment->user->avtar)
+                                        <img src="{{ asset('storage/' . $comment->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
+                                    @else
+                                        <span>{{ Str::upper(Str::substr($comment->user->name, 0, 2)) }}</span>
+                                    @endif
+                                </div>
 
                                 <div class="flex-1">
                                     <div class="bg-[#f0f0f0] rounded-2xl px-5 py-3">
@@ -192,7 +213,13 @@
                                             @foreach ($replies as $reply)
                                             <div class="flex gap-4">
                                                 <a href="/user/{{ $reply->user->name }}">
-                                                    <img src="{{ asset('storage/' . $reply->user->avtar) }}" class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm">
+                                                    <div class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm overflow-hidden">
+                                                        @if ($reply->user->avtar)
+                                                            <img src="{{ asset('storage/' . $reply->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
+                                                        @else
+                                                            <span>{{ Str::upper(Str::substr($reply->user->name, 0, 2)) }}</span>
+                                                        @endif
+                                                    </div>
                                                 </a>
 
                                                 <div class="flex-1">

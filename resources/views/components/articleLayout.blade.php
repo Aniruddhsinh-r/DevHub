@@ -10,7 +10,11 @@
             <div class="p-5">
                 {{-- <a href="{{ route('userprofile', $article->user->name) }}"> --}}
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0">{{ substr($article->user->name, 0, 1) }}</div>
+                        @if ($article->user->avtar)
+                            <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="user_image" class="w-9 h-9 rounded-full border-2 border-black object-cover">
+                        @else
+                            <div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0">{{ substr($article->user->name, 0, 1) }}</div>
+                        @endif
                         <div>
                             <h3 class="text-sm font-bold text-gray-900">{{ $article->user->name }}</h3>
                             <p class="text-xs text-gray-400 font-medium">{{ $article->category->name }}</p>
