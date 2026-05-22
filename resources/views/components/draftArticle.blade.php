@@ -7,7 +7,7 @@
             <p class="mt-4 text-sm text-gray-500 font-medium leading-relaxed">Refine unfinished stories and continue writing before publishing them publicly.</p>
         </div>
 
-        <a href="/article/{{ auth()->user()->id }}/article" class="bg-[#111111] text-white px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.18em] hover:bg-black transition-all duration-300">All Articles</a>
+        <a href="/articles/{{ auth()->user()->id }}/article" class="bg-[#111111] text-white px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.18em] hover:bg-black transition-all duration-300">All Articles</a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -29,7 +29,7 @@
                         <p class="mt-1 text-xs font-bold text-[#111111]">{{ $article->created_at->diffForHumans()}}</p>
                     </div>
 
-                    <button class="px-4 py-2.5 rounded-xl bg-[#111111] text-white text-[10px] font-black uppercase tracking-[0.15em] hover:bg-black transition-all duration-300">Continue</button>
+                    <button class="px-4 py-2.5 rounded-xl bg-[#111111] text-white text-[10px] font-black uppercase tracking-[0.15em] hover:bg-black transition-all duration-300">Edit</button>
                 </div>
             </a>
         @endforeach

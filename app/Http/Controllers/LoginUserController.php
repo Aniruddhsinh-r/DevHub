@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\WelcomeBackMail;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,26 +22,25 @@ class LoginUserController extends Controller implements ShouldQueue
     public function store(Request $request)
     {
         $attempt = $request->validate([
-            'name' => ['required','min:5','max:50'],
             'email' => ['required', 'string', 'min:10', 'max:255'],
             'password' => ['required', 'string', 'min:4', 'max:255'],
-            'role' => ['required'],
         ]);
 
         if (Auth::attempt($attempt, true)) {
             $request->session()->regenerate();
 
-            if ($request->role === 'admin') {
-                return redirect('/adminpanel')->with('success','you register successfully.');
+            $admin = User::where('email', $request->email)->whereRole('admin')->exists();
+
+            if ($admin) {
+                return redirect('/admin/dashboard')->with('success','you login successfully.');
+            } else {
+                $to = $request->email;
+                $message = $request->name;
+                $subject = "Welcome back!";
+
+                // Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
+                return to_route('home')->with('success','You are loged in sucessfully!');
             }
-
-            $to = $request->email;
-            $message = $request->name;
-            $subject = "Welcome back!";
-
-            Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
-
-            return to_route('home')->with('success','You are loged in sucessfully!');
         }
         return back()->withInput()->with('error','The provided credentials do not match our records.');
     }

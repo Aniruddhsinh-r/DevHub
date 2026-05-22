@@ -1,3 +1,3 @@
-<x-layout>
+<x-admin>
     @include('components.articleBody')
-</x-layout>
+</x-admin>

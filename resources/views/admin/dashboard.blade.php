@@ -118,18 +118,18 @@
 
                 <div class="space-y-2">
                     @foreach ($articles->sortByDesc('id')->take(4) as $article)
-                        <div class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
-                        <div class="flex items-center gap-3 truncate max-w-[70%]">
-                            <span class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px]">01</span>
-                            <span class="text-xs font-bold text-gray-900 truncate">{{ $article->title }}</span>
-                        </div>
-                        <div class="flex items-center gap-4 text-right">
-                            <div>
-                                <span class="text-[9px] uppercase font-black text-gray-400 tracking-wider block">Views</span>
-                                <span class="text-xs font-black text-[#111827]">{{ $article->view_count }} Views</span>
+                        <a href="/admin/articles/{{ $article->id }}" class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
+                            <div class="flex items-center gap-3 truncate max-w-[70%]">
+                                <span class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px]">{{ $loop->iteration }}</span>
+                                <span class="text-xs font-bold text-gray-900 truncate">{{ $article->title }}</span>
                             </div>
-                        </div>
-                    </div>
+                            <div class="flex items-center gap-4 text-right">
+                                <div>
+                                    <span class="text-[9px] uppercase font-black text-gray-400 tracking-wider block">Views</span>
+                                    <span class="text-xs font-black text-[#111827]">{{ $article->view_count }} Views</span>
+                                </div>
+                            </div>
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -159,7 +159,7 @@
                         </span>
                     </div>
 
-                    <div class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
+                    <a href="/user/{{ $topUser->name }}" class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
                         <div class="relative shrink-0">
                             <img src="{{ asset('storage/' . $topUser->avtar) }}" alt="{{ $topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500">
                         </div>
@@ -177,7 +177,7 @@
                                 {{ $topUser->bio }}
                             </p>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\comments;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,8 +54,11 @@ class AdminController extends Controller
         return view('admin.categories', ['categories' => $categories]);
     }
 
-    public function user() {
-        $users = DB::table('users')->latest()->whereNull('deleted_at')->get();
+    public function user(Request $request) {
+        $search = $request->search;
+        // $users = DB::table('users')->latest()->whereNull('deleted_at')->get();
+
+        $users = User::where('name', 'LIKE', "%{$search}%")->latest()->get();
 
         return view('admin.users', ['users'=>$users]);
     }
@@ -64,7 +68,7 @@ class AdminController extends Controller
         if (Auth::check() && Auth::user()->role === 'admin') {
             DB::table('views')->where('user_id',$user->id)->delete();
             DB::table('comments')->where('user_id',$user->id)->delete();
-            DB::table('views')->where('user_id',$user->id)->delete();
+            DB::table('follows')->where('user_id',$user->id)->delete();
             DB::table('bookmarks')->where('user_id',$user->id)->delete();
             DB::table('likes')->where('user_id',$user->id)->delete();
             $user->delete();
@@ -75,9 +79,19 @@ class AdminController extends Controller
         return back()->with('error','Only admin can perform this task');
     }
 
-    public function articles() {
-        $articles = Article::where('status', 'published')->get();
-        
+    public function articles(Request $request) {
+        $search = $request->search;
+        $articles = Article::query()->where('status', 'published')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%")
+                          ->orWhere('excerpt', 'like', "%{$search}%")
+                          ->orWhere('body', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->get();
+
         return view('admin.articles',['articles'=>$articles]);
     }
 
@@ -96,5 +110,15 @@ class AdminController extends Controller
             return back()->with('success','Category deleted successfully');
         }
         return back()->with('error','Only admin can perform this task');
+    }
+
+    public function showarticle(Article $article) {
+        // $article = Article::where('id',$article->id)->get();
+        $comments = comments::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
+        $replies = comments::where('article_id',$article->id)->whereNotNull('parent_id')->get();
+
+        $likes = DB::table('likes')->where('article_id',$article)->get();
+
+        return view('admin.article', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
     }
 }

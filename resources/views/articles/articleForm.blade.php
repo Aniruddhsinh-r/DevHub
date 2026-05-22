@@ -6,7 +6,7 @@
                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Editor Workspace</p>
             </div>
 
-            <div class="bg-[#c6caca] rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
+            <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="bg-[#c6caca] rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
                 <form method="POST" action="{{ $article->exists ? route('updateArticle', $article) : route('createArticle') }}" class="p-8 md:p-10 space-y-6" enctype="multipart/form-data">
                     @csrf
                     @if ($article->exists)
@@ -29,7 +29,7 @@
                             @enderror
                         </div>
 
-                        <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="space-y-1.5">
+                        <div class="space-y-1.5">
                             <label for="status" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Visibility</label>
                             <select x-model="status" name="status" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
                                 <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>

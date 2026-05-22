@@ -20,8 +20,27 @@
                     <h2 class="text-lg font-black text-[#111827] tracking-tight">All Written Articles</h2>
                     <p class="text-sm text-gray-500 mt-1">Manage, draft, review, and delete your site content here.</p>
                 </div>
-                <div class="relative w-full lg:w-[280px]">
-                    <input type="text" placeholder="Search articles..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
+                <div class="relative w-full lg:w-64">
+                    <form action="" method="GET">
+                        <div class="relative">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search articles..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
+
+                            @if (request('search'))
+                                <a href="{{ url()->current() }}" class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </a>
+                            @endif
+
+                            <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
 
@@ -87,7 +106,7 @@
         </div>
     </div>
 </x-admin>
-105
+
 {{-- <x-admin>
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 m-2">

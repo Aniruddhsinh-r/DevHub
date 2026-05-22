@@ -18,10 +18,8 @@
             @endif
 
             <div class="bg-white py-8 px-4 shadow-sm border border-gray-100 sm:rounded-2xl sm:px-10">
-
                 <form method="POST" action="{{ route('password.forgot.post') }}" class="space-y-5">
                     @csrf
-
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
                         <div class="mt-1">
@@ -40,21 +38,6 @@
                         </button>
                     </div>
                 </form>
-
-                <form method="POST" action="" class="mt-6 border-t border-gray-100 pt-5">
-                    @csrf
-
-                    <input type="hidden" name="email" value="{{ old('email') }}">
-
-                    <p class="text-center text-xs text-gray-400 mb-3">
-                        Didn't receive the email?
-                    </p>
-
-                    <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-gray-300 bg-white rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all">
-                        Resend Link
-                    </button>
-                </form>
-
             </div>
         </div>
     </div>

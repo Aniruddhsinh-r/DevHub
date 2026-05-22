@@ -62,8 +62,18 @@ class articleController extends Controller
         return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
     }
 
-    public function published(User $user)
+    public function published()
     {
+        $user_id = Auth::id();
+        $articles = Article::where('user_id',$user_id)->latest()->get();
+
+        if (Auth::check()) {
+            return view('articles.myArticles', ['articles' => $articles]);
+        }
+        return view('auth.register')->with('Please Register to see articles.');
+    }
+
+    public function userpublished(User $user) {
         $user_id = $user;
         // $articles = DB::table('articles')->where('user_id', $id)->get();
 
@@ -86,12 +96,12 @@ class articleController extends Controller
         ]);
     }
 
-    public function showDraftArticle() {
-        $id = Auth::id();
-        $articles = Article::with(['user', 'category'])->where(['user_id' => $id,'status' => 'draft'])->latest()->get();
-        return view('components.draftArticle',[
-            'articles' => $articles
-        ]);
+    public function showDraftArticle(User $user) {
+        if(Auth::id() == $user->id){
+            $articles = Article::with(['user', 'category'])->where(['user_id' => $user->id,'status' => 'draft'])->latest()->get();
+            return view('components.draftArticle',['articles' => $articles]);
+        }
+        return back()->with('error','you cant see others draft idiot.');
     }
 
     public function userarticleshow(User $user) {
@@ -137,10 +147,12 @@ class articleController extends Controller
     public function destroy(Article $article)
     {
         if (Auth::check()) {
-            // if ($article->cover_path) {
-            //     Storage::disk('public')->delete($article->cover_path);
-            // }
+            DB::table('views')->where('article_id',$article->id)->delete();
+            DB::table('comments')->where('article_id',$article->id)->delete();
+            DB::table('bookmarks')->where('article_id',$article->id)->delete();
+            DB::table('likes')->where('article_id',$article->id)->delete();
             $article->delete();
+
             return back()->with('success','article delete successfully.');
         }
         return back()->with('error', 'Unauthorized action.');

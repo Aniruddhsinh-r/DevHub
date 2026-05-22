@@ -10,44 +10,11 @@
             <div class="bg-white py-8 px-4 shadow-sm border border-gray-100 sm:rounded-2xl sm:px-10">
                 <form method="POST" action="/login" class="space-y-5">
                     @csrf
-
-                    <x-form.field name="name" type="text" label="Full name" placeholder="Enter Name"></x-form.field>
-
                     <x-form.field name="email" type="email" label="Your email" placeholder="mailadd@gmail.com"></x-form.field>
 
-                    <x-form.field name="password" type="password" label="Password" placeholder="••••••••"></x-form.field>
-
-                    <div class="items-center space-y-0.5">
-                        <div class="flex items-center gap-4 w-full max-w-md">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Role :</label>
-
-                            <label for="admin" class="ml-3 font-medium cursor-pointer">
-                                <input
-                                    id='admin'
-                                    type="radio"
-                                    name="role"
-                                    value="admin"
-                                    {{ old('role') == 'admin' ? 'checked' : '' }}
-                                    class="mr-1.5 accent-indigo-600"
-                                />
-                                Admin
-                            </label>
-
-                            <label for="author" class="ml-3 font-medium cursor-pointer">
-                                <input
-                                    id='author'
-                                    type="radio"
-                                    name="role"
-                                    value="author"
-                                    {{ old('role') == 'author' ? 'checked' : '' }}
-                                    class="mr-1.5 accent-indigo-600"
-                                />
-                                Author
-                            </label>
-                        </div>
-                        @error('role')
-                            <div class="red text-sm text-red-600">{{ $message }}</div>
-                        @enderror
+                    <div class="space-y-0.5">
+                        <label for="password" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Password</label>
+                        <input type="password" id="password" name="password" class="border border-gray-400 w-full p-2 font-semibold text-sm text-gray-800 rounded-md shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="••••••••"/>
                     </div>
 
                     <div class="mt-8 flex items-center justify-between gap-4">
@@ -57,7 +24,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                             </svg>
                         </a>
-                        
+
                         <div>
                             <button type="submit" class="inline-flex justify-center py-2.5 px-6 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
                                 Log in

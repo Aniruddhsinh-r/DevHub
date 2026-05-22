@@ -62,7 +62,7 @@
                         </div>
 
                         @if (auth()->user()?->role === 'author')
-                            <a href="/article/{{ $user->id }}/article" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                            <a href="/articles/myarticle" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
                                 Manage Articles
                             </a>
                         @else
@@ -80,17 +80,17 @@
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
-                        <div class="text-center">
+                        <a href="/profile/followers/{{ $user->id }}">
                             <p class="text-xl font-black text-gray-200">{{ $user->followers->count() }}</p>
                             <p class="text-[13px] text-gray-200 mt-0.5">followers</p>
-                        </div>
+                        </a>
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
-                        <div class="text-center">
+                        <a href="/profile/followings/{{ $user->id }}">
                             <p class="text-xl font-black text-gray-200">{{ $user->following->count() }}</p>
                             <p class="text-[13px] text-gray-200 mt-0.5">following</p>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
