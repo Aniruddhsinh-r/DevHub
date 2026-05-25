@@ -13,7 +13,7 @@
 </head>
 <body class="bg-[#f8f9fa] text-[#1a1a1a]">
     <main>
-        <nav class="sticky top-0 z-50 border-b border-gray-200 glass-effect">
+        <nav x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 border-b border-gray-200 glass-effect">
             <div class="max-w-6xl mx-auto px-4 sm:px-2">
                 <div class="flex justify-between items-center h-16">
 
@@ -21,7 +21,7 @@
                         <a href="/" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
                     </div>
 
-                    <div class="flex items-center gap-8">
+                    <div class="flex items-center gap-4 md:gap-8">
                         @if (auth()->user()?->role === 'admin')
                             <a href="/admin/dashboard" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">dashboard</a>
                         @else
@@ -32,7 +32,7 @@
                         @auth
                             @if (auth()->user()?->role === 'author')
                                 <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
-                                <a href="/articles/create" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
+                                <a href="/articles/create" class="hidden sm:inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                     </svg>Create Article
@@ -90,14 +90,56 @@
                                 Sign In
                             </a>
                         @endguest
+
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" class="block md:hidden text-[#1a1a1a] focus:outline-none z-50">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                <path x-show="mobileMenuOpen" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
+            </div>
+
+            <div x-show="mobileMenuOpen"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-4"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-4"
+                 class="md:hidden border-b border-gray-200 bg-white/95 backdrop-blur-lg absolute left-0 right-0 top-16 shadow-lg py-4 px-6 flex flex-col gap-4 z-40"
+                 style="display: none;">
+
+                @if (auth()->user()?->role === 'admin')
+                    <a href="/admin/dashboard" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">dashboard</a>
+                @else
+                    <a href="/home" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">home</a>
+                @endif
+
+                <a href="/articles" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
+
+                @auth
+                    @if (auth()->user()?->role === 'author')
+                        <a href="/profile" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">profile</a>
+                        <a href="/articles/create" class="sm:hidden inline-flex items-center justify-center w-full px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition shadow-sm mt-2">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>Create Article
+                        </a>
+                    @endif
+                @endauth
+
+                @guest
+                    <a href="/register" class="text-base font-semibold hover:text-gray-500 transition py-2">Sign Up</a>
+                @endguest
             </div>
         </nav>
 
         <div class="text-black">
             {{ $slot }}
         </div>
+
         @if (session()->has('success'))
             <div data-test="success-message" class="hidden">
                 {{ session('success') }}

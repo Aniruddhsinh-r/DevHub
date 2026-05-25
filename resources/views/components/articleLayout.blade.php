@@ -1,6 +1,6 @@
 @foreach($articles as $article)
         <a class="group bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 cursor-pointer" href="/articles/{{ $article->id }}">
-            <div class="relative overflow-hidden h-52">
+            <div class="relative overflow-hidden h-52 bg-gray-300">
                 @if ($article->cover_path)
                     <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-700">
                 @endif

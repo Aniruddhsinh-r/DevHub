@@ -49,6 +49,9 @@
     </div>
 </header>
 
+<div class="grid grid-cols-1 mx-4 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
+    @include('components.articleLayout')
+</div>
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-100 py-10 mt-20">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">

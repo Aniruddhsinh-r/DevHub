@@ -31,6 +31,11 @@ class articleController extends Controller
         ]);
     }
 
+    public function home() {
+        $articles = Article::where('status','published')->latest()->take(3)->get();
+        return view('components.home', ['articles' => $articles]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

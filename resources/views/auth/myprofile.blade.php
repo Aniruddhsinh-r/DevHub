@@ -72,7 +72,7 @@
                         @endif
                     </div>
 
-                    <div class="border-t border-gray-100 pt-6 flex items-center gap-10">
+                    <div class="border-t border-gray-100 pt-6 gap-6 sm:gap-10 flex items-center">
                         <div class="text-center">
                             <p class="text-xl font-black text-gray-200">{{ $user->articles->count() }}</p>
                             <p class="text-[13px] text-gray-200 mt-0.5">articles</p>
@@ -81,15 +81,19 @@
                         <div class="w-px h-7 bg-gray-200"></div>
 
                         <a href="/profile/followers/{{ $user->id }}">
-                            <p class="text-xl font-black text-gray-200">{{ $user->followers->count() }}</p>
-                            <p class="text-[13px] text-gray-200 mt-0.5">followers</p>
+                            <div class="text-center">
+                                <p class="text-xl font-black text-gray-200">{{ $user->followers->count() }}</p>
+                                <p class="text-[13px] text-gray-200 mt-0.5">followers</p>
+                            </div>
                         </a>
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
                         <a href="/profile/followings/{{ $user->id }}">
-                            <p class="text-xl font-black text-gray-200">{{ $user->following->count() }}</p>
-                            <p class="text-[13px] text-gray-200 mt-0.5">following</p>
+                            <div class="text-center">
+                                <p class="text-xl font-black text-gray-200">{{ $user->following->count() }}</p>
+                                <p class="text-[13px] text-gray-200 mt-0.5">following</p>
+                            </div>
                         </a>
                     </div>
                 </div>

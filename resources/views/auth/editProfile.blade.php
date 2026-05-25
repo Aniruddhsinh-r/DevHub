@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="max-w-3xl mx-auto my-10 p-12 bg-white border border-gray-200 rounded-2xl shadow-sm">
+    <div class="max-w-3xl mx-auto my-10 p-6 bg-white border border-gray-200 rounded-2xl shadow-sm">
         <h1 class="text-2xl font-bold text-gray-900 mb-2">My Profile</h1>
         <hr class="mb-6 border-gray-100">
 
@@ -25,7 +25,7 @@
                             </svg>Change Image
                         </label>
                     </div>
-                    <p class="text-xs text-gray-500">We support PNGs, JPEGs and GIFs under 2MB</p>
+                    <p class="text-xs text-gray-500">Only support PNG & JPEG under 2mb</p>
                 </div>
             </div>
 
@@ -68,8 +68,7 @@
                     <span>Back To Profile</span>
                 </a>
                 <div class="flex items-center gap-3">
-                    <button type="button" class="px-6 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition">Cancel</button>
-                    <button type="submit" class="bg-black hover:bg-gray-900 text-white px-8 py-2.5 rounded-xl text-sm font-semibold transition shadow-lg shadow-gray-200">Save Changes</button>
+                    <button type="submit" class="bg-black hover:bg-gray-900 text-white px-8 py-2.5 rounded-xl text-sm font-semibold transition shadow-lg shadow-gray-200">Update</button>
                 </div>
             </div>
         </form>

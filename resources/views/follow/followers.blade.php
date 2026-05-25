@@ -1,14 +1,16 @@
 <x-layout>
     <section class="max-w-3xl mx-auto px-4 py-10">
         <div class="flex items-center justify-between gap-4 mb-8">
-            <div>
-                <h1 class="text-2xl font-black tracking-tight text-black">
-                    Followers
-                </h1>
+            <div class="flex items-center gap-3">
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight text-black">
+                        Followers
+                    </h1>
 
-                <p class="text-sm text-gray-500 mt-1">
-                    {{ $followers->total() }} total followers
-                </p>
+                    <p class="text-sm text-gray-500 mt-1">
+                        {{ $followers->total() }} total followers
+                    </p>
+                </div>
             </div>
 
             <form action="" method="GET" class="hidden sm:block">
@@ -22,7 +24,7 @@
                             </svg>
                         </a>
                     @endif
-                    
+
                     <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -40,7 +42,6 @@
                             <div class="flex items-center gap-4 min-w-0">
                                 <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
                                     @if ($follower->user->avtar)
-
                                         <img
                                             src="{{ asset('storage/' . $follower->user->avtar) }}"
                                             alt="{{ $follower->user->name }}"
@@ -79,6 +80,15 @@
                     </p>
                 </div>
             @endforelse
+        </div>
+
+        <div class="mt-8">
+            <a href="{{ url()->previous() }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:-translate-x-1 transition-transform duration-150">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                <span>Go back</span>
+            </a>
         </div>
 
         <div class="mt-8">

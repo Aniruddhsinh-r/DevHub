@@ -24,43 +24,19 @@
                         <input type="file" id="avtar" name="avtar" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-gray-700 file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Profile Pic" />
                     </div>
 
-                    <div class="items-center space-y-0.5">
-                        <div class="flex items-center gap-4 w-full max-w-md">
-                            <label class="font-medium">Role :</label>
+                    <div class="mt-8 flex items-center justify-between gap-4">
+                        <a href="/login" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
+                            <span>Already have an account?</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:translate-x-1 transition-transform duration-150">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </a>
 
-                            <label for="admin" class="ml-3 font-medium cursor-pointer">
-                                <input
-                                    id='admin'
-                                    type="radio"
-                                    name="role"
-                                    value="admin"
-                                    {{ old('role') == 'admin' ? 'checked' : '' }}
-                                    class="mr-1.5 accent-indigo-600"
-                                />
-                                Admin
-                            </label>
-
-                            <label for="author" class="ml-3 font-medium cursor-pointer">
-                                <input
-                                    id='author'
-                                    type="radio"
-                                    name="role"
-                                    value="author"
-                                    {{ old('role') == 'author' ? 'checked' : '' }}
-                                    class="mr-1.5 accent-indigo-600"
-                                />
-                                Author
-                            </label>
+                        <div>
+                            <button type="submit" class="inline-flex justify-center py-2.5 px-6 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                                Register
+                            </button>
                         </div>
-                        @error('role')
-                            <div class="red text-sm text-red-600">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
-                            Register
-                        </button>
                     </div>
                 </form>
             </div>

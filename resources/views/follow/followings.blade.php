@@ -20,7 +20,7 @@
                             </svg>
                         </a>
                     @endif
-                    
+
                     <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -32,27 +32,27 @@
 
         <div class="space-y-3">
             @forelse ($followings as $following)
-                @if ($following->following)
-                    <a href="/user/{{ $following->following->id }}" class="block group bg-white border border-gray-200 hover:border-gray-400 rounded-2xl px-5 py-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                @if ($following->followed)
+                    <a href="/user/{{ $following->followed->id }}" class="block group bg-white border border-gray-200 hover:border-gray-400 rounded-2xl px-5 py-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <div class="flex items-center justify-between gap-4">
                             <div class="flex items-center gap-4 min-w-0">
                                 <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
-                                    @if ($following->following->avtar)
-                                        <img src="{{ asset('storage/' . $following->following->avtar) }}" alt="{{ $following->following->name }}" class="w-full h-full object-cover">
+                                    @if ($following->followed->avtar)
+                                        <img src="{{ asset('storage/' . $following->followed->avtar) }}" alt="{{ $following->followed->name }}" class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full bg-black text-white flex items-center justify-center text-sm font-bold uppercase">
-                                            {{ substr($following->following->name, 0, 2) }}
+                                            {{ substr($following->followed->name, 0, 2) }}
                                         </div>
                                     @endif
                                 </div>
 
                                 <div class="min-w-0">
                                     <h2 class="text-sm font-bold text-black truncate">
-                                        {{ $following->following->name }}
+                                        {{ $following->followed->name }}
                                     </h2>
 
                                     <p class="text-xs text-gray-500 truncate mt-0.5">
-                                        {{ $following->following->email }}
+                                        {{ $following->followed->email }}
                                     </p>
                                 </div>
                             </div>
@@ -66,10 +66,19 @@
             @empty
                 <div class="border border-dashed border-gray-300 rounded-3xl p-14 text-center bg-white">
                     <h2 class="text-lg font-bold text-black">No Following Found</h2>
-
                     <p class="text-sm text-gray-500 mt-2">Users you follow will appear here.</p>
                 </div>
             @endforelse
+        </div>
+
+
+        <div class="mt-8">
+            <a href="{{ url()->previous() }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:-translate-x-1 transition-transform duration-150">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                <span>Go back</span>
+            </a>
         </div>
 
         <div class="mt-8">

@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8" style="height: calc(100vh - 65px);">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <h2 class="mt-6 text-center text-3xl font-extrabold tracking-tight text-gray-900">
                 Log in to your account
@@ -30,6 +30,14 @@
                                 Log in
                             </button>
                         </div>
+                    </div>
+                    <div class="text-center pt-1">
+                        <p class="text-sm text-gray-500 font-medium">
+                            Don't have an account?
+                            <a href="{{ route('register') }}" class="font-bold text-indigo-600 hover:text-indigo-500 underline decoration-2 underline-offset-4 transition duration-150">
+                                Create an account
+                            </a>
+                        </p>
                     </div>
                 </form>
             </div>

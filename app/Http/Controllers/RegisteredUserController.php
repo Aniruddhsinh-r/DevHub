@@ -28,7 +28,6 @@ class RegisteredUserController extends Controller implements ShouldQueue
             'password' => ['required', 'string', 'min:4', 'max:255'],
             'avtar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'bio' => ['nullable', 'max:2000', 'string'],
-            'role' => ['required']
         ]);
 
         $avatarPath = null;
@@ -42,7 +41,7 @@ class RegisteredUserController extends Controller implements ShouldQueue
             'password' => Hash::make($request->password),
             'bio' => $request->bio,
             'avtar'=> $avatarPath,
-            'role' => $request->role,
+            'role' => 'author',
         ]);
 
         Auth::login($user, $remember = true);

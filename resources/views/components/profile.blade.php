@@ -21,19 +21,17 @@
                         </div>
 
                         <p class="text-gray-600 leading-6 text-sm max-w-xl">{{ $user->bio }}</p>
-                            <div class="flex items-center gap-6 pt-1">
-                                <a href="/profile/followings/{{ $user->id }}">
-                                    <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->following()->count()) }}</h2>
-                                    <p class="text-gray-500 text-sm mt-1">Following</p>
-                                </a>
-
-                                <div class="w-px h-10 bg-gray-300"></div>
-
-                                <a href="/profile/followers/{{ $user->id }}">
-                                    <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->followers()->count()) }}</h2>
-                                    <p class="text-gray-500 text-sm mt-1">Followers</p>
-                                </a>
-                            </div>
+                        <div class="flex items-center gap-6 pt-1">
+                            <a href="/profile/followings/{{ $user->id }}">
+                                <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->following()->count()) }}</h2>
+                                <p class="text-gray-500 text-sm mt-1">Following</p>
+                            </a>
+                            <div class="w-px h-10 bg-gray-300"></div>
+                            <a href="/profile/followers/{{ $user->id }}">
+                                <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->followers()->count()) }}</h2>
+                                <p class="text-gray-500 text-sm mt-1">Followers</p>
+                            </a>
+                        </div>
                     </div>
 
                     <div class="border-l border-gray-200 pl-5 flex flex-col justify-between h-full">

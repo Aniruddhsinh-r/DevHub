@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\articleController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\commentController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\LikeController;
@@ -14,9 +15,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/home', function () {
-    return view('components.home');
-})->name('home');
+Route::get('/home', [articleController::class, 'home'])->name('home');
 Route::get('/articles', [articleController::class, 'displayArticle'])->name('showArticle');
 Route::get('/articles/search', [SearchController::class, 'articleSearch']);
 

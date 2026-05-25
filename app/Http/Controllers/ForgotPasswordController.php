@@ -55,7 +55,7 @@ class ForgotPasswordController extends Controller
         return view('auth.resetPassword');
     }
 
-    public function reset(Request $request, $id){
+    public function reset(Request $request,int $id){
         $request->validate([
             'password' => ['required', 'string', 'min:4', 'max:255'],
             'password_confirmation' => ['required', 'string', 'min:4', 'max:255'],
