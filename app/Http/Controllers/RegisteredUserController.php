@@ -19,6 +19,9 @@ class RegisteredUserController extends Controller implements ShouldQueue
     }
 
     public function store(Request $request) {
+        $request->merge([
+            'email' => strtolower($request->email),
+        ]);
         $request->validate([
             'name' => ['required','min:5','max:50'],
             'email' => ['required', 'string', 'min:10', 'max:255', Rule::unique('users', 'email')],
@@ -35,7 +38,7 @@ class RegisteredUserController extends Controller implements ShouldQueue
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => strtolower($request->email),
             'password' => Hash::make($request->password),
             'bio' => $request->bio,
             'avtar'=> $avatarPath,

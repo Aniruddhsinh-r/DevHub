@@ -21,6 +21,10 @@ class LoginUserController extends Controller implements ShouldQueue
 
     public function store(Request $request)
     {
+        $request->merge([
+            'email' => strtolower($request->email),
+        ]);
+
         $attempt = $request->validate([
             'email' => ['required', 'string', 'min:10', 'max:255'],
             'password' => ['required', 'string', 'min:4', 'max:255'],

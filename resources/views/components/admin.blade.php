@@ -4,10 +4,6 @@
     <aside class="w-64 md:w-56 sm:w-20 sticky top-16 bg-[#e5e7eb] border-r border-gray-300 flex flex-col justify-between p-4 transition-all duration-300 shrink-0">
         <div>
             <div class="flex items-center gap-3 mb-5 border-b pb-4 border-gray-300">
-                <button class="shrink-0 flex items-center focus:outline-none">
-                    <img src="{{ asset('storage/' . auth()->user()->avtar) }}" alt="User Profile" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-gray-400 transition">
-                </button>
-
                 <div class="min-w-0 flex-1">
                     <span class="text-sm font-semibold text-gray-900 leading-none">{{ auth()->user()->name }}</span>
                     <span class="text-xs text-gray-500 block mt-0.5">{{ auth()->user()->email }}</span>

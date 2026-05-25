@@ -58,7 +58,7 @@ class AdminController extends Controller
         $search = $request->search;
         // $users = DB::table('users')->latest()->whereNull('deleted_at')->get();
 
-        $users = User::where('name', 'LIKE', "%{$search}%")->latest()->get();
+        $users = User::where('role','author')->where('name', 'LIKE', "%{$search}%")->latest()->get();
 
         return view('admin.users', ['users'=>$users]);
     }
@@ -68,7 +68,7 @@ class AdminController extends Controller
         if (Auth::check() && Auth::user()->role === 'admin') {
             DB::table('views')->where('user_id',$user->id)->delete();
             DB::table('comments')->where('user_id',$user->id)->delete();
-            DB::table('follows')->where('user_id',$user->id)->delete();
+            DB::table('follows')->where(['follower_id'=>$user->id, 'followed_id'=>$user->id])->delete();
             DB::table('bookmarks')->where('user_id',$user->id)->delete();
             DB::table('likes')->where('user_id',$user->id)->delete();
             $user->delete();

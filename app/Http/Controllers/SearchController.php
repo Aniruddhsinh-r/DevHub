@@ -13,10 +13,10 @@ class SearchController extends Controller
         $search = $request->search;
         $articles = Article::where('title', 'LIKE', "%{$search}%")->orWhere('excerpt', 'LIKE', "%{$search}%")->orWhere('body', 'LIKE', "%{$search}%")->get();
 
-        if (Auth()->user()->role === 'author') {
-            return view('articles.article',['articles'=>$articles]);
-        } else {
+        if (Auth()->user()?->role === 'admin') {
             return view('admin.articles',['articles'=>$articles]);
+        } else {
+            return view('articles.article',['articles'=>$articles]);
         }
     }
 

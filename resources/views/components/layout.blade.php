@@ -28,16 +28,16 @@
                             <a href="/home" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
                         @endif
 
-                        <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
+                        <a href="/articles" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
                         @auth
-                        @if (auth()->user()?->role === 'author')
-                            <a href="/articles" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
-                            <a href="/articles/create" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>Create Article
-                            </a>
-                        @endif
+                            @if (auth()->user()?->role === 'author')
+                                <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
+                                <a href="/articles/create" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                    </svg>Create Article
+                                </a>
+                            @endif
 
                             <div x-data="{ open: false }" class="relative z-50">
                                 <button @click="open = !open" @click.outside="open = false" class="flex items-center focus:outline-none">
@@ -63,11 +63,13 @@
                                     <div class="px-4 font-semibold break-all">{{ auth()->user()->email }}</div>
 
                                     <hr class="border-gray-100 my-1">
-                                    <a href="/{{ auth()->user()->id }}/bookmark" class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
-                                        <svg class="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                        </svg>Bookmark
-                                    </a>
+                                    @if (auth()->user()?->role === 'author')
+                                        <a href="/{{ auth()->user()->id }}/bookmark" class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
+                                            <svg class="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                            </svg>Bookmark
+                                        </a>
+                                    @endif
 
                                     <form action="/logout" method="POST" class="w-full">
                                         @csrf
