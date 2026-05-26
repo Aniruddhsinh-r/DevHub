@@ -192,6 +192,7 @@ Without queue workers and scheduler some automated features may not function cor
 
 This project is created for educational and portfolio purposes.
 
+---
 
 ## 🤝 Support
 
