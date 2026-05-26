@@ -29,7 +29,7 @@ DevHub is a modern blogging and developer community platform built with Laravel.
 Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone (https://github.com/Aniruddhsinh-r/DevHub.git)
 cd devhub
 ```
 
@@ -38,19 +38,12 @@ Install dependencies:
 ```bash
 composer install
 npm install
-npm run build
 ```
 
 Create environment file:
 
 ```bash
 cp .env.example .env
-```
-
-Generate application key:
-
-```bash
-php artisan key:generate
 ```
 
 Configure your database inside `.env` and run migrations:
