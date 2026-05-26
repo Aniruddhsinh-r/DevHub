@@ -56,6 +56,6 @@ class LoginUserController extends Controller implements ShouldQueue
     {
         Auth::logout();
 
-        return view('components.home')->with('success','Logout successfully!');
+        return to_route('home')->with('success','Logout successfully!');
     }
 }
