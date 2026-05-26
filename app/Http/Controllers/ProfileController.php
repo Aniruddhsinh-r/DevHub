@@ -48,7 +48,7 @@ class ProfileController extends Controller
             $user = Auth::user();
             return view('auth.editProfile',['user'=>$user]);
         }
-        return back()->with('error','please login first.');
+        return back()->with('error','Unauthorize action.');
     }
 
     /**

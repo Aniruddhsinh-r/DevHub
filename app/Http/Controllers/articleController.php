@@ -56,7 +56,7 @@ class articleController extends Controller
             return view('auth.register')->with('Please Register to see full article.');
         }
 
-        
+
         $viewed = views::where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
         $comments = comments::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = comments::where('article_id',$article->id)->whereNotNull('parent_id')->get();
@@ -154,7 +154,7 @@ class articleController extends Controller
      */
     public function destroy(Article $article)
     {
-        if (Auth::check()) {
+        if ($article->user_id == Auth::id()) {
             views::where('article_id',$article->id)->delete();
             comments::where('article_id',$article->id)->delete();
             bookmarks::where('article_id',$article->id)->delete();
