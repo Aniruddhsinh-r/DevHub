@@ -207,5 +207,5 @@ This project created by **Rathod Aniruddhsinh**
 GitHub: [https://github.com/Aniruddhsinh](https://github.com/Aniruddhsinh-r)
 
 Project Repository:
-[https://github.com/Aniruddhsinh/HireHub](https://github.com/Aniruddhsinh-r//Organic_mart)
+[https://github.com/Aniruddhsinh/HireHub](https://github.com/Aniruddhsinh-r//DevHub)
 
