@@ -191,3 +191,20 @@ Without queue workers and scheduler some automated features may not function cor
 ## License
 
 This project is created for educational and portfolio purposes.
+
+
+## 🤝 Support
+
+If you like this project, please consider giving it a **star ⭐ on GitHub**.
+
+---
+
+## Author
+
+This project created by **Rathod Aniruddhsinh**
+
+GitHub: [https://github.com/Aniruddhsinh](https://github.com/Aniruddhsinh-r)
+
+Project Repository:
+[https://github.com/Aniruddhsinh/HireHub](https://github.com/Aniruddhsinh-r//Organic_mart)
+
