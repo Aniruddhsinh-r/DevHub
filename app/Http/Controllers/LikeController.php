@@ -15,7 +15,7 @@ class LikeController extends Controller
         if (!Auth::check()) {
             return back()->with('error', 'You must be logged in to like this article.');
         }
-        $like = DB::table('likes')->where(['article_id' => $article->id ,'user_id' => Auth::id()]);
+        $like = likes::where(['article_id' => $article->id ,'user_id' => Auth::id()]);
 
         if ($like->exists()) {
             $like->delete();

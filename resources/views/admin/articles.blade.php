@@ -15,10 +15,9 @@
         </div>
 
         <div class="bg-white border border-gray-200 rounded-[2rem] shadow-sm overflow-hidden">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-5 py-5 border-b border-gray-100">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-5 py-5">
                 <div>
                     <h2 class="text-lg font-black text-[#111827] tracking-tight">All Written Articles</h2>
-                    <p class="text-sm text-gray-500 mt-1">Manage, draft, review, and delete your site content here.</p>
                 </div>
                 <div class="relative w-full lg:w-64">
                     <form action="" method="GET">
@@ -40,84 +39,42 @@
                             </button>
                         </div>
                     </form>
-
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full min-w-[850px]">
-                    <thead class="bg-[#fafafa] border-b border-gray-100">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">Article Details</th>
-                            <th class="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">Auther</th>
-                            <th class="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">category</th>
-                            <th class="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">Published</th>
-                        </tr>
-                    </thead>
-
-                    <tbody class="divide-y divide-gray-100">
-                        @foreach ($articles as $article)
-                            <tr class="hover:bg-gray-50/70 transition-all duration-200">
-                                <td class="px-6 py-4">
-                                    <div class="min-w-0 max-w-[400px]">
-                                        <h3 class="text-sm font-bold text-[#111827] truncate">
-                                            {{ $article->title }}
-                                        </h3>
-                                        <p class="text-xs text-gray-500 truncate mt-0.5">
-                                            {{ Str::limit($article->body ?? $article->content ?? '', 75) }}
-                                        </p>
-                                    </div>
-                                </td>
-
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
-                                        <img src="{{ asset('storage/' . $article->user->avtar) }}" class="w-9 h-9 rounded-xl object-cover border border-gray-200">
-                                        <div>
-                                            <h4 class="text-sm font-bold text-[#111827] line-clamp-1">
-                                                {{ $article->user->name }}
-                                            </h4>
-                                            <p class="text-xs text-gray-500 line-clamp-1">
-                                                {{ $article->user->email }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold text-gray-600">
-                                        {{ $article->category->name ?? 'Article' }}
-                                    </span>
-                                </td>
-
-                                <td class="px-6 py-4 text-sm font-medium text-gray-500">
-                                    {{ \Carbon\Carbon::parse($article->created_at)->format('d M Y') }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 m-4">
+                @foreach ($articles as $article)
+                    <a href='/admin/articles/{{ $article->id }}' class="p-5 bg-[#efefef] rounded-2xl">
+                        <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
+                        <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
+                        <div class="mt-5 flex items-center justify-between border-t border-gray-100">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Published</p>
+                                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->created_at->diffForHumans() }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Date</p>
+                                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->created_at->format('d M Y') }}</p>
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
             </div>
-
-            @if(method_exists($articles, 'links'))
-                <div class="px-6 py-4 bg-[#fafafa] border-t border-gray-100">
-                    {{ $articles->links() }}
-                </div>
-            @endif
         </div>
     </div>
 </x-admin>
 
 {{-- <x-admin>
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 m-2">
-        <div>
-            <h1 class="mt-2 text-5xl font-black tracking-tight text-gray-900">Latest Articles</h1>
-            <p class="mt-4 text-sm text-gray-500 font-medium max-w-lg leading-relaxed">Explore fresh perspectives and deep dives from our community of thinkers.</p>
+    <section class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 m-2">
+            <div>
+                <h1 class="mt-2 text-5xl font-black tracking-tight text-gray-900">Latest Articles</h1>
+                <p class="mt-4 text-sm text-gray-500 font-medium max-w-lg leading-relaxed">Explore fresh perspectives and deep dives from our community of thinkers.</p>
+            </div>
         </div>
-    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
-        @include('components.articleLayout')
-    </div>
-</section>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-10">
+            @include('components.articleLayout')
+        </div>
+    </section>
 </x-admin> --}}

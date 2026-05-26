@@ -88,7 +88,7 @@
 
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <a href="/user/{{ $user->name }}"  class="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-gray-200 bg-white hover:bg-[#111827] text-xs font-bold text-gray-700 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <a href="/admin/users/{{ $user->id }}"  class="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-gray-200 bg-white hover:bg-[#111827] text-xs font-bold text-gray-700 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
                                             View
                                         </a>
 

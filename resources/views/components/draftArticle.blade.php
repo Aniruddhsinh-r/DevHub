@@ -7,7 +7,7 @@
             <p class="mt-4 text-sm text-gray-500 font-medium leading-relaxed">Refine unfinished stories and continue writing before publishing them publicly.</p>
         </div>
 
-        <a href="/articles/{{ auth()->user()->id }}/article" class="bg-[#111111] text-white px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.18em] hover:bg-black transition-all duration-300">All Articles</a>
+        <a href="/articles/myarticle" class="bg-[#111111] text-white px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.18em] hover:bg-black transition-all duration-300">All Articles</a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

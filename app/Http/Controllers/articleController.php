@@ -6,10 +6,12 @@ use App\Actions\CreateArticle;
 use App\Actions\UpdateArticle;
 use App\Http\Requests\ArticleValidationRequest;
 use App\Models\Article;
+use App\Models\bookmarks;
 use App\Models\Category;
 use App\Models\comments;
 use App\Models\likes;
 use App\Models\User;
+use App\Models\views;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
@@ -54,15 +56,16 @@ class articleController extends Controller
             return view('auth.register')->with('Please Register to see full article.');
         }
 
-        $viewed = DB::table('views')->where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
+        
+        $viewed = views::where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
         $comments = comments::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = comments::where('article_id',$article->id)->whereNotNull('parent_id')->get();
 
-        $likes = DB::table('likes')->where('article_id',$article->id)->get();
+        $likes = likes::where('article_id',$article->id)->get();
 
         if (!$viewed) {
-            DB::table('articles')->where('id', $article->id)->increment('view_count');
-            DB::table('views')->insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
+            Article::where('id', $article->id)->increment('view_count');
+            views::insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
         }
         return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
     }
@@ -152,10 +155,10 @@ class articleController extends Controller
     public function destroy(Article $article)
     {
         if (Auth::check()) {
-            DB::table('views')->where('article_id',$article->id)->delete();
-            DB::table('comments')->where('article_id',$article->id)->delete();
-            DB::table('bookmarks')->where('article_id',$article->id)->delete();
-            DB::table('likes')->where('article_id',$article->id)->delete();
+            views::where('article_id',$article->id)->delete();
+            comments::where('article_id',$article->id)->delete();
+            bookmarks::where('article_id',$article->id)->delete();
+            likes::where('article_id',$article->id)->delete();
             $article->delete();
 
             return back()->with('success','article delete successfully.');

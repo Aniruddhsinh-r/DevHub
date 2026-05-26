@@ -203,7 +203,6 @@
 
                                     <div x-data="{ activeReply: null, showReplies: false }">
                                         <div class="flex items-center gap-5 mt-3 ml-2 text-xs font-bold text-gray-500">
-                                            <button class="hover:text-black transition">Like</button>
                                             <button @click="activeReply = activeReply === {{ $comment->id }} ? null : {{ $comment->id }}" class="hover:text-black transition">Reply</button>
                                             @if ($comment->replies->count() > 0)
                                                 <button x-show="!showReplies" @click="showReplies = !showReplies" class="hover:text-black transition">View {{ $comment->replies->count() }} more reply</button>

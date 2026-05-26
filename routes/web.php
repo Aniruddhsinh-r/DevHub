@@ -57,16 +57,17 @@ Route::middleware('auth')->controller(AdminController::class)->group(function ()
 
 Route::middleware(['auth','admin'])->controller(AdminController::class)->group(function () {
     Route::get('/admin/dashboard', 'index')->name('admin.dashboard');
-    Route::get('/admin/user', 'user');
+    Route::get('/admin/users', 'user');
+    Route::get('/admin/users/{user}', 'showuser');
     Route::delete('/admin/user/remove/{user}', 'userRemove');
     Route::get('/admin/categories', 'show');
     Route::post('/admin/categories', 'create');
     Route::get('/admin/articles', 'articles');
-    Route::get('/admin/articles/{article}', 'showarticle');
+    Route::get('/admin/articles/{article}', 'showArticle');
+    Route::get('/admin/articles/{user}/published', 'userPublished');
     Route::delete('/admin/categories/delete/{category}', 'destroy');
     Route::post('/search/users', [SearchController::class, 'userSearch']);
 });
-
 
 /** forget psswords */
 Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {

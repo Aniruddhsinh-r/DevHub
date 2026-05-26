@@ -18,7 +18,7 @@
                 <div class="flex justify-between items-center h-16">
 
                     <div class="flex items-center">
-                        <a href="/" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
+                        <a href="/home" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
                     </div>
 
                     <div class="flex items-center gap-4 md:gap-8">
@@ -26,9 +26,9 @@
                             <a href="/admin/dashboard" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">dashboard</a>
                         @else
                             <a href="/home" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
+                            <a href="/articles" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
                         @endif
 
-                        <a href="/articles" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
                         @auth
                             @if (auth()->user()?->role === 'author')
                                 <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
@@ -115,9 +115,8 @@
                     <a href="/admin/dashboard" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">dashboard</a>
                 @else
                     <a href="/home" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">home</a>
+                    <a href="/articles" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
                 @endif
-
-                <a href="/articles" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
 
                 @auth
                     @if (auth()->user()?->role === 'author')
@@ -173,5 +172,10 @@
             </div>
         @endif
     </main>
+
+    {{-- @if (Auth()->user()?->role !== 'admin')
+        @include('components.footer')
+    @endif --}}
+
 </body>
 </html>

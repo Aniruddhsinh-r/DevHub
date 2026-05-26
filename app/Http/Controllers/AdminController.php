@@ -48,6 +48,18 @@ class AdminController extends Controller
         return to_route('register')->with('error','Only admin can create categories.');
     }
 
+    public function showuser(User $user) {
+
+        $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+        return view('admin.userProfile', ['user'=>$user,'articles'=>$articles]);
+    }
+
+    public function userPublished(User $user) {
+        $articles = Article::with(['category'])->where('user_id', $user->id)->latest()->get();
+        return view('admin.userPublished', ['articles'=>$articles]);
+
+    }
+
     public function show() {
         $categories = Category::withCount('articles')->get();
 
@@ -112,7 +124,7 @@ class AdminController extends Controller
         return back()->with('error','Only admin can perform this task');
     }
 
-    public function showarticle(Article $article) {
+    public function showArticle(Article $article) {
         // $article = Article::where('id',$article->id)->get();
         $comments = comments::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = comments::where('article_id',$article->id)->whereNotNull('parent_id')->get();
