@@ -26,7 +26,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginUserController::class, 'store'])->name('login');
 });
 
-Route::middleware('auth','author')->group(function () {
+Route::middleware(['auth','author'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/profile/edit/{id}', [ProfileController::class, 'edit'])->name('profileedit');
     Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
