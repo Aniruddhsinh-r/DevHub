@@ -15,6 +15,9 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    return redirect('/home');
+});
 Route::get('/home', [articleController::class, 'home'])->name('home');
 Route::get('/articles', [articleController::class, 'displayArticle'])->name('showArticle');
 Route::get('/articles/search', [SearchController::class, 'articleSearch']);

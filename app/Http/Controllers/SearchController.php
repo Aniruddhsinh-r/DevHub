@@ -11,7 +11,13 @@ class SearchController extends Controller
 {
     public function articleSearch(Request $request) {
         $search = $request->search;
-        $articles = Article::where('title', 'LIKE', "%{$search}%")->orWhere('excerpt', 'LIKE', "%{$search}%")->orWhere('body', 'LIKE', "%{$search}%")->get();
+        $articles = Article::with(['user', 'category'])
+        ->where('status', 'published')
+        ->where(function($query) use ($search) {
+            $query->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('excerpt', 'LIKE', "%{$search}%")
+                  ->orWhere('body', 'LIKE', "%{$search}%");
+        })->latest()->get();
 
         if (Auth()->user()?->role === 'admin') {
             return view('admin.articles',['articles'=>$articles]);

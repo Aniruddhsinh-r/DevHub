@@ -120,7 +120,7 @@
                     @foreach ($articles->sortByDesc('id')->take(4) as $article)
                         <a href="/admin/articles/{{ $article->id }}" class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
                             <div class="flex items-center gap-3 truncate max-w-[70%]">
-                                <span class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px]">{{ $loop->iteration }}</span>
+                                <div class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px] shrink-0">{{ $loop->iteration }}</div>
                                 <span class="text-xs font-bold text-gray-900 truncate">{{ $article->title }}</span>
                             </div>
                             <div class="flex items-center gap-4 text-right">
@@ -161,7 +161,13 @@
 
                     <a href="/user/{{ $topUser->name }}" class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
                         <div class="relative shrink-0">
-                            <img src="{{ asset('storage/' . $topUser->avtar) }}" alt="{{ $topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500">
+                            @if ($topUser->avtar)
+                                <img src="{{ asset('storage/' . $topUser->avtar) }}" alt="{{ $topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500 object-cover">
+                            @else
+                                <div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0 group-hover:scale-110 transition-transform duration-500">
+                                    {{ mb_substr($topUser->name, 0, 2) }}
+                                </div>
+                            @endif
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex flex-col">

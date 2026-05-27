@@ -173,9 +173,9 @@
         @endif
     </main>
 
-    {{-- @if (Auth()->user()?->role !== 'admin')
+    @if (Auth()->user()?->role !== 'admin')
         @include('components.footer')
-    @endif --}}
+    @endif
 
 </body>
 </html>

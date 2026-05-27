@@ -26,7 +26,7 @@
                 </p>
 
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                    <div class="flex items-center gap-3">
+                    <a href="/admin/users/{{ $article->user->id }}" class="flex items-center gap-3">
                         @if ($article->user->avtar)
                             <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="user_image" class="w-9 h-9 rounded-full border-2 border-black object-cover">
                         @else
@@ -36,7 +36,7 @@
                             <h3 class="text-sm font-bold text-white">{{ $article->user->name }}</h3>
                             <p class="text-xs text-gray-400 font-medium">{{ $article->category->name }}</p>
                         </div>
-                    </div>
+                    </a>
                     <div>
                         <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Published</p>
                         <p class="mt-0.5 font-bold text-white text-sm">{{ $article->created_at->format('F d, Y') }}</p>
@@ -84,13 +84,13 @@
                         <div class="space-y-6">
                             @foreach ($comments as $comment)
                             <div class="flex gap-4">
-                                <div class="w-11 h-11 mt-1 rounded-full border border-gray-200 bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
+                                <a href="/admin/users/{{ $comment->user->id }}"  class="w-11 h-11 mt-1 rounded-full border border-gray-200 bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                                     @if ($comment->user->avtar)
                                         <img src="{{ asset('storage/' . $comment->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
                                     @else
                                         <span>{{ Str::upper(Str::substr($comment->user->name, 0, 2)) }}</span>
                                     @endif
-                                </div>
+                                </a>
 
                                 <div class="flex-1">
                                     <div class="bg-[#f0f0f0] rounded-2xl px-5 py-3">
@@ -119,13 +119,13 @@
                                         <div x-show="showReplies" class="mt-2 pl-4 border-l-2 border-gray-200 space-y-3" x-cloak>
                                             @foreach ($replies->where('parent_id', $comment->id) as $reply)
                                             <div class="flex gap-4">
-                                                <div class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
+                                                <a href="/admin/users/{{ $reply->user->id }}"  class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
                                                     @if ($reply->user->avtar)
                                                         <img src="{{ asset('storage/' . $reply->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
                                                     @else
                                                         <span>{{ Str::upper(Str::substr($reply->user->name, 0, 2)) }}</span>
                                                     @endif
-                                                </div>
+                                                </a>
 
                                                 <div class="flex-1">
                                                     <div class="bg-[#f0f0f0] rounded-2xl px-4 py-2.5">
