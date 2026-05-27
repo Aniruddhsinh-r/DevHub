@@ -1,12 +1,12 @@
 <x-layout>
-    <div class="min-h-screen py-12 px-4 sm:px-6">
+    <div class="min-h-screen py-12 px-4 + sm:px-6">
         <div class="max-w-2xl mx-auto">
             <div class="mb-8 border-l-4 border-black pl-5">
                 <h2 class="text-2xl font-black uppercase tracking-tighter text-gray-900">Create Article</h2>
                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Editor Workspace</p>
             </div>
 
-            <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="bg-[#c6caca] rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
+            <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="bg-[#c6caca] rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 <form method="POST" action="{{ $article->exists ? route('updateArticle', $article) : route('createArticle') }}" class="p-8 md:p-10 space-y-6" enctype="multipart/form-data">
                     @csrf
                     @if ($article->exists)

@@ -23,6 +23,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
         @include('components.articleLayout')
     </div>
+    <div class="mt-8 font-semibold">
+        {{ $articles->appends(['search' => request('search')])->links() }}
+    </div>
 
 </section>
 </x-layout>

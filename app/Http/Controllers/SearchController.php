@@ -17,7 +17,7 @@ class SearchController extends Controller
             $query->where('title', 'LIKE', "%{$search}%")
                   ->orWhere('excerpt', 'LIKE', "%{$search}%")
                   ->orWhere('body', 'LIKE', "%{$search}%");
-        })->latest()->get();
+        })->latest()->paginate(9);
 
         if (Auth()->user()?->role === 'admin') {
             return view('admin.articles',['articles'=>$articles]);

@@ -98,7 +98,7 @@ class articleController extends Controller
      */
     public function displayArticle()
     {
-        $articles = Article::with(['user', 'category'])->where('status', 'published')->latest()->get();
+        $articles = Article::with(['user', 'category'])->where('status', 'published')->latest()->paginate(9);
         return view('articles.article',[
             'articles' => $articles
         ]);

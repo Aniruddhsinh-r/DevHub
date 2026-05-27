@@ -61,7 +61,7 @@ class AdminController extends Controller
     }
 
     public function show() {
-        $categories = Category::withCount('articles')->get();
+        $categories = Category::withCount('articles')->paginate(6);
 
         return view('admin.categories', ['categories' => $categories]);
     }
@@ -70,7 +70,7 @@ class AdminController extends Controller
         $search = $request->search;
         // $users = DB::table('users')->latest()->whereNull('deleted_at')->get();
 
-        $users = User::where('role','author')->where('name', 'LIKE', "%{$search}%")->latest()->get();
+        $users = User::where('role','author')->where('name', 'LIKE', "%{$search}%")->latest()->paginate(6);
 
         return view('admin.users', ['users'=>$users]);
     }
@@ -102,7 +102,7 @@ class AdminController extends Controller
                 });
             })
             ->latest()
-            ->get();
+            ->paginate(9);
 
         return view('admin.articles',['articles'=>$articles]);
     }

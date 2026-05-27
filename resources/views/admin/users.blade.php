@@ -106,6 +106,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="m-5 font-semibold">
+                    {{ $users->appends(['search' => request('search')])->links() }}
+                </div>
             </div>
         </div>
     </div>

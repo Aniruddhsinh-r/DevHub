@@ -57,8 +57,10 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="m-5 font-semibold">
+                    {{ $categories->links() }}
+                </div>
             </div>
         </div>
     </div>
 </x-admin>
-{{-- 102 --}}

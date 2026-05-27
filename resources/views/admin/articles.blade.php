@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-[2rem] shadow-sm overflow-hidden">
+        <div class="bg-white border border-gray-200 rounded-[2rem] shadow-sm overflow-hidden p-4">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-5 py-5">
                 <div>
                     <h2 class="text-lg font-black text-[#111827] tracking-tight">All Written Articles</h2>
@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 m-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
                 @foreach ($articles as $article)
                     <a href='/admin/articles/{{ $article->id }}' class="p-5 bg-[#efefef] rounded-2xl">
                         <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
@@ -59,6 +59,9 @@
                         </div>
                     </a>
                 @endforeach
+            </div>
+            <div class="my-2 font-semibold">
+                {{ $articles->appends(['search' => request('search')])->links() }}
             </div>
         </div>
     </div>
