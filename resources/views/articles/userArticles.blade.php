@@ -24,7 +24,7 @@
                     </div>
                     <h2 class="text-2xl font-black text-gray-900">No articles yet</h2>
                     <p class="text-gray-500 mt-2 font-medium">You haven't published any content to your profile.</p>
-                    <a href="#" class="inline-block mt-8 px-8 py-4 bg-gray-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all">
+                    <a href="{{ route('articles.create') }}" class="inline-block mt-8 px-8 py-4 bg-gray-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all">
                         Write Your First Story
                     </a>
                 </div>

@@ -11,7 +11,7 @@
                     <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full"></span>Create New Category
                 </h2>
 
-                <form action="/admin/categories" method="POST" class="space-y-4" autocomplete="off" enctype="multipart/form-data">
+                <form action="{{ route('admin.categories') }}" method="POST" class="space-y-4" autocomplete="off" enctype="multipart/form-data">
                     @csrf
                     <x-form.field name="name" type="text" label="Category Name" placeholder="e.g., Technology, Helth, Coding..."></x-form.field>
 
@@ -46,7 +46,7 @@
                                     <td class="px-5 py-3.5 text-sm font-bold text-gray-900">{{ $category->slug }}</td>
                                     <td class="px-5 py-3.5 text-xs text-gray-500 font-mono">{{ $category->articles_count }}</td>
                                     <td class="px-5 py-3.5 text-right">
-                                        <form action="/admin/categories/delete/{{ $category->id }}" method="post">
+                                        <form action="{{ route('admin.category.delete',$category->id) }}" method="post">
                                             @csrf
                                             @method('DELETE')
                                             <button class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete</button>

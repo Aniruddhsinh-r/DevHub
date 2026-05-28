@@ -15,7 +15,7 @@
             You don't have permission to access this page.
         </p>
 
-        <a href="/"
+        <a href="{{ route('home') }}"
            class="inline-flex items-center px-6 py-3 rounded-2xl bg-white text-black font-bold hover:scale-105 transition">
             Go Home
         </a>

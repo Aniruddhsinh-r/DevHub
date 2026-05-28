@@ -22,12 +22,12 @@
 
                         <p class="text-gray-600 leading-6 text-sm max-w-xl">{{ $user->bio }}</p>
                         <div class="flex items-center gap-6 pt-1">
-                            <a href="/profile/followings/{{ $user->id }}">
+                            <a href="{{ route('followings',$user->id) }}">
                                 <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->following()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Following</p>
                             </a>
                             <div class="w-px h-10 bg-gray-300"></div>
-                            <a href="/profile/followers/{{ $user->id }}">
+                            <a href="{{ route('followers',$user->id) }}">
                                 <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->followers()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Followers</p>
                             </a>
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         @if (auth()->user()->role == "author")
-                            <form action="/follow/{{ $user->id }}" method="post">
+                            <form action="{{ route('follow',$user->id) }}" method="post">
                                 @csrf
                                 @if (auth()->user()->following->contains($user->id))
                                     <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Unfollow</button>
@@ -79,7 +79,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                     @foreach ($articles->take(3) as $article)
-                        <a href='/articles/{{ $article->id }}' class="p-5 bg-gray-200 rounded-2xl">
+                        <a href='{{ route('articles.show',$article->id) }}' class="p-5 bg-gray-200 rounded-2xl">
                             <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
                             <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
 
@@ -98,7 +98,7 @@
                 </div>
 
                 @if ($articles->count() > 3)
-                    <a href="/articles/{{ $user->id }}/published" class="flex justify-center mt-8">
+                    <a href="{{ route('user.published',$user->id) }}" class="flex justify-center mt-8">
                         <button class="border border-gray-300 hover:border-black hover:bg-black hover:text-white transition px-6 py-2.5 rounded-xl text-sm font-semibold text-gray-800">Show More Articles</button>
                     </a>
                 @endif

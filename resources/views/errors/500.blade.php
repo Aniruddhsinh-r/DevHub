@@ -15,7 +15,7 @@
             Something went wrong on our server.
         </p>
 
-        <a href="/"
+        <a href="{{ route('home') }}"
            class="inline-flex items-center px-6 py-3 rounded-2xl bg-yellow-400 text-black font-bold hover:scale-105 transition">
             Return Home
         </a>

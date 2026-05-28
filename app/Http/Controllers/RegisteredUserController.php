@@ -49,12 +49,8 @@ class RegisteredUserController extends Controller implements ShouldQueue
         $to = $request->email;
         $message = $user->name;
 
-        Mail::to($to)->queue(new RegistrationMail($message));
+        // Mail::to($to)->queue(new RegistrationMail($message));
 
-        if ($request->role === 'admin') {
-            return redirect('/adminpanel')->with('success','you register successfully.');
-            // return view('admin.admin')->with('success','you register successfully.');
-        }
         return to_route('home')->withInput()->with('success','User register successfully.');
     }
 }

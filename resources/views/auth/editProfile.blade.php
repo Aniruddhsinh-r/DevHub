@@ -5,7 +5,7 @@
 
         <form action="{{ route('profile.update',$user->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PATCH')
+            @method('PUT')
 
             <div class="flex items-center gap-6 mb-6" x-data="{ imageUrl: '{{ $user->avtar ? asset('storage/' . $user->avtar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name) }}' }">
                 <div class="relative">

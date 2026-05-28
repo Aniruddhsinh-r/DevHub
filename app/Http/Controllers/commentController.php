@@ -7,7 +7,7 @@ use App\Models\comments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class commentController extends Controller
+class CommentController extends Controller
 {
     public function create(Request $request) {
         // dd($request->all());

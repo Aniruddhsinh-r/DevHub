@@ -36,7 +36,7 @@ class ProfileController extends Controller
             $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
             return view('components.profile', compact('user','articles'));
         }
-        return to_route('register');
+        return view('auth.register')->with('error','Unauthorize action');
     }
 
     /**
@@ -85,7 +85,7 @@ class ProfileController extends Controller
         }
 
         if ($user->update($data)) {
-            return to_route('profile')->withInput()->with('success','your profile is sucessfully updated.');
+            return to_route('profile.index')->withInput()->with('success','your profile is sucessfully updated.');
         }
         return back()->with('error',"fail to update profile.");
     }

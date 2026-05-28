@@ -16,7 +16,7 @@
                     </div>
                     @if (auth()->user()->role === 'author')
                     <div class="flex items-center gap-3">
-                        <form action="/article/{{ $article->id }}/like" method="POST" class="inline">
+                        <form action="{{ route('likearticle',$article->id) }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
                                     @if($likes->count()>0)
@@ -31,7 +31,7 @@
                                 <span>{{ $likes->count() }} Like</span>
                             </button>
                         </form>
-                        <form action="/article/{{ $article->id }}/bookmark" method="POST" class="inline">
+                        <form action="{{ route('bookmarkarticle',$article->id) }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
                                 @if($article->bookmarked())
@@ -56,8 +56,8 @@
                 <p class="mt-5 text-gray-300 text-base md:text-lg leading-relaxed max-w-3xl font-medium">
                     {{ $article->excerpt }}
                 </p>
-                <a href="/user/{{ $article->user->id }}" class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                    <div class="flex items-center gap-3">
+                <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
+                    <a href="{{ route('userprofile',$article->user->id) }}" class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
                             @if ($article->user->avtar)
                                 <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="{{ $article->user->name }}" class="w-9 h-9">
@@ -69,7 +69,7 @@
                             <p class="font-black text-white uppercase tracking-wide text-xs">{{ $article->user->name }}</p>
                             <p class="text-gray-400 text-xs mt-0.5">Author</p>
                         </div>
-                    </div>
+                    </a>
                     <div class="h-8 w-px bg-white/10 hidden md:block"></div>
                     <div>
                         <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Published</p>
@@ -80,7 +80,7 @@
                         <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Views</p>
                         <p class="mt-0.5 font-bold text-white text-sm">{{ number_format($article->view_count) }} Views</p>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
 
@@ -112,7 +112,7 @@
                     </article>
 
                     {{-- AUTHOR CARD --}}
-                    <a href="/user/{{ $article->user->id }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
+                    <a href="{{ route('userprofile',$article->user->id) }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                         <div class="flex flex-col md:flex-row md:items-center gap-6">
                             <div class="w-24 h-24 rounded-full bg-[#111827] text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-gray-100">
                                 @if ($article->user->avtar)
@@ -149,7 +149,7 @@
                             </div>
 
                             <div class="flex-1">
-                                <form action="/article/comment" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('postcomment') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="article_id" value="{{ $article->id }}">
                                     <x-form.field name="body" type="textarea" label="Comment" placeholder="Start your story..."></x-form.field>
@@ -175,7 +175,7 @@
                         <div class="space-y-6">
                             @foreach ($comments as $comment)
                             <div class="flex gap-4">
-                                <a href="/user/{{ $comment->user->id }}" class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
+                                <a href="{{ route('userprofile',$comment->user->id) }}" class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                                     @if ($comment->user->avtar)
                                         <img src="{{ asset('storage/' . $comment->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
                                     @else
@@ -211,7 +211,7 @@
                                         <div x-show="showReplies" class="py-4">
                                             @foreach ($replies as $reply)
                                             <div class="flex gap-4">
-                                                <a href="/user/{{ $reply->user->id }}">
+                                                <a href="{{ route('userprofile',$reply->user->id) }}">
                                                     <div class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm overflow-hidden">
                                                         @if ($reply->user->avtar)
                                                             <img src="{{ asset('storage/' . $reply->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
@@ -243,7 +243,7 @@
                                                         <button @click="activeReply = activeReply === {{ $reply->id }} ? null : {{ $reply->id }}" class="hover:text-black transition">Reply</button>
                                                     </div>
                                                     <div x-show="activeReply === {{ $reply->id }}">
-                                                        <form action="/article/comment" method="post">
+                                                        <form action="{{ route('postcomment') }}" method="post">
                                                             @csrf
                                                             <div class="w-full flex items-end gap-4">
                                                                 <input type="hidden" name="article_id" value="{{ $article->id }}">
@@ -268,7 +268,7 @@
                                             @endforeach
                                         </div>
                                         <div x-show="activeReply === {{ $comment->id }}">
-                                            <form action="/article/comment" method="post">
+                                            <form action="{{ route('postcomment') }}" method="post">
                                                 @csrf
                                                 <div class="w-full flex items-end gap-4">
                                                     <input type="hidden" name="article_id" value="{{ $article->id }}">
@@ -344,14 +344,14 @@
                                 </span>
                             </div>
                             @if (auth()->user()->role === 'author')
-                                <a href="/articles" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
+                                <a href="{{ route('show.articles') }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:-translate-x-1 transition-transform duration-150">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                                     </svg>
                                     <span>Back To Articles</span>
                                 </a>
                             @else
-                                <a href="/admin/articles" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
+                                <a href="{{ route('admin.articles') }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:-translate-x-1 transition-transform duration-150">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                                     </svg>

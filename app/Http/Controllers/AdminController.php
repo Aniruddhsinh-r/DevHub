@@ -45,18 +45,18 @@ class AdminController extends Controller
 
             return back()->with('success','Category create successfully.');
         }
-        return to_route('register')->with('error','Only admin can create categories.');
+        return view('auth.register')->with('error','Only admin can create categories.');
     }
 
     public function showuser(User $user) {
 
         $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
-        return view('admin.userProfile', ['user'=>$user,'articles'=>$articles]);
+        return view('admin.users.userProfile', ['user'=>$user,'articles'=>$articles]);
     }
 
     public function userPublished(User $user) {
         $articles = Article::with(['category'])->where('user_id', $user->id)->latest()->get();
-        return view('admin.userPublished', ['articles'=>$articles]);
+        return view('admin.users.userPublished', ['articles'=>$articles]);
 
     }
 
@@ -72,7 +72,7 @@ class AdminController extends Controller
 
         $users = User::where('role','author')->where('name', 'LIKE', "%{$search}%")->latest()->paginate(6);
 
-        return view('admin.users', ['users'=>$users]);
+        return view('admin.users.users', ['users'=>$users]);
     }
 
     public function userRemove(User $user) {
@@ -104,7 +104,7 @@ class AdminController extends Controller
             ->latest()
             ->paginate(9);
 
-        return view('admin.articles',['articles'=>$articles]);
+        return view('admin.articles.articles',['articles'=>$articles]);
     }
 
     public function destroy(Category $category) {
@@ -131,6 +131,6 @@ class AdminController extends Controller
 
         $likes = DB::table('likes')->where('article_id',$article)->get();
 
-        return view('admin.article', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
+        return view('admin.articles.article', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
     }
 }

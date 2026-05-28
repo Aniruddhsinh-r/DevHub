@@ -13,7 +13,7 @@
 
         {{-- CARD --}}
         <div class="bg-white border border-gray-100 rounded-[2rem] shadow-xl shadow-gray-100 overflow-hidden">
-            <form action="/password/forgot/otp/{{ $email }}" method="POST" class="p-8 space-y-6">
+            <form action="{{ route('password.forgot.otp.post',$email) }}" method="POST" class="p-8 space-y-6">
                 @csrf
                 <input type="hidden" name="email" value="{{ $email }}">
                 @if(session('success'))

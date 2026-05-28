@@ -18,21 +18,21 @@
                 <div class="flex justify-between items-center h-16">
 
                     <div class="flex items-center">
-                        <a href="/home" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
+                        <a href="{{ route('home') }}" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
                     </div>
 
                     <div class="flex items-center gap-4 md:gap-8">
                         @if (auth()->user()?->role === 'admin')
                             <a href="/admin/dashboard" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">dashboard</a>
                         @else
-                            <a href="/home" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
-                            <a href="/articles" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
+                            <a href="{{ route('home')  }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
+                            <a href="{{ route('show.articles')  }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
                         @endif
 
                         @auth
                             @if (auth()->user()?->role === 'author')
-                                <a href="/profile" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
-                                <a href="/articles/create" class="hidden sm:inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
+                                <a href="{{ route('profile.index') }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
+                                <a href="{{ route('articles.create') }}" class="hidden sm:inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                     </svg>Create Article
@@ -64,14 +64,14 @@
 
                                     <hr class="border-gray-100 my-1">
                                     @if (auth()->user()?->role === 'author')
-                                        <a href="/{{ auth()->user()->id }}/bookmark" class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
+                                        <a href="{{ route('show.bookmarks',auth()->user()->id) }}" class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
                                             <svg class="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                                             </svg>Bookmark
                                         </a>
                                     @endif
 
-                                    <form action="/logout" method="POST" class="w-full">
+                                    <form action="{{ route('logout') }}" method="POST" class="w-full">
                                         @csrf
                                         <button type="submit" class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
                                             <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -83,10 +83,10 @@
                         @endauth
 
                         @guest
-                            <a href="/register" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">
+                            <a href="{{ route('register.create') }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">
                                 Sign Up
                             </a>
-                            <a href="/login" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
+                            <a href="{{ route('login.create') }}" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                 Sign In
                             </a>
                         @endguest
@@ -112,15 +112,15 @@
                  style="display: none;">
 
                 @if (auth()->user()?->role === 'admin')
-                    <a href="/admin/dashboard" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">dashboard</a>
+                    <a href="{{ route('admin.dashboard')  }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">dashboard</a>
                 @else
-                    <a href="/home" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">home</a>
-                    <a href="/articles" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
+                    <a href="{{ route('home')  }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">home</a>
+                    <a href="{{ route('show.articles')  }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
                 @endif
 
                 @auth
                     @if (auth()->user()?->role === 'author')
-                        <a href="/profile" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">profile</a>
+                        <a href="{{ route('profile.index') }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">profile</a>
                         <a href="/articles/create" class="sm:hidden inline-flex items-center justify-center w-full px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition shadow-sm mt-2">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -130,7 +130,7 @@
                 @endauth
 
                 @guest
-                    <a href="/register" class="text-base font-semibold hover:text-gray-500 transition py-2">Sign Up</a>
+                    <a href="{{ route('register.create') }}" class="text-base font-semibold hover:text-gray-500 transition py-2">Sign Up</a>
                 @endguest
             </div>
         </nav>

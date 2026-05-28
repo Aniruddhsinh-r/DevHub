@@ -21,16 +21,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
 
-class articleController extends Controller
+class ArticleController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
 
-        return view('articles.articleForm', [
-            'article' => new Article(),
-            'categories' => $categories
-        ]);
     }
 
     public function home() {
@@ -41,13 +36,23 @@ class articleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(ArticleValidationRequest $request, CreateArticle $action)
+    public function create()
+    {
+        $categories = Category::all();
+
+        return view('articles.articleForm', [
+            'article' => new Article(),
+            'categories' => $categories
+        ]);
+    }
+
+    public function store(ArticleValidationRequest $request, CreateArticle $action)
     {
         if (Auth::check()) {
             $action->handle($request->safe()->all());
             return to_route('home')->with('success', 'Article created successfully.');
         }
-        return to_route('register')->with('error','You must be authorize before posting artical');
+        return view('auth.register')->with('error','You must be authorize before posting artical');
     }
 
     public function show(Article $article)
@@ -55,7 +60,6 @@ class articleController extends Controller
         if (!Auth::check()) {
             return view('auth.register')->with('Please Register to see full article.');
         }
-
 
         $viewed = views::where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
         $comments = comments::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
@@ -96,9 +100,18 @@ class articleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function displayArticle()
+    public function displayArticle(Request $request)
     {
-        $articles = Article::with(['user', 'category'])->where('status', 'published')->latest()->paginate(9);
+        $search = $request->search;
+
+        $articles = Article::with(['user', 'category'])
+        ->where('status', 'published')
+        ->where(function($query) use ($search) {
+            $query->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('excerpt', 'LIKE', "%{$search}%")
+                  ->orWhere('body', 'LIKE', "%{$search}%");
+        })->latest()->paginate(9);
+
         return view('articles.article',[
             'articles' => $articles
         ]);
@@ -130,7 +143,7 @@ class articleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function editArticle(Article $article)
+    public function edit(Article $article)
     {
         $categories = Category::all();
 

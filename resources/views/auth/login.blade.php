@@ -8,7 +8,7 @@
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white py-8 px-4 shadow-sm border border-gray-100 sm:rounded-2xl sm:px-10">
-                <form method="POST" action="/login" class="space-y-5">
+                <form method="POST" action="{{ route('login.store') }}" class="space-y-5">
                     @csrf
                     <x-form.field name="email" type="email" label="Your email" placeholder="mailadd@gmail.com"></x-form.field>
 
@@ -34,7 +34,7 @@
                     <div class="text-center pt-1">
                         <p class="text-sm text-gray-500 font-medium">
                             Don't have an account?
-                            <a href="{{ route('register') }}" class="font-bold text-indigo-600 hover:text-indigo-500 underline decoration-2 underline-offset-4 transition duration-150">
+                            <a href="{{ route('register.create') }}" class="font-bold text-indigo-600 hover:text-indigo-500 underline decoration-2 underline-offset-4 transition duration-150">
                                 Create an account
                             </a>
                         </p>

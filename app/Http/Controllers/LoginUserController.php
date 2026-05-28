@@ -14,7 +14,7 @@ class LoginUserController extends Controller implements ShouldQueue
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function create()
     {
         return view('auth.login');
     }

@@ -43,11 +43,11 @@
                         </span>
                     </div>
                 </div>
-                <a href="/profile/edit/{{ $user->id }}" class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
+                <a href="{{ route('profile.edit',$user->id) }}" class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
             </div>
 
             <div class="space-y-8">
-                <div class=" bg-[#707577] border border-gray-200 rounded-[2rem] p-8 shadow-sm">
+                <div class="bg-[#707577] border border-gray-200 rounded-[2rem] p-8 shadow-sm">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
                         <div>
                             <div class="inline-block px-3 py-1 rounded-full bg-[#ececea] text-[10px] font-black uppercase tracking-[0.18em] text-gray-700 border border-gray-300 mb-4">
@@ -61,15 +61,9 @@
                             </p>
                         </div>
 
-                        @if (auth()->user()?->role === 'author')
-                            <a href="/articles/myarticle" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
-                                Manage Articles
-                            </a>
-                        @else
-                            <a href="/admin/articles" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
-                                see Articles
-                            </a>
-                        @endif
+                        <a href="{{ route('publishedarticle') }}" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                            Manage Articles
+                        </a>
                     </div>
 
                     <div class="border-t border-gray-100 pt-6 gap-6 sm:gap-10 flex items-center">
@@ -80,7 +74,7 @@
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
-                        <a href="/profile/followers/{{ $user->id }}">
+                        <a href="{{ route('followers',$user->id) }}">
                             <div class="text-center">
                                 <p class="text-xl font-black text-gray-200">{{ $user->followers->count() }}</p>
                                 <p class="text-[13px] text-gray-200 mt-0.5">followers</p>
@@ -89,7 +83,7 @@
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
-                        <a href="/profile/followings/{{ $user->id }}">
+                        <a href="{{ route('followings',$user->id) }}">
                             <div class="text-center">
                                 <p class="text-xl font-black text-gray-200">{{ $user->following->count() }}</p>
                                 <p class="text-[13px] text-gray-200 mt-0.5">following</p>
