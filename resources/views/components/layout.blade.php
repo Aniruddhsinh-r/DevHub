@@ -6,6 +6,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.10/dist/cdn.min.js"></script>
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
@@ -86,7 +88,7 @@
                             <a href="{{ route('register.create') }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">
                                 Sign Up
                             </a>
-                            <a href="{{ route('login.create') }}" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
+                            <a href="{{ route('login') }}" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                 Sign In
                             </a>
                         @endguest
@@ -173,7 +175,7 @@
         @endif
     </main>
 
-    @if (Auth()->user()?->role !== 'admin')
+    @if (auth()->user()?->role !== 'admin')
         @include('components.footer')
     @endif
 

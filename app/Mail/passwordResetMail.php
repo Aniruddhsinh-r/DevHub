@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class passwordResetMail extends Mailable
+class PasswordResetMail extends Mailable
 {
     use Queueable, SerializesModels;
     public string $msg;

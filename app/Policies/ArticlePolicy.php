@@ -19,4 +19,16 @@ class ArticlePolicy
     {
         return $article->user->is($user);
     }
+
+    public function create(User $user): bool {
+        return $user->role === 'author';
+    }
+
+    public function update(User $user, Article $article): bool {
+        return $user->id === $article->user_id;
+    }
+
+    public function delete(User $user, Article $article): bool {
+        return $user->id === $article->user_id || $user->role === 'admin';
+    }
 }

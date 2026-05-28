@@ -34,7 +34,7 @@
                             </li>
                         @else
                         <li>
-                                <a href="{{ route('login.create') }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
+                                <a href="{{ route('login') }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
                                     Sign In
                                 </a>
                             </li>

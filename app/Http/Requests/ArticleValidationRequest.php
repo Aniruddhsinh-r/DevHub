@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleValidationRequest extends FormRequest
 {
@@ -12,11 +13,16 @@ class ArticleValidationRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
+    public function authorize(): bool
+    {
+        return Auth::check() && Auth::user()->role === 'author';
+    }
+
     public function rules(): array
     {
         return [
             'title' => 'required|max:255|min:6',
-            'excerpt' => 'required|max:600|min:10',
+            'excerpt' => 'required|max:80|min:10',
             'body' => 'required|min:30|max:50000',
             'category_id' => 'required|exists:categories,id',
             'status' => 'required',

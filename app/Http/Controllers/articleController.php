@@ -6,23 +6,19 @@ use App\Actions\CreateArticle;
 use App\Actions\UpdateArticle;
 use App\Http\Requests\ArticleValidationRequest;
 use App\Models\Article;
-use App\Models\bookmarks;
+use App\Models\Bookmark;
 use App\Models\Category;
-use App\Models\comments;
-use App\Models\likes;
+use App\Models\Comment;
+use App\Models\Like;
 use App\Models\User;
-use App\Models\views;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Gate;
+use App\Models\View;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\Action;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schedule;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArticleController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
 
@@ -38,6 +34,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Article::class);
         $categories = Category::all();
 
         return view('articles.articleForm', [
@@ -52,7 +49,7 @@ class ArticleController extends Controller
             $action->handle($request->safe()->all());
             return to_route('home')->with('success', 'Article created successfully.');
         }
-        return view('auth.register')->with('error','You must be authorize before posting artical');
+        return view('auth.register')->with('error','You must be authorize before posting article');
     }
 
     public function show(Article $article)
@@ -61,17 +58,15 @@ class ArticleController extends Controller
             return view('auth.register')->with('Please Register to see full article.');
         }
 
-        $viewed = views::where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
-        $comments = comments::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
-        $replies = comments::where('article_id',$article->id)->whereNotNull('parent_id')->get();
-
-        $likes = likes::where('article_id',$article->id)->get();
+        $viewed = View::where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
+        $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
+        $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
 
         if (!$viewed) {
             Article::where('id', $article->id)->increment('view_count');
-            views::insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
+            View::insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
         }
-        return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
+        return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies]);
     }
 
     public function published()
@@ -87,8 +82,6 @@ class ArticleController extends Controller
 
     public function userpublished(User $user) {
         $user_id = $user;
-        // $articles = DB::table('articles')->where('user_id', $id)->get();
-
         $articles = $user_id->articles()->latest()->get();
 
         if (Auth::check()) {
@@ -122,7 +115,7 @@ class ArticleController extends Controller
             $articles = Article::with(['user', 'category'])->where(['user_id' => $user->id,'status' => 'draft'])->latest()->get();
             return view('components.draftArticle',['articles' => $articles]);
         }
-        return back()->with('error','you cant see others draft idiot.');
+        return back()->with('error','you cant see others draft.');
     }
 
     public function userarticleshow(User $user) {
@@ -145,9 +138,10 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        $categories = Category::all();
-
-        return view('articles.articleForm', compact('article','categories'));
+         $this->authorize('update', $article);
+            $categories = Category::all();
+            return view('articles.articleForm', compact('article','categories'));
+        
     }
 
     /**
@@ -156,10 +150,11 @@ class ArticleController extends Controller
     public function update(ArticleValidationRequest $request, Article $article, UpdateArticle $action)
     {
         if (Auth::check()) {
+            $this->authorize('update', $article);
             $action->handle($request->safe()->all(), $article);
             return to_route('publishedarticle',auth()->user()->id)->with('success', 'Article updated successfully.');
         }
-        return to_route('showArticle')->with('error','You must be authorize before posting artical');
+        return to_route('admin.article.show')->with('error','You must be authorize before posting article');
     }
 
     /**
@@ -167,15 +162,14 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        if ($article->user_id == Auth::id()) {
-            views::where('article_id',$article->id)->delete();
-            comments::where('article_id',$article->id)->delete();
-            bookmarks::where('article_id',$article->id)->delete();
-            likes::where('article_id',$article->id)->delete();
-            $article->delete();
+        $this->authorize('delete', $article);
 
-            return back()->with('success','article delete successfully.');
-        }
-        return back()->with('error', 'Unauthorized action.');
+        View::where('article_id',$article->id)->delete();
+        Comment::where('article_id',$article->id)->delete();
+        Bookmark::where('article_id',$article->id)->delete();
+        Like::where('article_id',$article->id)->delete();
+        $article->delete();
+
+        return back()->with('success','article delete successfully.');
     }
 }

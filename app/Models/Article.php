@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Article extends Model
 {
@@ -34,14 +35,14 @@ class Article extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function likes(): BelongsTo
+    public function likes(): HasMany
     {
-        return $this->belongsTo(likes::class);
+        return $this->hasMany(Like::class);
     }
 
     public function comment(): HasMany
     {
-        return $this->hasMany(comments::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function category()
@@ -49,13 +50,17 @@ class Article extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function bookmarked()
+    public function isBookmarkedByMe(): bool
     {
-        return $this->belongsToMany(User::class, 'bookmarks')->where('user_id', auth()->id())->exists();
+        return $this->bookmarks()->where('user_id', Auth::id())->exists();
     }
 
     public function bookmarks()
-{
-    return $this->belongsToMany(User::class, 'bookmarks');
-}
+    {
+        return $this->belongsToMany(User::class, 'bookmarks');
+    }
+    public function isLikedByUser(): bool
+    {
+        return $this->likes()->where('user_id', Auth::id())->exists();
+    }
 }

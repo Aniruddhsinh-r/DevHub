@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\passwordResetMail;
+use App\Mail\PasswordResetMail;
 use App\Models\User;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller
 {
@@ -22,40 +19,49 @@ class ForgotPasswordController extends Controller
         $request->validate(['email' => 'required|email|exists:users']);
 
         $to = $request->email;
-        $otp = rand(1000,9999);
+        $otp = random_int(100000,999999);
         $message = $otp;
 
-        Cache::forget('otp');
-        Cache::put('otp', $otp, now()->addMinutes(10));
-        Mail::to($to)->queue(new passwordResetMail($message));
+        Cache::forget('otp_'. $to);
+        Cache::put('otp_'. $to, $otp, now()->addMinutes(10));
+        session(['otp_email' => $to]);
+        Mail::to($to)->send(new PasswordResetMail($message));
 
         return view('auth.otpVarification',['email' => $request->email]);
     }
 
     public function OTPform(){
+        if (!session()->has('otp_email')) {
+            return redirect()->route('password.forgot')->with('error', 'Please enter your email first.');
+        }
         return view('auth.otpVarification');
     }
 
     public function OTPverify(Request $request) {
+        $email = session('otp_email');
         $request->validate([
-            'email' => 'required|email|exists:users',
-            'otp' => 'required|digits:4'
+            'otp' => 'required|digits:6'
         ]);
 
-        $id = User::where('email', $request->email)->value('id');
+        if($request->otp == Cache::get('otp_'. $email)){
+            Cache::forget('otp_'. $email);
+            session(['resetPass_email' => $email]);
+            session()->forget('otp_email');
 
-        if($request->otp == Cache::get('otp')){
-            Cache::forget('otp');
-            return view('auth.resetPassword',["id"=>$id]);
+            return view('auth.resetPassword');
         }
         return back()->with('error','Your provided otp is wrong');
     }
 
     public function resetform(){
+        if (!session()->has('resetPass_email')) {
+            return redirect()->route('password.forgot')->with('error', 'Unauthorized access.');
+        }
         return view('auth.resetPassword');
     }
 
-    public function reset(Request $request,int $id){
+    public function reset(Request $request){
+        $email = session('resetPass_email');
         $request->validate([
             'password' => ['required', 'string', 'min:4', 'max:255'],
             'password_confirmation' => ['required', 'string', 'min:4', 'max:255'],
@@ -65,7 +71,7 @@ class ForgotPasswordController extends Controller
         $confirmpass = $request->input('password_confirmation');
 
         if ($pass === $confirmpass) {
-            $user = User::where('id', $id)->first();
+            $user = User::where('email', $email)->firstOrFail();
             $user->password = Hash::make($pass);
             $user->save();
 

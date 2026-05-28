@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Hidden(['user_id', 'article_id'])]
-class views extends Model
+class View extends Model
 {
     use HasFactory;
 

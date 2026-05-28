@@ -13,9 +13,8 @@
 
         {{-- CARD --}}
         <div class="bg-white border border-gray-100 rounded-[2rem] shadow-xl shadow-gray-100 overflow-hidden">
-            <form action="{{ route('password.forgot.otp.post',$email) }}" method="POST" class="p-8 space-y-6">
+            <form action="{{ route('password.forgot.otp.post') }}" method="POST" class="p-8 space-y-6">
                 @csrf
-                <input type="hidden" name="email" value="{{ $email }}">
                 @if(session('success'))
                     <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium rounded-2xl px-4 py-3">
                         {{ session('success') }}
@@ -34,7 +33,7 @@
                     <label class="block text-sm font-black tracking-tight text-gray-800">
                         Enter OTP
                     </label>
-                    <input type="text" name="otp" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="one-time-code" placeholder="0000" value="{{ old('otp') }}" oninput="this.value=this.value.replace(/[^0-9]/g,'')" class="w-full h-16 rounded-2xl border border-gray-200 bg-gray-50 px-5 text-center text-3xl tracking-[0.6em] font-black text-gray-900 outline-none transition-all duration-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 placeholder:text-gray-300 shadow-sm">
+                    <input type="text" name="otp" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="000000" value="{{ old('otp') }}" oninput="this.value=this.value.replace(/[^0-9]/g,'')" class="w-full h-16 rounded-2xl border border-gray-200 bg-gray-50 px-5 text-center text-3xl tracking-[0.6em] font-black text-gray-900 outline-none transition-all duration-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 placeholder:text-gray-300 shadow-sm">
 
                     @error('otp')
                         <p class="text-sm font-semibold text-red-500">

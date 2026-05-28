@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
-use App\Models\comments;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +27,7 @@ class CommentController extends Controller
         // $article = Article::where('id',$request->article_id)->get();
 
         if (Auth::check()) {
-            comments::create($data);
+            Comment::create($data);
             return back()->with('success','comment posted successfully.');
         }
     }

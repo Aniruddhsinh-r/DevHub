@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Mail\WelcomeBackMail;
 use App\Models\User;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
-class LoginUserController extends Controller implements ShouldQueue
+class LoginUserController extends Controller
 {
     /**
      * Display a listing of the resource.

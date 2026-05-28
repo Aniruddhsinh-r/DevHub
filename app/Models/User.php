@@ -45,4 +45,26 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
     }
+    public function views(): HasMany
+    {
+        return $this->hasMany(View::class); // Make sure you have a View model
+    }
+
+    // 2. Comments Relationship
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    // 3. Bookmarks Relationship
+    public function bookmarks(): HasMany
+    {
+        return $this->hasMany(Bookmark::class);
+    }
+
+    // 4. Likes Relationship
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
 }

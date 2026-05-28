@@ -4,26 +4,26 @@ namespace App\Providers;
 
 use App\Models\Article;
 use App\Policies\ArticlePolicy;
-use Illuminate\Auth\Access\Gate;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
      */
     public function register(): void
     {
         //
     }
+    protected $policies = [
+        Article::class => ArticlePolicy::class,
+    ];
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      */
     public function boot(): void
     {
-        Paginator::useTailwind();
+        //
     }
-
 }

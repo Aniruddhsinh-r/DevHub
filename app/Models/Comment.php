@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class comments extends Model
+class Comment extends Model
 {
     use SoftDeletes, HasFactory;
     protected $fillable = [
@@ -28,7 +28,7 @@ class comments extends Model
     }
 
     public function comment() {
-        return $this->hasMany(comments::class);
+        return $this->hasMany(Comment::class);
     }
 
     /**
@@ -44,7 +44,7 @@ class comments extends Model
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(comments::class, 'parent_id');
+        return $this->belongsTo(Comment::class, 'parent_id');
     }
 
     /**
@@ -52,6 +52,6 @@ class comments extends Model
      */
     public function replies(): HasMany
     {
-        return $this->hasMany(comments::class, 'parent_id');
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 }

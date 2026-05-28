@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
-class RegisteredUserController extends Controller implements ShouldQueue
+class RegisteredUserController extends Controller
 {
     public function create() {
         return view('auth.register');
@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller implements ShouldQueue
         $to = $request->email;
         $message = $user->name;
 
-        // Mail::to($to)->queue(new RegistrationMail($message));
+        Mail::to($to)->queue(new RegistrationMail($message));
 
         return to_route('home')->withInput()->with('success','User register successfully.');
     }
