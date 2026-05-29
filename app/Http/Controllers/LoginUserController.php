@@ -38,10 +38,10 @@ class LoginUserController extends Controller
                 return redirect('/admin/dashboard')->with('success','you login successfully.');
             } else {
                 $to = $request->email;
-                $message = $request->name;
+                $message = User::where('email',$request->email)->value('name');
                 $subject = "Welcome back!";
 
-                // Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
+                Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
                 return to_route('home')->with('success','You are loged in sucessfully!');
             }
         }
