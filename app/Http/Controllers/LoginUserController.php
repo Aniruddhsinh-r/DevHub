@@ -41,7 +41,7 @@ class LoginUserController extends Controller
                 $message = User::where('email',$request->email)->value('name');
                 $subject = "Welcome back!";
 
-                Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
+                // Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
                 return to_route('home')->with('success','You are loged in sucessfully!');
             }
         }

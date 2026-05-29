@@ -47,7 +47,7 @@ class ArticleController extends Controller
     {
         if (Auth::check()) {
             $action->handle($request->safe()->all());
-            return to_route('home')->with('success', 'Article created successfully.');
+            return to_route('show.articles')->with('success', 'Article created successfully.');
         }
         return view('auth.register')->with('error','You must be authorize before posting article');
     }
@@ -141,7 +141,7 @@ class ArticleController extends Controller
          $this->authorize('update', $article);
             $categories = Category::all();
             return view('articles.articleForm', compact('article','categories'));
-        
+
     }
 
     /**
