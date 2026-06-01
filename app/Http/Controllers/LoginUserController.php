@@ -35,7 +35,7 @@ class LoginUserController extends Controller
             $admin = User::where('email', $request->email)->whereRole('admin')->exists();
 
             if ($admin) {
-                return redirect('/admin/dashboard')->with('success','you login successfully.');
+                return to_route('admin.dashboard')->with('success','you login successfully.');
             } else {
                 $to = $request->email;
                 $message = User::where('email',$request->email)->value('name');

@@ -11,7 +11,7 @@
                 <form method="POST" action="{{ route('register.store') }}" class="space-y-5" enctype="multipart/form-data">
                     @csrf
 
-                    <x-form.field name="name" type="string" label="Full name" placeholder="Enter Name"></x-form.field>
+                    <x-form.field name="name" type="text" label="Full name" placeholder="Enter Name"></x-form.field>
 
                     <x-form.field name="email" type="email" label="Your email" placeholder="mailadd@gmail.com"></x-form.field>
 

@@ -15,11 +15,7 @@
                     @csrf
                     <x-form.field name="name" type="text" label="Category Name" placeholder="e.g., Technology, Helth, Coding..."></x-form.field>
 
-                    <button type="submit" class="w-full py-2.5 px-4 bg-[#111827] text-white hover:bg-gray-800 font-semibold text-sm rounded-xl shadow-sm transition-all duration-200 mt-2 flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>Create Category
-                    </button>
+                    <button type="submit" data-test="CreateCategory" class="w-full py-2.5 px-4 bg-[#111827] text-white hover:bg-gray-800 font-semibold text-sm rounded-xl shadow-sm transition-all duration-200 mt-2 flex items-center justify-center gap-2">Create Category</button>
                 </form>
             </div>
 
@@ -46,10 +42,10 @@
                                     <td class="px-5 py-3.5 text-sm font-bold text-gray-900">{{ $category->slug }}</td>
                                     <td class="px-5 py-3.5 text-xs text-gray-500 font-mono">{{ $category->articles_count }}</td>
                                     <td class="px-5 py-3.5 text-right">
-                                        <form action="{{ route('admin.category.delete',$category->id) }}" method="post">
+                                        <form action="{{ route('admin.category.delete',$category->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete</button>
+                                            <button dusk="delete-category-{{ $category->id }}" class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete</button>
                                         </form>
                                     </td>
                                 </tr>

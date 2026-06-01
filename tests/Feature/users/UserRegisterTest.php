@@ -4,17 +4,19 @@ use Illuminate\Support\Facades\Auth;
 
 test('Register a user.', function () {
     visit('/register')
-        ->fill('name', 'rathodkcp')
-        ->fill('email', 'aniruddhsinh12@gmail.com')
-        ->fill('password', '1290')
+        ->fill('Full name', 'rathodkcp')
+        ->fill('Your email', 'aniruddhsinh24@gmail.com')
+        ->fill('Password', '129000')
         ->press('Register')
-        ->assertPathIs('home');
-
-    $this->assertAuthenticated();
+        ->assertRoute('home');
+        // ->assertPathIs('home');         // exact path match ✓
+        // ->assertPathBeginsWith('/home'); // path starts with
+        // ->assertPathContains('home');    // path contains
+        // ->assertPathEndsWith('/home')   // path ends with
+        // ->assertPathIsNot('/register')  // path is NOT this
 
     expect(Auth::user())->toMatchArray([
-        'name' => 'rathodk',
+        'name' => 'rathodkcp',
     ]);
 
-    $response->assertStatus(200);
 });

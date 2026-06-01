@@ -75,9 +75,16 @@
                     </div>
 
                     <div class="pt-6 border-t border-gray-200 flex justify-end">
-                        <button type="submit" data-test="submitBTN" class="w-full md:w-auto bg-black text-white px-10 py-3.5 rounded-full text-[11px] font-black uppercase tracking-[0.2em] hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-black/10">
-                            {{ $article->exists ? 'Update Article' : 'Create Article' }}
-                        </button>
+                        <p id="clickedMSG" class="text-green-600 font-bold text-xl"></p>
+
+<button
+    type="button"
+    onclick="document.getElementById('clickedMSG').innerHTML='BUTTON CLICKED'"
+    data-test="submitBTN"
+    class="w-full md:w-auto bg-black text-white px-10 py-3.5 rounded-full"
+>
+    Create Article
+</button>
                     </div>
                     @if ($errors->any())
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-6">

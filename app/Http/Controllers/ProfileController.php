@@ -53,7 +53,7 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, User $profile)
     {
         $request->validate([
             'name' => ['required','min:5','max:50'],
@@ -70,7 +70,7 @@ class ProfileController extends Controller
             'bio' => $request->bio,
         ];
 
-        $user = Auth::user();
+        $user = $profile;
 
         if ($request->hasFile('avtar')) {
             if ($user->avtar) {

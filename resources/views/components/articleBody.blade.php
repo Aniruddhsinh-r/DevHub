@@ -17,7 +17,7 @@
                     <div class="flex items-center gap-3">
                         <form action="{{ route('articles.like',$article->id) }}" method="POST" class="inline">
                             @csrf
-                            <button type="submit" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
+                            <button type="submit" data-test="like-button" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
                                     @if($article->isLikedByUser())
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-rose-500 scale-110 transition group-hover:scale-125">
                                             <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
@@ -32,7 +32,7 @@
                         </form>
                         <form action="{{ route('articles.bookmark',$article->id) }}" method="POST" class="inline">
                             @csrf
-                            <button type="submit" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
+                            <button type="submit" data-test="bookmark-button" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
                                 @if($article->isBookmarkedByMe())
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 scale-110 transition group-hover:scale-125">
                                         <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
@@ -161,7 +161,7 @@
                                         </div>
                                     @endif
                                     <div class="flex justify-end mt-3">
-                                        <button class="bg-black hover:bg-gray-900 text-white px-6 py-3 rounded-xl text-sm font-black transition">
+                                        <button data-test="PostComment" class="bg-black hover:bg-gray-900 text-white px-6 py-3 rounded-xl text-sm font-black transition">
                                             Comment
                                         </button>
                                     </div>
@@ -237,7 +237,6 @@
                                                         </p>
                                                     </div>
                                                     <div x-show="showReplies" class="flex items-center gap-5 ml-2 text-xs font-bold text-gray-500">
-                                                        <button class="hover:text-black transition">Like</button>
                                                         <button @click="activeReply = activeReply === {{ $reply->id }} ? null : {{ $reply->id }}" class="hover:text-black transition">Reply</button>
                                                     </div>
                                                     <div x-show="activeReply === {{ $reply->id }}">
