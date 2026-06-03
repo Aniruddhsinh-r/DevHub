@@ -26,6 +26,11 @@ class ArticleController extends Controller
 
     public function home() {
         $articles = Article::where('status','published')->latest()->take(3)->get();
+
+        if (Auth()->user()->role === 'admin') {
+            return to_route('admin.dashboard');
+        }
+
         return view('components.home', ['articles' => $articles]);
     }
 
@@ -151,7 +156,7 @@ class ArticleController extends Controller
         if (Auth::check()) {
             $this->authorize('update', $article);
             $action->handle($request->safe()->all(), $article);
-            return to_route('publishedarticle',auth()->user()->id)->with('success', 'Article updated successfully.');
+            return to_route('publishedarticle')->with('success', 'Article updated successfully.');
         }
         return to_route('admin.article.show')->with('error','You must be authorize before posting article');
     }

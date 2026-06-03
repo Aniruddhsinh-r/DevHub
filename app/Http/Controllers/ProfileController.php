@@ -27,6 +27,10 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
+        if (!$user || ($user->id === 1 && Auth::id() !== 1)) {
+            return redirect()->back()->with('error', 'This author does not exist.');
+        } 
+
         if ($user->id === Auth::id()) {
             return view('auth.myprofile', compact('user'));
         }

@@ -53,7 +53,7 @@ Route::middleware(['auth','admin'])->controller(AdminController::class)->group(f
     Route::get('/admin/users/{user}', 'showuser')->name('admin.show.user');
     Route::delete('/admin/user/remove/{user}', 'userRemove')->name('admin.user.remove');
     Route::get('/admin/categories', 'show')->name('admin.categories');
-    Route::post('/admin/categories', 'create');
+    Route::post('/admin/categories', 'create')->name('admin.category.post');
     Route::get('/admin/articles', 'articles')->name('admin.articles');
     Route::get('/admin/articles/{article}', 'showArticle')->name('admin.article.show');
     Route::get('/admin/articles/{user}/published', 'userPublished')->name('admin.user.published');

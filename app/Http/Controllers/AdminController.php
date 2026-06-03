@@ -62,7 +62,7 @@ class AdminController extends Controller
     }
 
     public function show() {
-        $categories = Category::withCount('articles')->paginate(6);
+        $categories = Category::withCount('articles')->latest()->paginate(6);
 
         return view('admin.categories', ['categories' => $categories]);
     }

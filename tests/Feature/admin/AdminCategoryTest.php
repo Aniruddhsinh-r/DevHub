@@ -1,14 +1,26 @@
 <?php
-require_once __DIR__.'/../../Helpers/adminLogin.php';
 
-test('Create category by admin', function () {
-    adminLogin();
+use App\Models\User;
+use App\Models\Category;
 
-    visit('/admin/categories')
-    ->fill('name','lkamar')
-    ->click('Create Category')
-    ->assertRoute('admin.categories')
-    ->assertSee('lkamar');
-    // ->click('@delete-category')
-    // ->assertDontSee('category');
+test('Admin category create test', function () {
+    $user = User::find(1);
+
+    $response = $this->actingAs($user)->post(route('admin.category.post'), [
+        'name' => 'category'
+    ]);
+
+    $this->assertDatabaseHas('categories', [
+        'name' => 'category'
+    ]);
+});
+
+test('Admin category delete test', function () {
+    $user = User::find(1);
+    $category = Category::where('name','category')->value('id');
+    $response = $this->actingAs($user)->delete(route('admin.category.delete',$category));
+
+    $this->assertDatabaseMissing('categories', [
+        'name' => 'category'
+    ]);
 });

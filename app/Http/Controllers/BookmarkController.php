@@ -14,6 +14,10 @@ class BookmarkController extends Controller
             return back()->with('error', 'You must be logged in to bookmark this article.');
         }
 
+        if ($article->status !== 'published') {
+            return back()->with('error', 'You cant bookmark draft articles.');
+        }
+
         $bookmark = Bookmark::where(['article_id' => $article->id ,'user_id' => Auth::id()]);
 
         if($bookmark->exists()) {

@@ -19,7 +19,6 @@
                 </form>
             </div>
 
-            <!-- RIGHT COLUMN: Categories List Table (Takes 2 columns width) -->
             <div class="lg:col-span-2 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
                 <div class="p-5 border-b border-gray-50">
                     <h2 class="text-sm font-bold text-gray-900 tracking-tight">Existing Categories</h2>

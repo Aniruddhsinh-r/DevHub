@@ -2,15 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Article;
-use App\Models\Model;
+use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<likes>
+ * @extends Factory<Follow>
  */
-class LikesFactory extends Factory
+class FollowFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,9 +19,8 @@ class LikesFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'article_id' => Article::factory(),
-            'created_at' => fake()->dateTimeBetween('-1 month', 'now'),
+            'follower_id' => User::factory(),
+            'followed_id' => User::factory(),
         ];
     }
 }

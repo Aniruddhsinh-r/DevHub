@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +10,11 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     public function create(Request $request) {
-        // dd($request->all());
+        $article = Article::findOrFail($request->article_id);
+
+        if ($article->status !== 'published') {
+            return back()->with('error', 'You cant bookmark draft articles.');
+        }
 
         $request->validate([
             'article_id' => ['required','exists:articles,id'],
@@ -23,8 +28,6 @@ class CommentController extends Controller
             'parent_id' => $request->parent_id,
             'body' => $request['body'],
         ]);
-
-        // $article = Article::where('id',$request->article_id)->get();
 
         if (Auth::check()) {
             Comment::create($data);

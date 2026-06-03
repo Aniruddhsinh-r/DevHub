@@ -16,8 +16,7 @@
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center gap-3">
                         <!-- @change listens for the file upload and updates our Alpine variable -->
-                        <input type="file" name="avtar" id="avtar" class="hidden" accept="image/*"
-                               @change="imageUrl = URL.createObjectURL($event.target.files[0])">
+                        <input type="file" name="avtar" id="avtar" class="hidden" accept="image/*" @change="imageUrl = URL.createObjectURL($event.target.files[0])">
 
                         <label for="avtar" class="cursor-pointer bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

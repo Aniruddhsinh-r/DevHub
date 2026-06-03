@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\RegistrationMail;
-use App\Mail\WelcomeBackMail;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
@@ -24,7 +22,7 @@ class RegisteredUserController extends Controller
         ]);
         $request->validate([
             'name' => ['required','min:5','max:50'],
-            'email' => ['required', 'string', 'min:10', 'max:255', Rule::unique('users', 'email')],
+            'email' => ['required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:4', 'max:255'],
             'avtar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'bio' => ['nullable', 'max:2000', 'string'],

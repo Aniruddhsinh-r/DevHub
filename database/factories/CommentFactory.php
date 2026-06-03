@@ -3,14 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Article;
-use App\Models\comments;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<comments>
+ * @extends Factory<Comment>
  */
-class CommentsFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * Define the model's default state.

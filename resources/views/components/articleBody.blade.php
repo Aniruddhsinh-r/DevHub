@@ -1,4 +1,4 @@
-<section class="bg-[#f5f7fb] pb-20">
+    <section class="bg-[#f5f7fb] pb-20">
         <div class="relative overflow-hidden bg-black">
             <div class="absolute inset-0 opacity-20">
                 <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
@@ -14,6 +14,7 @@
                             {{ $article->status }}
                         </span>
                     </div>
+                    @if ($article->status === 'published')
                     <div class="flex items-center gap-3">
                         <form action="{{ route('articles.like',$article->id) }}" method="POST" class="inline">
                             @csrf
@@ -47,6 +48,7 @@
                             </button>
                         </form>
                     </div>
+                    @endif
                 </div>
                 <h1 class="text-white text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight max-w-5xl">
                     {{ $article->title }}
