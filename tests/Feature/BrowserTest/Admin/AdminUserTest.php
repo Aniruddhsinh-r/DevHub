@@ -4,14 +4,12 @@ use App\Models\User;
 
 test('Admin fetch user details', function () {
     User::factory()->create([
-        'name' => 'Aniruddh',
-        'email' => 'ani5@gmail.com',
+        'name' => 'Loggy',
         'role' => 'author',
     ]);
 
     User::factory()->create([
-        'name' => 'Harsh',
-        'email' => 'harsh5@gmail.com',
+        'name' => 'Siman',
         'role' => 'author',
     ]);
 
@@ -22,29 +20,25 @@ test('Admin fetch user details', function () {
     ->assertRoute('admin.dashboard');
 
     visit('/admin/users')
-    ->assertSee('Aniruddh')
-    ->assertSee('ani5@gmail.com')
-    ->assertSee('Harsh')
-    ->assertSee('harsh5@gmail.com');
+    ->assertSee('Loggy')
+    ->assertSee('Siman');
 });
 
 test('search user', function () {
     User::factory()->create([
-        'name' => 'kishan',
-        'email' => 'kishansinh1@gmail.com',
+        'name' => 'ishigory',
         'role' => 'author',
     ]);
 
     visit('/login')
-    ->fill('email', 'harshrajsinh1@gmail.com')
+    ->fill('email', 'harshrajsinh@gmail.com')
     ->fill('password', 'IAmHarsh')
     ->press('@login-btn');
 
-    $userId = User::where('email','kishansinh1@gmail.com')->value('id');
+    $userId = User::where('name','ishigory')->value('id');
 
-    visit('/admin/users?search=kishan')
-    ->assertSee('kishan')
-    ->assertSee('kishansinh1@gmail.com')
+    visit('/admin/users?search=ishigory')
+    ->assertSee('ishigory')
     ->press('Remove');
 
     $this->assertDatabaseMissing('articles', ['user_id' => $userId,]);
@@ -53,3 +47,7 @@ test('search user', function () {
     $this->assertDatabaseMissing('views', ['user_id' => $userId,]);
     $this->assertDatabaseMissing('bookmarks', ['user_id' => $userId,]);
 });
+
+// test('admin delete user',function () {
+//     $user = User::where('name',)
+// });

@@ -21,7 +21,7 @@ test('user can follow but not twice and also unfollow', function () {
         'followed_id' => $followed->id,
     ]);
 
-    $response = $this->assertDatabaseMissing('follows', [
+    $this->assertDatabaseMissing('follows', [
         'follower_id' => $user->id,
         'followed_id' => $followed->id,
     ]);

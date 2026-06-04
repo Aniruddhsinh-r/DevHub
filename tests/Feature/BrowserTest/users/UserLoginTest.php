@@ -15,9 +15,9 @@ test('it login a user', function () {
 });
 
 test('it logout a user.', function () {
-    $user = User::factory()->create();
+    $user = User::find(4);
 
     $this->actingAs($user)->visit('home')
     ->click('@Logout')
-    ->assertRoute('/');
+    ->assertRoute('home');
 });

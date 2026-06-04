@@ -4,7 +4,7 @@ use App\Models\Article;
 use App\Models\User;
 
 test('Admin fetch user details', function () {
-    $user_id = User::where('email','adanirudda@gmail.com')->value('id');
+    $user_id = User::find(8);
 
     $article = Article::factory()->create([
         'title' => 'example Article',

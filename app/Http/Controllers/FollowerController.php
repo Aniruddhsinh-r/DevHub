@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Auth;
 class FollowerController extends Controller
 {
     public function follow(User $id){
-        if (Auth::check()) {
+        if(Auth::id() !== $id->id) {
             Auth::user()->following()->toggle($id);
             return back();
         }
-        return view('auth.register')->with('error','You must be authorize before following anyone.');
+        return back()->with('error','You cant follow yourself.');
     }
 
     public function followers(User $user, Request $request) {

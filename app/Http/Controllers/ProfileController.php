@@ -29,7 +29,7 @@ class ProfileController extends Controller
     {
         if (!$user || ($user->id === 1 && Auth::id() !== 1)) {
             return redirect()->back()->with('error', 'This author does not exist.');
-        } 
+        }
 
         if ($user->id === Auth::id()) {
             return view('auth.myprofile', compact('user'));
@@ -88,7 +88,7 @@ class ProfileController extends Controller
         }
 
         if ($user->update($data)) {
-            return to_route('profile.index')->withInput()->with('success','your profile is sucessfully updated.');
+            return to_route('profile.index')->with('success','your profile is sucessfully updated.');
         }
         return back()->with('error',"fail to update profile.");
     }

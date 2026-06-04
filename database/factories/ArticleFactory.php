@@ -21,10 +21,10 @@ class ArticleFactory extends Factory
     public function definition(): array
     {
         $title = fake()->sentence(15);
-        $status = fake()->randomElement(['published', 'draft']);
+        $status = 'published';
         return [
-            'user_id' => User::factory(),
-            'category_id' => Category::factory(),
+            'user_id' => 22,
+            'category_id' => 4,
             'title' => ($title),
             'slug' => Str::slug($title),
             'excerpt' => fake()->paragraph(1),

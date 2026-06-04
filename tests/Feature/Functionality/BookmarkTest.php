@@ -5,7 +5,7 @@ use App\Models\User;
 
 test('admin cant bookmark article', function () {
     $admin = User::find(1);
-    $article = Article::find(1);
+    $article = Article::find(3);
 
     $response = $this->actingAs($admin)->post(route('articles.bookmark',$article->id));
 
@@ -14,7 +14,7 @@ test('admin cant bookmark article', function () {
 });
 
 test('guest cant bookmark article', function () {
-    $article = Article::find(1);
+    $article = Article::find(3);
 
     $response = $this->post(route('articles.bookmark',$article->id));
 
@@ -23,7 +23,7 @@ test('guest cant bookmark article', function () {
 
 test('user can bookmark article', function () {
     $user = User::find(22);
-    $article = Article::find(1);
+    $article = Article::find(3);
 
     $this->actingAs($user)->post(route('articles.bookmark',$article->id));
 
@@ -32,7 +32,7 @@ test('user can bookmark article', function () {
 
 test('user can bookmark but not twice', function () {
     $user = User::find(22);
-    $article = Article::find(1);
+    $article = Article::find(3);
 
     $this->actingAs($user)->post(route('articles.bookmark',$article->id));
 

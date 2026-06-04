@@ -5,7 +5,7 @@
 
         <form action="{{ route('profile.update',$user) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
+            @method('PATCH')
 
             <div class="flex items-center gap-6 mb-6" x-data="{ imageUrl: '{{ $user->avtar ? asset('storage/' . $user->avtar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name) }}' }">
                 <div class="relative">
@@ -30,11 +30,11 @@
 
             <div class="grid grid-cols-1 gap-6 mb-10">
                 <div>
-                    <x-form.field name="name" type='text' label="Full name" placeholder="Enter name" :value="$user->name"></x-form.field>
+                    <x-form.field name="name" data-test="profile-name" type='text' label="Full name" placeholder="Enter name" :value="$user->name"></x-form.field>
                 </div>
 
                 <div>
-                    <x-form.field name="bio" type="textarea" label="Bio" placeholder="Tell us a little about youself..." :value="$user->bio"></x-form.field>
+                    <x-form.field name="bio" data-test="profile-bio" type="textarea" label="Bio" placeholder="Tell us a little about youself..." :value="$user->bio"></x-form.field>
                 </div>
             </div>
 
@@ -45,16 +45,16 @@
                 <!-- Email Section -->
                 <div class="flex flex-col md:flex-row md:items-end gap-4">
                     <div class="flex-grow">
-                        <x-form.field name="email" type="email" label="Your email" placeholder="mailadd@gmail.com" :value="$user->email"></x-form.field>
+                        <x-form.field name="email" data-test="profile-gmail" type="email" label="Your email" placeholder="mailadd@gmail.com" :value="$user->email"></x-form.field>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <x-form.field name="password" type="password" label="New Password" placeholder="••••••••"></x-form.field>
+                        <x-form.field name="password" data-test="profile-pass" type="password" label="New Password" placeholder="••••••••"></x-form.field>
                     </div>
                     <div>
-                        <x-form.field name="password_confirmation" type="password" label="Confirm Password" placeholder="••••••••"></x-form.field>
+                        <x-form.field name="password_confirmation" data-test="profil-conpass" type="password" label="Confirm Password" placeholder="••••••••"></x-form.field>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                     <span>Back To Profile</span>
                 </a>
                 <div class="flex items-center gap-3">
-                    <button type="submit" class="bg-black hover:bg-gray-900 text-white px-8 py-2.5 rounded-xl text-sm font-semibold transition shadow-lg shadow-gray-200">Update</button>
+                    <button type="submit" data-test="update_profile" class="bg-black hover:bg-gray-900 text-white px-8 py-2.5 rounded-xl text-sm font-semibold transition shadow-lg shadow-gray-200">Update</button>
                 </div>
             </div>
         </form>

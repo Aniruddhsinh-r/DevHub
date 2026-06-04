@@ -23,14 +23,13 @@ class ArticleController extends Controller
     {
 
     }
-
+    
     public function home() {
         $articles = Article::where('status','published')->latest()->take(3)->get();
 
-        if (Auth()->user()->role === 'admin') {
+        if (Auth()->user()?->role === 'admin') {
             return to_route('admin.dashboard');
         }
-
         return view('components.home', ['articles' => $articles]);
     }
 
