@@ -56,7 +56,7 @@ test('Admin cant follow Author', function () {
     $user = User::find(22);
 
     visit(route('user.follow',$user->id));
-    
+
     $this->assertDatabaseMissing('follows', [
         'follower_id' => $admin->id,
         'followed_id' => $user->id

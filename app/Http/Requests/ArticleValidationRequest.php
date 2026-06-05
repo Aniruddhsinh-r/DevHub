@@ -26,7 +26,7 @@ class ArticleValidationRequest extends FormRequest
             'excerpt' => 'required|max:80|min:10',
             'body' => 'required|min:30|max:50000',
             'category_id' => 'required|exists:categories,id',
-            'status' => ['required', Rule::in(['draft', 'schedule', 'published'])],
+            'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
             'scheduled_hours' => 'nullable|integer|min:1|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
             'cover_path' => 'nullable|image|',

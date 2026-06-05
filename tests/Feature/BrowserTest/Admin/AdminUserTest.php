@@ -24,7 +24,7 @@ test('Admin fetch user details', function () {
     ->assertSee('Siman');
 });
 
-test('search user', function () {
+test('admin search and delete user', function () {
     User::factory()->create([
         'name' => 'ishigory',
         'role' => 'author',
@@ -47,7 +47,3 @@ test('search user', function () {
     $this->assertDatabaseMissing('views', ['user_id' => $userId,]);
     $this->assertDatabaseMissing('bookmarks', ['user_id' => $userId,]);
 });
-
-// test('admin delete user',function () {
-//     $user = User::where('name',)
-// });
