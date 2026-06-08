@@ -23,7 +23,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register.create');
     Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
     Route::get('/login', [LoginUserController::class, 'create'])->name('login');
-    Route::post('/login', [LoginUserController::class, 'store'])->name('login.store');
+    Route::post('/login', [LoginUserController::class, 'store'])->name('login.store')->middleware('throttle:login');
 });
 
 Route::middleware('auth')->group(function () {
@@ -64,7 +64,7 @@ Route::middleware('guest')->controller(ForgotPasswordController::class)->group(f
     Route::get('/password/forgot', 'create')->name('password.forgot');
     Route::post('/password/forgot', 'store')->name('password.forgot.post');
     Route::get('/password/forgot/otp', 'OTPform')->name('password.forgot.otp');
-    Route::post('/password/forgot/otp', 'OTPverify')->name('password.forgot.otp.post');
+    Route::post('/password/forgot/otp', 'OTPverify')->name('password.forgot.otp.post')->middleware('throttle:otp');
     Route::get('/password/reset/password', 'resetform')->name('password.reset');
     Route::post('/password/reset/password', 'reset')->name('password.reset.post');
 });

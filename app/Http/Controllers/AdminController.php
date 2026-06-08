@@ -72,19 +72,15 @@ class AdminController extends Controller
     }
 
     public function userRemove(User $user) {
-
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            DB::transaction(function () use ($user) {
-                $user->views()->delete();
-                $user->comments()->delete();
-                $user->bookmarks()->delete();
-                $user->likes()->delete();
-                $user->articles()->delete();
-                $user->delete();
-            });
-            return back()->with('success','User remove successfully.');
-        }
-        return back()->with('error','Only admin can perform this task');
+        DB::transaction(function () use ($user) {
+            $user->views()->delete();
+            $user->comments()->delete();
+            $user->bookmarks()->delete();
+            $user->likes()->delete();
+            $user->articles()->delete();
+            $user->delete();
+        });
+        return back()->with('success','User remove successfully.');
     }
 
     public function articles(Request $request) {
@@ -104,20 +100,17 @@ class AdminController extends Controller
     }
 
     public function destroy(Category $category) {
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            $articles = Article::where('category_id', $category->id)->get(['id']);
-
-            foreach ($articles as $article) {
-                Like::where('article_id',$article->id)->delete();
-                Comment::where('article_id',$article->id)->delete();
-                View::where('article_id',$article->id)->delete();
-                Bookmark::where('article_id',$article->id)->delete();
-            }
-            Article::where('category_id',$category->id)->delete();
-            Category::where('id',$category->id)->delete();
-            return back()->with('success','Category deleted successfully');
+        $articles = Article::where('category_id', $category->id)->get(['id']);
+        
+        foreach ($articles as $article) {
+            Like::where('article_id',$article->id)->delete();
+            Comment::where('article_id',$article->id)->delete();
+            View::where('article_id',$article->id)->delete();
+            Bookmark::where('article_id',$article->id)->delete();
         }
-        return back()->with('error','Only admin can perform this task');
+        Article::where('category_id',$category->id)->delete();
+        Category::where('id',$category->id)->delete();
+        return back()->with('success','Category deleted successfully');
     }
 
     public function showArticle(Article $article) {

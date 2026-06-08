@@ -60,7 +60,7 @@ class ArticleController extends Controller
 
     public function store(ArticleValidationRequest $request, CreateArticle $action)
     {
-        $action->handle($request->safe()->all());
+        $action->handle($request->validated());
         return to_route('articles.index')->with('success', 'Article created successfully.');
     }
 
@@ -128,7 +128,7 @@ class ArticleController extends Controller
     public function update(ArticleValidationRequest $request, Article $article, UpdateArticle $action)
     {
         $this->authorize('update', $article);
-        $action->handle($request->safe()->all(), $article);
+        $action->handle($request->validated(), $article);
         return to_route('publishedarticle')->with('success', 'Article updated successfully.');
     }
 

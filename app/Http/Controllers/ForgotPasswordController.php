@@ -75,9 +75,10 @@ class ForgotPasswordController extends Controller
             $user->password = Hash::make($pass);
             $user->save();
 
+            session()->forget('resetPass_email');
+
             return to_route('home')->withInput()->with('success','your password has ben sucessfully updated.');
         }
-
         return back()->with('error',"fail to update password!");
     }
 }
