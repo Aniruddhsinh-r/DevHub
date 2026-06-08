@@ -4,49 +4,49 @@ use App\Models\Article;
 require_once __DIR__.'/../Helpers/userLogin.php';
 require_once __DIR__.'/../Helpers/adminLogin.php';
 
-// test('User can like article', function () {
-//     userLogin();
+test('User can like article', function () {
+    userLogin();
 
-//     $article = Article::find(29);
+    $article = Article::find(10);
 
-//     visit(route('articles.show', $article->id))
-//     ->click('[data-test="like-button"]');
+    visit(route('articles.show', $article->id))
+    ->press('@like-button');
 
-//     $this->assertDatabaseHas('likes', [
-//         'user_id' => 22,
-//         'article_id' => $article->id,
-//     ]);
-// });
+    $this->assertDatabaseHas('likes', [
+        'user_id' => 22,
+        'article_id' => $article->id,
+    ]);
+});
 
-// test('User can unlike article', function () {
-//     userLogin();
+test('User can unlike article', function () {
+    userLogin();
 
-//     $article = Article::find(29);
+    $article = Article::find(10);
 
-//     visit(route('articles.show', $article->id))
-//     ->click('[data-test="like-button"]');
+    visit(route('articles.show', $article->id))
+    ->press('@like-button');
 
-//     $this->assertDatabaseMissing('likes', [
-//         'user_id' => 22,
-//         'article_id' => $article->id,
-//     ]);
-// });
+    $this->assertDatabaseMissing('likes', [
+        'user_id' => 22,
+        'article_id' => $article->id,
+    ]);
+});
 
-// test('admin cant like articles', function () {
-//     adminLogin();
+test('admin cant like articles', function () {
+    adminLogin();
 
-//     $article = Article::find(29);
+    $article = Article::find(10);
 
-//     visit(route('articles.like',$article->id));
+    visit(route('articles.like',$article->id));
 
-//     $this->assertDatabaseMissing('likes', [
-//         'user_id' => 1,
-//         'article_id' => $article->id,
-//     ]);
-// });
+    $this->assertDatabaseMissing('likes', [
+        'user_id' => 1,
+        'article_id' => $article->id,
+    ]);
+});
 
 test('guest cant like article', function () {
-    $article = Article::find(29);
+    $article = Article::find(10);
 
     visit(route('articles.show', $article->id))
     ->assertRoute('login');

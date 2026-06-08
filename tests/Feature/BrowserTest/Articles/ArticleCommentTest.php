@@ -6,10 +6,10 @@ require_once __DIR__ . '/../Helpers/UserLogin.php';
 test('Author comment on article', function () {
     UserLogin();
 
-    $article = Article::find(29);
+    $article = Article::find(6);
     visit(route('articles.show', $article->id))
     ->fill('body',"hello this comment created by browser comment testing.")
-    ->click('[data-test="PostComment"]');
+    ->press('@PostComment');
 
     $this->assertDatabaseHas('comments', [
         'user_id' => 22,

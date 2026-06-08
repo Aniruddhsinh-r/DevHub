@@ -4,7 +4,7 @@ use App\Models\User;
 
 test('user can follow but not twice and also unfollow', function () {
     $user = User::find(21);
-    $followed = User::find(22);
+    $followed = User::find(2);
 
     $this->actingAs($user)->post(route('user.follow', $followed->id), [
         'follower_id' => $user->id,
@@ -28,7 +28,7 @@ test('user can follow but not twice and also unfollow', function () {
 });
 
 test('admin cant follow other author', function () {
-    $user = User::find(22);
+    $user = User::find(21);
     $admin = User::find(1);
 
     $response = $this->actingAs($admin)->post(route('user.follow', $admin->id), [

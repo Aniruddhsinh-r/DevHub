@@ -5,7 +5,7 @@ use App\Models\User;
 
 test('check article functionalitys', function () {
     $user = User::find(22);
-    $article = Article::find(4);
+    $article = Article::factory()->create();
     $response = $this->actingAs($user)->get(route('articles.show', $article->id));
 
     $this->actingAs($user)->post(route('post.comment',$article->id), [

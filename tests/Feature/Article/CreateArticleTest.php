@@ -32,7 +32,7 @@ test('user can delete own article', function () {
         'category_id' => 3,
     ]);
 
-    $response = $this->actingAs($user)->delete(route('articles.destroy',$article->id));
+    $this->actingAs($user)->delete(route('articles.destroy',$article->id));
 
     $this->assertSoftDeleted('articles', [
         'id' => $article->id,

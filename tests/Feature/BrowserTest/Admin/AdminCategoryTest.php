@@ -1,21 +1,25 @@
 <?php
+
+use App\Models\Category;
+
 require_once __DIR__.'/../Helpers/adminLogin.php';
 
 test('Create category by admin', function () {
     adminLogin();
 
     visit('/admin/categories')
-    ->fill('name','minati')
+    ->fill('name','Verdie Littel III')
     ->click('Create Category')
     ->assertRoute('admin.categories')
-    ->assertSee('minati');
-    // ->click('@delete-category')
-    // ->assertDontSee('category');
+    ->assertSee('Verdie Littel III');
 });
 
-// test('delete category', function () {
-//      adminLogin();
+test('delete category', function () {
+    adminLogin();
 
-//     visit('/admin/categories?search=lkamar')
-//     ->fill('name','alkamar')
-// });
+    $category = Category::where('name', 'Verdie Littel III')->first();
+
+    visit('/admin/categories')
+    ->click('[dusk="delete-category-' . $category->id . '"]')
+    ->assertDontSee('Verdie Littel III');
+});

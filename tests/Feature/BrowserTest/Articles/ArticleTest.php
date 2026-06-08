@@ -10,6 +10,8 @@ test('visite specific articles', function () {
 
     $article = Article::factory()->create([
         'title' => 'example Article9',
+        'user_id' => 13,
+        'category_id' => 2
     ]);
 
     // visit('/articles')
@@ -25,15 +27,15 @@ test('visite specific articles', function () {
 test('functionality check in articles.',function () {
     userLogin();
     $article = Article::factory()->create([
-        'category_id' => 3,
+        'category_id' => 5,
         'user_id' => 5
     ]);
 
     visit(route('articles.show',$article->id))
         ->press('@like-button')
         ->press('@bookmark-button')
-        ->fill('[name="body"]','Hi there this is my first comment.')
-        ->press('[data-test="PostComment"]')
+        ->fill('body','Hi there this is my first comment.')
+        ->press('@PostComment')
         ;
 
         $this->assertDatabaseHas('likes',['article_id'=>$article->id , 'user_id'=>22]);
@@ -42,9 +44,8 @@ test('functionality check in articles.',function () {
 });
 
 test('guest cant view specific article', function () {
-    $article = Article::find(29);
+    $article = Article::find(12);
 
     visit(route('articles.show', $article->id))
     ->assertRoute('login');
 });
-

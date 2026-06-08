@@ -41,7 +41,7 @@
                                 </a>
                             @endif
 
-                            <div x-data="{ open: false }" class="relative z-50">
+                            <div x-data="{ open: false }" data-test="Authbutton" class="relative z-50">
                                 <button @click="open = !open" @click.outside="open = false" class="flex items-center focus:outline-none">
                                     {{-- @if (auth()->user()->avtar)
                                         <img src="{{ asset('storage/' . auth()->user()->avtar) }}" alt="User Profile" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-gray-400 transition">

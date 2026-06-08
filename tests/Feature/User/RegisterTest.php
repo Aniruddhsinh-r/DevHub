@@ -1,9 +1,10 @@
 <?php
 
 test('user registration test', function () {
+    $email = 'khabib'.time().'@gmail.com';
     $response = $this->post(route('register.store'), [
         'name' => 'khabib',
-        'email' => 'khabib26@gmail.com',
+        'email' => $email,
         'password' => 'khabib',
     ]);
 
@@ -11,7 +12,7 @@ test('user registration test', function () {
 
     $this->assertDatabaseHas('users', [
         'name' => 'khabib',
-        'email' => 'khabib26@gmail.com',
+        'email' => $email,
         'role' => 'author',
     ]);
 });

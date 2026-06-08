@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-bold text-gray-900 mb-2">My Profile</h1>
         <hr class="mb-6 border-gray-100">
 
-        <form action="{{ route('profile.update',$user) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('profile.update',$user) }}" method="POST" >
             @csrf
             @method('PATCH')
 

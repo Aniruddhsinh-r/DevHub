@@ -38,13 +38,15 @@
                                     </div>
 
                                     <div class="flex flex-col items-end gap-1">
-                                        <form action="{{ route('articles.destroy',$article->id) }}" method="post" onsubmit="return confirm('Are you sure?')">
+                                        <form action="{{ route('articles.destroy',$article->id) }}" method="post"
+                                            {{-- onsubmit="return confirm('Are you sure?')" --}}
+                                        >
                                             @csrf
                                             @method('DELETE')
-                                            <button class="text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-wider">Delete</button>
+                                            <button class="text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-wider" dusk="delete-article-{{ $article->id }}">Delete</button>
                                         </form>
 
-                                        <a href="{{ route('articles.edit',$article->id) }}" class="text-xs font-bold text-gray-900 hover:text-black uppercase tracking-wider">
+                                        <a href="{{ route('articles.edit',$article->id) }}" dusk="edit-article-{{ $article->id }}" class="text-xs font-bold text-gray-900 hover:text-black uppercase tracking-wider">
                                             Edit
                                         </a>
                                     </div>

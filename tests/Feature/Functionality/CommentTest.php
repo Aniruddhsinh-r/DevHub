@@ -4,7 +4,7 @@ use App\Models\Article;
 use App\Models\User;
 
 test('Guest cant post comment', function () {
-    $article = Article::find(24);
+    $article = Article::find(12);
 
     $response = $this->post(route('post.comment',$article->id), [
         'article_id' => $article->id,
@@ -20,7 +20,7 @@ test('Guest cant post comment', function () {
 });
 
 test('admin cant post comment', function () {
-    $article = Article::find(24);
+    $article = Article::find(12);
     $user = User::find(1);
 
     $response = $this->actingAs($user)->post(route('post.comment',$article->id), [
@@ -37,7 +37,7 @@ test('admin cant post comment', function () {
 });
 
 test('user can post comment', function () {
-    $article = Article::find(24);
+    $article = Article::find(12);
     $user = User::find(6);
 
     $response = $this->actingAs($user)->from(route('articles.show', $article->id))->post(route('post.comment',$article->id), [

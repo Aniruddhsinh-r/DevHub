@@ -23,7 +23,7 @@ class ArticleFactory extends Factory
         $title = fake()->sentence(15);
         $status = 'published';
         return [
-            'user_id' => 22,
+            'user_id' => User::factory()->create(),
             'category_id' => 4,
             'title' => ($title),
             'slug' => Str::slug($title),

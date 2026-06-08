@@ -9,6 +9,7 @@ test('Admin fetch user details', function () {
     $article = Article::factory()->create([
         'title' => 'example Article',
         'user_id' => $user_id,
+        'category_id' => 5,
         'status' => 'published'
     ]);
 

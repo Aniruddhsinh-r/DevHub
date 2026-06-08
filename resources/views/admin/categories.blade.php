@@ -11,7 +11,7 @@
                     <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full"></span>Create New Category
                 </h2>
 
-                <form action="{{ route('admin.categories') }}" method="POST" class="space-y-4" autocomplete="off" enctype="multipart/form-data">
+                <form action="{{ route('admin.categories') }}" method="POST" class="space-y-4" autocomplete="off">
                     @csrf
                     <x-form.field name="name" type="text" label="Category Name" placeholder="e.g., Technology, Helth, Coding..."></x-form.field>
 

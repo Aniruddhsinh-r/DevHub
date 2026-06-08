@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Auth;
 
 test('Register a user.', function () {
+    $email = 'roman'.time().'@gmail.com';
+
     visit(route('register.create'))
         ->fill('name', 'Romanreigns')
-        ->fill('email', 'Roman2@gmail.com')
+        ->fill('email', $email)
         ->fill('password', 'Roman123')
         ->click('Register')
         ->assertRoute('home');
@@ -16,7 +18,7 @@ test('Register a user.', function () {
         // ->assertPathIsNot('/register')  // path is NOT this
 
 
-    // $this->assertDatabaseHas('users', [
-    //     'email' => 'roman2@gmail.com',
-    // ]);
+    $this->assertDatabaseHas('users', [
+        'email' => $email,
+    ]);
 });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+require_once __DIR__ . '/../Helpers/UserLogin.php';
 
 test('it login a user', function () {
     visit('/login')
@@ -9,15 +10,13 @@ test('it login a user', function () {
         ->press('@login-btn')
         // ->assertSee('you login successfully.');
         ->assertRoute('home');
-        // ->assertPathIs(route('home', [], false));
-
-    // $this->assertAuthenticated();
 });
 
 test('it logout a user.', function () {
-    $user = User::find(4);
+    userLogin();
 
-    $this->actingAs($user)->visit('home')
-    ->click('@Logout')
+    visit('/home')
+    ->click('[data-test="Authbutton"]')
+    ->click('[data-test="logout"]')
     ->assertRoute('home');
 });

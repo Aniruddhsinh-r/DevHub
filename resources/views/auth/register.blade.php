@@ -8,7 +8,7 @@
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white py-8 px-4 shadow-sm border border-gray-100 sm:rounded-2xl sm:px-10">
-                <form method="POST" action="{{ route('register.store') }}" class="space-y-5" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('register.store') }}" class="space-y-5">
                     @csrf
 
                     <x-form.field name="name" type="text" label="Full name" placeholder="Enter Name"></x-form.field>

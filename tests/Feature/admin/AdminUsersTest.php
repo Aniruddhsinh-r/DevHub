@@ -9,12 +9,12 @@ test('Admin User find test', function () {
     $user = User::find(1);
 
     $response = $this->actingAs($user)->get(route('admin.users', [
-        'search' => 'Rathod Aniruddhsinh Jayeshbhai'
+        'search' => 'ishigory'
     ]));
 
     $response->assertStatus(200);
 
-    $response->assertSee('Rathod Aniruddhsinh Jayeshbhai');
+    $response->assertSee('ishigory');
 });
 
 test('Admin User delete test', function () {

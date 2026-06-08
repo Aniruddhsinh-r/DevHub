@@ -149,7 +149,7 @@
                             </div>
 
                             <div class="flex-1">
-                                <form action="{{ route('post.comment') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('post.comment') }}" method="post">
                                     @csrf
                                     <input type="hidden" name="article_id" value="{{ $article->id }}">
                                     <x-form.field name="body" type="textarea" label="Comment" placeholder="Start your story..."></x-form.field>
