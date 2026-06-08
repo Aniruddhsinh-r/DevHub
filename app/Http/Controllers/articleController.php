@@ -23,7 +23,7 @@ class ArticleController extends Controller
     {
 
     }
-    
+
     public function home() {
         $articles = Article::where('status','published')->latest()->take(3)->get();
 
@@ -49,11 +49,8 @@ class ArticleController extends Controller
 
     public function store(ArticleValidationRequest $request, CreateArticle $action)
     {
-        if (Auth::check()) {
-            $action->handle($request->safe()->all());
-            return to_route('show.articles')->with('success', 'Article created successfully.');
-        }
-        return view('auth.register')->with('error','You must be authorize before posting article');
+        $action->handle($request->safe()->all());
+        return to_route('show.articles')->with('success', 'Article created successfully.');
     }
 
     public function show(Article $article)
@@ -78,20 +75,15 @@ class ArticleController extends Controller
         $user_id = Auth::id();
         $articles = Article::where('user_id',$user_id)->latest()->get();
 
-        if (Auth::check()) {
-            return view('articles.myArticles', ['articles' => $articles]);
-        }
-        return view('auth.register')->with('Please Register to see articles.');
+        return view('articles.myArticles', ['articles' => $articles]);
     }
 
     public function userpublished(User $user) {
         $user_id = $user;
         $articles = $user_id->articles()->latest()->get();
 
-        if (Auth::check()) {
-            return view('articles.userArticles', ['articles' => $articles]);
-        }
-        return view('auth.register')->with('Please Register to see articles.');
+        return view('articles.userArticles', ['articles' => $articles]);
+
     }
 
     /**
@@ -123,19 +115,16 @@ class ArticleController extends Controller
     }
 
     public function userarticleshow(User $user) {
-        if (Auth::check()) {
-            if (Auth::id() == $user->id) {
-                $user = Auth::user();
-                // return to_route('publishedarticle');
-                return view('auth.myprofile', ['user' => $user]);
-            }
-
-            $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
-            return view('articles.article',[
-                'articles' => $articles
-            ]);
+        if (Auth::id() == $user->id) {
+            $user = Auth::user();
+            // return to_route('publishedarticle');
+            return view('auth.myprofile', ['user' => $user]);
         }
-        return view('auth.register')->with('Please Register to see user articles.');
+
+        $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+        return view('articles.article',[
+            'articles' => $articles
+        ]);
     }
     /**
      * Show the form for editing the specified resource.
@@ -152,12 +141,9 @@ class ArticleController extends Controller
      */
     public function update(ArticleValidationRequest $request, Article $article, UpdateArticle $action)
     {
-        if (Auth::check()) {
-            $this->authorize('update', $article);
-            $action->handle($request->safe()->all(), $article);
-            return to_route('publishedarticle')->with('success', 'Article updated successfully.');
-        }
-        return to_route('admin.article.show')->with('error','You must be authorize before posting article');
+        $this->authorize('update', $article);
+        $action->handle($request->safe()->all(), $article);
+        return to_route('publishedarticle')->with('success', 'Article updated successfully.');
     }
 
     /**

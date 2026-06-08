@@ -16,10 +16,6 @@ class AuthorMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
-            return redirect('/login');
-        }
-
         if (Auth::user()->role !== 'author') {
             abort(403, 'Unauthorized');
         }

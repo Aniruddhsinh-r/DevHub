@@ -47,7 +47,7 @@ class ProfileController extends Controller
      */
     public function edit(string $id)
     {
-        if(Auth::id() == $id){
+        if(Auth::id() === (int)$id){
             $user = Auth::user();
             return view('auth.editProfile',['user'=>$user]);
         }
@@ -59,6 +59,10 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $profile)
     {
+        if (Auth::id() !== $profile->id) {
+            abort(403);
+        }
+
         $request->validate([
             'name' => ['required','min:5','max:50'],
             'email' => ['required', 'string', 'min:10', 'max:255'],

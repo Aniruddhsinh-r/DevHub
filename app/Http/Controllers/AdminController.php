@@ -37,16 +37,13 @@ class AdminController extends Controller
         $name = $request->name;
         $slug = Str::slug($name, '-');
 
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            Category::create([
-                'name' => $name,
-                'slug' => $slug,
-                'created_at' => now(),
-            ]);
+        Category::create([
+            'name' => $name,
+            'slug' => $slug,
+            'created_at' => now(),
+        ]);
 
-            return back()->with('success','Category create successfully.');
-        }
-        return view('auth.register')->with('error','Only admin can create categories.');
+        return back()->with('success','Category create successfully.');
     }
 
     public function showuser(User $user) {

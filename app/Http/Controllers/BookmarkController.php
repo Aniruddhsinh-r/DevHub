@@ -18,9 +18,9 @@ class BookmarkController extends Controller
             return back()->with('error', 'You cant bookmark draft articles.');
         }
 
-        $bookmark = Bookmark::where(['article_id' => $article->id ,'user_id' => Auth::id()]);
+        $bookmark = Bookmark::where(['article_id' => $article->id ,'user_id' => Auth::id()])->first();
 
-        if($bookmark->exists()) {
+        if($bookmark) {
             $bookmark->delete();
             return back()->with('success','remove from bookmark');
         } else {
@@ -32,7 +32,7 @@ class BookmarkController extends Controller
     }
 
     public function show(User $user) {
-        if (Auth::user()->role !== 'author') {
+        if (!Auth::check() || Auth::user()->role !== 'author') {
             return back()->with('error', 'You must be login as Author to see your bookmark article.');
         }
 

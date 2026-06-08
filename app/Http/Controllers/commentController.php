@@ -10,10 +10,13 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     public function create(Request $request) {
+        if (!Auth::check()) {
+            return to_route('register.create')->with('error','Unauthorize action.');
+        }
         $article = Article::findOrFail($request->article_id);
 
         if ($article->status !== 'published') {
-            return back()->with('error', 'You cant bookmark draft articles.');
+            return back()->with('error', 'You cant comment on draft articles.');
         }
 
         $request->validate([
@@ -29,9 +32,7 @@ class CommentController extends Controller
             'body' => $request['body'],
         ]);
 
-        if (Auth::check()) {
-            Comment::create($data);
-            return back()->with('success','comment posted successfully.');
-        }
+        Comment::create($data);
+        return back()->with('success','comment posted successfully.');
     }
 }
