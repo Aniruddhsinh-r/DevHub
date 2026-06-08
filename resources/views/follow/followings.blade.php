@@ -33,7 +33,7 @@
         <div class="space-y-3">
             @forelse ($followings as $following)
                 @if ($following->followed)
-                    <a href="/user/{{ $following->followed->id }}" class="block group bg-white border border-gray-200 hover:border-gray-400 rounded-2xl px-5 py-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <a href="{{ route('userprofile',$following->followed->id) }}" class="block group bg-white border border-gray-200 hover:border-gray-400 rounded-2xl px-5 py-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <div class="flex items-center justify-between gap-4">
                             <div class="flex items-center gap-4 min-w-0">
                                 <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">

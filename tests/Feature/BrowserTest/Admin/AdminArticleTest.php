@@ -2,22 +2,20 @@
 
 use App\Models\Article;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+require_once __DIR__.'/../Helpers/adminLogin.php';
+
+uses(RefreshDatabase::class);
 
 test('Admin fetch user details', function () {
-    $user_id = User::find(8);
+    $user_id = User::factory()->create();
 
     $article = Article::factory()->create([
         'title' => 'example Article',
         'user_id' => $user_id,
-        'category_id' => 5,
-        'status' => 'published'
     ]);
 
-    visit('/login')
-    ->fill('email', 'harshrajsinh@gmail.com')
-    ->fill('password', 'IAmHarsh')
-    ->press('@login-btn')
-    ->assertRoute('admin.dashboard');
+    adminLogin();
 
     visit('/admin/articles?search=example Article')
     ->assertSee('example Article')

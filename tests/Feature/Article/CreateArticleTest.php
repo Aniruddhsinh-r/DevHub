@@ -1,20 +1,23 @@
 <?php
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('Create Article test', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post(route('articles.store'), [
-        'category_id' => 3,
+        'category_id' => Category::factory()->create()->id,
         'title' => 'first testing article.',
         'status' => 'published',
         'excerpt' => 'Create article using test.',
         'body' => 'test body content att least 30 character long as i decide test body.',
         'published_at' => now(),
     ]);
-    $response->dumpSession();
 
     $response->assertRedirect(route('articles.index'));
 
@@ -25,11 +28,10 @@ test('Create Article test', function () {
 });
 
 test('user can delete own article', function () {
-    $user = User::find(22);
-    // $article = Article::find(36);
+    $user = User::factory()->create();
     $article = Article::factory()->create([
-        'user_id' => 22,
-        'category_id' => 3,
+        'user_id' => $user->id,
+        'category_id' => Category::factory()->create(),
     ]);
 
     $this->actingAs($user)->delete(route('articles.destroy',$article->id));
@@ -45,8 +47,8 @@ test('user can delete own article', function () {
 });
 
 test('user cannot delete others article', function () {
-    $user = User::find(22);
-    $article = Article::find(4);
+    $user = User::factory()->create();
+    $article = Article::factory()->create();
 
     $response = $this->actingAs($user)->delete(route('articles.destroy', $article->id));
     $response->assertStatus(403);
@@ -59,7 +61,7 @@ test('user cannot delete others article', function () {
 
 test('guest cannot create article', function () {
     $response = $this->post(route('articles.store'), [
-        'category_id' => 3,
+        'category_id' => Category::factory()->create(),
         'title' => 'gguest article.',
         'status' => 'published',
         'excerpt' => 'Create article using test.',
@@ -68,7 +70,6 @@ test('guest cannot create article', function () {
     ]);
 
     $response->assertRedirect(route('login'));
-    // $response->assertRedirect('/articles');
 
     $this->assertDatabaseMissing('articles', [
         'title' => 'gguest article.',
@@ -77,10 +78,12 @@ test('guest cannot create article', function () {
 });
 
 test('admin cannot post article', function () {
-    $admin = User::find(1);
+    $admin = User::factory()->create([
+        'role' => 'admin'
+    ]);
 
     $response = $this->actingAs($admin)->post(route('articles.store'), [
-        'category_id' => 3,
+        'category_id' => Category::factory()->create(),
         'title' => 'first testing article.',
         'status' => 'published',
         'excerpt' => 'Create article using test.',

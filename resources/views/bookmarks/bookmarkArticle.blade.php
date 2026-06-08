@@ -22,7 +22,7 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900">No bookmarks yet</h3>
             <p class="text-sm text-gray-500 mt-1 max-w-xs mx-auto px-4">Articles you save will show up here for easy access later.</p>
-            <a href="/articles" class="mt-5 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition">
+            <a href="{{ route('articles.index') }}" class="mt-5 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition">
                 Browse Articles
             </a>
         </div>

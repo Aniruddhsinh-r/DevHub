@@ -2,10 +2,13 @@
 
 use App\Models\Article;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('user can like but not twice', function () {
-    $article = Article::find(4);
-    $user = User::find(12);
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
 
     $this->actingAs($user)->post(route('articles.like',$article->id), [
         'article_id' => $article->id,
@@ -29,8 +32,8 @@ test('user can like but not twice', function () {
 });
 
 test('admin cant like', function () {
-    $article = Article::find(21);
-    $admin = User::find(1);
+    $article = Article::factory()->create();
+    $admin = User::factory()->create(['role'=>'admin']);
 
     $response = $this->actingAs($admin)->post(route('articles.like',$article->id), [
         'article_id' => $article->id,
@@ -45,8 +48,8 @@ test('admin cant like', function () {
 });
 
 test('user cant like draft article', function () {
-    $user = User::find(22);
-    $article = Article::find(2);
+    $user = User::factory()->create();
+    $article = Article::factory()->create(['status' => 'draft']);
 
     $this->actingAs($user)->post(route('articles.like',$article->id));
 

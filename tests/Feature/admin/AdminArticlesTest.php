@@ -1,9 +1,18 @@
 <?php
 
+use App\Models\Article;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('admin search articles', function () {
-    $user = User::find(1);
+    $user = User::factory()->create([
+        'role' => 'admin',
+    ]);
+    Article::factory()->create([
+        'title' => 'example article'
+    ]);
 
     $response = $this->actingAs($user)->get(route('admin.articles', [
         'search' => 'example article'

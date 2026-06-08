@@ -8,15 +8,11 @@ use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
-// use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\LoginUserController;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect('/home');
-});
+Route::get('/', function () {return redirect('/home');});
 Route::get('/home', [ArticleController::class, 'home'])->name('home');
 
 Route::middleware('guest')->group(function () {
@@ -38,12 +34,12 @@ Route::middleware(['auth','author'])->group(function () {
     Route::get('/user/{user}', [ProfileController::class, 'show'])->name('userprofile');
     Route::get('/articles/myarticle', [ArticleController::class, 'published'])->name('publishedarticle');
     Route::resource('/articles', ArticleController::class);
-    Route::post('/article/{article}/like', [LikeController::class, 'like'])->name('articles.like'); //likearticle
+    Route::post('/article/{article}/like', [LikeController::class, 'like'])->name('articles.like');
     Route::post('/article/{article}/bookmark', [BookmarkController::class, 'bookmark'])->name('articles.bookmark');
     Route::get('/{user}/bookmark', [BookmarkController::class, 'show'])->name('show.bookmarks');
     Route::get('/profile/followers/{user}', [FollowerController::class, 'followers'])->name('followers');
     Route::get('/profile/followings/{user}', [FollowerController::class, 'followings'])->name('followings');
-    Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('user.follow'); //follow
+    Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('user.follow');
     Route::post('/article/comment', [CommentController::class, 'create'])->name('post.comment');
 });
 

@@ -1,11 +1,19 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('User Login and logout test', function () {
+    User::factory()->create([
+        'email' => 'adanirudda@gmail.com',
+        'password' => 'rathod1290'
+    ]);
+
     $this->post(route('login.store'), [
         'email' => 'adanirudda@gmail.com',
-        'password' => '1290'
+        'password' => 'rathod1290'
     ]);
 
     $this->assertAuthenticated();
@@ -14,11 +22,10 @@ test('User Login and logout test', function () {
     $this->assertGuest();
 
     $response->assertRedirect(route('home'));
-    // $this->assertDatabaseMissing('users', ['id' => $response->id]);
 });
 
 test('Logged in user cannot visit login form', function () {
-    $user = User::find(22);
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)->get(route('login'));
 
@@ -26,7 +33,7 @@ test('Logged in user cannot visit login form', function () {
 });
 
 test('Logged in user cannot visit register form', function () {
-    $user = User::find(22);
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)->get(route('register.create'));
 
@@ -34,7 +41,7 @@ test('Logged in user cannot visit register form', function () {
 });
 
 test('Login user cant login again', function () {
-    $user = User::find(22);
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post(route('login.store'), [
         'email' => 'adanirudda@gmail.com',

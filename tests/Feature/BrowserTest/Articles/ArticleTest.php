@@ -1,24 +1,21 @@
 <?php
 
 use App\Models\Article;
-use App\Models\User;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__.'/../Helpers/userLogin.php';
+
+uses(RefreshDatabase::class);
 
 test('visite specific articles', function () {
     userLogin();
 
     $article = Article::factory()->create([
-        'title' => 'example Article9',
-        'user_id' => 13,
-        'category_id' => 2
+        'title' => 'example Article',
+        'user_id' => auth()->id(),
     ]);
 
-    // visit('/articles')
-    // ->assertSee('example Article7');
-
-    visit('/articles?search=example Article9')
-    ->click('example Article9')
+    visit('/articles?search=example Article')
+    ->click('example Article')
     ->assertPathIs('/articles/' . $article->id);
 
     expect($article->fresh()->view_count)->toBe(1);
@@ -27,8 +24,7 @@ test('visite specific articles', function () {
 test('functionality check in articles.',function () {
     userLogin();
     $article = Article::factory()->create([
-        'category_id' => 5,
-        'user_id' => 5
+        'user_id' => auth()->id()
     ]);
 
     visit(route('articles.show',$article->id))
@@ -38,13 +34,13 @@ test('functionality check in articles.',function () {
         ->press('@PostComment')
         ;
 
-        $this->assertDatabaseHas('likes',['article_id'=>$article->id , 'user_id'=>22]);
-        $this->assertDatabaseHas('bookmarks',['article_id'=>$article->id , 'user_id'=>22]);
-        // $this->assertDatabaseHas('comments',['article_id'=>1 , 'user_id'=>22, 'body'=>'Hi there this is my first comment.']);
+        $this->assertDatabaseHas('likes',['article_id'=>$article->id , 'user_id'=>auth()->id()]);
+        $this->assertDatabaseHas('bookmarks',['article_id'=>$article->id , 'user_id'=>auth()->id()]);
+        $this->assertDatabaseHas('comments',['article_id'=>$article->id , 'user_id'=>auth()->id(), 'body'=>'Hi there this is my first comment.']);
 });
 
 test('guest cant view specific article', function () {
-    $article = Article::find(12);
+    $article = Article::factory()->create();
 
     visit(route('articles.show', $article->id))
     ->assertRoute('login');

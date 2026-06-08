@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(RefreshDatabase::class);
 
 test('Register a user.', function () {
     $email = 'roman'.time().'@gmail.com';
@@ -11,12 +12,6 @@ test('Register a user.', function () {
         ->fill('password', 'Roman123')
         ->click('Register')
         ->assertRoute('home');
-        // ->assertPathIs('/home');         // exact path match ✓
-        // ->assertPathBeginsWith('/home'); // path starts with
-        // ->assertPathContains('home');    // path contains
-        // ->assertPathEndsWith('/home')   // path ends with
-        // ->assertPathIsNot('/register')  // path is NOT this
-
 
     $this->assertDatabaseHas('users', [
         'email' => $email,

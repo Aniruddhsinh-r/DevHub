@@ -1,30 +1,31 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__.'/../Helpers/adminLogin.php';
 require_once __DIR__.'/../Helpers/userLogin.php';
+
+uses(RefreshDatabase::class);
 
 test('it update user detail', function () {
     userLogin();
 
     visit('/profile')
     ->press('Edit Profile')
-    // ->assertRoute('profile.edit', $user->id)
-    ->fill('name', 'Rathod Aniruddhsinh')
+    ->fill('name', 'Rathod Ani')
     ->fill('bio', 'hi there this is my updated by using test case update profile testig.')
     ->fill('email', 'adanirudda@gmail.com')
-    ->fill('password', '1290')
-    ->fill('password_confirmation', '1290')
+    ->fill('password', 'rathod1290')
+    ->fill('password_confirmation', 'rathod1290')
     ->press('@update_profile');
 
     $this->assertDatabaseHas('users', [
-        'name' => 'Rathod Aniruddhsinh',
+        'name' => 'Rathod Ani',
     ]);
-    // $this->assertAuthenticated();
 });
 
 test('guest cant see author profile', function() {
-    $user = User::find(22);
+    $user = User::factory()->create();
 
     visit(route('userprofile',$user->id))
     ->assertRoute('login');
@@ -33,13 +34,12 @@ test('guest cant see author profile', function() {
 test('Admin cant follow Author', function () {
     adminLogin();
 
-    $admin = User::find(1);
-    $user = User::find(22);
+    $user = User::factory()->create();
 
     visit(route('user.follow',$user->id));
 
     $this->assertDatabaseMissing('follows', [
-        'follower_id' => $admin->id,
+        'follower_id' => auth()->id(),
         'followed_id' => $user->id
     ]);
 });

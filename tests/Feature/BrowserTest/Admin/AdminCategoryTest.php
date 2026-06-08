@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Category;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__.'/../Helpers/adminLogin.php';
+
+uses(RefreshDatabase::class);
 
 test('Create category by admin', function () {
     adminLogin();
@@ -17,9 +19,15 @@ test('Create category by admin', function () {
 test('delete category', function () {
     adminLogin();
 
-    $category = Category::where('name', 'Verdie Littel III')->first();
+    $category = Category::factory()->create([
+        'name' => 'Verdie Littel III'
+    ]);
 
     visit('/admin/categories')
     ->click('[dusk="delete-category-' . $category->id . '"]')
     ->assertDontSee('Verdie Littel III');
+
+    $this->assertDatabaseMissing('categories', [
+        'name' => 'Verdie Littel III',
+    ]);
 });

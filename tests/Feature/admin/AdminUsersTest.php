@@ -4,9 +4,17 @@ use App\Models\User;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Like;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('Admin User find test', function () {
-    $user = User::find(1);
+    $user = User::factory()->create([
+        'role' => 'admin',
+    ]);
+    User::factory()->create([
+        'name' => 'ishigory'
+    ]);
 
     $response = $this->actingAs($user)->get(route('admin.users', [
         'search' => 'ishigory'
@@ -19,14 +27,18 @@ test('Admin User find test', function () {
 
 test('Admin User delete test', function () {
     $this->withoutExceptionHandling();
-    $user = User::find(1);
+    $user = User::factory()->create([
+        'role' => 'admin',
+    ]);
     $removeuser = User::factory()->create();
+    $article = Article::factory()->create(['user_id' => $removeuser->id,]);
+    Comment::factory()->create(['user_id' => $removeuser->id,'article_id' => $article->id]);
 
-    Article::factory()->create(['user_id' => $removeuser->id, 'category_id' =>2]);
-    Comment::factory()->create(['user_id' => $removeuser->id, 'article_id'=> 4]);
+    Article::factory()->create(['user_id' => $removeuser->id, ]);
+    Comment::factory()->create(['user_id' => $removeuser->id, 'article_id'=> $article->id]);
     Like::factory()->create(['user_id' => $removeuser->id]);
 
-    $response = $this->actingAs($user)->delete(route('admin.user.remove',$removeuser->id));
+    $this->actingAs($user)->delete(route('admin.user.remove',$removeuser->id));
 
     $this->assertSoftDeleted('users',['id' => $removeuser->id]);
     $this->assertSoftDeleted('articles',['user_id' => $removeuser->id]);

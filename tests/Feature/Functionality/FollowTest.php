@@ -1,10 +1,13 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('user can follow but not twice and also unfollow', function () {
-    $user = User::find(21);
-    $followed = User::find(2);
+    $user = User::factory()->create();
+    $followed = User::factory()->create();
 
     $this->actingAs($user)->post(route('user.follow', $followed->id), [
         'follower_id' => $user->id,
@@ -28,8 +31,8 @@ test('user can follow but not twice and also unfollow', function () {
 });
 
 test('admin cant follow other author', function () {
-    $user = User::find(21);
-    $admin = User::find(1);
+    $user = User::factory()->create();
+    $admin = User::factory()->create(['role'=>'admin']);
 
     $response = $this->actingAs($admin)->post(route('user.follow', $admin->id), [
         'follower_id' => $user->id,
@@ -44,7 +47,7 @@ test('admin cant follow other author', function () {
 });
 
 test('Guest cant follow users', function () {
-    $user = User::find(5);
+    $user = User::factory()->create();
 
     $response = $this->post(route('user.follow',$user), [
         'follower_id' => $user->id,

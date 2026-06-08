@@ -1,9 +1,12 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('check article validation test', function () {
-    $user = User::find(22);
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post(route('articles.store'), [
         'title' => '',
@@ -52,7 +55,7 @@ test('check login validation test', function () {
 test('check credentials validation test', function () {
     $response = $this->post(route('login'), [
         'email' => 'adaniruddha@gmail.com',
-        'password' => '1290',
+        'password' => 'rathod1290',
     ]);
 
     $response->assertRedirect();
@@ -60,7 +63,7 @@ test('check credentials validation test', function () {
 });
 
 test('check schedule article validation test require minutes', function () {
-    $user = User::find(22);
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post(route('articles.store'), [
         'title' => 'expose your self',
@@ -77,7 +80,7 @@ test('check schedule article validation test require minutes', function () {
 });
 
 test('check profile update validation test', function () {
-    $user = User::find(22);
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)->put(route('profile.update',$user), [
         'name' => '',
@@ -94,9 +97,9 @@ test('check profile update validation test', function () {
     $response->assertSessionHasErrors('password');
 });
 
-test('User cant see author profile', function () {
-    $user = User::find(22);
-    $admin = User::find(1);
+test('Author cant see admin profile', function () {
+    $user = User::factory()->create();
+    $admin = User::factory()->create(['role'=>'admin']);
 
     $response = $this->actingAs($user)->get(route('userprofile',$admin));
     $response->assertStatus(302);
@@ -105,7 +108,7 @@ test('User cant see author profile', function () {
 });
 
 test('User cant see those auther who dose not exist in db', function () {
-    $user = User::find(22);
+    $user = User::factory()->create();
     $admin = 189;
 
     $response = $this->actingAs($user)->get(route('userprofile',$admin));
@@ -113,7 +116,7 @@ test('User cant see those auther who dose not exist in db', function () {
 });
 
 test('Admin cant update his profile', function () {
-    $admin = User::find(1);
+    $admin = User::factory()->create(['role' => 'admin']);
 
     $response = $this->actingAs($admin)->put(route('profile.update',$admin),[
         'name' => 'Admin Name change',
@@ -122,8 +125,8 @@ test('Admin cant update his profile', function () {
     $response->assertStatus(403);
 
     $this->assertDatabaseHas('users', [
-        'name' => 'Harshrajsinh',
-        'email' => 'harshrajsinh@gmail.com',
+        'name' => $admin->name,
+        'email' => $admin->email,
         'role' => 'admin',
     ]);
 });

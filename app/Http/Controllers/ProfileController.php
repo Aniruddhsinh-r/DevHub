@@ -27,7 +27,7 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        if (!$user || ($user->id === 1 && Auth::id() !== 1)) {
+        if (!$user || ($user->role === 'admin' && Auth::id() !== 1)) {
             return redirect()->back()->with('error', 'This author does not exist.');
         }
 
@@ -63,8 +63,8 @@ class ProfileController extends Controller
         $request->validate([
             'name' => ['required','min:5','max:50'],
             'email' => ['required', 'string', 'min:10', 'max:255' ,Rule::unique('users')->ignore($profile->id)],
-            'password' => ['nullable', 'string', 'min:4', 'max:255', 'confirmed'],
-            'password_confirmation' => ['nullable', 'string', 'min:4', 'max:255'],
+            'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
+            'password_confirmation' => ['nullable', 'string', 'min:8', 'max:255'],
             'avtar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'bio' => ['nullable', 'max:2000', 'string']
         ]);

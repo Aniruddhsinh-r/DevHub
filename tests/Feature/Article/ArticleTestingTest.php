@@ -2,9 +2,14 @@
 
 use App\Models\Article;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('check article functionalitys', function () {
-    $user = User::find(22);
+    $user = User::factory()->create([
+        'role' => 'author',
+    ]);
     $article = Article::factory()->create();
     $response = $this->actingAs($user)->get(route('articles.show', $article->id));
 
@@ -28,9 +33,11 @@ test('check article functionalitys', function () {
 });
 
 test('admin views not count', function () {
-    $admin = User::find(1);
-    $article = Article::find(4);
-    $response = $this->actingAs($admin)->get(route('admin.article.show', $article->id));
+    $admin = User::factory()->create([
+        'role' => 'admin',
+    ]);
+    $article = Article::factory()->create();
+    $this->actingAs($admin)->get(route('admin.article.show', $article->id));
 
     $this->assertDatabaseMissing('views',['article_id'=>$article->id , 'user_id'=>$admin->id]);
 });

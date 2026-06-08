@@ -62,23 +62,17 @@ class ForgotPasswordController extends Controller
 
     public function reset(Request $request){
         $email = session('resetPass_email');
+
         $request->validate([
-            'password' => ['required', 'string', 'min:4', 'max:255'],
-            'password_confirmation' => ['required', 'string', 'min:4', 'max:255'],
+          'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $pass = $request->input('password');
-        $confirmpass = $request->input('password_confirmation');
+        $user = User::where('email', $email)->firstOrFail();
+        $user->password = Hash::make($request->password);
+        $user->save();
 
-        if ($pass === $confirmpass) {
-            $user = User::where('email', $email)->firstOrFail();
-            $user->password = Hash::make($pass);
-            $user->save();
+        session()->forget('resetPass_email');
 
-            session()->forget('resetPass_email');
-
-            return to_route('home')->withInput()->with('success','your password has ben sucessfully updated.');
-        }
-        return back()->with('error',"fail to update password!");
+        return to_route('home')->with('success', 'Password updated successfully.');
     }
 }

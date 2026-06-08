@@ -1,6 +1,10 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+require_once __DIR__.'/../Helpers/adminLogin.php';
+
+uses(RefreshDatabase::class);
 
 test('Admin fetch user details', function () {
     User::factory()->create([
@@ -13,11 +17,7 @@ test('Admin fetch user details', function () {
         'role' => 'author',
     ]);
 
-    visit('/login')
-    ->fill('email', 'harshrajsinh@gmail.com')
-    ->fill('password', 'IAmHarsh')
-    ->press('@login-btn')
-    ->assertRoute('admin.dashboard');
+    adminLogin();
 
     visit('/admin/users')
     ->assertSee('Loggy')
@@ -30,10 +30,7 @@ test('admin search and delete user', function () {
         'role' => 'author',
     ]);
 
-    visit('/login')
-    ->fill('email', 'harshrajsinh@gmail.com')
-    ->fill('password', 'IAmHarsh')
-    ->press('@login-btn');
+    adminLogin();
 
     $userId = User::where('name','ishigory')->value('id');
 

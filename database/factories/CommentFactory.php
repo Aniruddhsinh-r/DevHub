@@ -31,7 +31,7 @@ class CommentFactory extends Factory
     /**
      * State modifier for generating nested replies smoothly
      */
-    public function reply(comments $parentComment): static
+    public function reply(Comment $parentComment): static
     {
         return $this->state(fn (array $attributes) => [
             'parent_id' => $parentComment->id,

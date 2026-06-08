@@ -2,9 +2,12 @@
 
 use App\Models\Article;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('Guest cant post comment', function () {
-    $article = Article::find(12);
+    $article = Article::factory()->create();
 
     $response = $this->post(route('post.comment',$article->id), [
         'article_id' => $article->id,
@@ -20,8 +23,8 @@ test('Guest cant post comment', function () {
 });
 
 test('admin cant post comment', function () {
-    $article = Article::find(12);
-    $user = User::find(1);
+    $article = Article::factory()->create();
+    $user = User::factory()->create(['role' => 'admin']);
 
     $response = $this->actingAs($user)->post(route('post.comment',$article->id), [
         'article_id' => $article->id,
@@ -37,8 +40,8 @@ test('admin cant post comment', function () {
 });
 
 test('user can post comment', function () {
-    $article = Article::find(12);
-    $user = User::find(6);
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)->from(route('articles.show', $article->id))->post(route('post.comment',$article->id), [
         'article_id' => $article->id,

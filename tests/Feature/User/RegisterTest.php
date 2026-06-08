@@ -3,15 +3,15 @@
 test('user registration test', function () {
     $email = 'khabib'.time().'@gmail.com';
     $response = $this->post(route('register.store'), [
-        'name' => 'khabib',
+        'name' => 'khabibji',
         'email' => $email,
-        'password' => 'khabib',
+        'password' => 'khabibji',
     ]);
 
     $response->assertRedirect(route('home'));
 
     $this->assertDatabaseHas('users', [
-        'name' => 'khabib',
+        'name' => 'khabibji',
         'email' => $email,
         'role' => 'author',
     ]);

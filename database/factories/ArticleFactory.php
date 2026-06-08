@@ -24,7 +24,7 @@ class ArticleFactory extends Factory
         $status = 'published';
         return [
             'user_id' => User::factory()->create(),
-            'category_id' => 4,
+            'category_id' => Category::factory()->create(),
             'title' => ($title),
             'slug' => Str::slug($title),
             'excerpt' => fake()->paragraph(1),

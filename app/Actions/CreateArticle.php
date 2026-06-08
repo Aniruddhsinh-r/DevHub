@@ -35,7 +35,6 @@ class CreateArticle
         } elseif ($values['status'] === 'published') {
             $data['published_at'] = now();
         }
-        // dd(['all' => $data]);
 
         DB::transaction(function () use ($data) {
             $this->user->articles()->create($data);

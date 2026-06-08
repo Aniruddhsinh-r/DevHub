@@ -1,14 +1,17 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('Profile update test', function () {
-    $user = User::find(22);
+    $user = User::factory()->create();
     $this->actingAs($user)->put(route('profile.update',$user->id), [
         'name' => 'Aniruddhsinh Rathod',
         'bio' => 'hi i am aniruddhsinh and i update my profile using testcase.',
-        'password' => '1290',
-        'password_confirmation' => '1290',
+        'password' => 'rathod1290',
+        'password_confirmation' => 'rathod1290',
         'email' => $user->email,
     ]);
 
@@ -19,10 +22,10 @@ test('Profile update test', function () {
 });
 
 test('Profile following functionality test', function () {
-    $user = User::find(22);
-    $followed = User::find(12);
+    $user = User::factory()->create();
+    $followed = User::factory()->create();
 
-    $this->actingAs($user)->post(route('user.follow', $user->id));
+    $this->actingAs($user)->post(route('user.follow', $followed->id));
 
     $this->assertDatabaseHas('follows', [
         'follower_id' => $user->id,

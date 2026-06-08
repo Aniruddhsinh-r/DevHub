@@ -3,7 +3,7 @@
             <div class="flex flex-col gap-8 md:flex-row md:justify-between md:items-start">
 
                 <div class="space-y-4 md:w-1/3">
-                    <a href="/" class="text-xl font-black tracking-tight text-black flex items-center gap-2">
+                    <a href="{{ route('home') }}" class="text-xl font-black tracking-tight text-black flex items-center gap-2">
                         <span>Dev<span class="text-indigo-600">Hub</span></span>
                     </a>
                     <p class="text-gray-500 text-sm max-w-sm font-medium leading-relaxed">
