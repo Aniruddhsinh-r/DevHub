@@ -16,7 +16,7 @@ test('Create Article test', function () {
     ]);
     $response->dumpSession();
 
-    $response->assertRedirect(route('show.articles'));
+    $response->assertRedirect(route('articles.index'));
 
     $this->assertDatabaseHas('articles', [
         'title' => 'first testing article.',

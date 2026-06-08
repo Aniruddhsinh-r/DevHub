@@ -35,11 +35,8 @@ class ProfileController extends Controller
             return view('auth.myprofile', compact('user'));
         }
 
-        if (Auth::check()) {
-            $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
-            return view('components.profile', compact('user','articles'));
-        }
-        return view('auth.register')->with('error','Unauthorize action');
+        $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+        return view('components.profile', compact('user','articles'));
     }
 
     /**
@@ -65,7 +62,7 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => ['required','min:5','max:50'],
-            'email' => ['required', 'string', 'min:10', 'max:255'],
+            'email' => ['required', 'string', 'min:10', 'max:255' ,Rule::unique('users')->ignore($profile->id)],
             'password' => ['nullable', 'string', 'min:4', 'max:255', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:4', 'max:255'],
             'avtar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
@@ -78,11 +75,9 @@ class ProfileController extends Controller
             'bio' => $request->bio,
         ];
 
-        $user = $profile;
-
         if ($request->hasFile('avtar')) {
-            if ($user->avtar) {
-                Storage::disk('public')->delete($user->avtar);
+            if ($profile->avtar) {
+                Storage::disk('public')->delete($profile->avtar);
             }
             $data['avtar'] = $request->file('avtar')->store('avtars','public');
         }
@@ -91,8 +86,8 @@ class ProfileController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
-        if ($user->update($data)) {
-            return to_route('profile.index')->with('success','your profile is sucessfully updated.');
+        if ($profile->update($data)) {
+            return to_route('profile.index')->with('success','your profile is successfully updated.');
         }
         return back()->with('error',"fail to update profile.");
     }

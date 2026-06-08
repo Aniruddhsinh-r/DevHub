@@ -19,9 +19,20 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class ArticleController extends Controller
 {
     use AuthorizesRequests;
-    public function index()
-    {
+    public function index(Request $request) {
+        $search = $request->search;
 
+        $articles = Article::with(['user', 'category'])
+        ->where('status', 'published')
+        ->where(function($query) use ($search) {
+            $query->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('excerpt', 'LIKE', "%{$search}%")
+                  ->orWhere('body', 'LIKE', "%{$search}%");
+        })->latest()->paginate(9);
+
+        return view('articles.article',[
+            'articles' => $articles
+        ]);
     }
 
     public function home() {
@@ -50,15 +61,11 @@ class ArticleController extends Controller
     public function store(ArticleValidationRequest $request, CreateArticle $action)
     {
         $action->handle($request->safe()->all());
-        return to_route('show.articles')->with('success', 'Article created successfully.');
+        return to_route('articles.index')->with('success', 'Article created successfully.');
     }
 
     public function show(Article $article)
     {
-        if (!Auth::check()) {
-            return view('auth.register')->with('Please Register to see full article.');
-        }
-
         $viewed = View::where(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true])->exists();
         $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
@@ -83,27 +90,6 @@ class ArticleController extends Controller
         $articles = $user_id->articles()->latest()->get();
 
         return view('articles.userArticles', ['articles' => $articles]);
-
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function displayArticle(Request $request)
-    {
-        $search = $request->search;
-
-        $articles = Article::with(['user', 'category'])
-        ->where('status', 'published')
-        ->where(function($query) use ($search) {
-            $query->where('title', 'LIKE', "%{$search}%")
-                  ->orWhere('excerpt', 'LIKE', "%{$search}%")
-                  ->orWhere('body', 'LIKE', "%{$search}%");
-        })->latest()->paginate(9);
-
-        return view('articles.article',[
-            'articles' => $articles
-        ]);
     }
 
     public function showDraftArticle(User $user) {
@@ -132,8 +118,8 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         $this->authorize('update', $article);
-            $categories = Category::all();
-            return view('articles.articleForm', compact('article','categories'));
+        $categories = Category::all();
+        return view('articles.articleForm', compact('article','categories'));
     }
 
     /**

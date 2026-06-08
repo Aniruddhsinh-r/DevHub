@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Auth;
 class BookmarkController extends Controller
 {
     public function bookmark(Article $article) {
-        if (!Auth::check()) {
-            return back()->with('error', 'You must be logged in to bookmark this article.');
-        }
-
         if ($article->status !== 'published') {
             return back()->with('error', 'You cant bookmark draft articles.');
         }

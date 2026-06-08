@@ -82,7 +82,6 @@ class AdminController extends Controller
                 $user->articles()->delete();
                 $user->delete();
             });
-
             return back()->with('success','User remove successfully.');
         }
         return back()->with('error','Only admin can perform this task');
@@ -125,7 +124,6 @@ class AdminController extends Controller
         // $article = Article::where('id',$article->id)->get();
         $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
-
         $likes = Like::where('article_id',$article)->get();
 
         return view('admin.articles.article', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);

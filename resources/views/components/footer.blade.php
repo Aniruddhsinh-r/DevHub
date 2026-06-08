@@ -17,7 +17,7 @@
                     </h3>
                     <ul role="list" class="mt-4 space-y-3">
                         <li>
-                            <a href="{{ route('show.articles') }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
+                            <a href="{{ route('articles.index') }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
                                 Latest Articles
                             </a>
                         </li>

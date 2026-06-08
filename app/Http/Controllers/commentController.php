@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     public function create(Request $request) {
-        if (!Auth::check()) {
-            return to_route('register.create')->with('error','Unauthorize action.');
-        }
         $article = Article::findOrFail($request->article_id);
 
         if ($article->status !== 'published') {

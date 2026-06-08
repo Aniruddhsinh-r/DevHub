@@ -12,10 +12,6 @@ class LikeController extends Controller
 {
     public function like(Article $article)
     {
-        if (!Auth::check()) {
-            return back()->with('error', 'You must be logged in to like this article.');
-        }
-
         if ($article->status !== 'published') {
             return back()->with('error', 'You cant like draft articles.');
         }

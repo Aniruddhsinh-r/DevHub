@@ -8,6 +8,7 @@ use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
+// use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\LoginUserController;
 use Illuminate\Support\Facades\Mail;
@@ -17,7 +18,6 @@ Route::get('/', function () {
     return redirect('/home');
 });
 Route::get('/home', [ArticleController::class, 'home'])->name('home');
-Route::get('/articles', [ArticleController::class, 'displayArticle'])->name('show.articles');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register.create');
@@ -37,7 +37,7 @@ Route::middleware(['auth','author'])->group(function () {
     Route::resource('/profile', ProfileController::class)->except(['show']);
     Route::get('/user/{user}', [ProfileController::class, 'show'])->name('userprofile');
     Route::get('/articles/myarticle', [ArticleController::class, 'published'])->name('publishedarticle');
-    Route::resource('/articles', ArticleController::class)->except(['index']);
+    Route::resource('/articles', ArticleController::class);
     Route::post('/article/{article}/like', [LikeController::class, 'like'])->name('articles.like'); //likearticle
     Route::post('/article/{article}/bookmark', [BookmarkController::class, 'bookmark'])->name('articles.bookmark');
     Route::get('/{user}/bookmark', [BookmarkController::class, 'show'])->name('show.bookmarks');

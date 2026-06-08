@@ -28,7 +28,7 @@
                             <a href="/admin/dashboard" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">dashboard</a>
                         @else
                             <a href="{{ route('home')  }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
-                            <a href="{{ route('show.articles')  }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
+                            <a href="{{ route('articles.index')  }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
                         @endif
 
                         @auth
@@ -117,7 +117,7 @@
                     <a href="{{ route('admin.dashboard')  }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">dashboard</a>
                 @else
                     <a href="{{ route('home')  }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">home</a>
-                    <a href="{{ route('show.articles')  }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
+                    <a href="{{ route('articles.index')  }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
                 @endif
 
                 @auth

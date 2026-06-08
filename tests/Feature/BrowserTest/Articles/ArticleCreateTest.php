@@ -25,7 +25,7 @@ test('article create', function () {
     ->fill('excerpt', 'this is test case for checking hope this work.')
     ->fill('body', 'Test case new Article body testing for Amazing article creating and test dummy body data.')
     ->press('@submitBTN')
-    ->assertRoute('show.articles');
+    ->assertRoute('articles.index');
 
     $this->assertDatabaseHas('articles', [
         'title' => 'hither aniruddhsinh',

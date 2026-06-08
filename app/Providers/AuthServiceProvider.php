@@ -16,9 +16,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         //
     }
-    protected $policies = [
-        Article::class => ArticlePolicy::class,
-    ];
 
     /**
      * Bootstrap services.
