@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Follow;
 use App\Models\User;
+use App\Notifications\NewFollowerNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,6 +13,11 @@ class FollowerController extends Controller
     public function follow(User $id){
         if(Auth::id() !== $id->id) {
             Auth::user()->following()->toggle($id);
+            $alreadyFollowing = Auth::user()->following()->where('followed_id', $id->id)->exists();
+
+            if ($alreadyFollowing) {
+                $id->notify(new NewFollowerNotification(Auth::user()));
+            }
             return back();
         }
         return back()->with('error','You cant follow yourself.');

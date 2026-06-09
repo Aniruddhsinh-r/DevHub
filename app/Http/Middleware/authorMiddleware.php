@@ -23,6 +23,7 @@ class AuthorMiddleware
         if (Auth::user()->role !== 'author') {
             abort(403, 'Unauthorized Admin access only');
         }
+        
         return $next($request);
     }
 }

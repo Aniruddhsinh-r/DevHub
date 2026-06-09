@@ -177,5 +177,52 @@
         @include('components.footer')
     @endif
 
+    <div x-data="{ show: false, message: '', url: null}"
+         x-on:live-notification.window="show = true; message = $event.detail.message; url = $event.detail.url; setTimeout(() => show = false, 5000)"
+         x-show="show"
+         @click="window.location = url"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:translate-x-4"
+         x-transition:enter-end="opacity-100 translate-y-0 sm:translate-x-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed top-5 right-5 bg-white border cursor-pointer border-gray-100 shadow-2xl rounded-xl p-4 z-50 max-w-sm flex items-start gap-3 glass-effect"
+         style="display: none;">
+
+        <div class="bg-gray-900 text-white p-2 rounded-lg shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+        </div>
+
+        <div class="flex-1">
+            <h4 class="text-sm font-bold text-gray-900">New Notification</h4>
+            <p class="text-sm text-gray-600 mt-0.5" x-text="message"></p>
+        </div>
+
+        <button @click="show = false" class="text-gray-400 hover:text-gray-600 transition focus:outline-none">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        window.onload = function () {
+            const userId = "{{ auth()->id() }}";
+
+            if (userId && window.Echo) {
+                window.Echo.private(`App.Models.User.${userId}`)
+                    .notification((notification) => {
+                        window.dispatchEvent(new CustomEvent('live-notification', {
+                            detail: { message: notification.message,
+                                url: notification.url,
+                            }
+                        }));
+                    });
+            }
+        };
+    </script>
 </body>
 </html>
