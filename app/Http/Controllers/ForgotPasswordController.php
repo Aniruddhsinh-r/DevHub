@@ -18,6 +18,11 @@ class ForgotPasswordController extends Controller
     public function store(Request $request) {
         $request->validate(['email' => 'required|email|exists:users']);
 
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return view('auth.otpVarification', ['email' => $request->email]);
+        }
+
         $to = $request->email;
         $otp = random_int(100000,999999);
         $message = $otp;
@@ -65,7 +70,8 @@ class ForgotPasswordController extends Controller
         $email = session('resetPass_email');
 
         $request->validate([
-          'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
+            'password_confirmation' => ['required', 'string'],
         ]);
 
         $user = User::where('email', $email)->firstOrFail();

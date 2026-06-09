@@ -216,7 +216,7 @@
                                                         @if ($reply->user->avtar)
                                                             <img src="{{ asset('storage/' . $reply->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
                                                         @else
-                                                            <span >{{ Str::upper(Str::substr($reply->user->name, 0, 2)) }}</span>
+                                                            <span>{{ Str::upper(Str::substr($reply->user->name, 0, 2)) }}</span>
                                                         @endif
                                                     </div>
                                                 </a>

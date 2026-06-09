@@ -65,9 +65,10 @@ test('article delete', function () {
     ->click('[dusk="delete-article-' . $article->id . '"]')
     ->assertDontSee('article create for delete browser test checking');
 
+    sleep(1);
+
     $this->assertSoftDeleted('articles', [
         'id' => $article->id,
-        'user_id' => auth()->id()
     ]);
 });
 

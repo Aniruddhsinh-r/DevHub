@@ -17,7 +17,7 @@ use Illuminate\Support\Str;
 class AdminController extends Controller
 {
     public function index() {
-        $articles = Article::all();
+        $articles = Article::where('status', 'published')->get();
         $users = User::whereNull('deleted_at')->get();
         $comments = Comment::count();
         $views = View::count();

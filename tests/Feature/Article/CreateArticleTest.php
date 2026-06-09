@@ -31,13 +31,14 @@ test('user can delete own article', function () {
     $user = User::factory()->create();
     $article = Article::factory()->create([
         'user_id' => $user->id,
-        'category_id' => Category::factory()->create(),
+        'category_id' => Category::factory()->create()->id,
     ]);
 
     $this->actingAs($user)->delete(route('articles.destroy',$article->id));
 
     $this->assertSoftDeleted('articles', [
         'id' => $article->id,
+        'user_id' => $user->id
     ]);
 
     $this->assertDatabaseMissing('comments', ['article_id' => $article->id]);
@@ -83,7 +84,7 @@ test('admin cannot post article', function () {
     ]);
 
     $response = $this->actingAs($admin)->post(route('articles.store'), [
-        'category_id' => Category::factory()->create(),
+        'category_id' => Category::factory()->create()->id,
         'title' => 'first testing article.',
         'status' => 'published',
         'excerpt' => 'Create article using test.',

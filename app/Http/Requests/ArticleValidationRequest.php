@@ -29,7 +29,7 @@ class ArticleValidationRequest extends FormRequest
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
             'scheduled_hours' => 'nullable|integer|min:1|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
-            'cover_path' => 'nullable|image|',
+            'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 }

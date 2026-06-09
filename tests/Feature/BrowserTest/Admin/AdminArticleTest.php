@@ -8,7 +8,7 @@ require_once __DIR__.'/../Helpers/adminLogin.php';
 uses(RefreshDatabase::class);
 
 test('Admin fetch user details', function () {
-    $user_id = User::
+    $user_id = User::factory()->create();
 
     $article = Article::factory()->create([
         'title' => 'example Article',
