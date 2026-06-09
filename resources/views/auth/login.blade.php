@@ -17,6 +17,11 @@
                         <input type="password" id="password" name="password" class="border border-gray-400 w-full p-2 font-semibold text-sm text-gray-800 rounded-md shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="••••••••"/>
                     </div>
 
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="remember" name="remember" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="remember" class="text-sm text-gray-600">Remember me</label>
+                    </div>
+
                     <div class="mt-8 flex items-center justify-between gap-4">
                         <a href="{{ route('password.forgot') }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
                             <span>Forgot password?</span>

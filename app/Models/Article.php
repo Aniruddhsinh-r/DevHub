@@ -64,7 +64,4 @@ class Article extends Model
         return $this->likes()->where('user_id', Auth::id())->exists();
     }
     public function views() { return $this->hasMany(View::class); }
-    public function comments() { return $this->hasMany(Comment::class); }
-    public function bookmark() { return $this->hasMany(Bookmark::class); }
-    public function like() { return $this->hasMany(Like::class); }
 }

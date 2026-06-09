@@ -29,7 +29,7 @@ class LoginUserController extends Controller
             'password' => ['required', 'string', 'min:8', 'max:255'],
         ]);
 
-        if (Auth::attempt($attempt, true)) {
+        if (Auth::attempt($attempt, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
             $admin = User::where('email', $request->email)->whereRole('admin')->exists();
