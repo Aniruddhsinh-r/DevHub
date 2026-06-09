@@ -17,11 +17,24 @@ class UpdateArticle
 
     public function handle(array $values, Article $article): void
     {
+        unset($values['_token']);
+
         $data = collect($values)->only([
             'title', 'excerpt', 'body', 'category_id','status',
         ])->toArray();
 
-        $data['slug'] = Str::slug($values['title'],'-');
+        if (($values['title'] ?? null) && $values['title'] !== $article->title) {
+            $base = Str::slug($values['title'], '-');
+            $slug = $base;
+            $count = 2;
+
+            while (Article::where('slug', $slug)->where('id', '!=', $article->id)->exists()) {
+                $slug = $base . '-' . $count;
+                $count++;
+            }
+
+            $data['slug'] = $slug;
+        }
 
         if ($this->hasFile($values, 'cover_path')) {
             if ($article->cover_path) {

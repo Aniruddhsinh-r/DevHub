@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Models\Article;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -24,7 +25,15 @@ class CreateArticle
             'title', 'excerpt', 'body', 'category_id','status',
         ])->toArray();
 
-        $data['slug'] = Str::slug($title,'-');
+        $base = Str::slug($title, '-');
+        $slug = $base;
+        $count = 2;
+        while (Article::where('slug', $slug)->exists()) {
+            $slug = $base . '-' . $count;
+            $count++;
+        }
+
+        $data['slug'] = $slug;
 
         if ($values['cover_path'] ?? false) {
             $data['cover_path'] = $values['cover_path']->store('articleCovers','public');

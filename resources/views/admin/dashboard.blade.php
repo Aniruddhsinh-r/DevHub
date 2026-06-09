@@ -76,7 +76,7 @@
                     </span>
                 </div>
                 <h2 class="mt-4 text-2xl font-black text-[#111827]">
-                    {{ $comments->count() }}
+                    {{ $comments }}
                 </h2>
                 <p class="mt-1 text-xs text-gray-400">
                     Total article comments
@@ -97,7 +97,7 @@
                     </span>
                 </div>
                 <h2 class="mt-4 text-2xl font-black text-[#111827]">
-                    {{ $views->count() }}
+                    {{ $views }}
                 </h2>
                 <p class="mt-1 text-xs text-gray-400">
                     Total article views
@@ -146,7 +146,7 @@
                 <div class="flex items-center justify-between border-b border-gray-50 pb-4">
                     <div>
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Total Likes</span>
-                        <span class="text-3xl font-black text-gray-900 tracking-tight">{{ $likes->count() }}</span>
+                        <span class="text-3xl font-black text-gray-900 tracking-tight">{{ $likes }}</span>
                     </div>
                     <span class="p-2 bg-rose-50 text-rose-600 rounded-xl text-xs font-semibold">❤️ Likes</span>
                 </div>

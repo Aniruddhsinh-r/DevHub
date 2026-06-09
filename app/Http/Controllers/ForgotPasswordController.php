@@ -43,7 +43,8 @@ class ForgotPasswordController extends Controller
             'otp' => 'required|digits:6'
         ]);
 
-        if($request->otp == Cache::get('otp_'. $email)){
+        $cachedOtp = Cache::get('otp_' . $email);
+        if ($cachedOtp !== null && hash_equals((string) $cachedOtp, (string) $request->otp)) {
             Cache::forget('otp_'. $email);
             session(['resetPass_email' => $email]);
             session()->forget('otp_email');

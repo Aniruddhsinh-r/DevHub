@@ -19,12 +19,10 @@ class AdminController extends Controller
     public function index() {
         $articles = Article::all();
         $users = User::whereNull('deleted_at')->get();
-        $comments = Comment::get();
-        $views = View::get();
-        $likes = Like::get();
-        $topUser = User::withCount('articles')
-        ->orderByDesc('articles_count')
-        ->first();
+        $comments = Comment::count();
+        $views = View::count();
+        $likes = Like::count();
+        $topUser = User::withCount('articles')->orderByDesc('articles_count')->first();
 
         return view('admin.dashboard',['articles' => $articles,'users' => $users,'comments' => $comments,'views'=>$views,'likes'=>$likes,'topUser'=>$topUser]);
     }
@@ -47,7 +45,6 @@ class AdminController extends Controller
     }
 
     public function showuser(User $user) {
-
         $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
         return view('admin.users.userProfile', ['user'=>$user,'articles'=>$articles]);
     }
@@ -55,12 +52,10 @@ class AdminController extends Controller
     public function userPublished(User $user) {
         $articles = Article::with(['category'])->where('user_id', $user->id)->latest()->get();
         return view('admin.users.userPublished', ['articles'=>$articles]);
-
     }
 
     public function show() {
         $categories = Category::withCount('articles')->latest()->paginate(6);
-
         return view('admin.categories', ['categories' => $categories]);
     }
 
@@ -100,21 +95,12 @@ class AdminController extends Controller
     }
 
     public function destroy(Category $category) {
-        $articles = Article::where('category_id', $category->id)->get(['id']);
-        
-        foreach ($articles as $article) {
-            Like::where('article_id',$article->id)->delete();
-            Comment::where('article_id',$article->id)->delete();
-            View::where('article_id',$article->id)->delete();
-            Bookmark::where('article_id',$article->id)->delete();
-        }
-        Article::where('category_id',$category->id)->delete();
-        Category::where('id',$category->id)->delete();
-        return back()->with('success','Category deleted successfully');
+        $category->delete();
+
+        return back()->with('success', 'Category deleted successfully.');
     }
 
     public function showArticle(Article $article) {
-        // $article = Article::where('id',$article->id)->get();
         $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
         $likes = Like::where('article_id',$article)->get();

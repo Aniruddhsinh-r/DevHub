@@ -6,10 +6,8 @@ use App\Actions\CreateArticle;
 use App\Actions\UpdateArticle;
 use App\Http\Requests\ArticleValidationRequest;
 use App\Models\Article;
-use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Comment;
-use App\Models\Like;
 use App\Models\User;
 use App\Models\View;
 use Illuminate\Http\Request;
@@ -72,7 +70,7 @@ class ArticleController extends Controller
 
         if (!$viewed) {
             Article::where('id', $article->id)->increment('view_count');
-            View::insert(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
+            View::create(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
         }
         return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies]);
     }
@@ -139,10 +137,11 @@ class ArticleController extends Controller
     {
         $this->authorize('delete', $article);
 
-        View::where('article_id',$article->id)->delete();
-        Comment::where('article_id',$article->id)->delete();
-        Bookmark::where('article_id',$article->id)->delete();
-        Like::where('article_id',$article->id)->delete();
+        $article->likes()->delete();
+        $article->comment()->delete();
+        $article->bookmarks()->detach();
+        View::where('article_id', $article->id)->delete();
+
         $article->delete();
 
         return back()->with('success','article delete successfully.');

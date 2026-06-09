@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('check article functionalitys', function () {
+test('user can comment like and bookmark article', function () {
     $user = User::factory()->create([
         'role' => 'author',
     ]);

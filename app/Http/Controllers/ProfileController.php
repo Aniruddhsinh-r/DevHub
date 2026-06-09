@@ -27,7 +27,7 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        if (!$user || ($user->role === 'admin' && Auth::id() !== 1)) {
+        if (!$user || ($user->role === 'admin' && Auth::user()->role !== 'admin')) {
             return redirect()->back()->with('error', 'This author does not exist.');
         }
 
