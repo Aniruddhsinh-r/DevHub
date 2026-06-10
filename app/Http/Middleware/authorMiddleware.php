@@ -20,10 +20,10 @@ class AuthorMiddleware
             return redirect()->route('login')->with('error','You must be login.');
         }
 
-        if (Auth::user()->role !== 'author') {
+        if (!Auth::user()->hasRole('author')) {
             abort(403, 'Unauthorized Admin access only');
         }
-        
+
         return $next($request);
     }
 }

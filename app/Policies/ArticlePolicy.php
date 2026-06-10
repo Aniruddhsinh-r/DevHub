@@ -21,14 +21,19 @@ class ArticlePolicy
     }
 
     public function create(User $user): bool {
-        return $user->role === 'author';
+        return $user->can('article.create');
     }
 
     public function update(User $user, Article $article): bool {
-        return $user->id === $article->user_id;
+        return $user->can('article.edit') && $user->id === $article->user_id;
     }
 
     public function delete(User $user, Article $article): bool {
-        return $user->id === $article->user_id || $user->role === 'admin';
+        return $user->can('article.delete') && $user->id === $article->user_id;
+    }
+
+    public function publish(User $user): bool
+    {
+        return $user->can('article.publish');
     }
 }

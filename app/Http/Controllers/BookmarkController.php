@@ -27,8 +27,8 @@ class BookmarkController extends Controller
         return back()->with('success','article bookmark');
     }
 
-    public function show(User $user) {
-        if (!Auth::check() || Auth::user()->role !== 'author') {
+    public function show() {
+        if (!Auth::check() || !Auth::user()->hasRole('author')) {
             return back()->with('error', 'You must be login as Author to see your bookmark article.');
         }
 

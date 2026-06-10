@@ -43,7 +43,7 @@
                         </span>
                     </div>
                 </div>
-                <a href="{{ route('profile.edit',$user->id) }}" class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
+                <a href="{{ route('profile.edit') }}" class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
             </div>
 
             <div class="space-y-8">
@@ -67,10 +67,12 @@
                     </div>
 
                     <div class="border-t border-gray-100 pt-6 gap-6 sm:gap-10 flex items-center">
-                        <div class="text-center">
-                            <p class="text-xl font-black text-gray-200">{{ $user->articles->count() }}</p>
-                            <p class="text-[13px] text-gray-200 mt-0.5">articles</p>
-                        </div>
+                        <a href={{ route('publishedarticle') }} class="text-center">
+                            <div class="text-center">
+                                <p class="text-xl font-black text-gray-200">{{ $user->articles->count() }}</p>
+                                <p class="text-[13px] text-gray-200 mt-0.5">articles</p>
+                            </div>
+                        </a>
 
                         <div class="w-px h-7 bg-gray-200"></div>
 

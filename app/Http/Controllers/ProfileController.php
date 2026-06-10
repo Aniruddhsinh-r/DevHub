@@ -25,9 +25,11 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $profile)
     {
-        if (!$user || ($user->role === 'admin' && Auth::user()->role !== 'admin')) {
+        $user = $profile;
+
+        if (!$user || ($user->hasRole('admin') && !Auth::user()->hasRole('admin'))) {
             return redirect()->back()->with('error', 'This author does not exist.');
         }
 
@@ -42,27 +44,25 @@ class ProfileController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit()
     {
-        if(Auth::id() === (int)$id){
-            $user = Auth::user();
-            return view('auth.editProfile',['user'=>$user]);
-        }
-        return back()->with('error','Unauthorize action.');
+        $user = Auth::user();
+        return view('auth.editProfile',['user'=>$user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $profile)
+    public function update(Request $request)
     {
-        if (Auth::id() !== $profile->id) {
-            abort(403);
+        if (!Auth::user()->hasRole('author')) {
+            return back()->with('error','Unauthorize action.');
         }
+        $user = Auth::user();
 
         $request->validate([
             'name' => ['required','min:5','max:50'],
-            'email' => ['required', 'string', 'min:10', 'max:255' ,Rule::unique('users')->ignore($profile->id)],
+            'email' => ['required', 'string', 'min:10', 'max:255' ,Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:8', 'max:255'],
             'avtar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
@@ -76,8 +76,8 @@ class ProfileController extends Controller
         ];
 
         if ($request->hasFile('avtar')) {
-            if ($profile->avtar) {
-                Storage::disk('public')->delete($profile->avtar);
+            if ($user->avtar) {
+                Storage::disk('public')->delete($user->avtar);
             }
             $data['avtar'] = $request->file('avtar')->store('avtars','public');
         }
@@ -86,7 +86,7 @@ class ProfileController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
-        if ($profile->update($data)) {
+        if ($user->update($data)) {
             return to_route('profile.index')->with('success','your profile is successfully updated.');
         }
         return back()->with('error',"fail to update profile.");

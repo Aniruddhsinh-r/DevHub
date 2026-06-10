@@ -42,6 +42,7 @@ class RegisteredUserController extends Controller
             'role' => 'author',
         ]);
 
+        $user->assignRole('author');
         Auth::login($user, $remember = true);
 
         $to = $request->email;

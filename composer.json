@@ -13,7 +13,8 @@
         "laravel/framework": "^13.0",
         "laravel/reverb": "*",
         "laravel/tinker": "^3.0",
-        "pusher/pusher-php-server": "*"
+        "pusher/pusher-php-server": "*",
+        "spatie/laravel-permission": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

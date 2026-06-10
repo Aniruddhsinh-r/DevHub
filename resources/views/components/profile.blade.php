@@ -22,12 +22,12 @@
 
                         <p class="text-gray-600 leading-6 text-sm max-w-xl">{{ $user->bio }}</p>
                         <div class="flex items-center gap-6 pt-1">
-                            <a href="{{ route('followings',$user->id) }}">
+                            <a href="{{ route('followings',['user' => $user->id]) }}">
                                 <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->following()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Following</p>
                             </a>
                             <div class="w-px h-10 bg-gray-300"></div>
-                            <a href="{{ route('followers',$user->id) }}">
+                            <a href="{{ route('followers',['user' => $user->id]) }}">
                                 <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->followers()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Followers</p>
                             </a>
@@ -56,7 +56,7 @@
                                 <span class="text-gray-900 font-semibold">{{ $articles->count() }}</span>
                             </div>
                         </div>
-                        @if (auth()->user()->role == "author")
+                        @role('author')
                             <form action="{{ route('user.follow',$user->id) }}" method="post">
                                 @csrf
                                 @if (auth()->user()->following->contains($user->id))
@@ -65,7 +65,7 @@
                                     <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Follow</button>
                                 @endif
                             </form>
-                        @endif
+                        @endrole
                     </div>
                 </div>
             </div>

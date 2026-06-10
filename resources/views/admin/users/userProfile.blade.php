@@ -55,7 +55,7 @@
                                 <span class="text-gray-900 font-semibold">{{ $articles->count() }}</span>
                             </div>
                         </div>
-                        @if (auth()->user()->role == "author")
+                        @role('author')
                             <form action="/follow/{{ $user->id }}" method="post">
                                 @csrf
                                 @if (auth()->user()->following->contains($user->id))
@@ -64,7 +64,7 @@
                                     <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Follow</button>
                                 @endif
                             </form>
-                        @endif
+                        @endrole
                     </div>
                 </div>
             </div>

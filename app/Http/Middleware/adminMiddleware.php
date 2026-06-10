@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +20,7 @@ class AdminMiddleware
             return redirect()->route('login')->with('error', 'You must be logged in.');
         }
 
-        if (Auth::user()->role !== 'admin') {
+        if (!Auth::user()->hasRole('admin')) {
             abort(403, 'Unauthorized');
         }
 

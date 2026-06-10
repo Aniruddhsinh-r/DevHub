@@ -101,7 +101,7 @@ test('Author cant see admin profile', function () {
     $user = User::factory()->create();
     $admin = User::factory()->create(['role'=>'admin']);
 
-    $response = $this->actingAs($user)->get(route('userprofile',$admin));
+    $response = $this->actingAs($user)->get(route('profile.show',$admin));
     $response->assertStatus(302);
 
     $response->assertSessionHas('error', 'This author does not exist.');
@@ -111,7 +111,7 @@ test('User cant see those auther who dose not exist in db', function () {
     $user = User::factory()->create();
     $admin = 189;
 
-    $response = $this->actingAs($user)->get(route('userprofile',$admin));
+    $response = $this->actingAs($user)->get(route('profile.show',$admin));
     $response->assertStatus(404);
 });
 

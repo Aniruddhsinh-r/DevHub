@@ -4,7 +4,7 @@
         <hr class="mb-6 border-gray-100">
 
         <form action="{{ route('profile.update',$user) }}" method="POST"
-            {{-- enctype="multipart/form-data" --}}
+            enctype="multipart/form-data"
         >
             @csrf
             @method('PATCH')

@@ -28,15 +28,13 @@ class ArticleController extends Controller
                   ->orWhere('body', 'LIKE', "%{$search}%");
         })->latest()->paginate(9);
 
-        return view('articles.article',[
-            'articles' => $articles
-        ]);
+        return view('articles.article',['articles' => $articles]);
     }
 
     public function home() {
         $articles = Article::where('status','published')->latest()->take(3)->get();
 
-        if (Auth()->user()?->role === 'admin') {
+        if (Auth::user()?->hasRole('admin')) {
             return to_route('admin.dashboard');
         }
         return view('components.home', ['articles' => $articles]);
@@ -48,6 +46,7 @@ class ArticleController extends Controller
     public function create()
     {
         $this->authorize('create', Article::class);
+
         $categories = Category::all();
 
         return view('articles.articleForm', [
@@ -58,6 +57,8 @@ class ArticleController extends Controller
 
     public function store(ArticleValidationRequest $request, CreateArticle $action)
     {
+        $this->authorize('publish', Article::class);
+
         $action->handle($request->validated());
         return to_route('articles.index')->with('success', 'Article created successfully.');
     }
@@ -68,7 +69,7 @@ class ArticleController extends Controller
         $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
 
-        if (!$viewed) {
+        if (Auth::id() !== $article->user_id && !$viewed) {
             Article::where('id', $article->id)->increment('view_count');
             View::create(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
         }
@@ -91,17 +92,15 @@ class ArticleController extends Controller
     }
 
     public function showDraftArticle(User $user) {
-        if(Auth::id() == $user->id){
-            $articles = Article::with(['user', 'category'])->where(['user_id' => $user->id,'status' => 'draft'])->latest()->get();
-            return view('components.draftArticle',['articles' => $articles]);
-        }
-        return back()->with('error','you cant see others draft.');
+        $user = Auth::id();
+        $articles = Article::with(['user', 'category'])->where(['user_id' => $user,'status' => 'draft'])->latest()->get();
+
+        return view('components.draftArticle',['articles' => $articles]);
     }
 
     public function userarticleshow(User $user) {
         if (Auth::id() == $user->id) {
             $user = Auth::user();
-            // return to_route('publishedarticle');
             return view('auth.myprofile', ['user' => $user]);
         }
 
@@ -116,6 +115,7 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         $this->authorize('update', $article);
+
         $categories = Category::all();
         return view('articles.articleForm', compact('article','categories'));
     }
@@ -141,7 +141,6 @@ class ArticleController extends Controller
         $article->comments()->delete();
         $article->bookmarks()->detach();
         View::where('article_id', $article->id)->delete();
-
         $article->delete();
 
         return back()->with('success','article delete successfully.');

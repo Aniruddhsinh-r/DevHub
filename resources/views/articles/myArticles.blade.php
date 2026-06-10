@@ -7,7 +7,7 @@
                     <p class="text-gray-500 mt-2 font-medium">Manage and monitor the performance of your shared content.</p>
                 </div>
                 <div class="mt-4 md:mt-0">
-                    <a href="{{ route('drafts',auth()->user()->id) }}" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                    <a href="{{ route('drafts') }}" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
                         draft
                     </a>
                 </div>

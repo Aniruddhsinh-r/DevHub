@@ -57,7 +57,7 @@
                     {{ $article->excerpt }}
                 </p>
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                    <a href="{{ route('userprofile',$article->user->id) }}" class="flex items-center gap-3">
+                    <a href="{{ route('profile.show',$article->user->id) }}" class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
                             @if ($article->user->avtar)
                                 <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="{{ $article->user->name }}" class="w-9 h-9">
@@ -112,7 +112,7 @@
                     </article>
 
                     {{-- AUTHOR CARD --}}
-                    <a href="{{ route('userprofile',$article->user->id) }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
+                    <a href="{{ route('profile.show',$article->user->id) }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                         <div class="flex flex-col md:flex-row md:items-center gap-6">
                             <div class="w-24 h-24 rounded-full bg-[#111827] text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-gray-100">
                                 @if ($article->user->avtar)
@@ -129,7 +129,7 @@
                         </div>
                     </a>
 
-                    @if (auth()->user()->role === 'author')
+                    @role('author')
                     <div class="mt-10 bg-white rounded-[2rem] border border-gray-100 shadow-lg shadow-gray-100/50 p-6 md:p-8">
                         <div class="flex items-center justify-between mb-8">
                             <div>
@@ -175,7 +175,7 @@
                         <div class="space-y-6">
                             @foreach ($comments as $comment)
                             <div class="flex gap-4">
-                                <a href="{{ route('userprofile',$comment->user->id) }}" class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
+                                <a href="{{ route('profile.show',$comment->user->id) }}" class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                                     @if ($comment->user->avtar)
                                         <img src="{{ asset('storage/' . $comment->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
                                     @else
@@ -211,7 +211,7 @@
                                         <div x-show="showReplies" class="py-4">
                                             @foreach ($replies as $reply)
                                             <div class="flex gap-4">
-                                                <a href="{{ route('userprofile',$reply->user->id) }}">
+                                                <a href="{{ route('profile.show',$reply->user->id) }}">
                                                     <div class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm overflow-hidden">
                                                         @if ($reply->user->avtar)
                                                             <img src="{{ asset('storage/' . $reply->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
@@ -293,7 +293,7 @@
                             @endforeach
                         </div>
                     </div>
-                    @endif
+                    @endrole
                 </div>
 
                 <aside class="lg:col-span-4 space-y-8">
@@ -342,7 +342,7 @@
                                     {{ $article->updated_at->diffForHumans() }}
                                 </span>
                             </div>
-                            @if (auth()->user()->role === 'author')
+                            @role('author')
                                 <a href="{{ route('articles.index') }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:-translate-x-1 transition-transform duration-150">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -356,7 +356,7 @@
                                     </svg>
                                     <span>Back To Articles</span>
                                 </a>
-                            @endif
+                            @endrole
                         </div>
                     </div>
                 </aside>

@@ -27,7 +27,7 @@ test('it update user detail', function () {
 test('guest cant see author profile', function() {
     $user = User::factory()->create();
 
-    visit(route('userprofile',$user->id))
+    visit(route('profile.show',$user->id))
     ->assertRoute('login');
 });
 

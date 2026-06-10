@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return redirect('/home');});
 Route::get('/home', [ArticleController::class, 'home'])->name('home');
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register.create');
@@ -24,19 +25,20 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/articles/{user}/published', [ArticleController::class, 'userpublished'])->name('user.published');
-    Route::get('/articles/{user}/drafts', [ArticleController::class, 'showDraftarticle'])->name('drafts');
+    Route::get('/articles/drafts', [ArticleController::class, 'showDraftarticle'])->name('drafts');
     Route::get('/user/article/{user}', [ArticleController::class, 'userarticleshow'])->name('users.articles'); //userArticle
     Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
 });
 
 Route::middleware(['auth','author'])->group(function () {
-    Route::resource('/profile', ProfileController::class)->except(['show']);
-    Route::get('/user/{user}', [ProfileController::class, 'show'])->name('userprofile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::resource('/profile', ProfileController::class)->except('edit');
+    // Route::get('/user/{user}', [ProfileController::class, 'show'])->name('userprofile');
     Route::get('/articles/myarticle', [ArticleController::class, 'published'])->name('publishedarticle');
-    Route::resource('/articles', ArticleController::class);
+    Route::resource('/articles', ArticleController::class)->except('index');
     Route::post('/article/{article}/like', [LikeController::class, 'like'])->name('articles.like');
     Route::post('/article/{article}/bookmark', [BookmarkController::class, 'bookmark'])->name('articles.bookmark');
-    Route::get('/{user}/bookmark', [BookmarkController::class, 'show'])->name('show.bookmarks');
+    Route::get('/bookmarks', [BookmarkController::class, 'show'])->name('show.bookmarks');
     Route::get('/profile/followers/{user}', [FollowerController::class, 'followers'])->name('followers');
     Route::get('/profile/followings/{user}', [FollowerController::class, 'followings'])->name('followings');
     Route::post('/follow/{id}', [FollowerController::class, 'follow'])->name('user.follow');

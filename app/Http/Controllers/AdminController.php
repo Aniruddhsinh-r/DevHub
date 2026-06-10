@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
-use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\User;
 use App\Models\View;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +16,8 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index() {
         $articles = Article::where('status', 'published')->get();
         $users = User::whereNull('deleted_at')->get();
@@ -28,19 +30,24 @@ class AdminController extends Controller
     }
 
     public function create(Request $request) {
+        $this->authorize('create', Category::class);
+
         $request->validate([
-            'name' => ['required','min:3','max:20']
+            'name' => ['required','min:3','max:20','string','unique:categories,name']
         ]);
 
-        $name = $request->name;
+        $name = strip_tags($request->name);
         $slug = Str::slug($name, '-');
+
+        if (Category::where('slug', $slug)->exists()) {
+            return back()->withErrors(['name' => 'This category name generates a duplicate entry.'])->withInput();
+        }
 
         Category::create([
             'name' => $name,
             'slug' => $slug,
             'created_at' => now(),
         ]);
-
         return back()->with('success','Category create successfully.');
     }
 
@@ -67,6 +74,8 @@ class AdminController extends Controller
     }
 
     public function userRemove(User $user) {
+        $this->authorize('remove', User::class);
+
         DB::transaction(function () use ($user) {
             $user->views()->delete();
             $user->comments()->delete();
@@ -95,6 +104,7 @@ class AdminController extends Controller
     }
 
     public function destroy(Category $category) {
+        $this->authorize('delete', Category::class);
         $category->delete();
 
         return back()->with('success', 'Category deleted successfully.');

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CommentNotification extends Notification
+class CommentNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -42,9 +42,9 @@ class CommentNotification extends Notification
                 ? "{$this->comment->user->name} replied to your comment"
                 : "{$this->comment->user->name} commented on your article",
 
-            'url' => route('articles.show', $this->comment->article_id) . '#comment-' . $this->comment->id,
                 'article_id' => $this->comment->article_id,
                 'comment_id' => $this->comment->id,
+            'url' => route('articles.show', $this->comment->article_id) . '#comment-' . $this->comment->id,
         ];
     }
 }

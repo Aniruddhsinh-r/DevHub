@@ -7,7 +7,9 @@
             </div>
 
             <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="bg-[#c6caca] rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                <form method="POST" action="{{ $article->exists ? route('articles.update', $article) : route('articles.store') }}" class="p-8 md:p-10 space-y-6">
+                <form method="POST" action="{{ $article->exists ? route('articles.update', $article) : route('articles.store') }}" class="p-8 md:p-10 space-y-6"
+                    enctype="multipart/form-data"
+                    >
                     @csrf
                     @if ($article->exists)
                         @method('PATCH')
