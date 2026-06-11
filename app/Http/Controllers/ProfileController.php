@@ -55,9 +55,6 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
-        if (!Auth::user()->hasRole('author')) {
-            return back()->with('error','Unauthorize action.');
-        }
         $user = Auth::user();
 
         $request->validate([

@@ -50,6 +50,6 @@ class RegisteredUserController extends Controller
 
         // Mail::to($to)->queue(new RegistrationMail($message));
 
-        return to_route('home')->withInput()->with('success','User register successfully.');
+        return to_route('home')->withInput()->with('success','Account created successfully.');
     }
 }

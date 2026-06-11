@@ -16,12 +16,8 @@ class ForgotPasswordController extends Controller
     }
 
     public function store(Request $request) {
-        $request->validate(['email' => 'required|email|exists:users']);
-
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return view('auth.otpVarification', ['email' => $request->email]);
-        }
+        $request->validate(['email' => 'required|email|exists:users,email']);
+        $user = User::where('email', $request->email)->firstOrFail();
 
         $to = $request->email;
         $otp = random_int(100000,999999);

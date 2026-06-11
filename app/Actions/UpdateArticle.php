@@ -17,8 +17,6 @@ class UpdateArticle
 
     public function handle(array $values, Article $article): void
     {
-        unset($values['_token']);
-
         $data = collect($values)->only([
             'title', 'excerpt', 'body', 'category_id','status',
         ])->toArray();

@@ -36,36 +36,36 @@
 
         <div class="space-y-3">
             @forelse ($followers as $follower)
-                @if ($follower->user)
-                    <a href="{{ route('profile.show', $follower->user) }}" class="block group bg-white border border-gray-200 hover:border-gray-400 rounded-2xl px-5 py-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                @if ($follower->follower)
+                    <a href="{{ route('profile.show', $follower->follower) }}" class="block group bg-white border border-gray-200 hover:border-gray-400 rounded-2xl px-5 py-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <div class="flex items-center justify-between gap-4">
                             <div class="flex items-center gap-4 min-w-0">
                                 <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
-                                    @if ($follower->user->avtar)
+                                    @if ($follower->follower->avtar)
                                         <img
-                                            src="{{ asset('storage/' . $follower->user->avtar) }}"
-                                            alt="{{ $follower->user->name }}"
+                                            src="{{ asset('storage/' . $follower->follower->avtar) }}"
+                                            alt="{{ $follower->follower->name }}"
                                             class="w-full h-full object-cover"
                                         >
                                     @else
                                         <div class="w-full h-full bg-black text-white flex items-center justify-center text-sm font-bold uppercase">
-                                            {{ substr($follower->user->name, 0, 2) }}
+                                            {{ substr($follower->follower->name, 0, 2) }}
                                         </div>
                                     @endif
                                 </div>
 
                                 <div class="min-w-0">
                                     <h2 class="text-sm font-bold text-black truncate">
-                                        {{ $follower->user->name }}
+                                        {{ $follower->follower->name }}
                                     </h2>
 
                                     <p class="text-xs text-gray-500 truncate mt-0.5">
-                                        {{ $follower->user->email }}
+                                        {{ $follower->follower->email }}
                                     </p>
                                 </div>
                             </div>
                             <button class="h-10 px-5 rounded-full bg-black text-white text-xs font-bold tracking-wide hover:bg-gray-800 transition-all duration-300 shrink-0">
-                                Visite Profile
+                                View Profile
                             </button>
                         </div>
                     </a>

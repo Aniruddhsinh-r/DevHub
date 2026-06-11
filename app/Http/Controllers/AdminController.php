@@ -20,7 +20,7 @@ class AdminController extends Controller
 
     public function index() {
         $articles = Article::where('status', 'published')->get();
-        $users = User::whereNull('deleted_at')->get();
+        $users = User::count();
         $comments = Comment::count();
         $views = View::count();
         $likes = Like::count();
@@ -48,7 +48,7 @@ class AdminController extends Controller
             'slug' => $slug,
             'created_at' => now(),
         ]);
-        return back()->with('success','Category create successfully.');
+        return back()->with('success','Category created successfully.');
     }
 
     public function showuser(User $user) {
@@ -78,13 +78,13 @@ class AdminController extends Controller
 
         DB::transaction(function () use ($user) {
             $user->views()->delete();
-            $user->comments()->delete();
+            $user->comment()->delete();
             $user->bookmarks()->delete();
             $user->likes()->delete();
             $user->articles()->delete();
             $user->delete();
         });
-        return back()->with('success','User remove successfully.');
+        return back()->with('success','User removed successfully.');
     }
 
     public function articles(Request $request) {
@@ -113,7 +113,7 @@ class AdminController extends Controller
     public function showArticle(Article $article) {
         $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
-        $likes = Like::where('article_id',$article)->get();
+        $likes = Like::where('article_id',$article->id)->get();
 
         return view('admin.articles.article', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
     }

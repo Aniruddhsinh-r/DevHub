@@ -56,7 +56,7 @@
                     </span>
                 </div>
                 <h2 class="mt-4 text-2xl font-black text-[#111827]">
-                    {{ $users->count() }}
+                    {{ $users }}
                 </h2>
                 <p class="mt-1 text-xs text-gray-400">
                     Registered users

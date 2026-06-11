@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Bookmark extends Model
 {
@@ -14,5 +15,10 @@ class Bookmark extends Model
     public function bookmark()
     {
         return $this->belongsToMany(User::class);
+    }
+    
+    public function article(): BelongsTo
+    {
+        return $this->belongsTo(Article::class);
     }
 }

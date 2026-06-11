@@ -35,14 +35,14 @@ class LoginUserController extends Controller
             $admin = User::where('email', $request->email)->whereRole('admin')->exists();
 
             if ($admin) {
-                return to_route('admin.dashboard')->with('success','you login successfully.');
+                return to_route('admin.dashboard')->with('success', 'Welcome back, admin!');
             } else {
                 $to = $request->email;
                 $message = User::where('email',$request->email)->value('name');
                 $subject = "Welcome back!";
 
                 // Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
-                return to_route('home')->with('success','You are loged in sucessfully!');
+                return to_route('home')->with('success', 'You have logged in successfully.');
             }
         }
         return back()->withInput()->with('error','The provided credentials do not match our records.');

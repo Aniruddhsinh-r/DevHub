@@ -65,7 +65,7 @@ class User extends Authenticatable
     }
 
     // 2. Comments Relationship
-    public function comments(): HasMany
+    public function comment(): HasMany
     {
         return $this->hasMany(Comment::class);
     }

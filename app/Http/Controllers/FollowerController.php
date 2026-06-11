@@ -25,8 +25,8 @@ class FollowerController extends Controller
 
     public function followers(User $user, Request $request) {
         $search = $request->follower;
-        $followers = Follow::with('user')->where('followed_id', $user->id)->when($search, function ($query) use ($search) {
-            $query->whereHas('user', function ($userQuery) use ($search) {
+        $followers = Follow::with('follower')->where('followed_id', $user->id)->when($search, function ($query) use ($search) {
+            $query->whereHas('follower', function ($userQuery) use ($search) {
                 $userQuery->where('name', 'LIKE', "%{$search}%");
             });
         })->latest()->paginate(10);

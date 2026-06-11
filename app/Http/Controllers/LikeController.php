@@ -16,16 +16,13 @@ class LikeController extends Controller
             return back()->with('error', 'You cant like draft articles.');
         }
 
-        $like = Like::where(['article_id' => $article->id ,'user_id' => Auth::id()]);
-
-        if ($like->exists()) {
+        $like = Like::where(['article_id' => $article->id, 'user_id' => Auth::id()])->first();
+        if ($like) {
             $like->delete();
-            return back()->with('success','Article Unlike');
-        } else {
-            Like::create(['user_id' => Auth::id(),
-            'article_id' => $article->id,
-            'created_at' => now()]);
+            return back()->with('success', 'Article unliked.');
         }
-        return back()->with('success','like successfully');
+
+        Like::create(['user_id' => Auth::id(), 'article_id' => $article->id,'created_at' => now()]);
+        return back()->with('success', 'Article liked.');
     }
 }

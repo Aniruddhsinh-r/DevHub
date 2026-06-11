@@ -44,7 +44,7 @@ class CommentNotification extends Notification implements ShouldQueue
 
                 'article_id' => $this->comment->article_id,
                 'comment_id' => $this->comment->id,
-            'url' => route('articles.show', $this->comment->article_id) . '#comment-' . $this->comment->id,
+            'url' => route('articles.show', $this->comment->article->slug) . '#comment-' . $this->comment->id,
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Like extends Model
 {
@@ -17,5 +18,9 @@ class Like extends Model
     public function likes()
     {
         return $this->belongsToMany(User::class);
+    }
+    public function article(): BelongsTo
+    {
+        return $this->belongsTo(Article::class);
     }
 }

@@ -16,7 +16,7 @@ class ArticleValidationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->role === 'author';
+        return Auth::check() && Auth::user()->hasRole('author');
     }
 
     public function rules(): array

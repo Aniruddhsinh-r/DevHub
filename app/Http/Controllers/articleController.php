@@ -68,9 +68,9 @@ class ArticleController extends Controller
         $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
         $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
 
-        if (Auth::id() !== $article->user_id && !$viewed) {
+        if (Auth::check() && Auth::id() !== $article->user_id && !$viewed) {
             Article::where('id', $article->id)->increment('view_count');
-            View::create(['user_id' => Auth::id(), 'article_id' => $article->id, 'viewed' => true, 'created_at' => now()]);
+            View::create(['user_id' => Auth::id(), 'article_id' => $article->id]);
         }
         return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies]);
     }
@@ -88,7 +88,7 @@ class ArticleController extends Controller
         return view('articles.userArticles', ['articles' => $articles]);
     }
 
-    public function draftArticle(User $user) {
+    public function draftArticle() {
         $user = Auth::id();
         $articles = Article::with(['user', 'category'])->where(['user_id' => $user,'status' => 'draft'])->latest()->get();
 
@@ -135,11 +135,11 @@ class ArticleController extends Controller
         $this->authorize('delete', $article);
 
         $article->likes()->delete();
-        $article->comments()->delete();
+        $article->comment()->delete();
         $article->bookmarks()->detach();
         View::where('article_id', $article->id)->delete();
         $article->delete();
 
-        return back()->with('success','article delete successfully.');
+        return back()->with('success', 'Article deleted successfully.');
     }
 }
