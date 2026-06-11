@@ -2,12 +2,14 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+// require_once __DIR__.'/../../Helpers/userLogin.php';
+// require_once __DIR__ . '/../Helpers/AdminLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
 uses(RefreshDatabase::class);
 
 test('Profile update test', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user)->put(route('profile.update',$user->id), [
+    $user = userLogin();
+    $this->actingAs($user)->put(route('profile.update',$user), [
         'name' => 'Aniruddhsinh Rathod',
         'bio' => 'hi i am aniruddhsinh and i update my profile using testcase.',
         'password' => 'rathod1290',
@@ -22,10 +24,10 @@ test('Profile update test', function () {
 });
 
 test('Profile following functionality test', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
     $followed = User::factory()->create();
 
-    $this->actingAs($user)->post(route('user.follow', $followed->id));
+    $this->actingAs($user)->post(route('user.follow', $followed));
 
     $this->assertDatabaseHas('follows', [
         'follower_id' => $user->id,

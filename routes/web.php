@@ -25,15 +25,14 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/articles/{user}/published', [ArticleController::class, 'userpublished'])->name('user.published');
-    Route::get('/articles/drafts', [ArticleController::class, 'showDraftarticle'])->name('drafts');
-    Route::get('/user/article/{user}', [ArticleController::class, 'userarticleshow'])->name('users.articles'); //userArticle
+    Route::get('/articles/drafts', [ArticleController::class, 'draftArticle'])->name('drafts');
+    Route::get('/user/article/{user}', [ArticleController::class, 'articleshow'])->name('users.articles');
     Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
 });
 
 Route::middleware(['auth','author'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::resource('/profile', ProfileController::class)->except('edit');
-    // Route::get('/user/{user}', [ProfileController::class, 'show'])->name('userprofile');
     Route::get('/articles/myarticle', [ArticleController::class, 'published'])->name('publishedarticle');
     Route::resource('/articles', ArticleController::class)->except('index');
     Route::post('/article/{article}/like', [LikeController::class, 'like'])->name('articles.like');

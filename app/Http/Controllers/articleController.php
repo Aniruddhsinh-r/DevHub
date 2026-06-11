@@ -46,7 +46,6 @@ class ArticleController extends Controller
     public function create()
     {
         $this->authorize('create', Article::class);
-
         $categories = Category::all();
 
         return view('articles.articleForm', [
@@ -78,27 +77,25 @@ class ArticleController extends Controller
 
     public function published()
     {
-        $user_id = Auth::id();
-        $articles = Article::where('user_id',$user_id)->latest()->get();
+        $articles = Article::where('user_id',Auth::id())->latest()->get();
 
         return view('articles.myArticles', ['articles' => $articles]);
     }
 
     public function userpublished(User $user) {
-        $user_id = $user;
-        $articles = $user_id->articles()->latest()->get();
+        $articles =  Article::where(['status' => 'published','user_id' => $user->id])->latest()->get();
 
         return view('articles.userArticles', ['articles' => $articles]);
     }
 
-    public function showDraftArticle(User $user) {
+    public function draftArticle(User $user) {
         $user = Auth::id();
         $articles = Article::with(['user', 'category'])->where(['user_id' => $user,'status' => 'draft'])->latest()->get();
 
         return view('components.draftArticle',['articles' => $articles]);
     }
 
-    public function userarticleshow(User $user) {
+    public function articleshow(User $user) {
         if (Auth::id() == $user->id) {
             $user = Auth::user();
             return view('auth.myprofile', ['user' => $user]);

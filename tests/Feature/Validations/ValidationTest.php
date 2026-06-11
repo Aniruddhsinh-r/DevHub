@@ -2,11 +2,13 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+require_once __DIR__.'/../Helpers/userLogin.php';
+require_once __DIR__.'/../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('check article validation test', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
 
     $response = $this->actingAs($user)->post(route('articles.store'), [
         'title' => '',
@@ -63,7 +65,7 @@ test('check credentials validation test', function () {
 });
 
 test('check schedule article validation test require minutes', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
 
     $response = $this->actingAs($user)->post(route('articles.store'), [
         'title' => 'expose your self',
@@ -80,7 +82,7 @@ test('check schedule article validation test require minutes', function () {
 });
 
 test('check profile update validation test', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
 
     $response = $this->actingAs($user)->put(route('profile.update',$user), [
         'name' => '',
@@ -98,8 +100,8 @@ test('check profile update validation test', function () {
 });
 
 test('Author cant see admin profile', function () {
-    $user = User::factory()->create();
-    $admin = User::factory()->create(['role'=>'admin']);
+    $user = userLogin();
+    $admin = adminLogin();
 
     $response = $this->actingAs($user)->get(route('profile.show',$admin));
     $response->assertStatus(302);
@@ -108,7 +110,7 @@ test('Author cant see admin profile', function () {
 });
 
 test('User cant see those auther who dose not exist in db', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
     $admin = 189;
 
     $response = $this->actingAs($user)->get(route('profile.show',$admin));
@@ -116,7 +118,7 @@ test('User cant see those auther who dose not exist in db', function () {
 });
 
 test('Admin cant update his profile', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
+    $admin = adminLogin();
 
     $response = $this->actingAs($admin)->put(route('profile.update',$admin),[
         'name' => 'Admin Name change',

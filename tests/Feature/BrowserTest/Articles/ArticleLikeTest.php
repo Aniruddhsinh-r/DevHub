@@ -2,8 +2,8 @@
 
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../Helpers/userLogin.php';
-require_once __DIR__.'/../Helpers/adminLogin.php';
+require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__.'/../../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -12,7 +12,7 @@ test('User can like article', function () {
 
     $article = Article::factory()->create();
 
-    visit(route('articles.show', $article->id))
+    visit(route('articles.show', $article))
     ->press('@like-button');
 
     $this->assertDatabaseHas('likes', [
@@ -26,9 +26,9 @@ test('User can unlike article', function () {
 
     $article = Article::factory()->create();
 
-    visit(route('articles.show', $article->id))
+    visit(route('articles.show', $article))
     ->press('@like-button');
-    visit(route('articles.show', $article->id))
+    visit(route('articles.show', $article))
     ->press('@like-button');
 
     $this->assertDatabaseMissing('likes', [
@@ -42,7 +42,7 @@ test('admin cant like articles', function () {
 
     $article = Article::factory()->create();
 
-    visit(route('articles.like',$article->id));
+    visit(route('articles.like',$article));
 
     $this->assertDatabaseMissing('likes', [
         'user_id' => auth()->id(),
@@ -52,7 +52,7 @@ test('admin cant like articles', function () {
 
 test('guest cant like article', function () {
     $article = Article::factory()->create();
-    
-    visit(route('articles.show', $article->id))
+
+    visit(route('articles.show', $article))
     ->assertRoute('login');
 });

@@ -2,7 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../Helpers/adminLogin.php';
+require_once __DIR__.'/../../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -25,22 +25,20 @@ test('Admin fetch user details', function () {
 });
 
 test('admin search and delete user', function () {
-    User::factory()->create([
+    $user = User::factory()->create([
         'name' => 'ishigory',
         'role' => 'author',
     ]);
 
     adminLogin();
 
-    $userId = User::where('name','ishigory')->value('id');
-
     visit('/admin/users?search=ishigory')
     ->assertSee('ishigory')
     ->press('Remove');
 
-    $this->assertDatabaseMissing('articles', ['user_id' => $userId,]);
-    $this->assertDatabaseMissing('likes', ['user_id' => $userId,]);
-    $this->assertDatabaseMissing('comments', ['user_id' => $userId,]);
-    $this->assertDatabaseMissing('views', ['user_id' => $userId,]);
-    $this->assertDatabaseMissing('bookmarks', ['user_id' => $userId,]);
+    $this->assertDatabaseMissing('articles', ['user_id' => $user->id,]);
+    $this->assertDatabaseMissing('likes', ['user_id' => $user->id,]);
+    $this->assertDatabaseMissing('comments', ['user_id' => $user->id,]);
+    $this->assertDatabaseMissing('views', ['user_id' => $user->id,]);
+    $this->assertDatabaseMissing('bookmarks', ['user_id' => $user->id,]);
 });

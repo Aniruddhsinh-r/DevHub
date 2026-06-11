@@ -16,7 +16,7 @@
                     </div>
                     @if ($article->status === 'published')
                     <div class="flex items-center gap-3">
-                        <form action="{{ route('articles.like',$article->id) }}" method="POST" class="inline">
+                        <form action="{{ route('articles.like',$article) }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" data-test="like-button" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
                                 @if($article->isLikedByUser())
@@ -31,7 +31,7 @@
                                 <span>{{ $article->likes->count() }} Like</span>
                             </button>
                         </form>
-                        <form action="{{ route('articles.bookmark',$article->id) }}" method="POST" class="inline">
+                        <form action="{{ route('articles.bookmark',$article) }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" data-test="bookmark-button" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
                                 @if($article->isBookmarkedByMe())
@@ -57,7 +57,7 @@
                     {{ $article->excerpt }}
                 </p>
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                    <a href="{{ route('profile.show',$article->user->id) }}" class="flex items-center gap-3">
+                    <a href="{{ route('profile.show',$article->user) }}" class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
                             @if ($article->user->avtar)
                                 <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="{{ $article->user->name }}" class="w-9 h-9">
@@ -112,7 +112,7 @@
                     </article>
 
                     {{-- AUTHOR CARD --}}
-                    <a href="{{ route('profile.show',$article->user->id) }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
+                    <a href="{{ route('profile.show',$article->user) }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                         <div class="flex flex-col md:flex-row md:items-center gap-6">
                             <div class="w-24 h-24 rounded-full bg-[#111827] text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-gray-100">
                                 @if ($article->user->avtar)
@@ -175,7 +175,7 @@
                         <div class="space-y-6">
                             @foreach ($comments as $comment)
                             <div class="flex gap-4">
-                                <a href="{{ route('profile.show',$comment->user->id) }}" class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
+                                <a href="{{ route('profile.show',$comment->user) }}" class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                                     @if ($comment->user->avtar)
                                         <img src="{{ asset('storage/' . $comment->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
                                     @else
@@ -211,7 +211,7 @@
                                         <div x-show="showReplies" class="py-4">
                                             @foreach ($replies as $reply)
                                             <div class="flex gap-4">
-                                                <a href="{{ route('profile.show',$reply->user->id) }}">
+                                                <a href="{{ route('profile.show',$reply->user) }}">
                                                     <div class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm overflow-hidden">
                                                         @if ($reply->user->avtar)
                                                             <img src="{{ asset('storage/' . $reply->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">

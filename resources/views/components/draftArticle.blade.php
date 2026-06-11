@@ -12,7 +12,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         @foreach ($articles as $article)
-            <a class="group bg-[#cfcfcf] border border-[#d7d7d6] rounded-[1.7rem] p-5 hover:-translate-y-1 hover:border-[#111111] transition-all duration-500 shadow-lg" href="{{ route('articles.edit',$article->id) }}">
+            <a class="group bg-[#cfcfcf] border border-[#d7d7d6] rounded-[1.7rem] p-5 hover:-translate-y-1 hover:border-[#111111] transition-all duration-500 shadow-lg" href="{{ route('articles.edit',$article) }}">
                 <div class="flex items-center justify-between mb-5">
                     <span class="px-3 py-1.5 rounded-full bg-[#111111] text-white text-[9px] font-black uppercase tracking-[0.18em]">Draft</span>
                     <div class="inline-block px-3 py-1 rounded-full bg-[#e7e7e4] text-[9px] font-black uppercase tracking-[0.15em] text-gray-600 border border-gray-300 mb-4">Technology</div>

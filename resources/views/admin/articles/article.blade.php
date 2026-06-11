@@ -26,7 +26,7 @@
                 </p>
 
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                    <a href="{{ route('admin.show.user',$article->user->id) }}" class="flex items-center gap-3">
+                    <a href="{{ route('admin.show.user',$article->user) }}" class="flex items-center gap-3">
                         @if ($article->user->avtar)
                             <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="user_image" class="w-9 h-9 rounded-full border-2 border-black object-cover">
                         @else
@@ -84,7 +84,7 @@
                         <div class="space-y-6">
                             @foreach ($comments as $comment)
                             <div class="flex gap-4">
-                                <a href="{{ route('admin.show.user',$comment->user->id) }}"  class="w-11 h-11 mt-1 rounded-full border border-gray-200 bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
+                                <a href="{{ route('admin.show.user',$comment->user) }}"  class="w-11 h-11 mt-1 rounded-full border border-gray-200 bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                                     @if ($comment->user->avtar)
                                         <img src="{{ asset('storage/' . $comment->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
                                     @else
@@ -119,7 +119,7 @@
                                         <div x-show="showReplies" class="mt-2 pl-4 border-l-2 border-gray-200 space-y-3" x-cloak>
                                             @foreach ($replies->where('parent_id', $comment->id) as $reply)
                                             <div class="flex gap-4">
-                                                <a href="{{ route('admin.show.user',$reply->user->id) }}"  class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
+                                                <a href="{{ route('admin.show.user',$reply->user) }}"  class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
                                                     @if ($reply->user->avtar)
                                                         <img src="{{ asset('storage/' . $reply->user->avtar) }}" alt="user_image" class="w-full h-full object-cover">
                                                     @else

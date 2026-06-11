@@ -22,8 +22,8 @@ class CreateArticle
         $title = $values['title'];
 
         $data = collect($values)->only([
-            'title', 'excerpt', 'body', 'category_id','status',
-        ])->toArray();
+            'title', 'excerpt', 'body', 'category_id', 'status',
+        ])->merge(['published_at' => now()])->toArray();
 
         $base = Str::slug($title, '-');
         $slug = $base;

@@ -22,12 +22,12 @@
 
                         <p class="text-gray-600 leading-6 text-sm max-w-xl">{{ $user->bio }}</p>
                         <div class="flex items-center gap-6 pt-1">
-                            <a href="{{ route('followings',['user' => $user->id]) }}">
+                            <a href="{{ route('followings',['user' => $user]) }}">
                                 <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->following()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Following</p>
                             </a>
                             <div class="w-px h-10 bg-gray-300"></div>
-                            <a href="{{ route('followers',['user' => $user->id]) }}">
+                            <a href="{{ route('followers',['user' => $user]) }}">
                                 <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->followers()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Followers</p>
                             </a>
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         @role('author')
-                            <form action="{{ route('user.follow',$user->id) }}" method="post">
+                            <form action="{{ route('user.follow',$user) }}" method="post">
                                 @csrf
                                 @if (auth()->user()->following->contains($user->id))
                                     <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Unfollow</button>
@@ -78,8 +78,8 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                    @foreach ($articles->take(3) as $article)
-                        <a href='{{ route('articles.show',$article->id) }}' class="p-5 bg-gray-200 rounded-2xl">
+                    @forelse ($articles->take(3) as $article)
+                        <a href='{{ route('articles.show',$article) }}' class="p-5 bg-gray-200 rounded-2xl">
                             <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
                             <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
 
@@ -94,11 +94,19 @@
                                 </div>
                             </div>
                         </a>
-                    @endforeach
+                    @empty
+                        <div class="col-span-1 md:col-span-2 xl:col-span-3 flex flex-col items-center justify-center p-12 bg-gray-50 border border-dashed border-gray-300 rounded-2xl text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                            </svg>
+                            <p class="text-gray-600 font-medium">No articles posted yet</p>
+                            <p class="text-xs text-gray-400 mt-1">Check back later to see published thoughts and ideas.</p>
+                        </div>
+                    @endforelse
                 </div>
 
                 @if ($articles->count() > 3)
-                    <a href="{{ route('user.published',$user->id) }}" class="flex justify-center mt-8">
+                    <a href="{{ route('user.published',$user) }}" class="flex justify-center mt-8">
                         <button class="border border-gray-300 hover:border-black hover:bg-black hover:text-white transition px-6 py-2.5 rounded-xl text-sm font-semibold text-gray-800">Show More Articles</button>
                     </a>
                 @endif

@@ -23,7 +23,7 @@
                         </li>
                         @auth
                             <li>
-                                <a href="{{ route('followings',auth()->user()->id) }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
+                                <a href="{{ route('followings',auth()->user()) }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
                                     Following List
                                 </a>
                             </li>

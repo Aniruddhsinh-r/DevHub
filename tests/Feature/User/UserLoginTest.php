@@ -2,14 +2,13 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+// require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__ . '/../Helpers/userLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('User Login and logout test', function () {
-    User::factory()->create([
-        'email' => 'adanirudda@gmail.com',
-        'password' => 'rathod1290'
-    ]);
+    userLogin();
 
     $this->post(route('login.store'), [
         'email' => 'adanirudda@gmail.com',
@@ -25,7 +24,7 @@ test('User Login and logout test', function () {
 });
 
 test('Logged in user cannot visit login form', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
 
     $response = $this->actingAs($user)->get(route('login'));
 
@@ -33,7 +32,7 @@ test('Logged in user cannot visit login form', function () {
 });
 
 test('Logged in user cannot visit register form', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
 
     $response = $this->actingAs($user)->get(route('register.create'));
 
@@ -41,7 +40,7 @@ test('Logged in user cannot visit register form', function () {
 });
 
 test('Login user cant login again', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
 
     $response = $this->actingAs($user)->post(route('login.store'), [
         'email' => 'adanirudda@gmail.com',

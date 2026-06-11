@@ -2,7 +2,7 @@
 
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../Helpers/adminLogin.php';
+require_once __DIR__.'/../../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 

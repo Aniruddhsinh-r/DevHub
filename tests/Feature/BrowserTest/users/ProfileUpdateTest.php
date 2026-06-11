@@ -2,8 +2,10 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../Helpers/adminLogin.php';
-require_once __DIR__.'/../Helpers/userLogin.php';
+use Illuminate\Http\UploadedFile;
+
+require_once __DIR__.'/../../Helpers/adminLogin.php';
+require_once __DIR__.'/../../Helpers/userLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -27,7 +29,7 @@ test('it update user detail', function () {
 test('guest cant see author profile', function() {
     $user = User::factory()->create();
 
-    visit(route('profile.show',$user->id))
+    visit(route('profile.show',$user))
     ->assertRoute('login');
 });
 
@@ -36,7 +38,7 @@ test('Admin cant follow Author', function () {
 
     $user = User::factory()->create();
 
-    visit(route('user.follow',$user->id));
+    visit(route('user.follow',$user));
 
     $this->assertDatabaseMissing('follows', [
         'follower_id' => auth()->id(),

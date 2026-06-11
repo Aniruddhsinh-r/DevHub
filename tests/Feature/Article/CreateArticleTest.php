@@ -4,11 +4,13 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+require_once __DIR__ . '/../Helpers/adminLogin.php';
+require_once __DIR__ . '/../Helpers/userLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Create Article test', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
 
     $response = $this->actingAs($user)->post(route('articles.store'), [
         'category_id' => Category::factory()->create()->id,
@@ -28,13 +30,13 @@ test('Create Article test', function () {
 });
 
 test('user can delete own article', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
     $article = Article::factory()->create([
         'user_id' => $user->id,
         'category_id' => Category::factory()->create()->id,
     ]);
 
-    $this->actingAs($user)->delete(route('articles.destroy',$article->id));
+    $this->actingAs($user)->delete(route('articles.destroy',$article));
 
     $this->assertSoftDeleted('articles', [
         'id' => $article->id,
@@ -48,10 +50,10 @@ test('user can delete own article', function () {
 });
 
 test('user cannot delete others article', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
     $article = Article::factory()->create();
 
-    $response = $this->actingAs($user)->delete(route('articles.destroy', $article->id));
+    $response = $this->actingAs($user)->delete(route('articles.destroy', $article));
     $response->assertStatus(403);
 
     $this->assertDatabaseHas('articles', [
@@ -79,9 +81,7 @@ test('guest cannot create article', function () {
 });
 
 test('admin cannot post article', function () {
-    $admin = User::factory()->create([
-        'role' => 'admin'
-    ]);
+    $admin = adminLogin();
 
     $response = $this->actingAs($admin)->post(route('articles.store'), [
         'category_id' => Category::factory()->create()->id,

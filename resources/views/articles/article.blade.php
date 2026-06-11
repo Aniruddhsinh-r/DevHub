@@ -12,11 +12,19 @@
         </div>
 
         <div class="w-full max-w-md lg:ml-auto">
-            <form action="" method="GET" class="flex items-center bg-[#1c1f24] border border-white/10 rounded-xl overflow-hidden focus-within:border-gray-500 transition-all shadow-2xl">
-                @csrf
-                <input type="text" name="search" placeholder="Search archives..." class="flex-1 px-5 py-3.5 outline-none text-gray-200 text-sm font-light bg-transparent" value="{{ request('search') }}">
+            <form action="" method="GET" class="relative flex items-center bg-[#1c1f24] border border-white/10 rounded-xl focus-within:border-gray-500 transition-all shadow-2xl">
 
-                <button class="bg-white text-black px-6 py-3.5 text-sm font-bold hover:bg-gray-200 transition-all active:scale-95">Search</button>
+                <input type="text" name="search" placeholder="Search archives..." class="flex-1 pl-5 pr-24 py-3.5 outline-none text-gray-200 text-sm font-light bg-transparent" value="{{ request('search') }}">
+
+                @if (request('search'))
+                    <a href="{{ url()->current() }}" class="absolute right-28 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#1c1f24] hover:bg-black hover:text-white text-gray-200 flex items-center justify-center transition-all duration-200 z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </a>
+                @endif
+
+                <button class="bg-white text-black px-6 py-3.5 text-sm font-bold hover:bg-gray-200 rounded-r-xl transition-all active:scale-95">Search</button>
             </form>
         </div>
     </div>

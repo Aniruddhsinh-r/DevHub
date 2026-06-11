@@ -2,8 +2,8 @@
 
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../Helpers/userLogin.php';
-require_once __DIR__.'/../Helpers/adminLogin.php';
+require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__.'/../../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -12,7 +12,7 @@ test('User can bookmark article', function () {
 
     $article = Article::factory()->create();
 
-    visit(route('articles.show', $article->id))
+    visit(route('articles.show', $article))
     ->press('@bookmark-button');
 
     $this->assertDatabaseHas('bookmarks', [
@@ -26,9 +26,9 @@ test('User can remove articles from bookmark', function () {
 
     $article = Article::factory()->create();
 
-    visit(route('articles.show', $article->id))
+    visit(route('articles.show', $article))
     ->press('@bookmark-button');
-    visit(route('articles.show', $article->id))
+    visit(route('articles.show', $article))
     ->press('@bookmark-button');
 
     $this->assertDatabaseMissing('bookmarks', [
@@ -42,7 +42,7 @@ test('admin cant bookmark articles', function () {
 
     $article = Article::factory()->create();
 
-    visit(route('articles.bookmark',$article->id));
+    visit(route('articles.bookmark',$article));
 
     $this->assertDatabaseMissing('bookmarks', [
         'user_id' => auth()->id(),
@@ -53,6 +53,6 @@ test('admin cant bookmark articles', function () {
 test('guest cant Bookmark article', function () {
     $article = Article::factory()->create();
 
-    visit(route('articles.show', $article->id))
+    visit(route('articles.show', $article))
     ->assertRoute('login');
 });

@@ -1,17 +1,15 @@
 <?php
 
-use App\Models\User;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+require_once __DIR__ . '/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Admin category create test', function () {
-    $user = User::factory()->create([
-        'role' => 'admin',
-    ]);
+    $admin = AdminLogin();
 
-    $this->actingAs($user)->post(route('admin.category.post'), [
+    $this->actingAs($admin)->post(route('admin.category.post'), [
         'name' => 'category'
     ]);
 
@@ -21,15 +19,13 @@ test('Admin category create test', function () {
 });
 
 test('Admin category delete test', function () {
-    $user = User::factory()->create([
-        'role' => 'admin',
-    ]);
+    $admin = AdminLogin();
     Category::factory()->create([
         'name' => 'category'
     ]);
 
     $category = Category::where('name','category')->value('id');
-    $this->actingAs($user)->delete(route('admin.category.delete',$category));
+    $this->actingAs($admin)->delete(route('admin.category.delete',$category));
 
     $this->assertDatabaseMissing('categories', [
         'name' => 'category'

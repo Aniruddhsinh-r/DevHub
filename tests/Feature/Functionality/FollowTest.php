@@ -2,14 +2,16 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+require_once __DIR__ . '/../Helpers/userLogin.php';
+require_once __DIR__ . '/../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('user can follow but not twice and also unfollow', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
     $followed = User::factory()->create();
 
-    $this->actingAs($user)->post(route('user.follow', $followed->id), [
+    $this->actingAs($user)->post(route('user.follow', $followed), [
         'follower_id' => $user->id,
         'followed_id' => $followed->id,
     ]);
@@ -19,7 +21,7 @@ test('user can follow but not twice and also unfollow', function () {
         'followed_id' => $followed->id,
     ]);
 
-    $this->actingAs($user)->post(route('user.follow', $followed->id), [
+    $this->actingAs($user)->post(route('user.follow', $followed), [
         'follower_id' => $user->id,
         'followed_id' => $followed->id,
     ]);
@@ -31,10 +33,10 @@ test('user can follow but not twice and also unfollow', function () {
 });
 
 test('admin cant follow other author', function () {
-    $user = User::factory()->create();
-    $admin = User::factory()->create(['role'=>'admin']);
+    $user = userLogin();
+    $admin = adminLogin();
 
-    $response = $this->actingAs($admin)->post(route('user.follow', $admin->id), [
+    $response = $this->actingAs($admin)->post(route('user.follow', $admin), [
         'follower_id' => $user->id,
         'followed_id' => $admin->id,
     ]);
@@ -47,7 +49,7 @@ test('admin cant follow other author', function () {
 });
 
 test('Guest cant follow users', function () {
-    $user = User::factory()->create();
+    $user = userLogin();
 
     $response = $this->post(route('user.follow',$user), [
         'follower_id' => $user->id,

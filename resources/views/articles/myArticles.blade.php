@@ -18,7 +18,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($articles as $article)
                         <div class="group bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative">
-                            <a href="{{ route('articles.show',$article->id) }}" class="block relative overflow-hidden h-52">
+                            <a href="{{ route('articles.show',$article) }}" class="block relative overflow-hidden h-52">
                                 @if ($article->cover_path)
                                     <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-700">
                                 @endif
@@ -26,7 +26,7 @@
                             </a>
 
                             <div class="p-4 pt-3">
-                                <a href="{{ route('articles.show',$article->id) }}">
+                                <a href="{{ route('articles.show',$article) }}">
                                     <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800 hover:text-gray-600">{{ $article->title }}</h3>
                                     <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
                                 </a>
@@ -38,7 +38,7 @@
                                     </div>
 
                                     <div class="flex flex-col items-end gap-1">
-                                        <form action="{{ route('articles.destroy',$article->id) }}" method="post"
+                                        <form action="{{ route('articles.destroy',$article) }}" method="post"
                                             {{-- onsubmit="return confirm('Are you sure?')" --}}
                                         >
                                             @csrf
@@ -46,7 +46,7 @@
                                             <button class="text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-wider" dusk="delete-article-{{ $article->id }}">Delete</button>
                                         </form>
 
-                                        <a href="{{ route('articles.edit',$article->id) }}" dusk="edit-article-{{ $article->id }}" class="text-xs font-bold text-gray-900 hover:text-black uppercase tracking-wider">
+                                        <a href="{{ route('articles.edit',$article) }}" dusk="edit-article-{{ $article->id }}" class="text-xs font-bold text-gray-900 hover:text-black uppercase tracking-wider">
                                             Edit
                                         </a>
                                     </div>

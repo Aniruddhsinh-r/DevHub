@@ -118,7 +118,7 @@
 
                 <div class="space-y-2">
                     @foreach ($articles->sortByDesc('id')->take(4) as $article)
-                        <a href="{{ route('admin.article.show',$article->id) }}" class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
+                        <a href="{{ route('admin.article.show',$article) }}" class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
                             <div class="flex items-center gap-3 truncate max-w-[70%]">
                                 <div class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px] shrink-0">{{ $loop->iteration }}</div>
                                 <span class="text-xs font-bold text-gray-900 truncate">{{ $article->title }}</span>

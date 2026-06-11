@@ -76,7 +76,7 @@
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
-                        <a href="{{ route('followers',$user->id) }}">
+                        <a href="{{ route('followers',$user) }}">
                             <div class="text-center">
                                 <p class="text-xl font-black text-gray-200">{{ $user->followers->count() }}</p>
                                 <p class="text-[13px] text-gray-200 mt-0.5">followers</p>
@@ -85,7 +85,7 @@
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
-                        <a href="{{ route('followings',$user->id) }}">
+                        <a href="{{ route('followings',$user) }}">
                             <div class="text-center">
                                 <p class="text-xl font-black text-gray-200">{{ $user->following->count() }}</p>
                                 <p class="text-[13px] text-gray-200 mt-0.5">following</p>

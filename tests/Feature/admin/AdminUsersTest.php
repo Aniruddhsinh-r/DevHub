@@ -5,18 +5,18 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Like;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+require_once __DIR__ . '/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Admin User find test', function () {
-    $user = User::factory()->create([
-        'role' => 'admin',
-    ]);
+    $admin = AdminLogin();
+
     User::factory()->create([
         'name' => 'ishigory'
     ]);
 
-    $response = $this->actingAs($user)->get(route('admin.users', [
+    $response = $this->actingAs($admin)->get(route('admin.users', [
         'search' => 'ishigory'
     ]));
 
@@ -27,9 +27,8 @@ test('Admin User find test', function () {
 
 test('Admin User delete test', function () {
     $this->withoutExceptionHandling();
-    $user = User::factory()->create([
-        'role' => 'admin',
-    ]);
+    $admin = AdminLogin();
+
     $removeuser = User::factory()->create();
     $article = Article::factory()->create(['user_id' => $removeuser->id,]);
     Comment::factory()->create(['user_id' => $removeuser->id,'article_id' => $article->id]);
@@ -38,7 +37,7 @@ test('Admin User delete test', function () {
     Comment::factory()->create(['user_id' => $removeuser->id, 'article_id'=> $article->id]);
     Like::factory()->create(['user_id' => $removeuser->id]);
 
-    $this->actingAs($user)->delete(route('admin.user.remove',$removeuser->id));
+    $this->actingAs($admin)->delete(route('admin.user.remove',$removeuser));
 
     $this->assertSoftDeleted('users',['id' => $removeuser->id]);
     $this->assertSoftDeleted('articles',['user_id' => $removeuser->id]);
