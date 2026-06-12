@@ -6,7 +6,6 @@ use App\Models\Article;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class LikeController extends Controller
 {
@@ -22,7 +21,7 @@ class LikeController extends Controller
             return back()->with('success', 'Article unliked.');
         }
 
-        Like::create(['user_id' => Auth::id(), 'article_id' => $article->id,'created_at' => now()]);
+        Like::create(['user_id' => Auth::id(), 'article_id' => $article->id]);
         return back()->with('success', 'Article liked.');
     }
 }

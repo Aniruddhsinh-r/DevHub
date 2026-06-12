@@ -70,5 +70,4 @@ class Article extends Model
     }
     public function views() { return $this->hasMany(View::class); }
     public function bookmark() { return $this->hasMany(Bookmark::class); }
-    public function like() { return $this->hasMany(Like::class); }
 }

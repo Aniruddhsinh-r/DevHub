@@ -39,7 +39,7 @@ class NewFollowerNotification extends Notification  implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return ([
-            'message' => "you have new follower {$this->follower->name}",
+            'message' => "you have a new follower {$this->follower->name}",
             'user_id' => $this->follower->id,
         ]);
     }

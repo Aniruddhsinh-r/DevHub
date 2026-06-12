@@ -65,15 +65,27 @@
 
                     <x-form.field name="body" type="textarea" label="Story Body" :value="$article->body" placeholder="Start your story..."></x-form.field>
 
-                    @if($article->cover_path)
-                        <div class="mb-2">
-                            <p class="text-[10px] text-gray-500 uppercase mb-1">Current Image:</p>
-                            <img src="{{ asset('storage/' . $article->cover_path) }}" alt="Current Cover" class="w-32 h-20 object-cover rounded-md border border-gray-300 shadow-sm">
+                    <div x-data="{
+                        imagePreview: '{{ $article->cover_path ? asset('storage/' . $article->cover_path) : '' }}',
+                        fileChosen(event) {
+                            const file = event.target.files[0];
+                            if (file) {
+                                this.imagePreview = URL.createObjectURL(file);
+                            }
+                        }
+                    }" class="space-y-4">
+
+                        <template x-if="imagePreview">
+                            <div class="mb-2">
+                                <p class="text-[10px] text-gray-500 uppercase mb-1" x-text="event => $refs.fileInput.files.length ? 'New Image Preview:' : 'Current Image:'">Current Image:</p>
+                                <img :src="imagePreview" alt="Cover Preview" class="w-32 h-20 object-cover rounded-md border border-gray-300 shadow-sm">
+                            </div>
+                        </template>
+
+                        <div class="space-y-0.5">
+                            <label for="cover_path" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Cover Picture</label>
+                            <input type="file" id="cover_path" name="cover_path" x-ref="fileInput" @change="fileChosen" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-black file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Choose cover page"/>
                         </div>
-                    @endif
-                    <div class="space-y-0.5">
-                        <label for="cover_path" class="block text-xs font-bold uppercase tracking-wider text-gray-700">cover picture</label>
-                        <input type="file" id="cover_path" name="cover_path" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-black file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Chouse cover page" />
                     </div>
 
                     <div class="pt-6 border-t border-gray-200 flex justify-end">
