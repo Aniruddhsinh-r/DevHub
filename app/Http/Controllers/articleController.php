@@ -130,7 +130,7 @@ class ArticleController extends Controller
         $this->authorize('delete', $article);
 
         $article->likes()->delete();
-        $article->delete();
+        $article->comments()->delete();
         $article->bookmarks()->detach();
         View::where('article_id', $article->id)->delete();
         $article->delete();

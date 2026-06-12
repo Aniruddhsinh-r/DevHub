@@ -39,7 +39,7 @@ class CreateArticle
 
         if ($values['status'] === 'scheduled' && !empty($values['scheduled_minutes'])) {
             $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
-        } else {
+        } elseif ($values['status'] === 'published') {
             $data['published_at'] = now();
         }
 

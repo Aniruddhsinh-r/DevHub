@@ -29,7 +29,7 @@ class ProfileController extends Controller
     {
         $user = $profile;
 
-        if (!$user || ($user->hasRole('admin') && !Auth::user()->hasRole('admin'))) {
+        if ($user->hasRole('admin') && !Auth::check() || !Auth::user()->hasRole('admin')) {
             return redirect()->back()->with('error', 'This author does not exist.');
         }
 
@@ -38,7 +38,7 @@ class ProfileController extends Controller
         }
 
         $articles = $user->articles()->with(['category'])->latest()->get();
-        
+
         return view('components.profile', compact('user','articles'));
     }
 
