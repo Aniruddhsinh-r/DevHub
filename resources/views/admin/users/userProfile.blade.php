@@ -3,9 +3,9 @@
             <div class="bg-[#fcfcfb] border border-gray-200 rounded-[1.5rem] shadow-sm p-6">
                 <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr_300px] gap-8 items-center">
                     <div class="flex justify-center lg:justify-start">
-                    @if ($user->avtar)
-                        <img src="{{ asset('storage/' . $user->avtar) }}" alt="{{ $user->name }}" class="w-56 h-56 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm">
-                        {{-- <img src="{{ asset('storage/' . $user->avtar) }}" class="w-32 h-32 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm"> --}}
+                    @if ($user->avatar)
+                        <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="w-56 h-56 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm">
+                        {{-- <img src="{{ asset('storage/' . $user->avatar) }}" class="w-32 h-32 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm"> --}}
                     @else
                         <div class="w-56 h-56 rounded-full bg-[#ececea] flex items-center justify-center text-6xl font-black text-[#111111] border-4 border-[#f3f3f1]">
                             {{ substr($user->name, 0, 2) }}
@@ -16,7 +16,7 @@
                     <div class="space-y-6">
                         <div>
                             <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ $user->name }}</h1>
-                            <p class="text-sm text-gray-600 mt-1 capitalize">{{ $user->role }} Fullstack Web Developer</p>
+                            <p class="text-sm text-gray-600 mt-1 capitalize">{{ $user->getRoleNames()->first() }} Fullstack Web Developer</p>
                         </div>
 
                         <p class="text-gray-600 leading-6 text-sm max-w-xl">{{ $user->bio }}</p>
@@ -37,7 +37,7 @@
                         <div class="space-y-6">
                             <div class="flex items-center justify-between gap-4">
                                 <span class="text-gray-500 font-medium">Role</span>
-                                <span class="text-gray-900 font-semibold capitalize">{{ $user->role }}</span>
+                                <span class="text-gray-900 font-semibold capitalize">{{ $user->getRoleNames()->first() }}</span>
                             </div>
 
                             <div class="flex items-center justify-between gap-4">

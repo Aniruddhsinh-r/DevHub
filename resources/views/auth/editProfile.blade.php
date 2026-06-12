@@ -9,7 +9,7 @@
             @csrf
             @method('PATCH')
 
-            <div class="flex items-center gap-6 mb-6" x-data="{ imageUrl: '{{ $user->avtar ? asset('storage/' . $user->avtar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name) }}' }">
+            <div class="flex items-center gap-6 mb-6" x-data="{ imageUrl: '{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name) }}' }">
                 <div class="relative">
                     <!-- The src attribute is now bound to our reactive Alpine variable -->
                     <img :src="imageUrl" alt="Profile" class="w-24 h-24 rounded-full object-cover border-2 border-gray-100">
@@ -18,9 +18,9 @@
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center gap-3">
                         <!-- @change listens for the file upload and updates our Alpine variable -->
-                        <input type="file" name="avtar" id="avtar" class="hidden" accept="image/*" @change="imageUrl = URL.createObjectURL($event.target.files[0])">
+                        <input type="file" name="avatar" id="avatar" class="hidden" accept="image/*" @change="imageUrl = URL.createObjectURL($event.target.files[0])">
 
-                        <label for="avtar" class="cursor-pointer bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                        <label for="avatar" class="cursor-pointer bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>Change Image

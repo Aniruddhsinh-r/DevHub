@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'two_factor_secret', 'last_seen_at', 'role', 'bio', 'avtar'])]
+#[Fillable(['name', 'email', 'password', 'two_factor_secret', 'last_seen_at', 'bio', 'avatar'])]
 #[Hidden(['password', 'remember_token', 'two_factor_secret'])]
 class User extends Authenticatable
 {
@@ -51,11 +52,11 @@ class User extends Authenticatable
         return $this->hasMany(Article::class);
     }
 
-    public function following()
+    public function following(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
     }
-    public function followers()
+    public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
     }
@@ -65,7 +66,7 @@ class User extends Authenticatable
     }
 
     // 2. Comments Relationship
-    public function comment(): HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }

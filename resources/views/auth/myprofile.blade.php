@@ -3,8 +3,8 @@
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
             <div class="bg-white border border-gray-200 rounded-[2rem] p-6 shadow-sm h-fit">
                 <div class="flex flex-col items-center text-center">
-                    @if ($user->avtar)
-                        <img src="{{ asset('storage/' . $user->avtar) }}" class="w-32 h-32 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm">
+                    @if ($user->avatar)
+                        <img src="{{ asset('storage/' . $user->avatar) }}" class="w-32 h-32 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm">
                     @else
                         <div class="w-32 h-32 rounded-full bg-[#ececea] flex items-center justify-center text-3xl font-black text-[#111111] border-4 border-[#f3f3f1]">
                             {{ substr($user->name, 0, 2) }}
@@ -32,7 +32,7 @@
                     <div class="flex items-center justify-between text-sm">
                         <span class="text-gray-500 font-medium">role</span>
                         <span class="px-3 py-1 rounded-full text-black text-medium font-bold">
-                            {{ $user->role }}
+                            {{ $user->getRoleNames()->first() }}
                         </span>
                     </div>
 
@@ -101,7 +101,7 @@
                     </div>
 
                     <div class="bg-[#f5f5f3] border border-gray-200 rounded-2xl p-5">
-                        <p class="text-sm leading-7 text-gray-600 font-medium">{{ $user->bio ?? 'Passionate about clean interface design, modern editorial experiences and building elegant digital products with minimal aesthetics.' }}</p>
+                        <p class="text-sm leading-7 text-gray-600 font-medium">{{ $user->bio ?? "Hello there {$user->name}" }}</p>
                     </div>
                 </div>
             </div>

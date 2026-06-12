@@ -32,7 +32,7 @@ class LoginUserController extends Controller
         if (Auth::attempt($attempt, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            $admin = User::where('email', $request->email)->whereRole('admin')->exists();
+            $admin = User::where('email', $request->email)->first()?->hasRole('admin');
 
             if ($admin) {
                 return to_route('admin.dashboard')->with('success', 'Welcome back, admin!');

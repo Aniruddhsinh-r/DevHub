@@ -37,8 +37,8 @@
                         <div class="flex items-center justify-between gap-4">
                             <div class="flex items-center gap-4 min-w-0">
                                 <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
-                                    @if ($following->followed->avtar)
-                                        <img src="{{ asset('storage/' . $following->followed->avtar) }}" alt="{{ $following->followed->name }}" class="w-full h-full object-cover">
+                                    @if ($following->followed->avatar)
+                                        <img src="{{ asset('storage/' . $following->followed->avatar) }}" alt="{{ $following->followed->name }}" class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full bg-black text-white flex items-center justify-center text-sm font-bold uppercase">
                                             {{ substr($following->followed->name, 0, 2) }}

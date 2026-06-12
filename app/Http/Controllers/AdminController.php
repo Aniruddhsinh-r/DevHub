@@ -51,12 +51,12 @@ class AdminController extends Controller
         return back()->with('success','Category created successfully.');
     }
 
-    public function showuser(User $user) {
+    public function showUser(User $user) {
         $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
         return view('admin.users.userProfile', ['user'=>$user,'articles'=>$articles]);
     }
 
-    public function userPublished(User $user) {
+    public function userArticle(User $user) {
         $articles = Article::with(['category'])->where('user_id', $user->id)->latest()->get();
         return view('admin.users.userPublished', ['articles'=>$articles]);
     }
@@ -68,7 +68,7 @@ class AdminController extends Controller
 
     public function user(Request $request) {
         $search = $request->search;
-        $users = User::where('role','author')->where('name', 'LIKE', "%{$search}%")->latest()->paginate(6);
+        $users = User::role('author')->where('name', 'LIKE', "%{$search}%")->paginate(6);
 
         return view('admin.users.users', ['users'=>$users]);
     }
@@ -78,7 +78,7 @@ class AdminController extends Controller
 
         DB::transaction(function () use ($user) {
             $user->views()->delete();
-            $user->comment()->delete();
+            $user->comments()->delete();
             $user->bookmarks()->delete();
             $user->likes()->delete();
             $user->articles()->delete();

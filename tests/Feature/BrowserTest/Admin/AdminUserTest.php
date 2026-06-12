@@ -2,38 +2,26 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 require_once __DIR__.'/../../Helpers/adminLogin.php';
+require_once __DIR__.'/../../Helpers/userLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Admin fetch user details', function () {
-    User::factory()->create([
-        'name' => 'Loggy',
-        'role' => 'author',
-    ]);
-
-    User::factory()->create([
-        'name' => 'Siman',
-        'role' => 'author',
-    ]);
-
+    $user = userLogin();
     adminLogin();
 
     visit('/admin/users')
-    ->assertSee('Loggy')
-    ->assertSee('Siman');
+    ->assertSee($user->name);
 });
 
 test('admin search and delete user', function () {
-    $user = User::factory()->create([
-        'name' => 'ishigory',
-        'role' => 'author',
-    ]);
-
+    $user = userLogin();
     adminLogin();
 
-    visit('/admin/users?search=ishigory')
-    ->assertSee('ishigory')
+    visit('/admin/users?search='.$user->name)
+    ->assertSee($user->name)
     ->press('Remove');
 
     $this->assertDatabaseMissing('articles', ['user_id' => $user->id,]);

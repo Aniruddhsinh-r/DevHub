@@ -8,7 +8,7 @@ require_once __DIR__.'/../../Helpers/adminLogin.php';
 uses(RefreshDatabase::class);
 
 test('User can like article', function () {
-    userLogin();
+    $user = userLogin();
 
     $article = Article::factory()->create();
 
@@ -16,13 +16,13 @@ test('User can like article', function () {
     ->press('@like-button');
 
     $this->assertDatabaseHas('likes', [
-        'user_id' => auth()->id(),
+        'user_id' => $user->id,
         'article_id' => $article->id,
     ]);
 });
 
 test('User can unlike article', function () {
-    userLogin();
+    $user = userLogin();
 
     $article = Article::factory()->create();
 
@@ -32,20 +32,20 @@ test('User can unlike article', function () {
     ->press('@like-button');
 
     $this->assertDatabaseMissing('likes', [
-        'user_id' => auth()->id(),
+        'user_id' => $user->id,
         'article_id' => $article->id,
     ]);
 });
 
 test('admin cant like articles', function () {
-    adminLogin();
+    $user = adminLogin();
 
     $article = Article::factory()->create();
 
     visit(route('articles.like',$article));
 
     $this->assertDatabaseMissing('likes', [
-        'user_id' => auth()->id(),
+        'user_id' => $user->id,
         'article_id' => $article->id,
     ]);
 });

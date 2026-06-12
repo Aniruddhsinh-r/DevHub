@@ -38,8 +38,8 @@
 
                         <div x-data="{ open: false }" data-test="Authbutton" class="relative z-50">
                             <button @click="open = !open" @click.outside="open = false" class="flex items-center focus:outline-none">
-                                @if (auth()->user()->avtar)
-                                    <img src="{{ asset('storage/' . auth()->user()->avtar) }}" alt="User Profile" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-gray-400 transition">
+                                @if (auth()->user()->avatar)
+                                    <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="User Profile" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-gray-400 transition">
                                 @else
                                     <span class="w-10 h-10 rounded-full bg-black text-white border border-gray-400 inline-flex items-center justify-center text-sm font-bold uppercase">
                                         {{ Str::upper(Str::substr(auth()->user()->name, 0, 2)) }}
@@ -149,9 +149,9 @@
     @endif
 </main>
 
-    @if (auth()->user()?->role !== 'admin')
-        @include('components.footer')
-    @endif
+    @unless(auth()->user()?->hasRole('admin'))
+       @include('components.footer')
+    @endunless
 
     <div x-data="{ show: false, message: '', url: null}"
         x-on:live-notification.window="show = true; message = $event.detail.message; url = $event.detail.url; setTimeout(() => show = false, 5000)"

@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class FollowerController extends Controller
 {
-    public function follow(User $id){
-        if(Auth::id() !== $id->id) {
-            Auth::user()->following()->toggle($id);
-            $alreadyFollowing = Auth::user()->following()->where('followed_id', $id->id)->exists();
+    public function follow(User $user){
+        if(Auth::id() !== $user->id) {
+            Auth::user()->following()->toggle($user);
+            $alreadyFollowing = Auth::user()->following()->where('followed_id', $user->id)->exists();
 
             if ($alreadyFollowing) {
-                $id->notify(new NewFollowerNotification(Auth::user()));
+                $user->notify(new NewFollowerNotification(Auth::user()));
             }
             return back();
         }

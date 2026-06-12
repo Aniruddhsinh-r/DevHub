@@ -17,7 +17,7 @@ class ForgotPasswordController extends Controller
 
     public function store(Request $request) {
         $request->validate(['email' => 'required|email|exists:users,email']);
-        $user = User::where('email', $request->email)->firstOrFail();
+        $user = User::where('email', $request->email)->first();
 
         $to = $request->email;
         $otp = random_int(100000,999999);
@@ -28,14 +28,14 @@ class ForgotPasswordController extends Controller
         session(['otp_email' => $to]);
         Mail::to($to)->send(new PasswordResetMail($message));
 
-        return view('auth.otpVarification',['email' => $request->email]);
+        return view('auth.otpVerification',['email' => $request->email]);
     }
 
     public function OTPform(){
         if (!session()->has('otp_email')) {
             return redirect()->route('password.forgot')->with('error', 'Please enter your email first.');
         }
-        return view('auth.otpVarification');
+        return view('auth.otpVerification');
     }
 
     public function OTPverify(Request $request) {

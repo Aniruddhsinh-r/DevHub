@@ -59,8 +59,8 @@
                             <tr class="hover:bg-gray-50/70 transition-all duration-200">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3 min-w-0">
-                                        @if ($user->avtar)
-                                            <img src="{{ asset('storage/' . $user->avtar) }}" alt="{{ $user->name }}" class="w-11 h-11 rounded-full object-cover border border-gray-200 shrink-0">
+                                        @if ($user->avatar)
+                                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="w-11 h-11 rounded-full object-cover border border-gray-200 shrink-0">
                                         @else
                                             <div class="w-11 h-11 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0">{{ substr($user->name, 0, 2) }}</div>
                                         @endif
@@ -77,10 +77,10 @@
 
                                 <td class="px-6 py-4">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold
-                                        {{ $user->role === 'admin'
+                                        {{ $user->hasRole('admin')
                                             ? 'bg-indigo-100 text-indigo-600'
                                             : 'bg-gray-100 text-gray-600' }}">
-                                        {{ ucfirst($user->role) }}
+                                        {{ ucfirst($user->getRoleNames()->first()) }}
                                     </span>
                                 </td>
 

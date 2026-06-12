@@ -161,8 +161,8 @@
 
                     <a href="{{ route('admin.show.user',$topUser) }}" class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
                         <div class="relative shrink-0">
-                            @if ($topUser->avtar)
-                                <img src="{{ asset('storage/' . $topUser->avtar) }}" alt="{{ $topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500 object-cover">
+                            @if ($topUser->avatar)
+                                <img src="{{ asset('storage/' . $topUser->avatar) }}" alt="{{ $topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500 object-cover">
                             @else
                                 <div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0 group-hover:scale-110 transition-transform duration-500">
                                     {{ mb_substr($topUser->name, 0, 2) }}

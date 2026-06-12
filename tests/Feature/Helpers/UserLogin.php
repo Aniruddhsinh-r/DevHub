@@ -20,7 +20,7 @@ function userLogin(array $permissions = ['article.create','article.edit','articl
     ]);
     $user->assignRole('author');
 
-     test()->actingAs($user);
+    test()->actingAs($user);
 
     return $user;
 }

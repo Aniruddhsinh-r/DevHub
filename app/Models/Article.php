@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -60,7 +61,7 @@ class Article extends Model
         return $this->bookmarks()->where('user_id', Auth::id())->exists();
     }
 
-    public function bookmarks()
+    public function bookmarks(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'bookmarks');
     }

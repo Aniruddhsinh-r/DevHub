@@ -41,9 +41,9 @@
                         <div class="flex items-center justify-between gap-4">
                             <div class="flex items-center gap-4 min-w-0">
                                 <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
-                                    @if ($follower->follower->avtar)
+                                    @if ($follower->follower->avatar)
                                         <img
-                                            src="{{ asset('storage/' . $follower->follower->avtar) }}"
+                                            src="{{ asset('storage/' . $follower->follower->avatar) }}"
                                             alt="{{ $follower->follower->name }}"
                                             class="w-full h-full object-cover"
                                         >

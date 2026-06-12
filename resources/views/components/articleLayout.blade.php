@@ -10,8 +10,8 @@
             <div class="p-5">
                 {{-- <a href="{{ route('profile.show', $article->user) }}"> --}}
                     <div class="flex items-center gap-3 mb-3">
-                        @if ($article->user->avtar)
-                            <img src="{{ asset('storage/' . $article->user->avtar) }}" alt="user_image" class="w-9 h-9 rounded-full border-2 border-black object-cover">
+                        @if ($article->user->avatar)
+                            <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="user_image" class="w-9 h-9 rounded-full border-2 border-black object-cover">
                         @else
                             <div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0">{{ substr($article->user->name, 0, 1) }}</div>
                         @endif

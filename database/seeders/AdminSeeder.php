@@ -14,11 +14,10 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::updateOrCreate([
-            'uuid' => Str::uuid(),
+        $user = User::updateOrCreate(
+            ['email' => 'harshrajsinh@gmail.com'],
+            ['uuid' => Str::uuid(),
             'name' => 'Harshrajsinh',
-            'email' => 'harshrajsinh@gmail.com',
-            'role' => 'admin',
             'password' => Hash::make('IAmHarsh'),
         ]);
         $user->assignRole('admin');

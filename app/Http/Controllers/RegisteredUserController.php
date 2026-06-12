@@ -24,13 +24,13 @@ class RegisteredUserController extends Controller
             'name' => ['required','min:5','max:50'],
             'email' => ['required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:8', 'max:255'],
-            'avtar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'bio' => ['nullable', 'max:2000', 'string'],
         ]);
 
         $avatarPath = null;
-        if ($request->hasFile('avtar')) {
-            $avatarPath = $request->file('avtar')->store('avatars', 'public');
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
         }
 
         $user = User::create([
@@ -38,8 +38,7 @@ class RegisteredUserController extends Controller
             'email' => strtolower($request->email),
             'password' => Hash::make($request->password),
             'bio' => $request->bio,
-            'avtar'=> $avatarPath,
-            'role' => 'author',
+            'avatar'=> $avatarPath,
         ]);
 
         $user->assignRole('author');

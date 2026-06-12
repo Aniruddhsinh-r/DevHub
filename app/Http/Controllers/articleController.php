@@ -20,13 +20,16 @@ class ArticleController extends Controller
     public function index(Request $request) {
         $search = $request->search;
 
-        $articles = Article::with(['user', 'category'])
-        ->where('status', 'published')
-        ->where(function($query) use ($search) {
-            $query->where('title', 'LIKE', "%{$search}%")
-                  ->orWhere('excerpt', 'LIKE', "%{$search}%")
-                  ->orWhere('body', 'LIKE', "%{$search}%");
-        })->latest()->paginate(9);
+        $articles = Article::query()->where('status', 'published')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%")
+                          ->orWhere('excerpt', 'like', "%{$search}%")
+                          ->orWhere('body', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(9);
 
         return view('articles.article',['articles' => $articles]);
     }
@@ -75,7 +78,7 @@ class ArticleController extends Controller
         return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies]);
     }
 
-    public function published()
+    public function myArticles()
     {
         $articles = Article::where('user_id',Auth::id())->latest()->get();
 
@@ -95,7 +98,7 @@ class ArticleController extends Controller
         return view('components.draftArticle',['articles' => $articles]);
     }
 
-    public function articleshow(User $user) {
+    public function showArticle(User $user) {
         if (Auth::id() == $user->id) {
             $user = Auth::user();
             return view('auth.myprofile', ['user' => $user]);

@@ -62,7 +62,7 @@ class ProfileController extends Controller
             'email' => ['required', 'string', 'min:10', 'max:255' ,Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:8', 'max:255'],
-            'avtar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'bio' => ['nullable', 'max:2000', 'string']
         ]);
 
@@ -72,11 +72,11 @@ class ProfileController extends Controller
             'bio' => $request->bio,
         ];
 
-        if ($request->hasFile('avtar')) {
-            if ($user->avtar) {
-                Storage::disk('public')->delete($user->avtar);
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
             }
-            $data['avtar'] = $request->file('avtar')->store('avtars','public');
+            $data['avatar'] = $request->file('avatar')->store('avatars','public');
         }
 
         if ($request->filled('password')) {

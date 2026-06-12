@@ -30,7 +30,6 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'role' => 'author',
             'remember_token' => Str::random(10),
         ];
     }
@@ -44,4 +43,10 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+    // public function configure(): static
+    // {
+    //     return $this->afterCreating(function (User $user) {
+    //         $user->assignRole('author');
+    //     });
+    // }
 }
