@@ -77,7 +77,7 @@
                                 <p class="text-sm text-gray-500 mt-1">Discussion history for this post</p>
                             </div>
                             <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-xs font-black">
-                                {{ $article->comment->count() }} Comments
+                                {{ $article->comments->count() }} Comments
                             </span>
                         </div>
 

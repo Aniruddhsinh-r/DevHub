@@ -46,7 +46,7 @@ class Article extends Model
         return $this->hasMany(Like::class);
     }
 
-    public function comment(): HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
@@ -70,5 +70,4 @@ class Article extends Model
         return $this->likes()->where('user_id', Auth::id())->exists();
     }
     public function views() { return $this->hasMany(View::class); }
-    public function bookmark() { return $this->hasMany(Bookmark::class); }
 }
