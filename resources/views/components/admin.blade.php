@@ -1,5 +1,4 @@
 <x-layout>
-{{-- <div class="flex overflow-hidden h-screen bg-[#f3f4f6] text-[#111827]"> --}}
 <div class="flex overflow-hidden bg-[#f3f4f6] text-[#111827]" style="height: calc(100vh - 65px);">
     <aside class="w-14 sm:w-20 md:w-56 sticky top-16 bg-[#e5e7eb] border-r border-gray-300 flex flex-col justify-between p-2 sm:p-4 transition-all duration-300 shrink-0">
         <div>

@@ -39,7 +39,7 @@
 
                                     <div class="flex flex-col items-end gap-1">
                                         <form action="{{ route('articles.destroy',$article) }}" method="post"
-                                            {{-- onsubmit="return confirm('Are you sure?')" --}}
+                                            onsubmit="return confirm('Are you sure?')"
                                         >
                                             @csrf
                                             @method('DELETE')

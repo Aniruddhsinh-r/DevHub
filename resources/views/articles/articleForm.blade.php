@@ -40,7 +40,6 @@
                             </select>
                         </div>
                     </div>
-                        {{-- <div x-show="status === 'scheduled'" x-transition class="w-1/3 space-y-1.5" style="display: none;"> --}}
                     <div x-show="status === 'scheduled'" x-transition style="display: none;" class="space-x-1.5">
                         <div x-data="{ hours: '{{ old('scheduled_hours') ?? null }}',minutes: '{{ old('scheduled_minutes') ?? null }}' }" class="flex items-end space-x-2">
                             <div class="w-20">
@@ -95,7 +94,6 @@
                     </div>
                     @if ($errors->any())
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-6">
-
                             <ul class="list-disc list-inside space-y-1 text-sm font-medium">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>

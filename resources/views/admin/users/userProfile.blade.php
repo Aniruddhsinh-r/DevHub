@@ -5,7 +5,6 @@
                     <div class="flex justify-center lg:justify-start">
                     @if ($user->avatar)
                         <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="w-56 h-56 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm">
-                        {{-- <img src="{{ asset('storage/' . $user->avatar) }}" class="w-32 h-32 rounded-full object-cover border-4 border-[#f3f3f1] shadow-sm"> --}}
                     @else
                         <div class="w-56 h-56 rounded-full bg-[#ececea] flex items-center justify-center text-6xl font-black text-[#111111] border-4 border-[#f3f3f1]">
                             {{ substr($user->name, 0, 2) }}

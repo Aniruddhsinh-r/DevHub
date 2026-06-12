@@ -31,6 +31,5 @@ test('Admin view not count', function () {
     ->assertSee('example Article')
     ->click('example Article')
     ->assertRoute('admin.article.show', ['article' => $article]);
-    // ['article' => $article]
     $this->assertDatabaseMissing('views',['user_id' => $admin->id]);
 });
