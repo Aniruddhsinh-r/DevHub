@@ -117,7 +117,7 @@
                                         @endif
 
                                         <div x-show="showReplies" class="mt-2 pl-4 border-l-2 border-gray-200 space-y-3" x-cloak>
-                                            @foreach ($replies->where('parent_id', $comment->id) as $reply)
+                                            @foreach ($comment->replies as $reply)
                                             <div class="flex gap-4">
                                                 <a href="{{ route('admin.show.user',$reply->user) }}"  class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
                                                     @if ($reply->user->avatar)

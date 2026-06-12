@@ -37,7 +37,8 @@ class ProfileController extends Controller
             return view('auth.myprofile', compact('user'));
         }
 
-        $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+        $articles = $user->articles()->with(['category'])->latest()->get();
+        
         return view('components.profile', compact('user','articles'));
     }
 

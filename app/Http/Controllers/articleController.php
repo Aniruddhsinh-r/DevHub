@@ -67,15 +67,14 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        $viewed = View::where(['user_id' => Auth::id(), 'article_id' => $article->id])->exists();
-        $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
-        $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
+        $viewed = Auth::user()->views()->where('article_id', $article->id)->exists();
+        $comments = $article->comments()->whereNull('parent_id')->with(['user', 'replies.user'])->get();
 
         if (Auth::check() && Auth::id() !== $article->user_id && !$viewed) {
             Article::where('id', $article->id)->increment('view_count');
             View::create(['user_id' => Auth::id(), 'article_id' => $article->id]);
         }
-        return view('articles.show', ['article' => $article, 'comments' => $comments, 'replies' => $replies]);
+        return view('articles.show', ['article' => $article, 'comments' => $comments,]);
     }
 
     public function myArticles()
@@ -86,29 +85,19 @@ class ArticleController extends Controller
     }
 
     public function userpublished(User $user) {
-        $articles =  Article::where(['status' => 'published','user_id' => $user->id])->latest()->get();
+        $articles = $user->articles()->where('status', 'published')->latest()->get();
 
         return view('articles.userArticles', ['articles' => $articles]);
     }
 
     public function draftArticle() {
-        $user = Auth::id();
-        $articles = Article::with(['user', 'category'])->where(['user_id' => $user,'status' => 'draft'])->latest()->get();
+        $user = Auth::user();
+        $articles = $user->articles()->where('status', 'draft')->latest()->get();
+        // Article::with(['user', 'category'])->where(['user_id' => $user,'status' => 'draft'])->latest()->get();
 
         return view('components.draftArticle',['articles' => $articles]);
     }
 
-    public function showArticle(User $user) {
-        if (Auth::id() == $user->id) {
-            $user = Auth::user();
-            return view('auth.myprofile', ['user' => $user]);
-        }
-
-        $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
-        return view('articles.article',[
-            'articles' => $articles
-        ]);
-    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -126,6 +115,9 @@ class ArticleController extends Controller
     public function update(ArticleValidationRequest $request, Article $article, UpdateArticle $action)
     {
         $this->authorize('update', $article);
+        if ($request->isPrecognitive()) {
+            return response()->json(['valid' => true]);
+        }
         $action->handle($request->validated(), $article);
         return to_route('publishedarticle')->with('success', 'Article updated successfully.');
     }
@@ -138,7 +130,7 @@ class ArticleController extends Controller
         $this->authorize('delete', $article);
 
         $article->likes()->delete();
-        $articles()->delete();
+        $article->delete();
         $article->bookmarks()->detach();
         View::where('article_id', $article->id)->delete();
         $article->delete();

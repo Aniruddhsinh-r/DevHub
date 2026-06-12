@@ -31,25 +31,16 @@ class Comment extends Model
         return $this->hasMany(Comment::class);
     }
 
-    /**
-     * Get the article that the comment belongs to.
-     */
     public function article(): BelongsTo
     {
         return $this->belongsTo(Article::class);
     }
 
-    /**
-     * Get the parent comment if this comment is a reply.
-     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Comment::class, 'parent_id');
     }
 
-    /**
-     * Get all replies nested directly under this comment.
-     */
     public function replies(): HasMany
     {
         return $this->hasMany(Comment::class, 'parent_id');

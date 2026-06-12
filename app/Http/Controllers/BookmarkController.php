@@ -14,10 +14,8 @@ class BookmarkController extends Controller
             return back()->with('error', 'You cant bookmark draft articles.');
         }
 
-        $bookmark = Bookmark::where(['article_id' => $article->id ,'user_id' => Auth::id()])->first();
-
-        if($bookmark) {
-            $bookmark->delete();
+        if($article->isBookmarkedByMe()) {
+            $article->bookmarks()->detach(auth()->id());
             return back()->with('success','remove from bookmark');
         } else {
             Bookmark::create(['user_id'=>Auth::id(),
@@ -28,12 +26,7 @@ class BookmarkController extends Controller
     }
 
     public function show() {
-        $articles = Article::whereHas('bookmarks', function ($query) {
-            $query->where('user_id', Auth::id());
-        })
-        ->with(['user', 'category'])
-        ->latest()
-        ->get();
+        $articles = Auth::user()->bookmarkedArticles()->with(['user', 'category'])->latest()->get();
 
         return view('bookmarks.bookmarkArticle', ['articles' => $articles]);
     }

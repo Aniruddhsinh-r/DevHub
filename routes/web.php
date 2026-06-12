@@ -26,7 +26,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/articles/{user}/published', [ArticleController::class, 'userpublished'])->name('user.published');
     Route::get('/articles/drafts', [ArticleController::class, 'draftArticle'])->name('drafts');
-    Route::get('/user/article/{user}', [ArticleController::class, 'showArticle'])->name('users.articles');
+    // Route::get('/user/article/{user}', [ArticleController::class, 'showArticle'])->name('users.articles');
     Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
 });
 

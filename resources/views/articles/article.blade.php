@@ -35,6 +35,5 @@
     <div class="mt-8 font-semibold">
         {{ $articles->appends(['search' => request('search')])->links() }}
     </div>
-
 </section>
 </x-layout>

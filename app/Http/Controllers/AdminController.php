@@ -52,12 +52,13 @@ class AdminController extends Controller
     }
 
     public function showUser(User $user) {
-        $articles = Article::with(['user', 'category'])->where('user_id', $user->id)->latest()->get();
+        $articles = $user->articles()->with(['category'])->latest()->get();
+
         return view('admin.users.userProfile', ['user'=>$user,'articles'=>$articles]);
     }
 
     public function userArticle(User $user) {
-        $articles = Article::with(['category'])->where('user_id', $user->id)->latest()->get();
+        $articles = $user->articles()->with(['category'])->latest()->get();
         return view('admin.users.userPublished', ['articles'=>$articles]);
     }
 
@@ -111,10 +112,9 @@ class AdminController extends Controller
     }
 
     public function showArticle(Article $article) {
-        $comments = Comment::where('article_id',$article->id)->whereNull('parent_id')->with('replies')->get();
-        $replies = Comment::where('article_id',$article->id)->whereNotNull('parent_id')->get();
-        $likes = Like::where('article_id',$article->id)->get();
+        $comments = $article->comments()->whereNull('parent_id')->with('replies')->get();
+        $likes = $article->likes()->get();
 
-        return view('admin.articles.article', ['article' => $article, 'comments' => $comments, 'replies' => $replies, 'likes' => $likes]);
+        return view('admin.articles.article', ['article' => $article, 'comments' => $comments, 'likes' => $likes]);
     }
 }

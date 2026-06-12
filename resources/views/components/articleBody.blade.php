@@ -209,7 +209,7 @@
                                             @endif
                                         </div>
                                         <div x-show="showReplies" class="py-4">
-                                            @foreach ($replies as $reply)
+                                            @foreach ($comment->replies as $reply)
                                             <div class="flex gap-4">
                                                 <a href="{{ route('profile.show',$reply->user) }}">
                                                     <div class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm overflow-hidden">

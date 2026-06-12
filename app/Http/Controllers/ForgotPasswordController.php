@@ -28,14 +28,14 @@ class ForgotPasswordController extends Controller
         session(['otp_email' => $to]);
         Mail::to($to)->send(new PasswordResetMail($message));
 
-        return view('auth.otpVerification',['email' => $request->email]);
+        return view('auth.otpVarification',['email' => $request->email]);
     }
 
     public function OTPform(){
         if (!session()->has('otp_email')) {
             return redirect()->route('password.forgot')->with('error', 'Please enter your email first.');
         }
-        return view('auth.otpVerification');
+        return view('auth.otpVarification');
     }
 
     public function OTPverify(Request $request) {

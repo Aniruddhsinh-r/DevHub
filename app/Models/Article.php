@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 
 class Article extends Model
 {
@@ -56,9 +55,9 @@ class Article extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function isBookmarkedByMe(): bool
+    public function isBookmarkedByMe()
     {
-        return $this->bookmarks()->where('user_id', Auth::id())->exists();
+        return $this->bookmarks()->where('user_id', auth()->id())->first();
     }
 
     public function bookmarks(): BelongsToMany
@@ -67,7 +66,7 @@ class Article extends Model
     }
     public function isLikedByUser(): bool
     {
-        return $this->likes()->where('user_id', Auth::id())->exists();
+        return $this->likes()->where('user_id', auth()->user()->id)->exists();
     }
     public function views() { return $this->hasMany(View::class); }
 }

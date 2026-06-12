@@ -15,7 +15,7 @@ class LikeController extends Controller
             return back()->with('error', 'You cant like draft articles.');
         }
 
-        $like = Like::where(['article_id' => $article->id, 'user_id' => Auth::id()])->first();
+        $like = $article->likes()->first();
         if ($like) {
             $like->delete();
             return back()->with('success', 'Article unliked.');
