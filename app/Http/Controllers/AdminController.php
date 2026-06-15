@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Models\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -19,14 +18,15 @@ class AdminController extends Controller
     use AuthorizesRequests;
 
     public function index() {
-        $articles = Article::where('status', 'published')->get();
+        $articleCount = Article::where('status', 'published')->count();
+        $articles = Article::where('status', 'published')->latest()->take(4)->get();
         $users = User::count();
         $comments = Comment::count();
         $views = View::count();
         $likes = Like::count();
         $topUser = User::withCount('articles')->orderByDesc('articles_count')->first();
 
-        return view('admin.dashboard',['articles' => $articles,'users' => $users,'comments' => $comments,'views'=>$views,'likes'=>$likes,'topUser'=>$topUser]);
+        return view('admin.dashboard',['articles' => $articles,'users' => $users,'comments' => $comments,'views'=>$views,'likes'=>$likes,'topUser'=>$topUser,'articleCount'=>$articleCount]);
     }
 
     public function create(Request $request) {
@@ -83,6 +83,7 @@ class AdminController extends Controller
             $user->bookmarks()->delete();
             $user->likes()->delete();
             $user->articles()->delete();
+            $user->notifications()->delete();
             $user->delete();
         });
         return back()->with('success','User removed successfully.');

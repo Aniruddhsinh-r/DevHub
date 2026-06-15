@@ -1,7 +1,9 @@
     <section class="bg-[#f5f7fb] pb-20">
         <div class="relative overflow-hidden bg-black">
             <div class="absolute inset-0 opacity-20">
-                <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
+                @unless(empty($article->cover_path))
+                    <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
+                @endunless
             </div>
 
             <div class="relative max-w-7xl mx-auto px-5 lg:px-8 py-10 lg:py-14">

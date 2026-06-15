@@ -3,7 +3,9 @@
         <div class="relative overflow-hidden bg-black">
             @if ($article->cover_path)
                 <div class="absolute inset-0 opacity-20">
-                    <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
+                    @unless(empty($article->cover_path))
+                        <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
+                    @endunless
                 </div>
             @endif
             <div class="relative max-w-7xl mx-auto px-5 lg:px-8 py-10 lg:py-14">
@@ -205,7 +207,6 @@
                         </div>
                     </div>
                 </aside>
-
             </div>
         </div>
     </section>

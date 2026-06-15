@@ -36,7 +36,7 @@
                     </span>
                 </div>
                 <h2 class="mt-4 text-2xl font-black text-[#111827]">
-                    {{ $articles->count() }}
+                    {{ $articleCount }}
                 </h2>
                 <p class="mt-1 text-xs text-gray-400">
                     Total published articles
@@ -117,7 +117,7 @@
                 </div>
 
                 <div class="space-y-2">
-                    @foreach ($articles->sortByDesc('id')->take(4) as $article)
+                    @foreach ($articles as $article)
                         <a href="{{ route('admin.article.show',$article) }}" class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
                             <div class="flex items-center gap-3 truncate max-w-[70%]">
                                 <div class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px] shrink-0">{{ $loop->iteration }}</div>

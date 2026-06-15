@@ -20,9 +20,7 @@ class BookmarkController extends Controller
             $bookmark->delete();
             return back()->with('success','remove from bookmark');
         } else {
-            Bookmark::create(['user_id'=>Auth::id(),
-            'article_id'=>$article->id,
-            'created_at'=>now()]);
+            Auth::user()->bookmarkedArticles()->toggle($article->id);
         }
         return back()->with('success','article bookmark');
     }
