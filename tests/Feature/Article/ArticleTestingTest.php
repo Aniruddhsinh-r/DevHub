@@ -14,7 +14,7 @@ test('user can comment like and bookmark article', function () {
     $article = Article::factory()->create();
     $response = $this->actingAs($user)->get(route('articles.show', $article));
 
-    $this->actingAs($user)->post(route('post.comment',$article->id), [
+    $this->actingAs($user)->post(route('post.comment',$article), [
         'article_id' => $article->id,
         'user_id' => $user->id,
         'body' => 'hi there this is comment create by testing',

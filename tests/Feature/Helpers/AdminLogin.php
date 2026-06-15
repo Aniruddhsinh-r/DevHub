@@ -17,7 +17,6 @@ function adminLogin(array $permissions = ['user.manage','category.create','categ
     $admin = User::factory()->create([
         'email' => 'harshrajsinh@gmail.com',
         'password' => 'IAmHarsh',
-        'role' => 'admin'
     ]);
     $admin->assignRole('admin');
 

@@ -129,6 +129,5 @@ test('Admin cant update his profile', function () {
     $this->assertDatabaseHas('users', [
         'name' => $admin->name,
         'email' => $admin->email,
-        'role' => 'admin',
     ]);
 });

@@ -21,6 +21,5 @@ test('user registration test', function () {
     $this->assertDatabaseHas('users', [
         'name' => 'khabibji',
         'email' => $email,
-        'role' => 'author',
     ]);
 });

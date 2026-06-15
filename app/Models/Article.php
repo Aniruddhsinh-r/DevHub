@@ -66,7 +66,7 @@ class Article extends Model
     }
     public function isLikedByUser(): bool
     {
-        return $this->likes()->where('user_id', auth()->id)->exists();
+        return $this->likes()->where('user_id', auth()->id())->exists();
     }
     public function views() { return $this->hasMany(View::class); }
 }
