@@ -11,17 +11,17 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     public function store(Request $request) {
-        $article = Article::findOrFail($request->article_id);
-
-        if ($article->status !== 'published') {
-            return back()->with('error', 'You cant comment on draft articles.');
-        }
-
         $request->validate([
             'article_id' => ['required','exists:articles,id'],
             'parent_id' => ['nullable','exists:comments,id'],
             'body'=> ['required','string','max:5000'],
         ]);
+
+        $article = Article::findOrFail($request->article_id);
+
+        if ($article->status !== 'published') {
+            return back()->with('error', 'You cant comment on draft articles.');
+        }
 
         $data = ([
             'user_id' => Auth::id(),

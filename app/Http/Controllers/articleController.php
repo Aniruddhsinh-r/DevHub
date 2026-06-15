@@ -67,7 +67,7 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        $viewed = Auth::user()->views()->where('article_id', $article->id)->exists();
+        $viewed = Auth::check() && Auth::user()->views()->where('article_id', $article->id)->exists();
         $comments = $article->comments()->whereNull('parent_id')->with(['user', 'replies.user'])->get();
 
         if (Auth::check() && Auth::id() !== $article->user_id && !$viewed) {

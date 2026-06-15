@@ -21,7 +21,6 @@ return new class extends Migration
             $table->timestamp('last_seen_at')->nullable();
             $table->string('avatar')->nullable();
             $table->text('bio')->nullable();
-            $table->string('role')->default('user');
             $table->string('password');
             $table->softDeletes();
             $table->rememberToken();

@@ -29,7 +29,7 @@ class ProfileController extends Controller
     {
         $user = $profile;
 
-        if ($user->hasRole('admin') && !Auth::check() || !Auth::user()->hasRole('admin')) {
+        if ($user->hasRole('admin')) {
             return redirect()->back()->with('error', 'This author does not exist.');
         }
 
