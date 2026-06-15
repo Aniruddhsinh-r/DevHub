@@ -18,6 +18,10 @@ class ArticleController extends Controller
 {
     use AuthorizesRequests;
     public function index(Request $request) {
+        if (auth()->user()?->hasRole('admin')) {
+            abort(403);
+        }
+        
         $search = $request->search;
 
         $articles = Article::query()->where('status', 'published')
