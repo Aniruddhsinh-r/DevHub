@@ -9,7 +9,7 @@ uses(RefreshDatabase::class);
 
 function adminLogin(array $permissions = ['user.manage','category.create','category.delete'])
 {
-    $adminRole = Role::create(['name' => 'admin']);
+    $adminRole = Role::firstOrCreate(['name' => 'admin']);
     foreach ($permissions as $permissionName) {
         $permission = Permission::create(['name' => $permissionName]);
         $adminRole->givePermissionTo($permission);

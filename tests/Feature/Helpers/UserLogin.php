@@ -9,7 +9,7 @@ uses(RefreshDatabase::class);
 
 function userLogin(array $permissions = ['article.create','article.edit','article.delete','article.publish'])
 {
-    $authorRole = Role::create(['name' => 'author']);
+    $authorRole = Role::firstOrCreate(['name' => 'author']);
     foreach ($permissions as $permissionName) {
         $permission = Permission::create(['name' => $permissionName]);
         $authorRole->givePermissionTo($permission);
