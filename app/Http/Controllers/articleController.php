@@ -7,7 +7,6 @@ use App\Actions\UpdateArticle;
 use App\Http\Requests\ArticleValidationRequest;
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\Comment;
 use App\Models\User;
 use App\Models\View;
 use Illuminate\Http\Request;
@@ -21,7 +20,6 @@ class ArticleController extends Controller
         if (auth()->user()?->hasRole('admin')) {
             abort(403);
         }
-        
         $search = $request->search;
 
         $articles = Article::query()->where('status', 'published')
