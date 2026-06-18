@@ -1,4 +1,3 @@
-<x-layout>
     <section class="max-w-3xl mx-auto px-4 py-10">
         <div class="flex items-center justify-between gap-4 mb-8">
             <div>
@@ -85,4 +84,3 @@
             {{ $followings->links() }}
         </div>
     </section>
-</x-layout>

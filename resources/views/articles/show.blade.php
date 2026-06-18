@@ -1,3 +1,3 @@
 <x-layout>
-    @include('components.articleBody')
+    {{-- @include('components.articleBody') --}}
 </x-layout>

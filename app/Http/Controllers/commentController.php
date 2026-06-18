@@ -39,7 +39,6 @@ class CommentController extends Controller
                 $parent->user->notify(new CommentNotification($comment));
             }
         }
-
         else {
             if ($article->user_id !== Auth::id()) {
                 $article->user->notify(new CommentNotification($comment));

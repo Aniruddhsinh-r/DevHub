@@ -1,4 +1,47 @@
-<x-layout>
+<?php
+
+use Livewire\Component;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewFollowerNotification;
+
+new class extends Component
+{
+    public User $user;
+    public $articles;
+
+    public function mount(User $user) {
+        $this->user = $user;
+
+        if ($this->user->hasRole('admin')) {
+            return redirect()->back()->with('error', 'This author does not exist.');
+        }
+        if ($this->user->id === Auth::id()) {
+            return redirect()->route('profile.index');
+        }
+
+        $this->articles = $this->user->articles()->with(['category'])->latest()->get();
+    }
+
+    public function toggleFollow() {
+        if(Auth::id() !== $this->user->id) {
+            Auth::user()->following()->toggle($this->user);
+            $alreadyFollowing = Auth::user()->following()->where('followed_id', $this->user->id)->exists();
+
+            if ($alreadyFollowing) {
+                $this->user->notify(new NewFollowerNotification(Auth::user()));
+                $this->dispatch('live-notification', message: 'Follow successfully.');
+            } else {
+                $this->dispatch('live-notification', message: 'Unfollow successfully.');
+            }
+            return;
+        }
+        $this->dispatch('live-notification', message: 'You cant follow yourself.');
+    }
+};
+?>
+
+<div>
     <div class="min-h-screen px-4 py-10">
         <div class="max-w-6xl mx-auto space-y-6">
             <div class="bg-[#fcfcfb] border border-gray-200 rounded-[1.5rem] shadow-sm p-6">
@@ -56,7 +99,15 @@
                             </div>
                         </div>
                         @role('author')
-                            <livewire:livewirecomponent.profile.follow :user="$user" />
+                            {{-- <livewire:livewirecomponent.profile.follow :user="$user" /> --}}
+                            <form wire:submit.prevent="toggleFollow">
+                                @csrf
+                                @if (auth()->user()->following()->where('followed_id', $user->id)->exists())
+                                    <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Unfollow</button>
+                                @else
+                                    <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Follow</button>
+                                @endif
+                            </form>
                         @endrole
                     </div>
                 </div>
@@ -105,4 +156,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</div>

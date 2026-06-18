@@ -1,4 +1,20 @@
-<x-layout>
+<?php
+
+use Livewire\Component;
+use App\Models\Article;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+
+new class extends Component
+{
+    public $articles;
+    public function mount() {
+        $this->articles = Article::where('user_id',Auth::id())->latest()->get();
+    }
+};
+?>
+
+<div>
     <div class="min-h-screen bg-gray-50 py-12 px-4">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 border-b border-gray-200 pb-8">
@@ -66,4 +82,4 @@
             @endif
         </div>
     </div>
-</x-layout>
+</div>

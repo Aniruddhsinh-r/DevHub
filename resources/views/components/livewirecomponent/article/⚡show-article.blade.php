@@ -1,3 +1,63 @@
+<?php
+
+use Livewire\Component;
+use App\Models\Article;
+use App\Models\View;
+use App\Models\Like;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
+
+new class extends Component
+{
+    public Article $article;
+    public $viewed;
+    public $comments;
+
+    public function mount() {
+        $this->viewed = Auth::check() && Auth::user()->views()->where('article_id', $this->article->id)->exists();
+        $this->comments = $this->article->comments()->whereNull('parent_id')->with(['user', 'replies.user'])->get();
+
+        if (Auth::check() && Auth::id() !== $this->article->user_id && !$this->viewed) {
+            Article::where('id', $this->article->id)->increment('view_count');
+            View::create(['user_id' => Auth::id(), 'article_id' => $this->article->id]);
+        }
+        $this->article->refresh();
+        return;
+    }
+
+    public function toggleLike() {
+        if ($this->article->status !== 'published') {
+            $this->dispatch('live-notification', message: 'You cant like draft articles');
+        }
+
+        $like = $this->article->likes()->where('user_id', auth()->id())->first();
+
+        if ($like) {
+            $like->delete();
+            $this->dispatch('live-notification', message: 'article unlike');
+            return;
+        }
+
+        Like::create(['user_id' => auth()->id(),'article_id' => $this->article->id,]);
+        $this->dispatch('live-notification', message: 'article like');
+    }
+
+    public function toggleBookmark()
+    {
+        if ($this->article->status !== 'published') {
+            session()->flash('error', 'You cant bookmark draft articles.');
+            return;
+        }
+
+        Auth::user()->bookmarkedArticles()->toggle($this->article->id);
+
+        $message = $this->article->isBookmarkedByMe() ? 'article bookmark' : 'remove from bookmark';
+        $this->dispatch('live-notification', message: $message);
+    }
+};
+?>
+
+<div>
     <section class="bg-[#f5f7fb] pb-20">
         <div class="relative overflow-hidden bg-black">
             <div class="absolute inset-0 opacity-20">
@@ -18,8 +78,41 @@
                     </div>
                     @if ($article->status === 'published')
                     <div class="flex items-center gap-3">
-                        <livewire:livewirecomponent.like-button :article="$article" />
-                        <livewire:livewirecomponent.bookmark-button :article="$article" />
+                        <div>
+                            <button wire:click="toggleLike" type="submit" data-test="like-button"
+                                class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
+                                @if ($article->isLikedByUser())
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                        class="w-4 h-4 text-rose-500 scale-110 transition group-hover:scale-125">
+                                        <path
+                                            d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                                    </svg>
+                                @else
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                                        stroke="currentColor"
+                                        class="w-4 h-4 text-gray-400 group-hover:text-rose-400 transition group-hover:scale-110">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    </svg>
+                                @endif
+                                <span>{{ $article->likes->count() }} Like</span>
+                            </button>
+                        </div>
+                        <div>
+                            <button wire:click="toggleBookmark" data-test="bookmark-button" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-1.5 transition text-white text-sm font-bold group">
+                                @if($article->isBookmarkedByMe())
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 scale-110 transition group-hover:scale-125">
+                                        <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Saved</span>
+                                @else
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-amber-400 transition group-hover:scale-110">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                                    </svg>
+                                    <span>Bookmark</span>
+                                @endif
+                            </button>
+                        </div>
                     </div>
                     @endif
                 </div>
@@ -174,3 +267,4 @@
             </div>
         </div>
     </section>
+</div>

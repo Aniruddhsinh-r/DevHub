@@ -44,5 +44,6 @@
 
 <div class="grid grid-cols-1 mx-4 md:grid-cols-2 xl:grid-cols-3 gap-8 my-10">
     @include('components.articleLayout')
+    {{-- <x-article.show-article /> --}}
 </div>
 </x-layout>

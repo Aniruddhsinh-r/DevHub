@@ -1,4 +1,3 @@
-<x-layout>
     <div class="min-h-screen py-12 px-4 + sm:px-6">
         <div class="max-w-2xl mx-auto">
             <div class="mb-8 border-l-4 border-black pl-5">
@@ -7,7 +6,9 @@
             </div>
 
             <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="bg-[#c6caca] rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                <form method="POST" action="{{ $article->exists ? route('articles.update', $article) : route('articles.store') }}" class="p-8 md:p-10 space-y-6"
+                <form method="POST" wire:submit.prevent="{{ $article->exists ? 'update' : 'store' }}"
+                    {{-- action="{{ $article->exists ? route('articles.update', $article) : route('articles.store') }}" --}}
+                    class="p-8 md:p-10 space-y-6"
                     enctype="multipart/form-data"
                     >
                     @csrf
@@ -20,8 +21,8 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
                             <label for="category_id" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Collection</label>
-                            <select name="category_id" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
-                                <option disabled {{ old('category_id') ? '' : 'selected' }}>Select Category</option>
+                            <select name="category_id" wire:model.live="category_id" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
+                                <option disabled {{ old('category_id') ? '' : 'selected' }} value="null">Select Category</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ old('category_id', $article->category_id ?? '') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                 @endforeach
@@ -33,7 +34,7 @@
 
                         <div class="space-y-1.5">
                             <label for="status" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Visibility</label>
-                            <select x-model="status" name="status" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
+                            <select x-model="status" name="status" wire:model.live="status" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
                                 <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
                                 <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
                                 <option value="scheduled" {{ old('status') == 'scheduled' ? 'selected' : '' }}>scheduled</option>
@@ -44,12 +45,12 @@
                         <div x-data="{ hours: '{{ old('scheduled_hours') ?? null }}',minutes: '{{ old('scheduled_minutes') ?? null }}' }" class="flex items-end space-x-2">
                             <div class="w-20">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Hours</label>
-                                <input type="text" name="scheduled_hours" placeholder="HH" x-model="hours" @input="hours = hours.replace(/\D/g, '').slice(0, 2); if(parseInt(hours) > 48) hours = '48'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-500 outline-none">
+                                <input type="text" name="scheduled_hours" wire:model="scheduled_hours" placeholder="HH" x-model="hours" @input="hours = hours.replace(/\D/g, '').slice(0, 2); if(parseInt(hours) > 48) hours = '48'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-500 outline-none">
                             </div>
                             <span class="text-gray-400 font-bold pb-2">:</span>
                             <div class="w-20">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Mins</label>
-                                <input type="text" name="scheduled_minutes" placeholder="MM" x-model="minutes" @input="minutes = minutes.replace(/\D/g, '').slice(0, 2); if(parseInt(minutes) > 59) minutes = '59'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-500 outline-none">
+                                <input type="text" name="scheduled_minutes" wire:model="scheduled_minutes" placeholder="MM" x-model="minutes" @input="minutes = minutes.replace(/\D/g, '').slice(0, 2); if(parseInt(minutes) > 59) minutes = '59'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-500 outline-none">
                             </div>
                         </div>
                         @error('scheduled_minutes')
@@ -83,7 +84,7 @@
 
                         <div class="space-y-0.5">
                             <label for="cover_path" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Cover Picture</label>
-                            <input type="file" id="cover_path" name="cover_path" x-ref="fileInput" @change="fileChosen" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-black file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Choose cover page"/>
+                            <input type="file" wire:model="cover_path" id="cover_path" name="cover_path" x-ref="fileInput" @change="fileChosen" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-black file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Choose cover page"/>
                         </div>
                     </div>
 
@@ -105,4 +106,3 @@
             </div>
         </div>
     </div>
-</x-layout>
