@@ -15,7 +15,7 @@ new class extends Component
 
     public function render()
     {
-        return view('articles.article', [
+        return view('admin.articles.articles', [
             'articles' => Article::query()
                 ->where('status', 'published')
                 ->when($this->search, function ($query, $search) {

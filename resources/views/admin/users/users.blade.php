@@ -1,4 +1,4 @@
-<x-admin>
+
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -92,10 +92,8 @@
                                             View
                                         </a>
 
-                                        <form action="{{ route('admin.user.remove',$user) }}" method="post">
+                                        <form wire:submit.prevent="remove({{ $user->id }})">
                                             @csrf
-                                            @method('DELETE')
-
                                             <button class="inline-flex items-center justify-center h-8 px-4 rounded-xl bg-rose-50 hover:bg-red-600 text-xs font-bold text-red-600 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
                                                 Remove
                                             </button>
@@ -112,4 +110,3 @@
             </div>
         </div>
     </div>
-</x-admin>

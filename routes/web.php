@@ -10,6 +10,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\LoginUserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return redirect('/home');});
@@ -33,7 +34,12 @@ Route::middleware('auth')->group(function () {
     // Route::get('/articles/drafts', [ArticleController::class, 'draftArticle'])->name('drafts');
     Route::livewire('/articles/draft', 'livewirecomponent.article.drafts')->name('drafts');
     // Route::post('/logout', [LoginUserController::class, 'destroy'])->name('logout');
-    Route::livewire('/logout', 'livewirecomponent.auth.logout')->name('logout');
+    Route::post('/logout', function(){
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+
+        return redirect('home')->with('success', 'Logged out successfully.');})->name('logout');
 });
 
 Route::middleware(['auth','author'])->group(function () {
@@ -51,7 +57,7 @@ Route::middleware(['auth','author'])->group(function () {
     Route::livewire('/articles/destroy/{article}', 'livewirecomponent.article.delete-article')->name('articles.destroy');
     // Route::post('/article/{article}/like', [LikeController::class, 'like'])->name('articles.like');
     // Route::post('/article/{article}/bookmark', [BookmarkController::class, 'bookmark'])->name('articles.bookmark');
-    Route::get('/bookmarks', [BookmarkController::class, 'show'])->name('show.bookmarks');
+    // Route::get('/bookmarks', [BookmarkController::class, 'show'])->name('show.bookmarks');
     Route::livewire('/bookmarks', 'livewirecomponent.bookmark.bookmarks')->name('show.bookmarks');
     // Route::get('/profile/followers/{user}', [FollowerController::class, 'followers'])->name('followers');
     Route::livewire('/profile/followers/{user}', 'livewirecomponent.profile.followers')->name('followers');
@@ -62,23 +68,33 @@ Route::middleware(['auth','author'])->group(function () {
 });
 
 Route::middleware(['auth','admin'])->controller(AdminController::class)->group(function () {
-    Route::get('/admin/dashboard', 'index')->name('admin.dashboard');
-    Route::get('/admin/users', 'user')->name('admin.users');
-    Route::get('/admin/users/{user}', 'showUser')->name('admin.show.user');
-    Route::delete('/admin/user/remove/{user}', 'userRemove')->name('admin.user.remove');
-    Route::get('/admin/categories', 'show')->name('admin.categories');
-    Route::post('/admin/categories', 'create')->name('admin.category.post');
-    Route::get('/admin/articles', 'articles')->name('admin.articles');
-    Route::get('/admin/articles/{article}', 'showArticle')->name('admin.article.show');
-    Route::get('/admin/articles/{user}/published', 'userArticle')->name('admin.user.published');
-    Route::delete('/admin/categories/delete/{category}', 'destroy')->name('admin.category.delete');
+    // Route::get('/admin/dashboard', 'index')->name('admin.dashboard');
+    Route::livewire('/admin/dashboard', 'livewirecomponent.admin.dashboard')->name('admin.dashboard');
+    // Route::get('/admin/users', 'user')->name('admin.users');
+    Route::livewire('/admin/users', 'livewirecomponent.admin.users')->name('admin.users');
+    // Route::get('/admin/users/{user}', 'showUser')->name('admin.show.user');
+    Route::livewire('/admin/users/{user}', 'livewirecomponent.admin.users-profile')->name('admin.show.user');
+    // Route::delete('/admin/user/remove/{user}', 'userRemove')->name('admin.user.remove');
+    // Route::get('/admin/categories', 'show')->name('admin.categories');
+    // Route::post('/admin/categories', 'create')->name('admin.category.post');
+    Route::livewire('/admin/categories', 'livewirecomponent.admin.category-list')->name('admin.categories');
+    // Route::get('/admin/articles', 'articles')->name('admin.articles');
+    Route::livewire('/admin/articles', 'livewirecomponent.admin.article-list')->name('admin.articles');
+    // Route::get('/admin/articles/{article}', 'showArticle')->name('admin.article.show');
+    Route::livewire('/admin/articles/{article}', 'livewirecomponent.admin.show-article')->name('admin.article.show');
+    // Route::get('/admin/articles/{user}/published', 'userArticle')->name('admin.user.published');
+    Route::livewire('/admin/articles/{user}/published', 'livewirecomponent.admin.user-articles')->name('admin.user.published');
+    // Route::delete('/admin/categories/delete/{category}', 'destroy')->name('admin.category.delete');
 });
 
-Route::middleware('guest')->controller(ForgotPasswordController::class)->group(function () {
-    Route::get('/password/forgot', 'create')->name('password.forgot');
-    Route::post('/password/forgot', 'store')->name('password.forgot.post');
-    Route::get('/password/forgot/otp', 'OTPform')->name('password.forgot.otp');
-    Route::post('/password/forgot/otp', 'OTPverify')->name('password.forgot.otp.post')->middleware('throttle:otp');
-    Route::get('/password/reset/password', 'resetform')->name('password.reset');
-    Route::post('/password/reset/password', 'reset')->name('password.reset.post');
+Route::middleware('guest')->group(function () {
+    // Route::get('/password/forgot', 'create')->name('password.forgot');
+    // Route::post('/password/forgot', 'store')->name('password.forgot.post');
+    Route::livewire('/password/forgot', 'livewirecomponent.auth.password-forgot')->name('password.forgot');
+    // Route::get('/password/forgot/otp', 'OTPform')->name('password.forgot.otp');
+    // Route::post('/password/forgot/otp', 'OTPverify')->name('password.forgot.otp.post')->middleware('throttle:otp');
+    Route::livewire('/password/forgot/otp', 'livewirecomponent.auth.verify-otp')->name('password.forgot.otp');
+    // Route::get('/password/reset/password', 'resetform')->name('password.reset');
+    // Route::post('/password/reset/password', 'reset')->name('password.reset.post');
+    Route::livewire('/password/reset/password', 'livewirecomponent.auth.reset-password')->name('password.reset');
 });

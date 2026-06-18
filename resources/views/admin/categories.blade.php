@@ -1,4 +1,3 @@
-<x-admin>
     <div class="space-y-6 max-w-7xl mx-auto">
         <div>
             <h1 class="text-2xl font-black text-gray-900 tracking-tight">Category Management</h1>
@@ -11,7 +10,7 @@
                     <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full"></span>Create New Category
                 </h2>
 
-                <form action="{{ route('admin.categories') }}" method="POST" class="space-y-4" autocomplete="off">
+                <form wire:submit.prevent="create" class="space-y-4" autocomplete="off">
                     @csrf
                     <x-form.field name="name" type="text" label="Category Name" placeholder="e.g., Technology, Helth, Coding..."></x-form.field>
 
@@ -41,9 +40,8 @@
                                     <td class="px-5 py-3.5 text-sm font-bold text-gray-900">{{ $category->slug }}</td>
                                     <td class="px-5 py-3.5 text-xs text-gray-500 font-mono">{{ $category->articles_count }}</td>
                                     <td class="px-5 py-3.5 text-right">
-                                        <form action="{{ route('admin.category.delete',$category->id) }}" method="POST">
+                                        <form wire:submit.prevent="remove({{ $category->id }})">
                                             @csrf
-                                            @method('DELETE')
                                             <button dusk="delete-category-{{ $category->id }}" class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete</button>
                                         </form>
                                     </td>
@@ -58,4 +56,3 @@
             </div>
         </div>
     </div>
-</x-admin>
