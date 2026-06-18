@@ -9,7 +9,7 @@ new class extends Component
     public $likes = '';
     public Article $article;
     public function mount() {
-        $this->comments = $this->article->comments()->whereNull('parent_id')->with('replies')->get();
+        $this->comments = $this->article->comments()->whereNull('parent_id')->with('user', 'replies.user')->get();
         $this->likes = $this->article->likes()->get();
     }
 };

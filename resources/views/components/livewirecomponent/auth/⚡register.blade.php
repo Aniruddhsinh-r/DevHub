@@ -49,7 +49,6 @@ new class extends Component
         // Mail::to($to)->queue(new RegistrationMail($message));
 
         return redirect()->route('home')->with('success', 'Account created successfully.');
-        // return to_route('home')->withInput()->with('success','Account created successfully.');
     }
 };
 ?>
