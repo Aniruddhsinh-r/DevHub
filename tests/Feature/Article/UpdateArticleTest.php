@@ -2,6 +2,7 @@
 
 use App\Models\Article;
 use App\Models\User;
+use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../Helpers/userLogin.php';
 
@@ -13,15 +14,13 @@ test('user can update his article', function () {
         'user_id' => $user->id
     ]);
 
-    $updateResponse = $this->actingAs($user)->patch(route('articles.update', $article), [
-        'title' => 'first update testing article.',
-        'excerpt' => 'Create article using test, and perform update.',
-        'body' => $article->body,
-        'category_id' => $article->category_id,
-        'status' => $article->status,
-    ]);
-
-    $updateResponse->assertRedirect(route('publishedarticle'));
+    Livewire::test('livewirecomponent.article.edit-article',['article' => $article])
+        ->set('title','first update testing article.')
+        ->set('excerpt','Create article using test, and perform update.')
+        ->set('body','test body content att least 30 character long as i decide test body.')
+        ->set('status','published')
+        ->call('update')
+        ->assertRedirect(route('publishedarticle'));
 
     $this->assertDatabaseHas('articles', [
         'id' => $article->id,
@@ -34,7 +33,7 @@ test('user cannot update others article', function () {
     $user = userLogin();
     $article = Article::factory()->create();
 
-    $updateResponse = $this->actingAs($user)->patch(route('articles.update', $article), [
+    $updateResponse = $this->actingAs($user)->get(route('articles.edit', $article), [
         'title' => 'try to update unauthorized article.',
         'excerpt' => 'try to update unauthorized article using test, and perform update.',
         'body' => $article->body,

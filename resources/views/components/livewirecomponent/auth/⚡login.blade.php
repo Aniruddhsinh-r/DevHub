@@ -25,7 +25,6 @@ new class extends Component
 
         if (Auth::attempt($attempt, (bool) $this->remember)) {
             session()->regenerate();
-
             $admin = User::where('email', $this->email)->first()?->hasRole('admin');
 
             if ($admin) {
@@ -36,11 +35,9 @@ new class extends Component
                 $subject = "Welcome back!";
 
                 // Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
-                // return to_route('home')->with('success', 'You have logged in successfully.');
                 return redirect()->route('home')->with('success', 'You have logged in successfully.');
             }
         }
-        // return back()->withInput()->with('error','The provided credentials do not match our records.');
         $this->dispatch('live-notification', message: 'The provided credentials do not match our records.');
     }
 };

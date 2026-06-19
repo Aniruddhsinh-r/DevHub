@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__.'/../Helpers/userLogin.php';
 require_once __DIR__.'/../Helpers/adminLogin.php';
@@ -8,119 +8,102 @@ require_once __DIR__.'/../Helpers/adminLogin.php';
 uses(RefreshDatabase::class);
 
 test('check article validation test', function () {
-    $user = userLogin();
-
-    $response = $this->actingAs($user)->post(route('articles.store'), [
-        'title' => '',
-        'category_id' => '344',
-        'excerpt' => 'qerr',
-        'body' => '13333213313',
-        'status' => 'drafts',
-
-    ]);
-
-    $response->dump();
-
-    $response->assertSessionHasErrors('title');
-    $response->assertSessionHasErrors('category_id');
-    $response->assertSessionHasErrors('excerpt');
-    $response->assertSessionHasErrors('body');
-    $response->assertSessionHasErrors('status');
+    userLogin();
+    Livewire::test('livewirecomponent.article.create-article')
+        ->set('title','')
+        ->set('category_id','344')
+        ->set('excerpt','article created by kishan that gonna delete for purpose. wetw rtt wtwtwrgr  wrgg g rt t ret r t rt er ter e d gd g g')
+        ->set('body','')
+        ->set('status','drafts')
+        ->call('store')
+        ->assertHasErrors(['title' => 'required'])
+        ->assertHasErrors(['category_id' => 'exists:categories,id'])
+        ->assertHasErrors(['excerpt' => 'max'])
+        ->assertHasErrors(['body' => 'required'])
+        ->assertHasErrors(['status' => 'in']);
 });
 
 test('check register validation test', function () {
-    $response = $this->post(route('register.create'), [
-        'name' => 'Visu',
-        'email' => 'vishugmail.com',
-        'password' => '12',
-        'bio' => 34
-    ]);
-
-    $response->dump();
-
-    $response->assertSessionHasErrors('name');
-    $response->assertSessionHasErrors('email');
-    $response->assertSessionHasErrors('password');
-    $response->assertSessionHasErrors('bio');
+    Livewire::test('livewirecomponent.auth.register')
+        ->set('name','Visu')
+        ->set('email','vishagmail.com')
+        ->set('password','12')
+        ->set('bio',34)
+        ->call('register')
+        ->assertHasErrors(['name' => 'min'])
+        ->assertHasErrors(['email' => 'email'])
+        ->assertHasErrors(['password' => 'min'])
+        ->assertHasErrors(['bio' => 'string']);
 });
 
 test('check login validation test', function () {
-    $response = $this->post(route('login'), [
-        'email' => 'adaniruddhagmail.com',
-        'password' => '12',
-    ]);
-
-    $response->assertSessionHasErrors('email');
-    $response->assertSessionHasErrors('password');
+    Livewire::test('livewirecomponent.auth.login')
+        ->set('email','adaniruddhagmail.com')
+        ->set('password','12')
+        ->call('login')
+        ->assertHasErrors(['email' => 'email'])
+        ->assertHasErrors(['password' => 'min']);
 });
 
 test('check credentials validation test', function () {
-    $response = $this->post(route('login'), [
-        'email' => 'adaniruddha@gmail.com',
-        'password' => 'rathod1290',
-    ]);
-
-    $response->assertRedirect();
-    $response->assertSessionHas('error', 'The provided credentials do not match our records.');
+    Livewire::test('livewirecomponent.auth.login')
+    ->set('email','adaniruddha@gmail.com')
+    ->set('password','rathod1290')
+    ->call('login')
+    ->assertDispatched('live-notification', message: 'The provided credentials do not match our records.');
 });
 
 test('check schedule article validation test require minutes', function () {
-    $user = userLogin();
+    userLogin();
 
-    $response = $this->actingAs($user)->post(route('articles.store'), [
-        'title' => 'expose your self',
-        'category_id' => '3',
-        'excerpt' => 'article for know who are you.',
-        'body' => 'hi there good that i attract you anyway lets talk that how to know ourself...',
-        'status' => 'scheduled',
-        'scheduled_minutes' => ''
-    ]);
-
-    $response->dump();
-
-    $response->assertSessionHasErrors('scheduled_minutes');
+    Livewire::test('livewirecomponent.article.create-article')
+        ->set('title','expose your self')
+        ->set('category_id','3')
+        ->set('excerpt','article for know who are you.')
+        ->set('body','hi there good that i attract you anyway lets talk that how to know ourself...')
+        ->set('status','scheduled')
+        ->set('scheduled_minutes',0)
+        ->call('store')
+        ->assertHasErrors(['scheduled_minutes' => 'min']);
 });
 
 test('check profile update validation test', function () {
     $user = userLogin();
 
-    $response = $this->actingAs($user)->put(route('profile.update',$user), [
-        'name' => '',
-        'bio' => '344',
-        'email' => 'qerr',
-        'password' => '13333213313',
-        'password_confirmation' => 'drafts',
+    $test = Livewire::test('livewirecomponent.profile.edit-profile')
+        ->set('name', '')
+        ->set('bio',  342432)
+        ->set('password', '13333213313')
+        ->set('password_confirmation', 'drafts')
+        ->call('update');
+
+    $test->assertHasErrors([
+        'name' => 'required',
+        'bio' => 'string',
+        'password' => 'confirmed'
     ]);
-
-    $response->dump();
-
-    $response->assertSessionHasErrors('name');
-    $response->assertSessionHasErrors('email');
-    $response->assertSessionHasErrors('password');
 });
 
 test('Author cant see admin profile', function () {
-    $user = userLogin();
     $admin = adminLogin();
+    userLogin();
 
-    $response = $this->actingAs($user)->get(route('profile.show',$admin));
+    $response = Livewire::test('livewirecomponent.profile.profile',['user' => $admin]);
     $response->assertStatus(302);
-
-    $response->assertSessionHas('error', 'This author does not exist.');
+    $response->assertRedirect('/home');
+    $response->assertSessionHas('error','This author does not exist.');
 });
 
 test('User cant see those auther who dose not exist in db', function () {
-    $user = userLogin();
-    $admin = 189;
+    userLogin();
 
-    $response = $this->actingAs($user)->get(route('profile.show',$admin));
-    $response->assertStatus(404);
+    $this->get('/profile/4343223')->assertStatus(404);
 });
 
 test('Admin cant update his profile', function () {
     $admin = adminLogin();
 
-    $response = $this->actingAs($admin)->put(route('profile.update',$admin),[
+    $response = $this->actingAs($admin)->get(route('profile.edit'),[
         'name' => 'Admin Name change',
         'email' => 'admin@example.com',
     ]);

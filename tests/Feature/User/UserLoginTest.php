@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__.'/../Helpers/userLogin.php';
 require_once __DIR__ . '/../Helpers/userLogin.php';
@@ -10,7 +9,7 @@ uses(RefreshDatabase::class);
 test('User Login and logout test', function () {
     userLogin();
 
-    $this->post(route('login.store'), [
+    $this->post(route('login'), [
         'email' => 'adanirudda@gmail.com',
         'password' => 'rathod1290'
     ]);
@@ -42,11 +41,12 @@ test('Logged in user cannot visit register form', function () {
 test('Login user cant login again', function () {
     $user = userLogin();
 
-    $response = $this->actingAs($user)->post(route('login.store'), [
+    $response = $this->actingAs($user)->get(route('login'), [
         'email' => 'adanirudda@gmail.com',
         'password' => '1290'
     ]);
 
     $response->assertRedirect(route('home'));
+
     $this->assertAuthenticatedAs($user);
 });

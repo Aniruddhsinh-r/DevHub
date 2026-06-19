@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../Helpers/userLogin.php';
 require_once __DIR__ . '/../Helpers/adminLogin.php';
@@ -11,20 +12,18 @@ test('user can follow but not twice and also unfollow', function () {
     $user = userLogin();
     $followed = User::factory()->create();
 
-    $this->actingAs($user)->post(route('user.follow', $followed), [
-        'follower_id' => $user->id,
-        'followed_id' => $followed->id,
-    ]);
+    Livewire::test('livewirecomponent.profile.profile',['user' => $followed])
+        ->call('toggleFollow')
+        ->assertDispatched('live-notification', message: 'Follow successfully.');
 
     $this->assertDatabaseHas('follows', [
         'follower_id' => $user->id,
         'followed_id' => $followed->id,
     ]);
 
-    $this->actingAs($user)->post(route('user.follow', $followed), [
-        'follower_id' => $user->id,
-        'followed_id' => $followed->id,
-    ]);
+    Livewire::test('livewirecomponent.profile.profile',['user' => $followed])
+        ->call('toggleFollow')
+        ->assertDispatched('live-notification', message: 'Unfollow successfully.');
 
     $this->assertDatabaseMissing('follows', [
         'follower_id' => $user->id,
@@ -32,16 +31,26 @@ test('user can follow but not twice and also unfollow', function () {
     ]);
 });
 
-test('admin cant follow other author', function () {
+test('admin cant access follow function page', function () {
     $user = userLogin();
     $admin = adminLogin();
 
-    $response = $this->actingAs($admin)->post(route('user.follow', $admin), [
-        'follower_id' => $user->id,
-        'followed_id' => $admin->id,
-    ]);
+    $this->get(route('profile.show', $user))
+        ->assertStatus(403);
 
-    $response->assertStatus(403);
+    $this->assertDatabaseMissing('follows', [
+        'follower_id' => $admin->id,
+    ]);
+});
+
+test('admin cant follow Authors', function () {
+    $user = userLogin();
+    $admin = adminLogin();
+
+    Livewire::test('livewirecomponent.profile.profile',['user' => $user])
+    ->call('toggleFollow')
+    ->assertRedirect(route('/'))
+    ->assertSessionHas('error', 'Only Author can Follow others.');
 
     $this->assertDatabaseMissing('follows', [
         'follower_id' => $admin->id,
@@ -49,13 +58,12 @@ test('admin cant follow other author', function () {
 });
 
 test('Guest cant follow users', function () {
-    $user = userLogin();
+    $user = User::factory()->create();
 
-    $response = $this->post(route('user.follow',$user), [
-        'follower_id' => $user->id,
-    ]);
-
-    $response->assertStatus(302);
+    Livewire::test('livewirecomponent.profile.profile',['user' => $user])
+    ->call('toggleFollow')
+    ->assertRedirect(route('/'))
+    ->assertSessionHas('error', 'Only Author can Follow others.');
 
     $this->assertDatabaseMissing('follows', [
         'follower_id' => $user->id,

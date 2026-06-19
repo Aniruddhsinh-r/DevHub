@@ -30,7 +30,8 @@ test('functionality check in articles.',function () {
         ->press('@like-button')
         ->press('@bookmark-button')
         ->fill('body','Hi there this is my first comment.')
-        ->press('@PostComment')
+        ->press('Comment')
+        ->assertSee('Comment successfully posted.')
         ;
 
         $this->assertDatabaseHas('likes',['article_id'=>$article->id , 'user_id'=>auth()->id()]);

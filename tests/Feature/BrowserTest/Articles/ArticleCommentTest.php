@@ -12,7 +12,8 @@ test('Author comment on article', function () {
     $article = Article::factory()->create();
     visit(route('articles.show', $article))
     ->fill('body',"hello this comment created by browser comment testing.")
-    ->press('@PostComment');
+    ->press('Comment')
+    ->assertSee('Comment successfully posted.');
 
     $this->assertDatabaseHas('comments', [
         'user_id' => auth()->id(),

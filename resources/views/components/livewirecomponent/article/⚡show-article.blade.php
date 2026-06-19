@@ -26,12 +26,16 @@ new class extends Component
     }
 
     public function toggleLike() {
+        if (!auth()->user()?->hasRole('author')) {
+            return redirect()->route('/')->with('error', 'Only Author can Like article.');
+        }
+
         if ($this->article->status !== 'published') {
-            $this->dispatch('live-notification', message: 'You cant like draft articles');
+            $this->dispatch('live-notification', message: 'You cant like draft articles.');
+            return;
         }
 
         $like = $this->article->likes()->where('user_id', auth()->id())->first();
-
         if ($like) {
             $like->delete();
             $this->dispatch('live-notification', message: 'article unlike');
@@ -44,8 +48,12 @@ new class extends Component
 
     public function toggleBookmark()
     {
+        if (!auth()->user()?->hasRole('author')) {
+            return redirect()->route('/')->with('error', 'Only Author can bookmark article.');
+        }
+
         if ($this->article->status !== 'published') {
-            session()->flash('error', 'You cant bookmark draft articles.');
+            $this->dispatch('live-notification', message: 'You cant bookmark draft articles');
             return;
         }
 

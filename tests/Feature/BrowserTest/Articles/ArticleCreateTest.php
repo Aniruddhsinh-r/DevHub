@@ -71,5 +71,3 @@ test('article delete', function () {
         'id' => $article->id,
     ]);
 });
-
-

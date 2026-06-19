@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__.'/../../Helpers/adminLogin.php';
+require_once __DIR__.'/../../Helpers/userLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -30,4 +32,17 @@ test('delete category', function () {
     $this->assertDatabaseMissing('categories', [
         'name' => 'Verdie Littel III',
     ]);
+});
+
+test('guest cant access admin article page', function () {
+    visit('/admin/categories')
+    ->assertRoute('login');
+});
+
+test('Author cant access admin article page', function () {
+    userLogin();
+
+    visit('/admin/categories')
+    ->assertSee('403')
+    ->assertSee('Forbidden');
 });

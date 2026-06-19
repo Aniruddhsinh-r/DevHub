@@ -16,6 +16,10 @@ new class extends Component {
             'body' => ['required', 'string', 'max:5000'],
         ]);
 
+        if (!auth()->user()?->hasRole('author')) {
+            return redirect()->route('/')->with('error', 'Only Author can bookmark article.');
+        }
+
         if ($this->article->status !== 'published') {
             $this->dispatch('live-notification', message: 'Comments are only allowed on published articles.');
             return;
@@ -40,6 +44,10 @@ new class extends Component {
         $this->validate([
             'replybody' => ['required', 'string', 'max:5000'],
         ]);
+
+        if (!auth()->user()?->hasRole('author')) {
+            return redirect()->route('/')->with('error', 'Only Author can bookmark article.');
+        }
 
         $comment = Comment::create([
             'user_id' => Auth::id(),
@@ -83,7 +91,7 @@ new class extends Component {
         <div class="flex-1">
             <form wire:submit.prevent="postComment">
                 <div class="w-full">
-                    <textarea wire:model="body" placeholder="Start your story..." class="w-full border border-gray-200 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-black"></textarea>
+                    <textarea wire:model="body" name="body" placeholder="Start your story..." class="w-full border border-gray-200 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-black"></textarea>
                 </div>
                 @error('body') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
 

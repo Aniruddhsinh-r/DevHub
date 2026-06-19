@@ -13,7 +13,7 @@ use App\Http\Controllers\LoginUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {return redirect('/home');});
+Route::get('/', function () {return redirect('/home');})->name('/');
 Route::livewire('/home', 'livewirecomponent.home.home-page')->name('home');
 Route::livewire('/articles', 'livewirecomponent.article.article-card')->name('articles.index');
 

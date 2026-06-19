@@ -2,14 +2,20 @@
 
 use App\Models\User;
 use App\Models\Article;
+use Livewire\Livewire;
 use App\Models\Comment;
 use App\Models\Like;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 
 require_once __DIR__ . '/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    Role::firstOrCreate(['name' => 'author', 'guard_name' => 'web']);
+    Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+});
 test('Admin User find test', function () {
     $admin = AdminLogin();
 
@@ -22,13 +28,11 @@ test('Admin User find test', function () {
     ]));
 
     $response->assertStatus(200);
-
     $response->assertSee('ishigory');
 });
 
 test('Admin User delete test', function () {
-    $this->withoutExceptionHandling();
-    $admin = AdminLogin();
+    AdminLogin();
 
     $removeuser = User::factory()->create();
     $article = Article::factory()->create(['user_id' => $removeuser->id,]);
@@ -38,7 +42,8 @@ test('Admin User delete test', function () {
     Comment::factory()->create(['user_id' => $removeuser->id, 'article_id'=> $article->id]);
     Like::factory()->create(['user_id' => $removeuser->id]);
 
-    $this->actingAs($admin)->delete(route('admin.user.remove',$removeuser));
+    Livewire::test('livewirecomponent.admin.users')
+    ->call('remove', $removeuser->id);
 
     $this->assertSoftDeleted('users',['id' => $removeuser->id]);
     $this->assertSoftDeleted('articles',['user_id' => $removeuser->id]);

@@ -1,6 +1,9 @@
 <?php
-
+use App\Livewire\Livewirecomponent\Auth\Register;
 use Spatie\Permission\Models\Role;
+use Livewire\Livewire;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     Role::firstOrCreate([
@@ -8,15 +11,21 @@ beforeEach(function () {
         'guard_name' => 'web'
     ]);
 });
-test('user registration test', function () {
-    $email = 'khabib'.time().'@gmail.com';
-    $response = $this->post(route('register.store'), [
-        'name' => 'khabibji',
-        'email' => $email,
-        'password' => 'khabibji',
-    ]);
 
-    $response->assertRedirect(route('home'));
+test('user registration test', function () {
+    Storage::fake('public');
+    $file = UploadedFile::fake()->image('avatar.jpg');
+    $email = 'khabib'.time().'@gmail.com';
+
+    Livewire::test('livewirecomponent.auth.register')
+        ->set('name', 'khabibji')
+        ->set('email', $email)
+        ->set('password', 'password123')
+        ->set('bio', 'Hello, this is my bio.')
+        ->set('avatar', $file)
+        ->call('register')
+        ->assertHasNoErrors()
+        ->assertRedirect(route('home'));
 
     $this->assertDatabaseHas('users', [
         'name' => 'khabibji',

@@ -13,7 +13,8 @@ test('User can like article', function () {
     $article = Article::factory()->create();
 
     visit(route('articles.show', $article))
-    ->press('@like-button');
+    ->click('@like-button')
+    ->assertSee('article like');
 
     $this->assertDatabaseHas('likes', [
         'user_id' => $user->id,
@@ -27,9 +28,12 @@ test('User can unlike article', function () {
     $article = Article::factory()->create();
 
     visit(route('articles.show', $article))
-    ->press('@like-button');
+    ->press('@like-button')
+    ->assertSee('article like');
+
     visit(route('articles.show', $article))
-    ->press('@like-button');
+    ->press('@like-button')
+    ->assertSee('article unlike');
 
     $this->assertDatabaseMissing('likes', [
         'user_id' => $user->id,
@@ -37,15 +41,15 @@ test('User can unlike article', function () {
     ]);
 });
 
-test('admin cant like articles', function () {
-    $user = adminLogin();
+test('admin cant access article like page', function () {
+    $admin = adminLogin();
 
     $article = Article::factory()->create();
 
-    visit(route('articles.like',$article));
+    visit(route('articles.show',$article));
 
     $this->assertDatabaseMissing('likes', [
-        'user_id' => $user->id,
+        'user_id' => $admin->id,
         'article_id' => $article->id,
     ]);
 });

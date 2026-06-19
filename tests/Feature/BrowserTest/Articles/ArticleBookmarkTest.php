@@ -13,7 +13,8 @@ test('User can bookmark article', function () {
     $article = Article::factory()->create();
 
     visit(route('articles.show', $article))
-    ->press('@bookmark-button');
+    ->click('@bookmark-button')
+    ->assertSee('article bookmark');
 
     $this->assertDatabaseHas('bookmarks', [
         'user_id' => auth()->id(),
@@ -27,9 +28,11 @@ test('User can remove articles from bookmark', function () {
     $article = Article::factory()->create();
 
     visit(route('articles.show', $article))
-    ->press('@bookmark-button');
+    ->click('@bookmark-button')
+    ->assertSee('article bookmark');
     visit(route('articles.show', $article))
-    ->press('@bookmark-button');
+    ->press('@bookmark-button')
+    ->assertSee('remove from bookmark');
 
     $this->assertDatabaseMissing('bookmarks', [
         'user_id' => auth()->id(),
@@ -37,12 +40,12 @@ test('User can remove articles from bookmark', function () {
     ]);
 });
 
-test('admin cant bookmark articles', function () {
+test('admin cant visite bookmark articles page', function () {
     adminLogin();
 
     $article = Article::factory()->create();
 
-    visit(route('articles.bookmark',$article));
+    visit(route('articles.show', $article));
 
     $this->assertDatabaseMissing('bookmarks', [
         'user_id' => auth()->id(),

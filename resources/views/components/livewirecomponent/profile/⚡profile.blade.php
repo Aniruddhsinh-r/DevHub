@@ -12,10 +12,12 @@ new class extends Component
 
     public function mount(User $user) {
         $this->user = $user;
+        $this->articles = collect();
 
         if ($this->user->hasRole('admin')) {
-            return redirect()->back()->with('error', 'This author does not exist.');
+            return redirect()->route('home')->with('error', 'This author does not exist.');
         }
+
         if ($this->user->id === Auth::id()) {
             return redirect()->route('profile.index');
         }
@@ -24,6 +26,10 @@ new class extends Component
     }
 
     public function toggleFollow() {
+        if (!auth()->user()?->hasRole('author')) {
+            return redirect()->route('/')->with('error', 'Only Author can Follow others.');
+        }
+
         if(Auth::id() !== $this->user->id) {
             Auth::user()->following()->toggle($this->user);
             $alreadyFollowing = Auth::user()->following()->where('followed_id', $this->user->id)->exists();

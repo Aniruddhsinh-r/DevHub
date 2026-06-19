@@ -5,13 +5,14 @@ use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    Role::firstOrCreate([
+        'name' => 'author',
+        'guard_name' => 'web'
+    ]);
+});
+
 test('Register a user.', function () {
-    beforeEach(function () {
-        Role::firstOrCreate([
-            'name' => 'author',
-            'guard_name' => 'web'
-        ]);
-    });
     $email = 'roman'.time().'@gmail.com';
 
     visit(route('register.create'))
