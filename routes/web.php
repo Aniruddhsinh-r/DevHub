@@ -1,15 +1,5 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\BookmarkController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\FollowerController;
-use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\LikeController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegisteredUserController;
-use App\Http\Controllers\LoginUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 

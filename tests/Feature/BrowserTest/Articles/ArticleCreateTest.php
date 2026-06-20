@@ -4,7 +4,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../../Helpers/UserLogin.php';
+require_once __DIR__ . '/../../Helpers/userLogin.php';
 
 uses(RefreshDatabase::class);
 

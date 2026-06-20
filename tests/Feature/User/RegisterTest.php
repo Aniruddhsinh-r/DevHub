@@ -1,5 +1,5 @@
 <?php
-use App\Livewire\Livewirecomponent\Auth\Register;
+
 use Spatie\Permission\Models\Role;
 use Livewire\Livewire;
 use Illuminate\Http\UploadedFile;

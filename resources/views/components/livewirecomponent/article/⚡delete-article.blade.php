@@ -13,7 +13,7 @@ new class extends Component
         Gate::authorize('delete', $this->article);
 
         if ($this->article->cover_path) {
-            Storage::disk('public')->delete($article->cover_path);
+            Storage::disk('public')->delete($this->article->cover_path);
         }
         $this->article->likes()->delete();
         $this->article->comments()->delete();

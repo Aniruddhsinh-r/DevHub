@@ -5,7 +5,7 @@ use Livewire\Livewire;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 require_once __DIR__.'/../Helpers/userLogin.php';
-require_once __DIR__ . '/../Helpers/AdminLogin.php';
+require_once __DIR__ . '/../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 
