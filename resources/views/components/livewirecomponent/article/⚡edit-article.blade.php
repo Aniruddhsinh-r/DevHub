@@ -91,7 +91,8 @@ new class extends Component
             $this->article->update($data);
         });
 
-        return redirect()->route('publishedarticle')->with('success', 'Article updated successfully.');
+        session()->flash('success', 'Article updated successfully.');
+        return redirect()->route('publishedarticle');
     }
 };
 ?>

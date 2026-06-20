@@ -21,7 +21,7 @@ new class extends Component
         Auth::guard('web')->logout();
         session()->invalidate();
         session()->regenerateToken();
-
+        session()->flash('success', 'Successfully logged out.');
         return redirect('/');
     }
 };

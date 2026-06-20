@@ -27,7 +27,8 @@ new class extends Component
 
     public function toggleLike() {
         if (!auth()->user()?->hasRole('author')) {
-            return redirect()->route('/')->with('error', 'Only Author can Like article.');
+            session()->flash('error', 'Only Author can Like article.');
+            return redirect()->route('/');
         }
 
         if ($this->article->status !== 'published') {
@@ -49,7 +50,8 @@ new class extends Component
     public function toggleBookmark()
     {
         if (!auth()->user()?->hasRole('author')) {
-            return redirect()->route('/')->with('error', 'Only Author can bookmark article.');
+            session()->flash('error', 'Only Author can bookmark article.');
+            return redirect()->route('/');
         }
 
         if ($this->article->status !== 'published') {

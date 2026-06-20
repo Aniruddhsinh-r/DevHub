@@ -28,14 +28,16 @@ new class extends Component
             $admin = User::where('email', $this->email)->first()?->hasRole('admin');
 
             if ($admin) {
-                return to_route('admin.dashboard')->with('success', 'Welcome back, admin!');
+                session()->flash('success', 'Welcome back, admin!');
+                return to_route('admin.dashboard');
             } else {
                 $to = $this->email;
                 $message = User::where('email',$this->email)->value('name');
                 $subject = "Welcome back!";
 
                 // Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
-                return redirect()->route('home')->with('success', 'You have logged in successfully.');
+                session()->flash('success', 'You have logged in successfully.');
+                return redirect()->route('home');
             }
         }
         $this->dispatch('live-notification', message: 'The provided credentials do not match our records.');

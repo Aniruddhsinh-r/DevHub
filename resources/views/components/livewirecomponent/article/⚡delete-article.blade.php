@@ -21,7 +21,8 @@ new class extends Component
         View::where('article_id', $this->article->id)->delete();
         $this->article->delete();
 
-        return redirect()->route('publishedarticle')->with('success', 'Article deleted successfully.');
+        session()->flash('success', 'Article deleted successfully.');
+        return redirect()->route('publishedarticle');
     }
 };
 ?>

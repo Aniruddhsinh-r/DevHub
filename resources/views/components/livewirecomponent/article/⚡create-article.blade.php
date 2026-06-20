@@ -76,7 +76,8 @@ new class extends Component
         DB::transaction(function () use ($data) {
             auth()->user()->articles()->create($data);
         });
-        return redirect()->route('articles.index')->with('success', 'Article created successfully.');
+        session()->flash('success', 'Article created successfully.');
+        return redirect()->route('articles.index');
     }
 };
 ?>

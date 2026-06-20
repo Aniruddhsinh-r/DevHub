@@ -58,7 +58,8 @@ new class extends Component
         }
 
         if ($user->update($data)) {
-            return to_route('profile.index')->with('success','your profile is successfully updated.');
+            session()->flash('success','your profile is successfully updated.');
+            return to_route('profile.index');
         }
         // return back()->with('error',"fail to update profile.");
         $this->dispatch('live-notification', message: 'fail to update profile.');

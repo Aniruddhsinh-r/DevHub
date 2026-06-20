@@ -26,7 +26,7 @@ new class extends Component
         $slug = Str::slug($this->name, '-');
 
         if (Category::where('slug', $slug)->exists()) {
-            return back()->withErrors(['name' => 'This category name generates a duplicate entry.'])->withInput();
+            $this->validate();
         }
 
         Category::create([

@@ -10,7 +10,6 @@ new class extends Component
     public function mount() {
         $user = Auth::user();
         $this->articles = $user->articles()->where('status', 'draft')->latest()->get();
-        // Article::with(['user', 'category'])->where(['user_id' => $user,'status' => 'draft'])->latest()->get();
     }
 };
 ?>

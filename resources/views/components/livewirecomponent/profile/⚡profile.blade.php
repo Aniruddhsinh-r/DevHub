@@ -15,7 +15,8 @@ new class extends Component
         $this->articles = collect();
 
         if ($this->user->hasRole('admin')) {
-            return redirect()->route('home')->with('error', 'This author does not exist.');
+            session()->flash('error', 'This author does not exist.');
+            return redirect()->route('home');
         }
 
         if ($this->user->id === Auth::id()) {
@@ -27,7 +28,8 @@ new class extends Component
 
     public function toggleFollow() {
         if (!auth()->user()?->hasRole('author')) {
-            return redirect()->route('/')->with('error', 'Only Author can Follow others.');
+            session()->flash('error', 'Only Author can Follow others.');
+            return redirect()->route('/');
         }
 
         if(Auth::id() !== $this->user->id) {

@@ -17,7 +17,8 @@ new class extends Component {
         ]);
 
         if (!auth()->user()?->hasRole('author')) {
-            return redirect()->route('/')->with('error', 'Only Author can bookmark article.');
+            session()->flash('error', 'Only Author can bookmark article.');
+            return redirect()->route('/');
         }
 
         if ($this->article->status !== 'published') {
@@ -46,7 +47,8 @@ new class extends Component {
         ]);
 
         if (!auth()->user()?->hasRole('author')) {
-            return redirect()->route('/')->with('error', 'Only Author can bookmark article.');
+            session()->flash('error', 'Only Author can bookmark article.');
+            return redirect()->route('/');
         }
 
         $comment = Comment::create([
@@ -61,7 +63,7 @@ new class extends Component {
             $parent->user->notify(new CommentNotification($comment));
         }
 
-        $this->replybody = ''; // FIXED: Clears out the shared body text field after dynamic submission
+        $this->replybody = '';
 
         $this->dispatch('live-notification', message: 'Reply successfully posted.');
     }
