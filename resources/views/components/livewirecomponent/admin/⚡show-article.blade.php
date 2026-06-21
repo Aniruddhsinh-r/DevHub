@@ -1,9 +1,10 @@
 <?php
 
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\Article;
 
-new class extends Component
+new #[Layout('layouts::dashboard')] class extends Component
 {
     public $comments = '';
     public $likes = '';

@@ -1,11 +1,12 @@
 <?php
 
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 
-new class extends Component
+new #[Layout('layouts::dashboard')] class extends Component
 {
     use WithPagination;
 

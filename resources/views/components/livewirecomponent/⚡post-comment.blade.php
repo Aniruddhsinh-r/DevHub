@@ -99,7 +99,8 @@ new class extends Component {
 
                 <div class="flex justify-end mt-3">
                     <button type="submit" class="bg-black hover:bg-gray-900 text-white px-6 py-3 rounded-xl text-sm font-black transition">
-                        Comment
+                        <span wire:loading wire:target="register">commenting...</span>
+                        <span wire:loading.remove wire:target="register">Comment</span>
                     </button>
                 </div>
             </form>

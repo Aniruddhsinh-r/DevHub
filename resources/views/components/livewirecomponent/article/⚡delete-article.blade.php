@@ -4,12 +4,14 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Models\View;
 use Illuminate\Support\Facades\Gate;
+use Livewire\Attributes\Computed;
 
 new class extends Component
 {
+    #[Computed]
     public Article $article;
 
-    public function mount() {
+    protected function mount() {
         Gate::authorize('delete', $this->article);
 
         if ($this->article->cover_path) {

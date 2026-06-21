@@ -3,9 +3,11 @@
 use Livewire\Component;
 use App\Models\Article;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
 
-new class extends Component
+new #[Layout('layouts::dashboard')] class extends Component
 {
+
     use WithPagination;
     public $search = '';
 

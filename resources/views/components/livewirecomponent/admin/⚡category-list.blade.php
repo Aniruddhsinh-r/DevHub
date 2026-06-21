@@ -3,9 +3,10 @@
 use Livewire\Component;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 
-new class extends Component
+new #[Layout('layouts::dashboard')] class extends Component
 {
     use WithPagination;
     public $name = '';
