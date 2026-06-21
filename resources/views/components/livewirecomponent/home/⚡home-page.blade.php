@@ -1,7 +1,6 @@
 <?php
 
 use Livewire\Component;
-use Livewire\Attributes\Layout;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 

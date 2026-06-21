@@ -4,7 +4,6 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Models\View;
 use App\Models\Like;
-use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component

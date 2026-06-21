@@ -3,11 +3,8 @@
 use Livewire\Component;
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\User;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
-use Livewire\Attributes\Layout;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +28,7 @@ new class extends Component
         $this->status = $article->status;
         $this->scheduled_hours = $article->scheduled_hours;
         $this->scheduled_minutes = $article->scheduled_minutes;
-        $this->categories = Category::all();
+        $this->categories = Category::select('id','name')->orderBy('name')->get();
     }
 
     public $title;
@@ -53,7 +50,7 @@ new class extends Component
             'category_id' => 'required|exists:categories,id',
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
             'scheduled_hours' => 'nullable|integer|min:1|max:48',
-            'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
+            'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:0|max:59',
             'cover_path' => 'nullable|dimensions:max_width=1000,max_height=1000|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -77,10 +74,10 @@ new class extends Component
         }
 
         if ($this->cover_path) {
+            $data['cover_path'] = $values['cover_path']->store('articleCovers', 'public');
             if ($article->cover_path) {
                 Storage::disk('public')->delete($article->cover_path);
             }
-            $data['cover_path'] = $values['cover_path']->store('articleCovers', 'public');
         }
 
         if ($values['status'] === 'scheduled' && !empty($values['scheduled_minutes'])) {

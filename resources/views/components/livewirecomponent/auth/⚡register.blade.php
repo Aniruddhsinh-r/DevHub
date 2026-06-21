@@ -80,7 +80,7 @@ new class extends Component
 
                     <div class='space-y-0.5'>
                         <label for="avatar" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Profile Pic</label>
-                        <input type="file" id="avatar" name="avatar" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-gray-700 file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Profile Pic" />
+                        <input type="file" id="avatar" name="avatar" wire:model="avatar" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-gray-700 file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Profile Pic" />
                     </div>
 
                     <div class="mt-8 flex items-center justify-between gap-4">

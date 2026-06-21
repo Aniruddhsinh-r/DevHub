@@ -2,7 +2,6 @@
 
 use Livewire\Component;
 use App\Models\Article;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component

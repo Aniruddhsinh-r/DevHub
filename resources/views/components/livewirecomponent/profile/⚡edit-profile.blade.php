@@ -49,10 +49,10 @@ new class extends Component
         ];
 
         if ($this->avatar) {
+            $data['avatar'] = $this->avatar->store('avatars', 'public');
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
-            $data['avatar'] = $this->avatar->store('avatars', 'public');
         }
 
         if ($this->password) {

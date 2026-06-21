@@ -2,7 +2,6 @@
 
 use Livewire\Component;
 use App\Models\Category;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
