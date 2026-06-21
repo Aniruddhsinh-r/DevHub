@@ -6,6 +6,7 @@ use App\Models\View;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 new class extends Component
 {

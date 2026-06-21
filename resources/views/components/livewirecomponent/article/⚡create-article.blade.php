@@ -28,7 +28,7 @@ new class extends Component
     public $cover_path = null;
 
     public function mount() {
-        $this->authorize('create', Article::class);
+        Gate::authorize('create', Article::class);
         $this->categories = Category::all();
         $this->article = new Article();
     }
@@ -46,7 +46,7 @@ new class extends Component
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
             'scheduled_hours' => 'nullable|integer|min:1|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
-            'cover_path' => 'nullable|dimensions:max_width=1000,max_height=1000|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $title = $values['title'];

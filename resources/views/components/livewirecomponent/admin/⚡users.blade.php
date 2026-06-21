@@ -5,6 +5,7 @@ use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Gate;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
@@ -23,8 +24,8 @@ new #[Layout('layouts::dashboard')] class extends Component
     }
 
     public function remove($userId) {
-        $user = User::find($userId);
-        $this->authorize('remove', $user);
+        $user = User::findOrFail($userId);
+        Gate::authorize('remove', $user);
 
         DB::transaction(function () use ($user) {
             $user->views()->delete();

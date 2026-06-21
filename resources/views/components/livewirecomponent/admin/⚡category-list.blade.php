@@ -3,8 +3,10 @@
 use Livewire\Component;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Gate;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
@@ -18,7 +20,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     }
 
     public function create() {
-        $this->authorize('create', Category::class);
+        Gate::authorize('create', Category::class);
 
         $this->validate([
             'name' => ['required','min:3','max:20','string','unique:categories,name']
@@ -41,8 +43,8 @@ new #[Layout('layouts::dashboard')] class extends Component
     }
 
     public function remove($categoryId) {
-        $category = Category::find($categoryId);
-        $this->authorize('delete', $category);
+        $category = Category::findOrFail($categoryId);
+        Gate::authorize('delete', $category);
 
         $category->delete();
         $this->dispatch('live-notification', message: 'Category deleted successfully.');

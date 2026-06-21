@@ -4,14 +4,12 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Like;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use App\Models\User;
 use App\Models\View;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
-    #[Computed]
     public $articleCount = null;
     public $users = null;
     public $comments = null;
@@ -149,7 +147,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                 </div>
 
                 <div class="space-y-2">
-                    @foreach ($this->articles as $article)
+                    @foreach ($articles as $article)
                         <a href="{{ route('admin.article.show',$article) }}" class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
                             <div class="flex items-center gap-3 truncate max-w-[70%]">
                                 <div class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px] shrink-0">{{ $loop->iteration }}</div>

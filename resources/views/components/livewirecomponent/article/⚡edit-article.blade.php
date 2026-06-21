@@ -11,6 +11,7 @@ use Livewire\Attributes\Layout;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 new class extends Component
 {
@@ -20,6 +21,7 @@ new class extends Component
     public $categories;
 
     public function mount(Article $article) {
+        $this->article = $article;
         Gate::authorize('update', $this->article);
 
         $this->title = $article->title;
@@ -52,7 +54,7 @@ new class extends Component
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
             'scheduled_hours' => 'nullable|integer|min:1|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
-            'nullable|dimensions:max_width=1000,max_height=1000|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'cover_path' => 'nullable|dimensions:max_width=1000,max_height=1000|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $article = $this->article;
