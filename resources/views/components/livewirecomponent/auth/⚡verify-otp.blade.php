@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Cache;
 
 new class extends Component
 {

@@ -34,7 +34,9 @@ new class extends Component
     }
 
     public function store() {
-        Gate::authorize('publish', Article::class);
+        if ($this->status === 'published') {
+            Gate::authorize('publish', Article::class);
+        }
 
         $values = $this->validate([
             'title' => 'required|max:255|min:6',
@@ -44,7 +46,7 @@ new class extends Component
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
             'scheduled_hours' => 'nullable|integer|min:1|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
-            'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'cover_path' => 'nullable|dimensions:max_width=1000,max_height=1000|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $title = $values['title'];
@@ -73,9 +75,8 @@ new class extends Component
             $data['published_at'] = now();
         }
 
-        DB::transaction(function () use ($data) {
-            auth()->user()->articles()->create($data);
-        });
+        auth()->user()->articles()->create($data);
+
         session()->flash('success', 'Article created successfully.');
         return redirect()->route('articles.index');
     }

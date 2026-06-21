@@ -6,14 +6,16 @@ use App\Models\User;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\Sensitive;
 
 new class extends Component
 {
     use WithFileUploads;
 
     public $email = '';
-    public $password = '';
     public $remember = '';
+    #[Sensitive]
+    public $password = '';
 
     public function login() {
         $this->email = strtolower($this->email);

@@ -23,7 +23,6 @@ new class extends Component
         session(['otp_email' => $to]);
         Mail::to($to)->send(new PasswordResetMail($message));
 
-        // return view('auth.otpVarification',['email' => $request->email]);
         return redirect()->route('password.forgot.otp');
     }
 };

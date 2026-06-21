@@ -10,7 +10,7 @@ new class extends Component
     public $password_confirmation = '';
 
     public function mount() {
-        if (!session('otp_email')) {
+        if (!session('resetPass_email')) {
             session()->flash('error', 'Your email is expire please reenter your email.');
             return redirect()->route('password.forgot');
         }

@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Sensitive;
 
 new class extends Component
 {
@@ -23,10 +24,11 @@ new class extends Component
 
     public $name;
     public $email;
-    public $password;
     public $password_confirmation;
     public $avatar;
     public $bio;
+    #[Sensitive]
+    public $password;
 
     public function update() {
         $user = Auth::user();
@@ -36,7 +38,7 @@ new class extends Component
             'email' => ['required', 'string', 'min:10', 'max:255' ,Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:8', 'max:255'],
-            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:1024', 'dimensions:max_width=1000,max_height=1000'],
             'bio' => ['nullable', 'max:2000', 'string']
         ]);
 

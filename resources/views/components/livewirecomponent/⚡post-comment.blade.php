@@ -3,6 +3,7 @@
 use App\Models\Article;
 use App\Models\Comment;
 use App\Notifications\CommentNotification;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,13 +12,19 @@ new class extends Component {
     public string $body = '';
     public string $replybody = '';
 
+    #[Computed]
+    public function comments()
+    {
+        return $this->article->comments()->whereNull('parent_id')->with(['user', 'replies.user'])->latest()->get();
+    }
+
     public function postComment() {
         $this->validate([
             'body' => ['required', 'string', 'max:5000'],
         ]);
 
         if (!auth()->user()?->hasRole('author')) {
-            session()->flash('error', 'Only Author can bookmark article.');
+            session()->flash('error', 'Only Author can post comment on article.');
             return redirect()->route('/');
         }
 
@@ -47,7 +54,7 @@ new class extends Component {
         ]);
 
         if (!auth()->user()?->hasRole('author')) {
-            session()->flash('error', 'Only Author can bookmark article.');
+            session()->flash('error', 'Only Author can reply on comments.');
             return redirect()->route('/');
         }
 
@@ -109,7 +116,7 @@ new class extends Component {
 
     {{-- COMMENTS LIST --}}
     <div class="space-y-6">
-        @foreach ($article->comments()->whereNull('parent_id')->latest()->get() as $comment)
+        @foreach ($this->comments as $comment)
             <div class="flex gap-4" wire:key="comment-{{ $comment->id }}">
                 <a href="{{ route('profile.show', $comment->user) }}" class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                     @if ($comment->user->avatar)
@@ -164,7 +171,6 @@ new class extends Component {
                                         </div>
 
                                         <div x-show="activeReply === {{ $reply->id }}" class="mt-2" x-cloak>
-                                            {{-- FIXED: Changed argument to $comment->id so nested replies render within this thread container --}}
                                             <form wire:submit.prevent="postReply({{ $comment->id }})">
                                                 <div class="w-full flex items-end gap-4">
                                                     <div class="flex-1">

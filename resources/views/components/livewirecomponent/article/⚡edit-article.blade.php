@@ -52,7 +52,7 @@ new class extends Component
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
             'scheduled_hours' => 'nullable|integer|min:1|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:1|max:59',
-            'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'nullable|dimensions:max_width=1000,max_height=1000|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $article = $this->article;
@@ -87,9 +87,7 @@ new class extends Component
             $data['published_at'] = now();
         }
 
-        DB::transaction(function () use ($article, $data) {
-            $this->article->update($data);
-        });
+        $this->article->update($data);
 
         session()->flash('success', 'Article updated successfully.');
         return redirect()->route('publishedarticle');
