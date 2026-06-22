@@ -12,6 +12,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 {
     public $articleCount = null;
     public $users = null;
+    public $articles = null;
     public $comments = null;
     public $views = null;
     public $likes = null;
