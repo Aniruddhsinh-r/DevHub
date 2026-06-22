@@ -11,8 +11,13 @@ new class extends Component
     public $email = '';
 
     public function submit() {
-        $this->validate(['email' => 'required|email']);
+        $this->validate(['email' => 'required|email|exists:user,email']);
         $user = User::where('email', $this->email)->first();
+
+        if (!$user) {
+            $this->addError('email', 'No account found with that email address.');
+            return;
+        }
 
         $to = $this->email;
         $otp = random_int(100000,999999);
@@ -59,8 +64,8 @@ new class extends Component
 
                     <div>
                         <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all">
-                            <span wire:loading wire:target="register">Processing...</span>
-                            <span wire:loading.remove wire:target="register">Send Password Reset Link</span>
+                            <span wire:loading>Processing...</span>
+                            <span wire:loading.remove wire:target="submit">Send Password Reset Link</span>
                         </button>
                     </div>
                 </form>

@@ -76,7 +76,7 @@ new class extends Component
 
                     <x-form.field name="password" type="password" label="Password" placeholder="••••••••"></x-form.field>
 
-                    <x-form.field name="bio" type="textarea" label="Bio" placeholder="Tell us a little about youself..."></x-form.field>
+                    <x-form.field name="bio" type="textarea" label="Bio" placeholder="Tell us a little about yourself..."></x-form.field>
 
                     <div class='space-y-0.5'>
                         <label for="avatar" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Profile Pic</label>

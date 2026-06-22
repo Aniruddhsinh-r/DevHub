@@ -97,7 +97,7 @@ new class extends Component
                 <x-form.field name="name" data-test="profile-name" type='text' label="Full name" placeholder="Enter name" :value="$user->name"></x-form.field>
             </div>
             <div>
-                <x-form.field name="bio" data-test="profile-bio" type="textarea" label="Bio" placeholder="Tell us a little about youself..." :value="$user->bio"></x-form.field>
+                <x-form.field name="bio" data-test="profile-bio" type="textarea" label="Bio" placeholder="Tell us a little about yourself..." :value="$user->bio"></x-form.field>
             </div>
         </div>
         <h2 class="text-xl font-bold text-gray-900 mb-4">Account Security</h2>
@@ -128,7 +128,7 @@ new class extends Component
             <div class="flex items-center gap-3">
                 <button type="submit" data-test="update_profile" class="bg-black hover:bg-gray-900 text-white px-8 py-2.5 rounded-xl text-sm font-semibold transition shadow-lg shadow-gray-200">
                     <span wire:loading wire:target="register">Processing...</span>
-                    <span wire:loading.remove wire:target="register">Update</span>
+                    <span wire:loading.remove wire:target="update">Update</span>
                 </button>
             </div>
         </div>

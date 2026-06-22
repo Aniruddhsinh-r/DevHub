@@ -27,7 +27,7 @@ new class extends Component
 
     public function mount() {
         Gate::authorize('create', Article::class);
-        $this->categories = select('id','name')->orderBy('name')->get();
+        $this->categories = Category::select('id','name')->orderBy('name')->get();
         $this->article = new Article();
     }
 
@@ -42,7 +42,7 @@ new class extends Component
             'body' => 'required|min:30|max:50000',
             'category_id' => 'required|exists:categories,id',
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
-            'scheduled_hours' => 'nullable|integer|min:1|max:48',
+            'scheduled_hours' => 'required_if:status,scheduled|nullable|integer|min:0|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:0|max:59',
             'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
