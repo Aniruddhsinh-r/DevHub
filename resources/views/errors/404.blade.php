@@ -15,7 +15,7 @@
             The page you are trying to reach might have been deleted, renamed, or temporarily went offline. Let's get you back on track.
         </p>
 
-        <a href="{{ route('home') }}" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all duration-150">
+        <a href="{{ route('home') }}" wire:navigate class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all duration-150">
             Go Back Home
         </a>
     </div>

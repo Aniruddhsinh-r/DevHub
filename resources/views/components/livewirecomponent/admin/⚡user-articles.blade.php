@@ -28,7 +28,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-10">
             @foreach ($this->articles as $article)
-                <a href='{{ route('admin.article.show',$article) }}' class="p-5 bg-[#efefef] rounded-2xl">
+                <a href='{{ route('admin.article.show',$article) }}' wire:navigate class="p-5 bg-[#efefef] rounded-2xl">
                     <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
                     <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
                     <div class="mt-5 flex items-center justify-between border-t border-gray-100">

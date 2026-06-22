@@ -22,7 +22,7 @@ new class extends Component
                     <p class="text-gray-500 mt-2 font-medium">Manage and monitor the performance of your shared content.</p>
                 </div>
                 <div class="mt-4 md:mt-0">
-                    <a href="{{ route('drafts') }}" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                    <a href="{{ route('drafts') }}" wire:navigate class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
                         draft
                     </a>
                 </div>
@@ -32,7 +32,7 @@ new class extends Component
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($articles as $article)
                         <div class="group bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative">
-                            <a href="{{ route('articles.show',$article) }}" class="block relative overflow-hidden h-52">
+                            <a href="{{ route('articles.show',$article) }}" wire:navigate class="block relative overflow-hidden h-52">
                                 @if ($article->cover_path)
                                     <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-700">
                                 @endif
@@ -40,7 +40,7 @@ new class extends Component
                             </a>
 
                             <div class="p-4 pt-3">
-                                <a href="{{ route('articles.show',$article) }}">
+                                <a href="{{ route('articles.show',$article) }}" wire:navigate>
                                     <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800 hover:text-gray-600">{{ $article->title }}</h3>
                                     <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
                                 </a>
@@ -54,7 +54,7 @@ new class extends Component
                                     <div class="flex flex-col items-end gap-1">
                                         <livewire:livewirecomponent.article.delete-article :article="$article" />
 
-                                        <a href="{{ route('articles.edit',$article) }}" dusk="edit-article-{{ $article->id }}" class="text-xs font-bold text-gray-900 hover:text-black uppercase tracking-wider">
+                                        <a href="{{ route('articles.edit',$article) }}" wire:navigate dusk="edit-article-{{ $article->id }}" class="text-xs font-bold text-gray-900 hover:text-black uppercase tracking-wider">
                                             Edit
                                         </a>
                                     </div>
@@ -74,7 +74,7 @@ new class extends Component
                     </div>
                     <h2 class="text-2xl font-black text-gray-900">No articles yet</h2>
                     <p class="text-gray-500 mt-2 font-medium">You haven't published any content to your profile.</p>
-                    <a href="{{ route('articles.create') }}" class="inline-block mt-8 px-8 py-4 bg-gray-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all">
+                    <a href="{{ route('articles.create') }}" wire:navigate class="inline-block mt-8 px-8 py-4 bg-gray-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all">
                         Write Your First Story
                     </a>
                 </div>

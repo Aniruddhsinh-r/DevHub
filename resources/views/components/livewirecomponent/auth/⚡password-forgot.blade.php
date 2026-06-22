@@ -28,7 +28,7 @@ new class extends Component
         session(['otp_email' => $to]);
         Mail::to($to)->send(new PasswordResetMail($message));
 
-        return redirect()->route('password.forgot.otp');
+        return $this->redirectRoute('password.forgot.otp', navigate: true);
     }
 };
 ?>

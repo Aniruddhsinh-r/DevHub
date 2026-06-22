@@ -58,7 +58,7 @@ new class extends Component
                         </span>
                     </div>
                 </div>
-                <a href="{{ route('profile.edit') }}" class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
+                <a href="{{ route('profile.edit') }}" wire:navigate class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
             </div>
 
             <div class="space-y-8">
@@ -76,13 +76,13 @@ new class extends Component
                             </p>
                         </div>
 
-                        <a href="{{ route('publishedarticle') }}" class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
+                        <a href="{{ route('publishedarticle') }}" wire:navigate class="px-6 py-3 rounded-2xl bg-[#111111] text-gray-200 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">
                             Manage Articles
                         </a>
                     </div>
 
                     <div class="border-t border-gray-100 pt-6 gap-6 sm:gap-10 flex items-center">
-                        <a href={{ route('publishedarticle') }} class="text-center">
+                        <a href="{{ route('publishedarticle') }}" wire:navigate class="text-center">
                             <div class="text-center">
                                 <p class="text-xl font-black text-gray-200">{{ $user->articles->count() }}</p>
                                 <p class="text-[13px] text-gray-200 mt-0.5">articles</p>
@@ -91,7 +91,7 @@ new class extends Component
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
-                        <a href="{{ route('followers',$user) }}">
+                        <a href="{{ route('followers',$user) }}" wire:navigate>
                             <div class="text-center">
                                 <p class="text-xl font-black text-gray-200">{{ $user->followers->count() }}</p>
                                 <p class="text-[13px] text-gray-200 mt-0.5">followers</p>
@@ -100,7 +100,7 @@ new class extends Component
 
                         <div class="w-px h-7 bg-gray-200"></div>
 
-                        <a href="{{ route('followings',$user) }}">
+                        <a href="{{ route('followings',$user) }}" wire:navigate>
                             <div class="text-center">
                                 <p class="text-xl font-black text-gray-200">{{ $user->following->count() }}</p>
                                 <p class="text-[13px] text-gray-200 mt-0.5">following</p>

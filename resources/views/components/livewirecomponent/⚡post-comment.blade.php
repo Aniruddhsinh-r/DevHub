@@ -25,7 +25,7 @@ new class extends Component {
 
         if (!auth()->user()?->hasRole('author')) {
             session()->flash('error', 'Only Author can post comment on article.');
-            return redirect()->route('/');
+            return $this->redirectRoute('/', navigate: true);
         }
 
         if ($this->article->status !== 'published') {
@@ -55,7 +55,7 @@ new class extends Component {
 
         if (!auth()->user()?->hasRole('author')) {
             session()->flash('error', 'Only Author can reply on comments.');
-            return redirect()->route('/');
+            return $this->redirectRoute('/', navigate: true);
         }
 
         $comment = Comment::create([
@@ -118,7 +118,7 @@ new class extends Component {
     <div class="space-y-6">
         @foreach ($this->comments as $comment)
             <div class="flex gap-4" wire:key="comment-{{ $comment->id }}">
-                <a href="{{ route('profile.show', $comment->user) }}" class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
+                <a href="{{ route('profile.show', $comment->user) }}" wire:navigate class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                     @if ($comment->user->avatar)
                         <img src="{{ asset('storage/' . $comment->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
                     @else
@@ -147,7 +147,7 @@ new class extends Component {
                         <div x-show="showReplies" class="py-4 pl-4 border-l border-gray-200 mt-2 space-y-4" x-cloak>
                             @foreach ($comment->replies as $reply)
                                 <div class="flex gap-4" wire:key="reply-{{ $reply->id }}">
-                                    <a href="{{ route('profile.show', $reply->user) }}">
+                                    <a href="{{ route('profile.show', $reply->user) }}" wire:navigate>
                                         <div class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm overflow-hidden flex items-center justify-center bg-[#0f0f0f] text-white text-xs font-bold uppercase">
                                             @if ($reply->user->avatar)
                                                 <img src="{{ asset('storage/' . $reply->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">

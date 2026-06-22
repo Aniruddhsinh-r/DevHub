@@ -19,7 +19,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     public $topUser;
 
     public function mount() {
-        $this->articleCount = Article::where('status', 'published')->count();
+        $this->articleCount = Article::count();
         $this->articles = Article::where('status', 'published')->latest()->take(4)->get();
         $this->users = User::count();
         $this->comments = Comment::count();
@@ -149,7 +149,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
                 <div class="space-y-2">
                     @foreach ($articles as $article)
-                        <a href="{{ route('admin.article.show',$article) }}" class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
+                        <a href="{{ route('admin.article.show',$article) }}" wire:navigate class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
                             <div class="flex items-center gap-3 truncate max-w-[70%]">
                                 <div class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px] shrink-0">{{ $loop->iteration }}</div>
                                 <span class="text-xs font-bold text-gray-900 truncate">{{ $article->title }}</span>
@@ -190,7 +190,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                         </span>
                     </div>
 
-                    <a href="{{ route('admin.show.user',$topUser) }}" class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
+                    <a href="{{ route('admin.show.user',$topUser) }}" wire:navigate class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
                         <div class="relative shrink-0">
                             @if ($topUser->avatar)
                                 <img src="{{ asset('storage/' . $topUser->avatar) }}" alt="{{ $topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500 object-cover">

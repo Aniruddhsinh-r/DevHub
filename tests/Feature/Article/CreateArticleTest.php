@@ -36,7 +36,8 @@ test('user can delete his own article', function () {
         'category_id' => Category::factory()->create()->id,
     ]);
 
-    Livewire::test('livewirecomponent.article.delete-article',['article' => $article]);
+    Livewire::test('livewirecomponent.article.delete-article',['article' => $article])
+        ->call('delete');
 
     $this->assertSoftDeleted('articles', [
         'id' => $article->id,

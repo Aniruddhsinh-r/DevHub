@@ -27,7 +27,7 @@ new class extends Component
     public function toggleLike() {
         if (!auth()->user()?->hasRole('author')) {
             session()->flash('error', 'Only Author can Like article.');
-            return redirect()->route('/');
+            return $this->redirectRoute('/', navigate: true);
         }
 
         if ($this->article->status !== 'published') {
@@ -50,7 +50,7 @@ new class extends Component
     {
         if (!auth()->user()?->hasRole('author')) {
             session()->flash('error', 'Only Author can bookmark article.');
-            return redirect()->route('/');
+            return $this->redirectRoute('/', navigate: true);
         }
 
         if ($this->article->status !== 'published') {
@@ -132,7 +132,7 @@ new class extends Component
                     {{ $article->excerpt }}
                 </p>
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                    <a href="{{ route('profile.show',$article->user) }}" class="flex items-center gap-3">
+                    <a href="{{ route('profile.show',$article->user) }}" wire:navigate class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
                             @if ($article->user->avatar)
                                 <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="{{ $article->user->name }}" class="w-9 h-9">
@@ -187,7 +187,7 @@ new class extends Component
                     </article>
 
                     {{-- AUTHOR CARD --}}
-                    <a href="{{ route('profile.show',$article->user) }}" class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
+                    <a href="{{ route('profile.show',$article->user) }}" wire:navigate class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                         <div class="flex flex-col md:flex-row md:items-center gap-6">
                             <div class="w-24 h-24 rounded-full bg-[#111827] text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-gray-100">
                                 @if ($article->user->avatar)
@@ -256,14 +256,14 @@ new class extends Component
                                 </span>
                             </div>
                             @role('author')
-                                <a href="{{ route('articles.index') }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
+                                <a href="{{ route('articles.index') }}" wire:navigate class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:-translate-x-1 transition-transform duration-150">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                                     </svg>
                                     <span>Back To Articles</span>
                                 </a>
                             @else
-                                <a href="{{ route('admin.articles') }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
+                                <a href="{{ route('admin.articles') }}" wire:navigate class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:-translate-x-1 transition-transform duration-150">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                                     </svg>

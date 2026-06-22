@@ -21,7 +21,7 @@ new class extends Component
         session()->invalidate();
         session()->regenerateToken();
         session()->flash('success', 'Successfully logged out.');
-        return redirect('/');
+        return $this->redirectRoute('/', navigate: true);
     }
 };
 ?>

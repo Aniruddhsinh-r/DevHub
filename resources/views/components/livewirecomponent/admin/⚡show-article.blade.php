@@ -46,7 +46,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                 </p>
 
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                    <a href="{{ route('admin.show.user',$article->user) }}" class="flex items-center gap-3">
+                    <a href="{{ route('admin.show.user',$article->user) }}" wire:navigate class="flex items-center gap-3">
                         @if ($article->user->avatar)
                             <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="user_image" class="w-9 h-9 rounded-full border-2 border-black object-cover">
                         @else
@@ -104,7 +104,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                         <div class="space-y-6">
                             @foreach ($comments as $comment)
                             <div class="flex gap-4">
-                                <a href="{{ route('admin.show.user',$comment->user) }}"  class="w-11 h-11 mt-1 rounded-full border border-gray-200 bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
+                                <a href="{{ route('admin.show.user',$comment->user) }}" wire:navigate class="w-11 h-11 mt-1 rounded-full border border-gray-200 bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                                     @if ($comment->user->avatar)
                                         <img src="{{ asset('storage/' . $comment->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
                                     @else
@@ -139,7 +139,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                                         <div x-show="showReplies" class="mt-2 pl-4 border-l-2 border-gray-200 space-y-3" x-cloak>
                                             @foreach ($comment->replies as $reply)
                                             <div class="flex gap-4">
-                                                <a href="{{ route('admin.show.user',$reply->user) }}"  class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
+                                                <a href="{{ route('admin.show.user',$reply->user) }}" wire:navigate class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
                                                     @if ($reply->user->avatar)
                                                         <img src="{{ asset('storage/' . $reply->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
                                                     @else
@@ -216,7 +216,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                                 </span>
                             </div>
 
-                            <a href="{{ route('admin.articles') }}" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
+                            <a href="{{ route('admin.articles') }}" wire:navigate class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-500 hover:text-gray-800 transition-colors duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-400 group-hover:text-gray-700 group-hover:-translate-x-1 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                                 </svg>

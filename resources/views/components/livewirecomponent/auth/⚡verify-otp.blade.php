@@ -9,7 +9,7 @@ new class extends Component
     public function mount() {
         if (!session('otp_email')) {
             session()->flash('error', 'Your email is expire please reenter your email.');
-            return redirect()->route('password.forgot');
+            return $this->redirectRoute('password.forgot', navigate: true);
         }
     }
 
@@ -17,7 +17,7 @@ new class extends Component
         $email = session('otp_email');
         if (!$email) {
             session()->flash('error', 'Your email is expire please reenter your email.');
-            return redirect()->route('password.forgot');
+            return $this->redirectRoute('password.forgot', navigate: true);
         }
 
         $this->validate([
@@ -30,7 +30,7 @@ new class extends Component
             session(['resetPass_email' => $email]);
             session()->forget('otp_email');
 
-            return redirect()->route('password.reset');
+            return $this->redirectRoute('password.reset', navigate: true);
         }
         session()->flash('error','Your provided otp is wrong');
         return;

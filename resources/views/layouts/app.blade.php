@@ -20,13 +20,13 @@
                         <a href="{{ route('home') }}" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
                     </div>
                     <div class="flex items-center gap-4 md:gap-8">
-                        <a href="{{ route('home') }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
-                        <a href="{{ route('articles.index') }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
+                        <a href="{{ route('home') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
+                        <a href="{{ route('articles.index') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
 
                         @auth
                             @role('author')
-                                <a href="{{ route('profile.index') }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
-                                <a href="{{ route('articles.create') }}" class="hidden sm:inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
+                                <a href="{{ route('profile.index') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
+                                <a href="{{ route('articles.create') }}" wire:navigate class="hidden sm:inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                     </svg>Create Article
@@ -55,7 +55,7 @@
                                     <div class="px-4 font-semibold break-all">{{ auth()->user()->email }}</div>
                                     <hr class="border-gray-100 my-1">
                                     @role('author')
-                                        <a href="{{ route('show.bookmarks') }}" class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
+                                        <a href="{{ route('show.bookmarks') }}" wire:navigate class="w-full flex items-center gap-3 px-5 py-2 text-sm text-gray-700 font-medium hover:text-gray-500 transition">
                                             <svg class="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                                             </svg>Bookmark
@@ -74,8 +74,8 @@
                         @endauth
 
                         @guest
-                            <a href="{{ route('register.create') }}" class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Sign Up</a>
-                            <a href="{{ route('login') }}" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">Sign In</a>
+                            <a href="{{ route('register.create') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Sign Up</a>
+                            <a href="{{ route('login') }}" wire:navigate class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">Sign In</a>
                         @endguest
 
                         <button @click="mobileMenuOpen = !mobileMenuOpen" class="block md:hidden text-[#1a1a1a] focus:outline-none z-50">
@@ -91,13 +91,13 @@
                 x-transition:enter="transition ease-out duration-200"
                 class="md:hidden border-b border-gray-200 bg-white/95 backdrop-blur-lg absolute left-0 right-0 top-16 shadow-lg py-4 px-6 flex flex-col gap-4 z-40"
                 style="display: none;">
-                <a href="{{ route('home') }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">home</a>
-                <a href="{{ route('articles.index') }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
+                <a href="{{ route('home') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">home</a>
+                <a href="{{ route('articles.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
                 @role('author')
-                    <a href="{{ route('profile.index') }}" class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">profile</a>
+                    <a href="{{ route('profile.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">profile</a>
                 @endrole
                 @guest
-                    <a href="{{ route('register.create') }}" class="text-base font-semibold hover:text-gray-500 transition py-2">Sign Up</a>
+                    <a href="{{ route('register.create') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2">Sign Up</a>
                 @endguest
             </div>
         </nav>
@@ -134,7 +134,7 @@
             <div class="flex flex-col gap-8 md:flex-row md:justify-between md:items-start">
 
                 <div class="space-y-4 md:w-1/3">
-                    <a href="{{ route('home') }}" class="text-xl font-black tracking-tight text-black flex items-center gap-2">
+                    <a href="{{ route('home') }}" wire:navigate class="text-xl font-black tracking-tight text-black flex items-center gap-2">
                         <span>Dev<span class="text-indigo-600">Hub</span></span>
                     </a>
                     <p class="text-gray-500 text-sm max-w-sm font-medium leading-relaxed">
@@ -148,33 +148,33 @@
                     </h3>
                     <ul role="list" class="mt-4 space-y-3">
                         <li>
-                            <a href="{{ route('articles.index') }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
+                            <a href="{{ route('articles.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
                                 Latest Articles
                             </a>
                         </li>
                         @auth
                             <li>
-                                <a href="{{ route('followings',auth()->user()) }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
+                                <a href="{{ route('followings',auth()->user()) }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
                                     Following List
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('profile.index') }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
+                                <a href="{{ route('profile.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
                                     Your Profile
                                 </a>
                             </li>
-                        @else
-                        <li>
-                                <a href="{{ route('login') }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
+                            @else
+                            <li>
+                                <a href="{{ route('login') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
                                     Sign In
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('register.create') }}" class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
+                                <a href="{{ route('register.create') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
                                     Create Account
                                 </a>
                             </li>
-                            @endauth
+                        @endauth
                     </ul>
                 </div>
 

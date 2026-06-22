@@ -21,7 +21,7 @@
 
                 <p>Thank you for signing up! We are incredibly thrilled to welcome you to our growing community ecosystem.</p>
                 <div style="margin: 28px 0; text-align: center;">
-                    <a href="{{ url('http://devhub.test/home') }}" style="background-color: #4f46e5; color: #ffffff; padding: 12px 28px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; display: inline-block; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);">
+                    <a href="{{ url('http://devhub.test/home') }}" wire:navigate style="background-color: #4f46e5; color: #ffffff; padding: 12px 28px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; display: inline-block; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);">
                         Get Started & Explore
                     </a>
                 </div>

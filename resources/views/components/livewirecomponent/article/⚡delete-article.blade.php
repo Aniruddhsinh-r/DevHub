@@ -4,13 +4,11 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Models\View;
 use Illuminate\Support\Facades\Gate;
-use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
 new class extends Component
 {
-    #[Computed]
     public Article $article;
 
     public function mount(Article $article)
@@ -31,15 +29,12 @@ new class extends Component
             Storage::disk('public')->delete($this->article->cover_path);
         }
         DB::transaction(function () {
-            $this->article->likes()->delete();
-            $this->article->comments()->delete();
             $this->article->bookmarks()->detach();
-            View::where('article_id', $this->article->id)->delete();
             $this->article->delete();
         });
 
         session()->flash('success', 'Article deleted successfully.');
-       return redirect()->route('publishedarticle');
+        return $this->redirectRoute('publishedarticle', navigate: true);
     }
 };
 ?>

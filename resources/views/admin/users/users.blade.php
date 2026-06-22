@@ -26,7 +26,7 @@
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search users..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
 
                             @if (request('search'))
-                                <a href="{{ url()->current() }}" class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
+                                <a href="{{ url()->current() }}" wire:navigate class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
@@ -88,7 +88,7 @@
 
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <a href="{{ route('admin.show.user',$user) }}"  class="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-gray-200 bg-white hover:bg-[#111827] text-xs font-bold text-gray-700 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <a href="{{ route('admin.show.user',$user) }}" wire:navigate class="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-gray-200 bg-white hover:bg-[#111827] text-xs font-bold text-gray-700 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
                                             View
                                         </a>
 

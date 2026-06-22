@@ -12,7 +12,7 @@ new class extends Component
     public function mount() {
         if (!session('resetPass_email')) {
             session()->flash('error', 'Your email is expire please reenter your email.');
-            return redirect()->route('password.forgot');
+            return $this->redirectRoute('password.forgot', navigate: true);
         }
     }
 
@@ -21,7 +21,7 @@ new class extends Component
 
         if (!$email) {
             session()->flash('error', 'Your email is expire please reenter your email.');
-            return redirect()->route('password.forgot');
+            return $this->redirectRoute('password.forgot', navigate: true);
         }
         $this->validate([
             'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
@@ -35,7 +35,7 @@ new class extends Component
         session()->forget('resetPass_email');
 
         session()->flash('success', 'Password updated successfully.');
-        return redirect()->route('login');
+        return $this->redirectRoute('login', navigate: true);
     }
 };
 ?>

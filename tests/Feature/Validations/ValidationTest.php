@@ -62,9 +62,9 @@ test('check schedule article validation test require minutes', function () {
         ->set('excerpt','article for know who are you.')
         ->set('body','hi there good that i attract you anyway lets talk that how to know ourself...')
         ->set('status','scheduled')
-        ->set('scheduled_minutes',0)
+        ->set('scheduled_minutes',null)
         ->call('store')
-        ->assertHasErrors(['scheduled_minutes' => 'min']);
+        ->assertHasErrors(['scheduled_minutes' => 'required_if']);
 });
 
 test('check profile update validation test', function () {

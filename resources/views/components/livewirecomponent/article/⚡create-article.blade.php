@@ -76,7 +76,7 @@ new class extends Component
         auth()->user()->articles()->create($data);
 
         session()->flash('success', 'Article created successfully.');
-        return redirect()->route('articles.index');
+        return $this->redirectRoute('articles.index', navigate: true);
     }
 };
 ?>

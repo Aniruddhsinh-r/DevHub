@@ -16,11 +16,11 @@ new class extends Component
 
         if ($this->user->hasRole('admin')) {
             session()->flash('error', 'This author does not exist.');
-            return redirect()->route('home');
+            return $this->redirectRoute('home', navigate: true);
         }
 
         if ($this->user->id === Auth::id()) {
-            return redirect()->route('profile.index');
+            return $this->redirectRoute('profile.index', navigate: true);
         }
 
         $this->articles = $this->user->articles()->with(['category'])->latest()->get();
@@ -29,7 +29,7 @@ new class extends Component
     public function toggleFollow() {
         if (!auth()->user()?->hasRole('author')) {
             session()->flash('error', 'Only Author can Follow others.');
-            return redirect()->route('/');
+            return $this->redirectRoute('/', navigate: true);
         }
 
         if(Auth::id() !== $this->user->id) {
@@ -72,12 +72,12 @@ new class extends Component
 
                         <p class="text-gray-600 leading-6 text-sm max-w-xl">{{ $user->bio }}</p>
                         <div class="flex items-center gap-6 pt-1">
-                            <a href="{{ route('followings',['user' => $user]) }}">
+                            <a href="{{ route('followings',['user' => $user]) }}" wire:navigate>
                                 <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->following()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Following</p>
                             </a>
                             <div class="w-px h-10 bg-gray-300"></div>
-                            <a href="{{ route('followers',['user' => $user]) }}">
+                            <a href="{{ route('followers',['user' => $user]) }}" wire:navigate>
                                 <h2 class="text-xl font-bold text-gray-900">{{ number_format($user->followers()->count()) }}</h2>
                                 <p class="text-gray-500 text-sm mt-1">Followers</p>
                             </a>
@@ -130,7 +130,7 @@ new class extends Component
 
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                     @forelse ($articles->take(3) as $article)
-                        <a href='{{ route('articles.show',$article) }}' class="p-5 bg-gray-200 rounded-2xl">
+                        <a href='{{ route('articles.show',$article) }}' wire:navigate class="p-5 bg-gray-200 rounded-2xl">
                             <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
                             <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
 
@@ -157,7 +157,7 @@ new class extends Component
                 </div>
 
                 @if ($articles->count() > 3)
-                    <a href="{{ route('user.published',$user) }}" class="flex justify-center mt-8">
+                    <a href="{{ route('user.published',$user) }}" wire:navigate class="flex justify-center mt-8">
                         <button class="border border-gray-300 hover:border-black hover:bg-black hover:text-white transition px-6 py-2.5 rounded-xl text-sm font-semibold text-gray-800">Show More Articles</button>
                     </a>
                 @endif
