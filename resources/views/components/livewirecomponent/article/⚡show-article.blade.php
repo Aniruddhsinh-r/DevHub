@@ -13,6 +13,11 @@ new class extends Component
     public $comments;
 
     public function mount() {
+        if ($this->article->status !== 'published' && $this->article->user_id !== auth()->id()) {
+            session()->flash('error', 'The article you are looking for is not available.');
+            return $this->redirect(route('articles.index'), navigate: true);
+        }
+
         $this->viewed = Auth::check() && Auth::user()->views()->where('article_id', $this->article->id)->exists();
         $this->comments = $this->article->comments()->whereNull('parent_id')->with(['user', 'replies.user'])->get();
 
