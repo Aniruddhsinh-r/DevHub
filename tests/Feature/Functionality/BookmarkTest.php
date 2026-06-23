@@ -71,7 +71,7 @@ test('user can bookmark but not twice', function () {
 
 test('user cant bookmark draft article', function () {
     $user = userLogin();
-    $article = Article::factory()->create(['status'=>'draft']);
+    $article = Article::factory()->create(['status'=>'draft','user_id'=>$user->id]);
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
         ->call('toggleBookmark')

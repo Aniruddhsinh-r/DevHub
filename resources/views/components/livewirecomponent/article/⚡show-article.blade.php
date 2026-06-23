@@ -210,7 +210,7 @@ new class extends Component
                     </a>
 
                     @role('author')
-                        <livewire:livewirecomponent.post-comment :article="$article" lazy.bundle />
+                        <livewire:livewirecomponent.post-comment :article="$article" />
                     @endrole
                 </div>
 

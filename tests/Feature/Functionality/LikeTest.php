@@ -48,7 +48,7 @@ test('admin cant like', function () {
 
 test('user cant like draft article', function () {
     $user = userLogin();
-    $article = Article::factory()->create(['status' => 'draft']);
+    $article = Article::factory()->create(['status' => 'draft','user_id' => $user->id]);
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
         ->call('toggleLike')
