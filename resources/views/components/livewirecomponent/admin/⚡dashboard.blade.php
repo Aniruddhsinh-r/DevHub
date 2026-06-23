@@ -10,17 +10,20 @@ use App\Models\View;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
+   
     public $articleCount = null;
     public $users = null;
     public $articles = null;
     public $comments = null;
     public $views = null;
     public $likes = null;
+    public $draftArticle = null;
     public $topUser;
 
     public function mount() {
-        $this->articleCount = Article::count();
+        $this->articleCount = Article::where('status', 'published')->count();
         $this->articles = Article::where('status', 'published')->latest()->take(4)->get();
+        $this->draftArticle = Article::where('status','draft')->count();
         $this->users = User::count();
         $this->comments = Comment::count();
         $this->views = View::count();
@@ -169,7 +172,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                 <div class="flex items-center justify-between border-b border-gray-50 pb-4">
                     <div>
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Remaining Drafts</span>
-                        <span class="text-3xl font-black text-gray-900 tracking-tight">{{ $this->articles->where('status','draft')->count() }}</span>
+                        <span class="text-3xl font-black text-gray-900 tracking-tight">{{ $this->draftArticle }}</span>
                     </div>
                     <span class="p-2 bg-amber-50 text-amber-600 rounded-xl text-xs font-semibold">Drafts</span>
                 </div>

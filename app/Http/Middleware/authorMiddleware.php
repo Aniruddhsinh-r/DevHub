@@ -21,7 +21,7 @@ class AuthorMiddleware
         }
 
         if (!Auth::user()->hasRole('author')) {
-            abort(403, 'Unauthorized Admin access only');
+            abort(403, 'Unauthorized action');
         }
 
         return $next($request);

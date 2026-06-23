@@ -88,8 +88,8 @@
 
                     <div class="pt-6 border-t border-gray-200 flex justify-end">
                         <button type="submit" data-test="submitBTN" class="w-full md:w-auto bg-black text-white px-10 py-3.5 rounded-full text-[11px] font-black uppercase tracking-[0.2em] hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-black/10">
-                            <span wire:loading wire:target="register">Processing...</span>
-                            <span wire:loading.remove wire:target="register">{{ $article->exists ? 'Update Article' : 'Create Article' }}</span>
+                            <span wire:loading>Processing...</span>
+                            <span wire:loading.remove >{{ $article->exists ? 'Update Article' : 'Create Article' }}</span>
                         </button>
                     </div>
                     @if ($errors->any())

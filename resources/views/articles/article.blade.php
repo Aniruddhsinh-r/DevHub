@@ -23,10 +23,7 @@
                     </button>
                 @endif
 
-                <button type="submit" class="bg-white text-black px-6 py-3.5 text-sm font-bold hover:bg-gray-200 rounded-r-xl transition-all active:scale-95">
-                    <span wire:loading wire:target="register">Processing...</span>
-                    <span wire:loading.remove wire:target="register">Search</span>
-                </button>
+                <button type="submit" class="bg-white text-black px-6 py-3.5 text-sm font-bold hover:bg-gray-200 rounded-r-xl transition-all active:scale-95">Search</button>
             </form>
         </div>
     </div>

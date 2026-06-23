@@ -74,7 +74,7 @@ new class extends Component
                 </div>
 
                 <button type="submit" class="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black tracking-wide transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-indigo-300">
-                    <span wire:loading wire:target="register">Processing...</span>
+                    <span wire:loading wire:target="submit">Processing...</span>
                     <span wire:loading.remove wire:target="submit">VERIFY OTP</span>
                 </button>
 

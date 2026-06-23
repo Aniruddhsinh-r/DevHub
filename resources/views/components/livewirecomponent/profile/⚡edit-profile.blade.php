@@ -127,7 +127,7 @@ new class extends Component
             </a>
             <div class="flex items-center gap-3">
                 <button type="submit" data-test="update_profile" class="bg-black hover:bg-gray-900 text-white px-8 py-2.5 rounded-xl text-sm font-semibold transition shadow-lg shadow-gray-200">
-                    <span wire:loading wire:target="register">Processing...</span>
+                    <span wire:loading wire:target="update">Processing...</span>
                     <span wire:loading.remove wire:target="update">Update</span>
                 </button>
             </div>

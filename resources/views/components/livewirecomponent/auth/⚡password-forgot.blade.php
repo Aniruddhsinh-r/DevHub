@@ -11,7 +11,7 @@ new class extends Component
     public $email = '';
 
     public function submit() {
-        $this->validate(['email' => 'required|email|exists:user,email']);
+        $this->validate(['email' => 'required|email|exists:users,email']);
         $user = User::where('email', $this->email)->first();
 
         if (!$user) {
