@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
+require_once __DIR__ . '/../../Helpers/userLogin.php';
+require_once __DIR__ . '/../../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -25,4 +27,18 @@ test('Register a user.', function () {
     $this->assertDatabaseHas('users', [
         'email' => $email,
     ]);
+});
+
+test('after login user cant access login page.', function () {
+    userLogin();
+
+    visit('/register')
+    ->assertRoute('home');
+});
+
+test('after login admin cant access login page.', function () {
+    adminLogin();
+
+    visit('/login')
+    ->assertRoute('admin.dashboard');
 });

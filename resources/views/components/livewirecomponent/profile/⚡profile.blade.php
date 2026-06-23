@@ -107,14 +107,15 @@ new class extends Component
                             </div>
                         </div>
                         @role('author')
-                            {{-- <livewire:livewirecomponent.profile.follow :user="$user" /> --}}
                             <form wire:submit.prevent="toggleFollow">
                                 @csrf
-                                @if (auth()->user()->following()->where('followed_id', $user->id)->exists())
-                                    <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Unfollow</button>
-                                @else
-                                    <button class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">Follow</button>
-                                @endif
+                                <button data-test="follow-button" class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">
+                                    @if (auth()->user()->following()->where('followed_id', $user->id)->exists())
+                                        Unfollow
+                                    @else
+                                        Follow
+                                    @endif
+                                </button>
                             </form>
                         @endrole
                     </div>

@@ -34,12 +34,12 @@ test('delete category', function () {
     ]);
 });
 
-test('guest cant access admin article page', function () {
+test('guest cant access admin category page', function () {
     visit('/admin/categories')
     ->assertRoute('login');
 });
 
-test('Author cant access admin article page', function () {
+test('Author cant access admin category page', function () {
     userLogin();
 
     visit('/admin/categories')

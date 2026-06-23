@@ -64,3 +64,43 @@ test('admin cant access functional article page', function () {
 
     $this->assertDatabasemissing('views',['article_id'=>$article->id , 'user_id'=>$admin->id]);
 });
+
+test('author can access his draft article', function() {
+    $user = userLogin();
+
+    $article = Article::factory()->create(['status'=>'draft','user_id'=>$user->id]);
+    $this->actingAs($user)->get(route('articles.show', $article))
+    ->assertSee($article->title)
+    ->assertSee($article->excerpt); 
+});
+
+test('author can access his scheduled article', function() {
+    $user = userLogin();
+
+    $article = Article::factory()->create(['status'=>'scheduled','user_id'=>$user->id]);
+    $this->actingAs($user)->get(route('articles.show', $article))
+    ->assertSee($article->title)
+    ->assertSee($article->excerpt); 
+});
+
+test('user can not access other draft article', function() {
+    $user = userLogin();
+
+    $article = Article::factory()->create(['status'=>'draft']);
+    $this->actingAs($user)->get(route('articles.show', $article))
+    ->assertDontSee($article->title)
+    ->assertDontSee($article->excerpt)
+    ->assertRedirect(route('articles.index'))
+    ->assertSessionHas('error', 'The article you are looking for is not available.');
+});
+
+test('user can access his scheduled article', function() {
+    $user = userLogin();
+
+    $article = Article::factory()->create(['status'=>'scheduled']);
+    $this->actingAs($user)->get(route('articles.show', $article))
+    ->assertDontSee($article->title)
+    ->assertDontSee($article->excerpt)
+    ->assertRedirect(route('articles.index'))
+    ->assertSessionHas('error', 'The article you are looking for is not available.');
+});

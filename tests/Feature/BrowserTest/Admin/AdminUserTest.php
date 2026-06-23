@@ -30,3 +30,17 @@ test('admin search and delete user', function () {
     $this->assertDatabaseMissing('views', ['user_id' => $user->id,]);
     $this->assertDatabaseMissing('bookmarks', ['user_id' => $user->id,]);
 });
+
+test('guest cant access user detail page', function () {
+    visit('/admin/users')
+    ->assertRoute('login');
+});
+
+test('Author cant access or search on user detail page', function () {
+    $user = User::factory()->create();
+    userLogin();
+
+    visit('/admin/users?search='.$user->name)
+    ->assertSee('403')
+    ->assertSee('Forbidden');
+});

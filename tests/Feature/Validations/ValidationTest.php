@@ -68,7 +68,7 @@ test('check schedule article validation test require minutes', function () {
 });
 
 test('check profile update validation test', function () {
-    $user = userLogin();
+    userLogin();
 
     $test = Livewire::test('livewirecomponent.profile.edit-profile')
         ->set('name', '')

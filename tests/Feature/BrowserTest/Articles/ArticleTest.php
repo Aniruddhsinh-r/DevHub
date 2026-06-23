@@ -45,3 +45,43 @@ test('guest cant view specific article', function () {
     visit(route('articles.show', $article))
     ->assertRoute('login');
 });
+
+test('author can access his draft article', function() {
+    $user = userLogin();
+
+    $article = Article::factory()->create(['status'=>'draft','user_id'=>$user->id]);
+    visit(route('articles.show', $article))
+    ->assertSee($article->title)
+    ->assertSee($article->excerpt); 
+});
+
+test('author can access his scheduled article', function() {
+    $user = userLogin();
+
+    $article = Article::factory()->create(['status'=>'scheduled','user_id'=>$user->id]);
+    visit(route('articles.show', $article))
+    ->assertSee($article->title)
+    ->assertSee($article->excerpt); 
+});
+
+test('user can not access other draft article', function() {
+    userLogin();
+
+    $article = Article::factory()->create(['status'=>'draft']);
+    visit(route('articles.show', $article))
+    ->assertDontSee($article->title)
+    ->assertDontSee($article->excerpt)
+    ->assertRoute('articles.index')
+    ->assertSee('The article you are looking for is not available.'); 
+});
+
+test('user can not access other scheduled article', function() {
+    userLogin();
+
+    $article = Article::factory()->create(['status'=>'scheduled']);
+    visit(route('articles.show', $article))
+    ->assertDontSee($article->title)
+    ->assertDontSee($article->excerpt)
+    ->assertRoute('articles.index')
+    ->assertSee('The article you are looking for is not available.'); 
+});
