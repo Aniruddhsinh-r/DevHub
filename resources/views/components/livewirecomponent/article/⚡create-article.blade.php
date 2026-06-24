@@ -42,7 +42,7 @@ new class extends Component
             'body' => 'required|min:30|max:50000',
             'category_id' => 'required|exists:categories,id',
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
-            'scheduled_hours' => 'required_if:status,scheduled|nullable|integer|min:0|max:48',
+            'scheduled_hours' => 'nullable|integer|min:0|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:0|max:59',
             'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
@@ -51,7 +51,7 @@ new class extends Component
 
         $data = collect($values)->only([
             'title', 'excerpt', 'body', 'category_id', 'status',
-        ])->merge(['published_at' => now()])->toArray();
+        ])->toArray();
 
         $base = Str::slug($title, '-');
         $slug = $base;
@@ -67,10 +67,12 @@ new class extends Component
             $data['cover_path'] = $values['cover_path']->store('articleCovers','public');
         }
 
-        if ($values['status'] === 'scheduled' && !empty($values['scheduled_minutes'])) {
+        if ($values['status'] === 'scheduled') {
             $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
         } elseif ($values['status'] === 'published') {
             $data['published_at'] = now();
+        } else {
+            $data['published_at'] = null; // Drafts stay null until active
         }
 
         auth()->user()->articles()->create($data);

@@ -1,4 +1,17 @@
-<x-layout>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-[#f8f9fa] text-[#1a1a1a]">
 <div class="min-h-screen bg-gray-200 flex flex-col justify-center items-center px-6 py-12">
     <div class="text-center max-w-md w-full">
         <!-- Icon Badge -->
@@ -20,4 +33,5 @@
         </a>
     </div>
 </div>
-</x-layout>
+</body>
+</html>

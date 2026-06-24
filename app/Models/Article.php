@@ -68,5 +68,11 @@ class Article extends Model
     {
         return $this->likes()->where('user_id', auth()->id())->exists();
     }
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+        ];
+    }
     public function views() { return $this->hasMany(View::class); }
 }

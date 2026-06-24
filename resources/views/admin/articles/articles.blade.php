@@ -8,7 +8,7 @@
             <div class="flex items-center gap-3">
                 <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 shadow-sm">
                     <span class="text-xs text-gray-400 font-bold uppercase tracking-wider block">Total Articles</span>
-                    <span class="text-lg font-black text-[#111827]">{{ $articles->count() }}</span>
+                    <span class="text-lg font-black text-[#111827]">{{ $articles->total() }}</span>
                 </div>
             </div>
         </div>

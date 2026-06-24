@@ -4,13 +4,13 @@ namespace Database\Factories;
 
 use App\Models\Article;
 use App\Models\User;
-use App\Models\Views;
+use App\Models\View;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Views>
+ * @extends Factory<View>
  */
-class ViewsFactory extends Factory
+class ViewFactory extends Factory
 {
     /**
      * Define the model's default state.

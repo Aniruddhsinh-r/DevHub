@@ -29,6 +29,9 @@ new class extends Component
             Storage::disk('public')->delete($this->article->cover_path);
         }
         DB::transaction(function () {
+            $this->article->likes()->delete();
+            $this->article->comments()->delete();
+            $this->article->views()->delete();
             $this->article->bookmarks()->detach();
             $this->article->delete();
         });

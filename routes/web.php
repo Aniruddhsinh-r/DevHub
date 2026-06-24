@@ -49,6 +49,6 @@ Route::middleware(['auth','admin'])->group(function () {
 
 Route::middleware('guest')->group(function () {
     Route::livewire('/password/forgot', 'livewirecomponent.auth.password-forgot')->name('password.forgot');
-    Route::livewire('/password/forgot/otp', 'livewirecomponent.auth.verify-otp')->name('password.forgot.otp');
+    Route::livewire('/password/forgot/otp', 'livewirecomponent.auth.verify-otp')->name('password.forgot.otp')->middleware('throttle:otp');
     Route::livewire('/password/reset/password', 'livewirecomponent.auth.reset-password')->name('password.reset');
 });

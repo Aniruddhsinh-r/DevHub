@@ -26,8 +26,9 @@ new class extends Component
         $this->body = $article->body;
         $this->category_id = $article->category_id;
         $this->status = $article->status;
-        $this->scheduled_hours = $article->scheduled_hours;
-        $this->scheduled_minutes = $article->scheduled_minutes;
+        $diff = ($article->published_at && $article->status === 'scheduled') ? now()->diffInMinutes($article->published_at, false) : 0;
+        $this->scheduled_hours = $diff > 0 ? floor($diff / 60) : 0;
+        $this->scheduled_minutes = $diff > 0 ? ($diff % 60) : 0;
         $this->categories = Category::select('id','name')->orderBy('name')->get();
     }
 
@@ -49,7 +50,7 @@ new class extends Component
             'body' => 'required|min:30|max:50000',
             'category_id' => 'required|exists:categories,id',
             'status' => ['required', Rule::in(['draft', 'scheduled', 'published'])],
-            'scheduled_hours' => 'nullable|integer|min:1|max:48',
+            'scheduled_hours' => 'nullable|integer|min:0|max:48',
             'scheduled_minutes' => 'required_if:status,scheduled|nullable|integer|min:0|max:59',
             'cover_path' => 'nullable|dimensions:max_width=1000,max_height=1000|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
@@ -80,10 +81,12 @@ new class extends Component
             }
         }
 
-        if ($values['status'] === 'scheduled' && !empty($values['scheduled_minutes'])) {
+        if ($values['status'] === 'scheduled') {
             $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
         } elseif ($values['status'] === 'published') {
             $data['published_at'] = now();
+        } else {
+            $data['published_at'] = null;
         }
 
         $this->article->update($data);

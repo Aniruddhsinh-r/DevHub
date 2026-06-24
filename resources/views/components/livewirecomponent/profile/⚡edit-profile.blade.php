@@ -35,7 +35,7 @@ new class extends Component
 
         $this->validate([
             'name' => ['required','min:5','max:50'],
-            'email' => ['required', 'string', 'min:10', 'max:255' ,Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'email', 'min:10', 'max:255' ,Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:8', 'max:255'],
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:1024', 'dimensions:max_width=1000,max_height=1000'],
@@ -63,7 +63,6 @@ new class extends Component
             session()->flash('success','your profile is successfully updated.');
             return to_route('profile.index');
         }
-        // return back()->with('error',"fail to update profile.");
         $this->dispatch('live-notification', message: 'fail to update profile.');
     }
 };

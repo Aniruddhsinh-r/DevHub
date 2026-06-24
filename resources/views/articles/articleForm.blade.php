@@ -43,7 +43,7 @@
                         <div x-data="{ hours: '{{ old('scheduled_hours') ?? null }}',minutes: '{{ old('scheduled_minutes') ?? null }}' }" class="flex items-end space-x-2">
                             <div class="w-20">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Hours</label>
-                                <input type="text" name="scheduled_hours" wire:model="scheduled_hours" placeholder="HH" x-model="hours" @input="hours = hours.replace(/\D/g, '').slice(0, 2); if(parseInt(hours) > 48) hours = '48'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-50tline-none">
+                                <input type="text" name="scheduled_hours" value="0" wire:model="scheduled_hours" placeholder="HH" x-model="hours" @input="hours = hours.replace(/\D/g, '').slice(0, 2); if(parseInt(hours) > 48) hours = '48'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-50tline-none">
                             </div>
                             <span class="text-gray-400 font-bold pb-2">:</span>
                             <div class="w-20">

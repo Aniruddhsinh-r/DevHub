@@ -28,7 +28,8 @@ new #[Layout('layouts::dashboard')] class extends Component
         $slug = Str::slug($this->name, '-');
 
         if (Category::where('slug', $slug)->exists()) {
-            $this->validate();
+            $this->addError('name', 'A category with a similar name already exists in the system.');
+            return;
         }
 
         Category::create([

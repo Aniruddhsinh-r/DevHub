@@ -1,15 +1,14 @@
 <?php
 
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Computed;
 use Livewire\Component;
 use App\Models\Article;
 use App\Models\User;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
-    #[Computed]
     public User $user;
+    public User $articles;
 
     public function mount() {
         $this->articles = $this->user->articles()->with(['category'])->latest()->get();

@@ -4,6 +4,9 @@ use Spatie\Permission\Models\Role;
 use Livewire\Livewire;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Role::firstOrCreate([

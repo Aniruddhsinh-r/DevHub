@@ -11,13 +11,8 @@ new class extends Component
     public $email = '';
 
     public function submit() {
-        $this->validate(['email' => 'required|email|exists:users,email']);
+        $this->validate(['email' => 'required|email']);
         $user = User::where('email', $this->email)->first();
-
-        if (!$user) {
-            $this->addError('email', 'No account found with that email address.');
-            return;
-        }
 
         $to = $this->email;
         $otp = random_int(100000,999999);
@@ -57,8 +52,10 @@ new class extends Component
                     @csrf
                     <div>
                         <div class="mt-1">
-                            {{-- <input id="email" name="email" type="email" autocomplete="email" required value="{{ old('email') }}" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"> --}}
                             <x-form.field name="email" type="email" label="Your email" placeholder="mailadd@gmail.com"></x-form.field>
+                        </div>
+                        <div class="text-sm text-red-500 font-semibold py-1 rounded-md">
+                            Note: If email matches with our records, an Otp has been sent.
                         </div>
                     </div>
 

@@ -12,11 +12,3 @@ window.Echo = new Echo({
     forceTLS: false,
     enabledTransports: ['ws', 'wss'],
 });
-
-if (window.userId) {
-    window.Echo.private(`App.Models.User.${window.userId}`)
-        .notification((notification) => {
-            console.log("Live Broadcast Intercepted!", notification);
-            alert("Live Notification: " + notification.message);
-        });
-}
