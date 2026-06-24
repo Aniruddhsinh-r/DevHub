@@ -1,14 +1,12 @@
 <?php
 
 use Livewire\Component;
+use App\Actions\CreateArticle;
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\User;
-use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Auth;
 
 new class extends Component
 {
@@ -31,7 +29,7 @@ new class extends Component
         $this->article = new Article();
     }
 
-    public function store() {
+    public function store(CreateArticle $action) {
         if ($this->status === 'published') {
             Gate::authorize('publish', Article::class);
         }
@@ -47,35 +45,7 @@ new class extends Component
             'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $title = $values['title'];
-
-        $data = collect($values)->only([
-            'title', 'excerpt', 'body', 'category_id', 'status',
-        ])->toArray();
-
-        $base = Str::slug($title, '-');
-        $slug = $base;
-        $count = 2;
-        while (Article::where('slug', $slug)->exists()) {
-            $slug = $base . '-' . $count;
-            $count++;
-        }
-
-        $data['slug'] = $slug;
-
-        if ($values['cover_path'] ?? false) {
-            $data['cover_path'] = $values['cover_path']->store('articleCovers','public');
-        }
-
-        if ($values['status'] === 'scheduled') {
-            $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
-        } elseif ($values['status'] === 'published') {
-            $data['published_at'] = now();
-        } else {
-            $data['published_at'] = null; // Drafts stay null until active
-        }
-
-        auth()->user()->articles()->create($data);
+        $action->handle($values);
 
         session()->flash('success', 'Article created successfully.');
         return $this->redirectRoute('articles.index', navigate: true);

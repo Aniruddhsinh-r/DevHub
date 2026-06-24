@@ -2,10 +2,8 @@
 
 use Livewire\Component;
 use App\Models\Article;
-use App\Models\View;
+use App\Actions\ArticleDelete;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 new class extends Component
 {
@@ -17,24 +15,10 @@ new class extends Component
         Gate::authorize('delete', $this->article);
     }
 
-    public function delete() {
+    public function delete(ArticleDelete $action) {
         Gate::authorize('delete', $this->article);
-
-        $this->deleteArticle();
-    }
-
-    protected function deleteArticle()
-    {
-        if ($this->article->cover_path) {
-            Storage::disk('public')->delete($this->article->cover_path);
-        }
-        DB::transaction(function () {
-            $this->article->likes()->delete();
-            $this->article->comments()->delete();
-            $this->article->views()->delete();
-            $this->article->bookmarks()->detach();
-            $this->article->delete();
-        });
+        
+        $action->handle($this->article);
 
         session()->flash('success', 'Article deleted successfully.');
         return $this->redirectRoute('publishedarticle', navigate: true);

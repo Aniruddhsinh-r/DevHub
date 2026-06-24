@@ -2,13 +2,11 @@
 
 use Livewire\Component;
 use App\Models\Article;
+use App\Actions\UpdateArticle;
 use App\Models\Category;
-use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 new class extends Component
 {
@@ -41,7 +39,7 @@ new class extends Component
     public $scheduled_minutes;
     public $cover_path;
 
-    public function update() {
+    public function update(UpdateArticle $action) {
         Gate::authorize('update', $this->article);
 
         $values = $this->validate([
@@ -57,39 +55,7 @@ new class extends Component
 
         $article = $this->article;
 
-        $data = collect($values)->only([
-            'title', 'excerpt', 'body', 'category_id','status',
-        ])->toArray();
-
-        if (($values['title'] ?? null) && $values['title'] !== $this->article->title) {
-            $base = Str::slug($values['title'], '-');
-            $slug = $base;
-            $count = 2;
-
-            while (Article::where('slug', $slug)->where('id', '!=', $this->article->id)->exists()) {
-                $slug = $base . '-' . $count;
-                $count++;
-            }
-
-            $data['slug'] = $slug;
-        }
-
-        if ($this->cover_path) {
-            $data['cover_path'] = $values['cover_path']->store('articleCovers', 'public');
-            if ($article->cover_path) {
-                Storage::disk('public')->delete($article->cover_path);
-            }
-        }
-
-        if ($values['status'] === 'scheduled') {
-            $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
-        } elseif ($values['status'] === 'published') {
-            $data['published_at'] = now();
-        } else {
-            $data['published_at'] = null;
-        }
-
-        $this->article->update($data);
+        $action->handle($values, $article);
 
         session()->flash('success', 'Article updated successfully.');
         return $this->redirectRoute('publishedarticle', navigate: true);

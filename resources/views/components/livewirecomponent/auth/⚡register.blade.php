@@ -2,9 +2,7 @@
 
 use Livewire\Component;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use App\Actions\UserRegister;
 use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Sensitive;
@@ -20,8 +18,8 @@ new class extends Component
     #[Sensitive]
     public $password = '';
 
-    public function register() {
-        $this->validate([
+    public function register(UserRegister $action) {
+        $values = $this->validate([
             'name' => ['required','min:5','max:50'],
             'email' => ['required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:8', 'max:255'],
@@ -29,26 +27,7 @@ new class extends Component
             'bio' => ['nullable', 'max:2000', 'string'],
         ]);
 
-        $avatarPath = null;
-        if ($this->avatar) {
-            $avatarPath = $this->avatar->store('avatars', 'public');
-        }
-
-        $user = User::create([
-            'name' => $this->name,
-            'email' => strtolower($this->email),
-            'password' => Hash::make($this->password),
-            'bio' => $this->bio,
-            'avatar'=> $avatarPath,
-        ]);
-
-        $user->assignRole('author');
-        Auth::login($user, $remember = true);
-
-        $to = $this->email;
-        $message = $user->name;
-
-        // Mail::to($to)->queue(new RegistrationMail($message));
+        $action->handle($values);
 
         session()->flash('success', 'Account created successfully.');
         return $this->redirectRoute('home', navigate: true);

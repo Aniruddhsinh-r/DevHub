@@ -3,6 +3,7 @@
 use Livewire\Component;
 use App\Models\User;
 use Livewire\WithFileUploads;
+use App\Actions\UpdateProfile;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -30,10 +31,10 @@ new class extends Component
     #[Sensitive]
     public $password;
 
-    public function update() {
+    public function update(UpdateProfile $action) {
         $user = Auth::user();
 
-        $this->validate([
+        $values = $this->validate([
             'name' => ['required','min:5','max:50'],
             'email' => ['required', 'email', 'min:10', 'max:255' ,Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
@@ -42,28 +43,14 @@ new class extends Component
             'bio' => ['nullable', 'max:2000', 'string']
         ]);
 
-        $data = [
-            'name' => $this->name,
-            'email' => $this->email,
-            'bio' => $this->bio,
-        ];
+        $updated = $action->handle($values);
 
-        if ($this->avatar) {
-            $data['avatar'] = $this->avatar->store('avatars', 'public');
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
-            }
+        if ($updated) {
+            session()->flash('success', 'Your profile is successfully updated.');
+            return $this->redirectRoute('profile.index', navigate: true);
         }
 
-        if ($this->password) {
-            $data['password'] = Hash::make($this->password);
-        }
-
-        if ($user->update($data)) {
-            session()->flash('success','your profile is successfully updated.');
-            return to_route('profile.index');
-        }
-        $this->dispatch('live-notification', message: 'fail to update profile.');
+        $this->dispatch('live-notification', message: 'Failed to update profile.');
     }
 };
 ?>
@@ -88,7 +75,11 @@ new class extends Component
                         </svg>Change Image
                     </label>
                 </div>
-                <p class="text-xs text-gray-500">Only support PNG & JPEG under 2mb</p>
+                @error('avatar')
+                    <p class="text-xs text-red-500 font-semibold mt-1">{{ $message }}</p>
+                @else
+                    <p class="text-xs text-gray-500">Only support PNG & JPEG under 2mb</p>
+                @enderror
             </div>
         </div>
         <div class="grid grid-cols-1 gap-6 mb-10">
