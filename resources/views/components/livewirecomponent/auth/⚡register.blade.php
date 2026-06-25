@@ -16,7 +16,7 @@ new class extends Component
     public $name = '';
     #[Validate('required|email|min:10|max:255|unique:users,email')]
     public $email = '';
-    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:1024|dimensions:max_width=1000,max_height=1000')]
+    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:max_width=1000,max_height=1000')]
     public $avatar = null;
     #[Validate('nullable|max:2000|string')]
     public $bio = '';

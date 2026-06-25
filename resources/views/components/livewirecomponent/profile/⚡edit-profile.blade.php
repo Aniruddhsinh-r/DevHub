@@ -29,7 +29,7 @@ new class extends Component
     public $email;
     #[Validate('nullable|string|min:8|max:255')]
     public $password_confirmation;
-    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:1024|dimensions:max_width=1000,max_height=1000')]
+    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:max_width=1000,max_height=1000')]
     public $avatar;
     #[Validate('nullable|max:2000|string')]
     public $bio;
