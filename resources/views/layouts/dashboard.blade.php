@@ -21,7 +21,7 @@
                 </div>
                 <div class="flex items-center gap-4 md:gap-8">
                     @role('admin')
-                        <a href="{{ route('admin.dashboard') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">dashboard</a>
+                        <a href="{{ route('admin.profile') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
 
                         <div x-data="{ open: false }" data-test="Authbutton" class="relative z-50">
                             <button @click="open = !open" @click.outside="open = false" class="flex cursor-pointer items-center focus:outline-none">

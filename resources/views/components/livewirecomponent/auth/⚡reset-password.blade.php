@@ -26,6 +26,12 @@ new class extends Component
             session()->flash('error', 'Your email is expire please reenter your email.');
             return $this->redirectRoute('password.forgot', navigate: true);
         }
+
+        if (empty($this->password) && !empty($this->password_confirmation)) {
+            $this->addError('password', 'The password field is required when confirming.');
+            return;
+        }
+        
         $this->validate();
 
         $user = User::where('email', $email)->firstOrFail();
@@ -33,7 +39,7 @@ new class extends Component
         $user->save();
 
         session()->forget('resetPass_email');
-        
+
         session()->flash('success', 'Password updated successfully.');
         return $this->redirectRoute('login', navigate: true);
     }

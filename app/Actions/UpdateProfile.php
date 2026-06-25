@@ -26,6 +26,12 @@ class UpdateProfile
             'bio' => $values['bio'],
         ];
 
+        if (empty($values['password']) && !empty($values['password_confirmation'])) {
+            throw ValidationException::withMessages([
+                'password' => 'The password field is required when confirming.'
+            ]);
+        }
+
         $isBlocked = User::onlyTrashed()->where('email', $values['email'])->exists();
         if ($isBlocked) {
             throw ValidationException::withMessages([
