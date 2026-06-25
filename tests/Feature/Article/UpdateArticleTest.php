@@ -2,6 +2,7 @@
 
 use App\Models\Article;
 use Livewire\Livewire;
+use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../Helpers/userLogin.php';
 
@@ -17,7 +18,7 @@ test('user can update his article', function () {
         ->set('title','first update testing article.')
         ->set('excerpt','Create article using test, and perform update.')
         ->set('body','test body content att least 30 character long as i decide test body.')
-        ->set('status','published')
+        ->set('status',ArticleStatus::PUBLISHED)
         ->call('update')
         ->assertRedirect(route('publishedarticle'));
 
@@ -37,7 +38,7 @@ test('user cannot update others article', function () {
         'excerpt' => 'try to update unauthorized article using test, and perform update.',
         'body' => $article->body,
         'category_id' => $article->category_id,
-        'status' => $article->status,
+        'status' => $article->status->value,
     ]);
 
     $updateResponse->assertStatus(403);

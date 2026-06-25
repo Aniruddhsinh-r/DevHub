@@ -11,10 +11,10 @@
         .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="bg-[#f8f9fa] text-[#1a1a1a]">
+<body class="bg-[#f8f9fa] text-[#1a1a1a] min-h-screen flex flex-col">
     <main>
         <nav x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 border-b border-gray-200 glass-effect">
-            <div class="max-w-6xl mx-auto px-4 sm:px-2">
+            <div class="mx-auto px-4 sm:px-18">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center">
                         <a href="{{ route('home') }}" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
@@ -129,7 +129,7 @@
         @endif
     </main>
 
-    <footer class="bg-white border-t border-gray-100 mt-2">
+    <footer class="bg-white border-t border-gray-100 mt-auto">
         <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
             <div class="flex flex-col gap-8 md:flex-row md:justify-between md:items-start">
 

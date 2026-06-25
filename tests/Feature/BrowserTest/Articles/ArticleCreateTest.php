@@ -3,6 +3,7 @@
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
+use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../../Helpers/userLogin.php';
 
@@ -21,7 +22,7 @@ test('article create', function () {
     ->click('Create Article')
     ->fill('title', 'hither aniruddhsinh')
     ->select('category_id', $category->id)
-    ->select('status', 'published')
+    ->select('status', ArticleStatus::PUBLISHED->value)
     ->fill('excerpt', 'this is test case for checking hope this work.')
     ->fill('body', 'Test case new Article body testing for Amazing article creating and test dummy body data.')
     ->press('@submitBTN')
@@ -42,7 +43,7 @@ test('article update', function () {
     visit('/articles/myarticle')
     ->click('[dusk="edit-article-' . $article->id . '"]')
     ->fill('title', 'hither aniruddhsinh')
-    ->select('status', 'published')
+    ->select('status', ArticleStatus::PUBLISHED->value)
     ->fill('excerpt', 'this article is update by browser test case.')
     ->press('@submitBTN')
     ->assertRoute('publishedarticle')
@@ -61,9 +62,10 @@ test('article delete', function () {
         'user_id' => auth()->id()
     ]);
 
-   visit('/articles/myarticle')
-    ->click('[dusk="delete-article-' . $article->id . '"]')
-    ->assertDontSee('article create for delete browser test checking');
+    $page = visit('/articles/myarticle');
+    $page->script('window.confirm = () => true;');
+    $page->click('[dusk="delete-article-' . $article->id . '"]')
+        ->assertDontSee('article create for delete browser test checking');
 
     sleep(1);
 

@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\Livewire;
+use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__.'/../Helpers/userLogin.php';
 require_once __DIR__.'/../Helpers/adminLogin.php';
@@ -14,13 +15,13 @@ test('check article validation test', function () {
         ->set('category_id','344')
         ->set('excerpt','article created by kishan that gonna delete for purpose. wetw rtt wtwtwrgr  wrgg g rt t ret r t rt er ter e d gd g g')
         ->set('body','')
-        ->set('status','drafts')
+        ->set('status','anything')
         ->call('store')
         ->assertHasErrors(['title' => 'required'])
         ->assertHasErrors(['category_id' => 'exists:categories,id'])
         ->assertHasErrors(['excerpt' => 'max'])
         ->assertHasErrors(['body' => 'required'])
-        ->assertHasErrors(['status' => 'in']);
+        ->assertHasErrors(['status' => \Illuminate\Validation\Rules\Enum::class]);
 });
 
 test('check register validation test', function () {
@@ -61,7 +62,7 @@ test('check schedule article validation test require minutes', function () {
         ->set('category_id','3')
         ->set('excerpt','article for know who are you.')
         ->set('body','hi there good that i attract you anyway lets talk that how to know ourself...')
-        ->set('status','scheduled')
+        ->set('status',ArticleStatus::SCHEDULED)
         ->set('scheduled_minutes',null)
         ->call('store')
         ->assertHasErrors(['scheduled_minutes' => 'required_if']);

@@ -1,10 +1,12 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Cache;
 
 new class extends Component
 {
+    #[Validate('nullable|digits:6')]
     public $otp = '';
     public function mount() {
         if (!session('otp_email')) {
@@ -20,9 +22,7 @@ new class extends Component
             return $this->redirectRoute('password.forgot', navigate: true);
         }
 
-        $this->validate([
-            'otp' => 'required|digits:6'
-        ]);
+        $this->validate();
 
         $cachedOtp = Cache::get('otp_' . $email);
         if ($cachedOtp !== null && hash_equals((string) $cachedOtp, (string) $this->otp)) {

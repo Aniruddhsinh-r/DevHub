@@ -14,7 +14,7 @@
 <body class="bg-[#f8f9fa] text-[#1a1a1a]">
 <main>
     <nav x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 border-b border-gray-200 glass-effect">
-        <div class="max-w-6xl mx-auto px-4 sm:px-2">
+        <div class="mx-auto px-4 sm:px-18">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
                     <a href="{{ route('admin.dashboard') }}" wire:navigate class="text-2xl font-bold tracking-tighter italic">DevHub</a>

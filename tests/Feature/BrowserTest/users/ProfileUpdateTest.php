@@ -16,7 +16,7 @@ test('it update user detail', function () {
     visit(route('profile.edit'))
     ->fill('name', 'Rathod Ani')
     ->fill('bio', 'hi there this is my updated by using test case update profile testig.')
-    ->fill('email', 'adanirudda@gmail.com')
+    ->fill('email', 'rathodani@gmail.com')
     ->fill('password', 'rathod1290')
     ->fill('password_confirmation', 'rathod1290')
     ->press('@update_profile')
@@ -25,7 +25,7 @@ test('it update user detail', function () {
     $this->assertDatabaseHas('users', [
         'name' => 'Rathod Ani',
         'bio' => 'hi there this is my updated by using test case update profile testig.',
-        'email' => 'adanirudda@gmail.com'
+        'email' => 'rathodani@gmail.com'
     ]);
 });
 

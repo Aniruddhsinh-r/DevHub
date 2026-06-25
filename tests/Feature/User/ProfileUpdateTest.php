@@ -18,7 +18,7 @@ test('Profile update test', function () {
         ->set('bio', 'hi i am aniruddhsinh and i update my profile using testcase.')
         ->set('password', 'password123')
         ->set('password_confirmation', 'password123')
-        ->set('email', $user->email)
+        ->set('email', 'adniruddha@gmail.com')
         ->set('avatar', $newAvatar)
         ->call('update');
 

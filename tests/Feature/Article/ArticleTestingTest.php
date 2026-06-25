@@ -2,6 +2,7 @@
 
 use App\Models\Article;
 use Livewire\Livewire;
+use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../Helpers/userLogin.php';
 require_once __DIR__ . '/../Helpers/adminLogin.php';
@@ -67,25 +68,25 @@ test('admin cant access functional article page', function () {
 test('author can access his draft article', function() {
     $user = userLogin();
 
-    $article = Article::factory()->create(['status'=>'draft','user_id'=>$user->id]);
+    $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT,'user_id'=>$user->id]);
     $this->actingAs($user)->get(route('articles.show', $article))
     ->assertSee($article->title)
-    ->assertSee($article->excerpt); 
+    ->assertSee($article->excerpt);
 });
 
 test('author can access his scheduled article', function() {
     $user = userLogin();
 
-    $article = Article::factory()->create(['status'=>'scheduled','user_id'=>$user->id]);
+    $article = Article::factory()->create(['status'=>ArticleStatus::SCHEDULED,'user_id'=>$user->id]);
     $this->actingAs($user)->get(route('articles.show', $article))
     ->assertSee($article->title)
-    ->assertSee($article->excerpt); 
+    ->assertSee($article->excerpt);
 });
 
 test('user can not access other draft article', function() {
     $user = userLogin();
 
-    $article = Article::factory()->create(['status'=>'draft']);
+    $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT]);
     $this->actingAs($user)->get(route('articles.show', $article))
     ->assertDontSee($article->title)
     ->assertDontSee($article->excerpt)

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Validation\ValidationException;
 
 class UpdateProfile
 {
@@ -18,12 +19,19 @@ class UpdateProfile
     public function handle(array $values, ?User $user = null): bool
     {
         $user = Auth::user();
-        
+
         $data = [
             'name' => $values['name'],
             'email' => $values['email'],
             'bio' => $values['bio'],
         ];
+
+        $isBlocked = User::onlyTrashed()->where('email', $values['email'])->exists();
+        if ($isBlocked) {
+            throw ValidationException::withMessages([
+                'email' => 'This email is blocked in our records.',
+            ]);
+        }
 
         if (!empty($values['avatar'])) {
             $data['avatar'] = $values['avatar']->store('avatars', 'public');

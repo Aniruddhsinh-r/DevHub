@@ -6,26 +6,26 @@ use App\Actions\UserRegister;
 use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Sensitive;
+use Livewire\Attributes\Validate;
 
 new class extends Component
 {
     use WithFileUploads;
 
+    #[Validate('required|min:5|max:50')]
     public $name = '';
+    #[Validate('required|email|min:10|max:255|unique:users,email')]
     public $email = '';
+    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:1024|dimensions:max_width=1000,max_height=1000')]
     public $avatar = null;
+    #[Validate('nullable|max:2000|string')]
     public $bio = '';
     #[Sensitive]
+    #[Validate('nullable|string|min:8|max:255')]
     public $password = '';
 
     public function register(UserRegister $action) {
-        $values = $this->validate([
-            'name' => ['required','min:5','max:50'],
-            'email' => ['required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')],
-            'password' => ['required', 'string', 'min:8', 'max:255'],
-            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:1024', 'dimensions:max_width=1000,max_height=1000'],
-            'bio' => ['nullable', 'max:2000', 'string'],
-        ]);
+        $values = $this->validate();
 
         $action->handle($values);
 

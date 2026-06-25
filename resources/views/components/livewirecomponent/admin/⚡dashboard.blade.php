@@ -4,13 +4,14 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Enums\ArticleStatus;
 use Livewire\Attributes\Layout;
 use App\Models\User;
 use App\Models\View;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
-   
+
     public $articleCount = null;
     public $users = null;
     public $articles = null;
@@ -21,9 +22,9 @@ new #[Layout('layouts::dashboard')] class extends Component
     public $topUser;
 
     public function mount() {
-        $this->articleCount = Article::where('status', 'published')->count();
-        $this->articles = Article::where('status', 'published')->latest()->take(4)->get();
-        $this->draftArticle = Article::where('status','draft')->count();
+        $this->articleCount = Article::where('status',ArticleStatus::PUBLISHED)->count();
+        $this->articles = Article::where('status', ArticleStatus::PUBLISHED)->latest()->take(4)->get();
+        $this->draftArticle = Article::where('status',ArticleStatus::DRAFT)->count();
         $this->users = User::count();
         $this->comments = Comment::count();
         $this->views = View::count();

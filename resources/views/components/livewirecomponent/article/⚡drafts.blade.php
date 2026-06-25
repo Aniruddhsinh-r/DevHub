@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\User;
+use App\Enums\ArticleStatus;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component
@@ -9,7 +10,7 @@ new class extends Component
     public $articles;
     public function mount() {
         $user = Auth::user();
-        $this->articles = $user->articles()->where('status', 'draft')->latest()->get();
+        $this->articles = $user->articles()->where('status', ArticleStatus::DRAFT)->latest()->get();
     }
 };
 ?>

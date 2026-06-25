@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\View;
 use Livewire\Livewire;
+use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../Helpers/adminLogin.php';
 require_once __DIR__ . '/../Helpers/userLogin.php';
@@ -20,14 +21,14 @@ test('Create Article test', function () {
         ->set('category_id',Category::factory()->create()->id)
         ->set('excerpt','article created by kishan that gonna delete for purpose.')
         ->set('body','test body content att least 30 character long as i decide test body.')
-        ->set('status','published')
+        ->set('status',ArticleStatus::PUBLISHED)
         ->call('store')
         ->assertRedirect(route('articles.index'));
 
     $this->assertDatabaseHas('articles', [
         'title' => 'first testing article.',
         'excerpt' => 'article created by kishan that gonna delete for purpose.',
-        'status' => 'published',
+        'status' => ArticleStatus::PUBLISHED,
     ]);
 });
 

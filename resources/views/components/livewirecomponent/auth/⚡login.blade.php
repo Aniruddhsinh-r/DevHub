@@ -5,22 +5,22 @@ use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\Validate;
 use Livewire\Attributes\Sensitive;
 
 new class extends Component
 {
+    #[Validate('required|email|min:10|max:255')]
     public $email = '';
     public $remember = '';
     #[Sensitive]
+    #[Validate('nullable|string|min:8|max:255')]
     public $password = '';
 
     public function login() {
         $this->email = strtolower($this->email);
 
-        $attempt = $this->validate([
-            'email' => ['required', 'email', 'min:10', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'max:255'],
-        ]);
+        $attempt = $this->validate();
 
         if (Auth::attempt($attempt, (bool) $this->remember)) {
             session()->regenerate();

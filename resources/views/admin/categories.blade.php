@@ -40,10 +40,9 @@
                                     <td class="px-5 py-3.5 text-sm font-bold text-gray-900">{{ $category->slug }}</td>
                                     <td class="px-5 py-3.5 text-xs text-gray-500 font-mono">{{ $category->articles_count }}</td>
                                     <td class="px-5 py-3.5 text-right">
-                                        <form wire:submit.prevent="remove({{ $category->id }})">
-                                            @csrf
-                                            <button dusk="delete-category-{{ $category->id }}" class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete</button>
-                                        </form>
+                                        <button wire:click="remove({{ $category->id }})" dusk="delete-category-{{ $category->id }}"
+                                             wire:confirm="Are you sure you want to delete this User?" class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach

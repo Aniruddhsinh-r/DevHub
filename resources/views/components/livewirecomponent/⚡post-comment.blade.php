@@ -4,6 +4,8 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Notifications\CommentNotification;
 use Livewire\Attributes\Computed;
+use App\Enums\ArticleStatus;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,8 +21,8 @@ new class extends Component {
     }
 
     public function postComment() {
-        $this->validate([
-            'body' => ['required', 'string', 'max:5000'],
+        $validated = $this->validate([
+            'body' => 'required|string|max:5000'
         ]);
 
         if (!auth()->user()?->hasRole('author')) {
@@ -28,7 +30,7 @@ new class extends Component {
             return $this->redirectRoute('/', navigate: true);
         }
 
-        if ($this->article->status !== 'published') {
+        if ($this->article->status !== ArticleStatus::PUBLISHED) {
             $this->dispatch('live-notification', message: 'Comments are only allowed on published articles.');
             return;
         }
@@ -49,8 +51,8 @@ new class extends Component {
     }
 
     public function postReply($parentId) {
-        $this->validate([
-            'replybody' => ['required', 'string', 'max:5000'],
+        $validated = $this->validate([
+            'replybody' => 'required|string|max:5000'
         ]);
 
         if (!auth()->user()?->hasRole('author')) {

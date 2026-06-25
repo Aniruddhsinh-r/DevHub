@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\Article;
+use App\Enums\ArticleStatus;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component
@@ -12,7 +13,7 @@ new class extends Component
         if (Auth::user()?->hasRole('admin')) {
             return to_route('admin.dashboard');
         }
-        $this->articles = Article::where('status','published')->latest()->take(3)->get();
+        $this->articles = Article::where('status',ArticleStatus::PUBLISHED)->latest()->take(3)->get();
     }
 
     public function logout()

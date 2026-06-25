@@ -5,11 +5,13 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
+use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Gate;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
     use WithPagination;
+    #[Validate('required|min:3|max:20|string|unique:categories,name')]
     public $name = '';
 
     public function render() {
@@ -21,9 +23,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     public function create() {
         Gate::authorize('create', Category::class);
 
-        $this->validate([
-            'name' => ['required','min:3','max:20','string','unique:categories,name']
-        ]);
+        $this->validate();
 
         $slug = Str::slug($this->name, '-');
 

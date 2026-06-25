@@ -2,11 +2,14 @@
 
 use Livewire\Component;
 use App\Models\User;
+use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Hash;
 
 new class extends Component
 {
+    #[Validate('nullable|string|min:8|max:255|confirmed')]
     public $password = '';
+    #[Validate('nullable|string|min:8|max:255')]
     public $password_confirmation = '';
 
     public function mount() {
@@ -23,17 +26,14 @@ new class extends Component
             session()->flash('error', 'Your email is expire please reenter your email.');
             return $this->redirectRoute('password.forgot', navigate: true);
         }
-        $this->validate([
-            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
-            'password_confirmation' => ['required', 'string'],
-        ]);
+        $this->validate();
 
         $user = User::where('email', $email)->firstOrFail();
         $user->password = Hash::make($this->password);
         $user->save();
 
         session()->forget('resetPass_email');
-
+        
         session()->flash('success', 'Password updated successfully.');
         return $this->redirectRoute('login', navigate: true);
     }

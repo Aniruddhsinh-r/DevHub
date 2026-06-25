@@ -2,13 +2,14 @@
 
 use Livewire\Component;
 use App\Models\User;
+use App\Enums\ArticleStatus;
 
 new class extends Component
 {
     public $articles;
 
     public function mount(User $user) {
-        $this->articles = $user->articles()->where('status', 'published')->latest()->get();
+        $this->articles = $user->articles()->where('status', ArticleStatus::PUBLISHED)->latest()->get();
     }
 };
 ?>

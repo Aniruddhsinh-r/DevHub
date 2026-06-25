@@ -17,7 +17,7 @@ new class extends Component
 
     public function delete(ArticleDelete $action) {
         Gate::authorize('delete', $this->article);
-        
+
         $action->handle($this->article);
 
         session()->flash('success', 'Article deleted successfully.');
@@ -27,5 +27,6 @@ new class extends Component
 ?>
 
 <div>
-    <button wire:click="delete" class="text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-wider" dusk="delete-article-{{ $article->id }}">Delete</button>
+    <button wire:click="delete" wire:confirm="Are you sure you want to delete this article?"
+    class="text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-wider" dusk="delete-article-{{ $article->id }}">Delete</button>
 </div>

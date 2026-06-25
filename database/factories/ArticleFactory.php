@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
+use App\Enums\ArticleStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -21,7 +22,7 @@ class ArticleFactory extends Factory
     public function definition(): array
     {
         $title = fake()->sentence(15);
-        $status = 'published';
+        $status = ArticleStatus::PUBLISHED;
         return [
             'user_id' => User::factory(),
             'category_id' => Category::factory(),
@@ -30,7 +31,7 @@ class ArticleFactory extends Factory
             'excerpt' => fake()->paragraph(1),
             'body' => fake()->paragraphs(6, true),
             'status' => $status,
-            'published_at' => $status === 'published' ? fake()->dateTimeBetween('-1 month', 'now') : null,
+            'published_at' => $status === ArticleStatus::PUBLISHED ? fake()->dateTimeBetween('-1 month', 'now') : null,
             'created_at' => now(),
         ];
     }

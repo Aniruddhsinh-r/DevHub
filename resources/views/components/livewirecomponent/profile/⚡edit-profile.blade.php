@@ -5,9 +5,8 @@ use App\Models\User;
 use Livewire\WithFileUploads;
 use App\Actions\UpdateProfile;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Validate;
 use Livewire\Attributes\Sensitive;
 
 new class extends Component
@@ -23,25 +22,24 @@ new class extends Component
         $this->bio = $this->user->bio;
     }
 
+    #[Validate('required|min:5|max:50')]
     public $name;
+    #[Validate('required|email|min:10|max:255')]
     public $email;
+    #[Validate('nullable|string|min:8|max:255')]
     public $password_confirmation;
+    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:1024|dimensions:max_width=1000,max_height=1000')]
     public $avatar;
+    #[Validate('nullable|max:2000|string')]
     public $bio;
     #[Sensitive]
+    #[Validate('nullable|string|min:8|max:255|confirmed')]
     public $password;
 
     public function update(UpdateProfile $action) {
         $user = Auth::user();
 
-        $values = $this->validate([
-            'name' => ['required','min:5','max:50'],
-            'email' => ['required', 'email', 'min:10', 'max:255' ,Rule::unique('users')->ignore($user->id)],
-            'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
-            'password_confirmation' => ['nullable', 'string', 'min:8', 'max:255'],
-            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:1024', 'dimensions:max_width=1000,max_height=1000'],
-            'bio' => ['nullable', 'max:2000', 'string']
-        ]);
+        $values = $this->validate();
 
         $updated = $action->handle($values);
 

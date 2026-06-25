@@ -3,15 +3,17 @@
 use Livewire\Component;
 use App\Mail\PasswordResetMail;
 use App\Models\User;
+use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
 new class extends Component
 {
+    #[Validate('required|email')]
     public $email = '';
 
     public function submit() {
-        $this->validate(['email' => 'required|email']);
+        $this->validate();
         $user = User::where('email', $this->email)->first();
 
         $to = $this->email;

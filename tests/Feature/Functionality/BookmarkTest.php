@@ -2,6 +2,7 @@
 
 use App\Models\Article;
 use Livewire\Livewire;
+use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../Helpers/userLogin.php';
 require_once __DIR__ . '/../Helpers/adminLogin.php';
@@ -71,7 +72,7 @@ test('user can bookmark but not twice', function () {
 
 test('user cant bookmark draft article', function () {
     $user = userLogin();
-    $article = Article::factory()->create(['status'=>'draft','user_id'=>$user->id]);
+    $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT,'user_id'=>$user->id]);
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
         ->call('toggleBookmark')

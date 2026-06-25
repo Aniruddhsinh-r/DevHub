@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\Article;
+use App\Enums\ArticleStatus;
 use Livewire\WithPagination;
 
 new class extends Component
@@ -17,7 +18,7 @@ new class extends Component
     {
         return view('articles.article', [
             'articles' => Article::query()
-                ->where('status', 'published')
+                ->where('status', ArticleStatus::PUBLISHED)
                 ->when($this->search, function ($query, $search) {
                     $query->where(function ($query) use ($search) {
                         $query->where('title', 'like', "%{$search}%")

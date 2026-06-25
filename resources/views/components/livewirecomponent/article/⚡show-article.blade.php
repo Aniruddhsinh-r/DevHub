@@ -4,6 +4,7 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Models\View;
 use App\Models\Like;
+use App\Enums\ArticleStatus;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component
@@ -13,7 +14,7 @@ new class extends Component
     public $comments;
 
     public function mount() {
-        if ($this->article->status !== 'published' && $this->article->user_id !== auth()->id()) {
+        if ($this->article->status !== ArticleStatus::PUBLISHED && $this->article->user_id !== auth()->id()) {
             session()->flash('error', 'The article you are looking for is not available.');
             return $this->redirect(route('articles.index'), navigate: true);
         }
@@ -30,12 +31,14 @@ new class extends Component
     }
 
     public function toggleLike() {
+        // $this->authorize('like', $this->article);
+
         if (!auth()->user()?->hasRole('author')) {
             session()->flash('error', 'Only Author can Like article.');
             return $this->redirectRoute('/', navigate: true);
         }
 
-        if ($this->article->status !== 'published') {
+        if ($this->article->status !== ArticleStatus::PUBLISHED) {
             $this->dispatch('live-notification', message: 'You cant like draft articles.');
             return;
         }
@@ -53,12 +56,13 @@ new class extends Component
 
     public function toggleBookmark()
     {
+        // $this->authorize('bookmark', $this->article);
         if (!auth()->user()?->hasRole('author')) {
             session()->flash('error', 'Only Author can bookmark article.');
             return $this->redirectRoute('/', navigate: true);
         }
 
-        if ($this->article->status !== 'published') {
+        if ($this->article->status !==  ArticleStatus::PUBLISHED) {
             $this->dispatch('live-notification', message: 'You cant bookmark draft articles');
             return;
         }
@@ -90,7 +94,7 @@ new class extends Component
                             {{ $article->status }}
                         </span>
                     </div>
-                    @if ($article->status === 'published')
+                    @if ($article->status === ArticleStatus::PUBLISHED)
                     <div class="flex items-center gap-3">
                         <div>
                             <button wire:click="toggleLike" type="submit" data-test="like-button"
