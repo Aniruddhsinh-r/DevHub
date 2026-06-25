@@ -34,6 +34,13 @@ class UpdateArticle
             $data['slug'] = $slug;
         }
 
+        if (!empty($values['delete_cover'])) {
+            if ($article->avatar) {
+                Storage::disk('public')->delete($article->cover_path);
+            }
+            $data['cover_path'] = null;
+        }
+
         if ($this->hasFile($values, 'cover_path')) {
             $data['cover_path'] = $values['cover_path']->store('articleCovers', 'public');
             if ($article->cover_path) {

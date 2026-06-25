@@ -14,9 +14,10 @@ new class extends Component
     use WithFileUploads;
     public User $user;
 
+    public $delete_avatar = false;
+
     public function mount() {
         $this->user = Auth::user();
-
         $this->name = $this->user->name;
         $this->email = $this->user->email;
         $this->bio = $this->user->bio;
@@ -36,11 +37,16 @@ new class extends Component
     #[Validate('nullable|string|min:8|max:255|confirmed')]
     public $password;
 
+    public function removeAvatar() {
+        $this->avatar = null;
+        $this->delete_avatar = true;
+    }
+
     public function update(UpdateProfile $action) {
         $user = Auth::user();
 
         $values = $this->validate();
-
+        $values['delete_avatar'] = $this->delete_avatar;
         $updated = $action->handle($values);
 
         if ($updated) {
@@ -66,12 +72,18 @@ new class extends Component
             </div>
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-3">
-                    <input type="file" wire:model="avatar" id="avatar" class="hidden" accept="image/*" @change="imageUrl = URL.createObjectURL($event.target.files[0])">
-                    <label for="avatar" class="cursor-pointer bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>Change Image
-                    </label>
+                    {{-- <input type="file" wire:model="avatar" id="avatar" class="hidden" accept="image/*" @change="imageUrl = URL.createObjectURL($event.target.files[0])"> --}}
+                    <input type="file" wire:model="avatar" id="avatar" x-ref="avatarInput" class="hidden" accept="image/*" @change="imageUrl = URL.createObjectURL($event.target.files[0])">
+                    <div class="flex items-center gap-3">
+                        <label for="avatar" class="cursor-pointer bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>Change Image
+                        </label>
+                        <button type="button" wire:click="removeAvatar" @click="imageUrl = 'https://ui-avatars.com/api/?name={{ urlencode($user->name) }}'; $refs.avatarInput.value = '';" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                            Remove
+                        </button>
+                    </div>
                 </div>
                 @error('avatar')
                     <p class="text-xs text-red-500 font-semibold mt-1">{{ $message }}</p>

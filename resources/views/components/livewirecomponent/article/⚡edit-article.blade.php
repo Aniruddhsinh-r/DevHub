@@ -17,6 +17,8 @@ new class extends Component
     public Article $article;
     public $categories;
 
+    public $delete_cover = false;
+
     public function mount(Article $article) {
         $this->article = $article;
         Gate::authorize('update', $this->article);
@@ -50,12 +52,18 @@ new class extends Component
 
     public $cover_path;
 
+    public function removeCover() {
+        $this->cover_path = null;
+        $this->delete_cover = true;
+    }
+
     public function update(UpdateArticle $action) {
         Gate::authorize('update', $this->article);
 
         $values = $this->validate();
 
         $article = $this->article;
+        $values['delete_cover'] = $this->delete_cover;
 
         $action->handle($values, $article);
 

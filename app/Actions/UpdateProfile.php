@@ -33,6 +33,12 @@ class UpdateProfile
             ]);
         }
 
+        if (!empty($values['delete_avatar'])) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $data['avatar'] = null;
+        }
         if (!empty($values['avatar'])) {
             $data['avatar'] = $values['avatar']->store('avatars', 'public');
             if ($user->avatar) {
