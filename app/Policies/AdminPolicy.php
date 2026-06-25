@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\User;
 
 class AdminPolicy
@@ -23,6 +24,6 @@ class AdminPolicy
     }
 
     public function remove(User $user): bool {
-        return $user->can('user.manage') && $user->hasRole('admin');
+        return $user->can('user.manage') && $user->hasRole(UserRole::ADMIN);
     }
 }

@@ -4,6 +4,7 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Models\View;
 use App\Models\Like;
+use App\Enums\UserRole;
 use App\Enums\ArticleStatus;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,7 +34,7 @@ new class extends Component
     public function toggleLike() {
         // $this->authorize('like', $this->article);
 
-        if (!auth()->user()?->hasRole('author')) {
+        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
             session()->flash('error', 'Only Author can Like article.');
             return $this->redirectRoute('/', navigate: true);
         }
@@ -57,7 +58,7 @@ new class extends Component
     public function toggleBookmark()
     {
         // $this->authorize('bookmark', $this->article);
-        if (!auth()->user()?->hasRole('author')) {
+        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
             session()->flash('error', 'Only Author can bookmark article.');
             return $this->redirectRoute('/', navigate: true);
         }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -20,8 +21,8 @@ class RolePermissionSeeder extends Seeder
 
         Permission::firstOrCreate(['name' => 'user.manage']);
 
-        $author = Role::firstOrCreate(['name' => 'author']);
-        $admin = Role::firstOrCreate(['name' => 'admin']);
+        $author = Role::firstOrCreate(['name' => UserRole::AUTHOR]);
+        $admin = Role::firstOrCreate(['name' => UserRole::ADMIN]);
 
         $author->givePermissionTo([
             'article.create',

@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
+use App\Enums\UserRole;
 require_once __DIR__ . '/../../Helpers/UserLogin.php';
 require_once __DIR__ . '/../../Helpers/AdminLogin.php';
 
@@ -9,7 +10,7 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Role::firstOrCreate([
-        'name' => 'author',
+        'name' => UserRole::AUTHOR,
         'guard_name' => 'web'
     ]);
 });

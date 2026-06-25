@@ -2,6 +2,7 @@
 
 use Spatie\Permission\Models\Role;
 use Livewire\Livewire;
+use App\Enums\UserRole;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,7 +11,7 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Role::firstOrCreate([
-        'name' => 'author',
+        'name' => UserRole::AUTHOR,
         'guard_name' => 'web'
     ]);
 });

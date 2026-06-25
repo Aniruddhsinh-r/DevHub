@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Enums\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class AdminMiddleware
             return redirect()->route('login')->with('error', 'You must be logged in.');
         }
 
-        if (!Auth::user()->hasRole('admin')) {
+        if (!Auth::user()->hasRole(UserRole::ADMIN)) {
             abort(403, 'Unauthorized action');
         }
 

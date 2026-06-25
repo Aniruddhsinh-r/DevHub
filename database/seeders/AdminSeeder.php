@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Enums\UserRole;
 
 class AdminSeeder extends Seeder
 {
@@ -20,6 +21,6 @@ class AdminSeeder extends Seeder
             'name' => 'Harshrajsinh',
             'password' => Hash::make('IAmHarsh'),
         ]);
-        $user->assignRole('admin');
+        $user->assignRole(UserRole::ADMIN);
     }
 }

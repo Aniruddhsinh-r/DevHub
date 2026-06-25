@@ -5,6 +5,7 @@ use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
+use App\Enums\UserRole;
 use Illuminate\Support\Facades\Gate;
 
 new #[Layout('layouts::dashboard')] class extends Component
@@ -19,7 +20,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     public function render()
     {
         return view('admin.users.users', [
-            'users' => User::role('author')->where('name', 'LIKE', "%{$this->search}%")->paginate(6),
+            'users' => User::role(UserRole::AUTHOR)->where('name', 'LIKE', "%{$this->search}%")->paginate(6),
         ]);
     }
 

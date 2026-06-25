@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Validate;
+use App\Enums\UserRole;
 use Livewire\Attributes\Sensitive;
 
 new class extends Component
@@ -24,7 +25,7 @@ new class extends Component
 
         if (Auth::attempt($attempt, (bool) $this->remember)) {
             session()->regenerate();
-            $admin = User::where('email', $this->email)->first()?->hasRole('admin');
+            $admin = User::where('email', $this->email)->first()?->hasRole(UserRole::ADMIN);
 
             if ($admin) {
                 session()->flash('success', 'Welcome back, admin!');

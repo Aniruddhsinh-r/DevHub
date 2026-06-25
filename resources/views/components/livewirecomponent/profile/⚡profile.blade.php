@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewFollowerNotification;
 
@@ -14,7 +15,7 @@ new class extends Component
         $this->user = $user;
         $this->articles = collect();
 
-        if ($this->user->hasRole('admin')) {
+        if ($this->user->hasRole(UserRole::ADMIN)) {
             session()->flash('error', 'This author does not exist.');
             return $this->redirectRoute('home', navigate: true);
         }
@@ -27,7 +28,7 @@ new class extends Component
     }
 
     public function toggleFollow() {
-        if (!auth()->user()?->hasRole('author')) {
+        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
             session()->flash('error', 'Only Author can Follow others.');
             return $this->redirectRoute('/', navigate: true);
         }

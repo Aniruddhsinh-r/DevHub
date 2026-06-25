@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -48,8 +49,8 @@ class UserFactory extends Factory
     public function author(): static
     {
         return $this->afterCreating(function (User $user) {
-            Role::findOrCreate('author', 'web');
-            $user->assignRole('author');
+            Role::findOrCreate(UserRole::AUTHOR, 'web');
+            $user->assignRole(UserRole::AUTHOR);
         });
     }
 }

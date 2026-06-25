@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\UserRole;
 
 use Illuminate\Container\Attributes\CurrentUser;
 
@@ -30,7 +31,7 @@ class UserRegister
             'avatar'=> $avatarPath,
         ]);
 
-        $user->assignRole('author');
+        $user->assignRole(UserRole::AUTHOR);
         Auth::login($user, $remember = true);
 
         $to = $values['email'];

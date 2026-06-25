@@ -5,6 +5,7 @@ use App\Models\Article;
 use Livewire\Livewire;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Enums\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 
@@ -13,8 +14,8 @@ require_once __DIR__ . '/../Helpers/AdminLogin.php';
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    Role::firstOrCreate(['name' => 'author', 'guard_name' => 'web']);
-    Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+    Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
+    Role::firstOrCreate(['name' => UserRole::ADMIN, 'guard_name' => 'web']);
 });
 test('Admin User find test', function () {
     $admin = AdminLogin();

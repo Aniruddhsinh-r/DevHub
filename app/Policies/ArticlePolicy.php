@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Article;
 use App\Models\User;
+use App\Enums\UserRole;
 use App\Enums\ArticleStatus;
 
 class ArticlePolicy
@@ -40,7 +41,7 @@ class ArticlePolicy
 
     public function like(User $user, Article $article): bool
     {
-        return $user->hasRole('author') && $article->status === ArticleStatus::PUBLISHED;
+        return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED;
     }
     public function view(User $user, Article $article): bool
     {
@@ -48,6 +49,6 @@ class ArticlePolicy
     }
     public function bookmark(User $user, Article $article): bool
     {
-        return $user->hasRole('author') && $article->status === ArticleStatus::PUBLISHED;
+        return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED;
     }
 }

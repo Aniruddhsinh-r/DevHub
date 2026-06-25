@@ -7,6 +7,7 @@ use Livewire\Attributes\Computed;
 use App\Enums\ArticleStatus;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use App\Enums\UserRole;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component {
@@ -25,7 +26,7 @@ new class extends Component {
             'body' => 'required|string|max:5000'
         ]);
 
-        if (!auth()->user()?->hasRole('author')) {
+        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
             session()->flash('error', 'Only Author can post comment on article.');
             return $this->redirectRoute('/', navigate: true);
         }
@@ -55,7 +56,7 @@ new class extends Component {
             'replybody' => 'required|string|max:5000'
         ]);
 
-        if (!auth()->user()?->hasRole('author')) {
+        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
             session()->flash('error', 'Only Author can reply on comments.');
             return $this->redirectRoute('/', navigate: true);
         }

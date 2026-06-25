@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\Article;
+use App\Enums\UserRole;
 use App\Enums\ArticleStatus;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +11,7 @@ new class extends Component
     public $articles;
 
     public function mount() {
-        if (Auth::user()?->hasRole('admin')) {
+        if (Auth::user()?->hasRole(UserRole::ADMIN)) {
             return to_route('admin.dashboard');
         }
         $this->articles = Article::where('status',ArticleStatus::PUBLISHED)->latest()->take(3)->get();
