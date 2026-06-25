@@ -2,8 +2,8 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../../Helpers/userLogin.php';
-require_once __DIR__ . '/../../Helpers/adminLogin.php';
+require_once __DIR__ . '/../../Helpers/UserLogin.php';
+require_once __DIR__ . '/../../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -21,7 +21,7 @@ test('it login a user', function () {
 });
 
 test('it logout a user.', function () {
-    userLogin();
+    UserLogin();
 
     visit('/home')
     ->click('[data-test="Authbutton"]')
@@ -30,14 +30,14 @@ test('it logout a user.', function () {
 });
 
 test('after login user cant access login page.', function () {
-    userLogin();
+    UserLogin();
 
     visit('/login')
     ->assertRoute('home');
 });
 
 test('after login admin cant access login page.', function () {
-    adminLogin();
+    AdminLogin();
 
     visit('/login')
     ->assertRoute('admin.dashboard');

@@ -3,8 +3,8 @@
 use Livewire\Livewire;
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/userLogin.php';
-require_once __DIR__ . '/../Helpers/adminLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
+require_once __DIR__ . '/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -33,7 +33,7 @@ test('guest cant access article page for comment', function () {
 
 test('admin cant post comment', function () {
     $article = Article::factory()->create();
-    $admin = adminLogin();
+    $admin = AdminLogin();
 
     Livewire::test('livewirecomponent.post-comment', ['article' => $article])
     ->set('body', 'hi there this is comment create by testing')
@@ -47,7 +47,7 @@ test('admin cant post comment', function () {
 
 test('user can post comment', function () {
     $article = Article::factory()->create();
-    $user = userLogin();
+    $user = UserLogin();
 
     Livewire::test('livewirecomponent.post-comment', ['article' => $article])
     ->set('body', 'hi there this is comment create by testing')

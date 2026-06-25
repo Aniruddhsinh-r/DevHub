@@ -4,13 +4,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
-require_once __DIR__.'/../Helpers/userLogin.php';
-require_once __DIR__ . '/../Helpers/adminLogin.php';
+require_once __DIR__.'/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Profile update test', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $newAvatar =  UploadedFile::fake()->image('avatar.jpg');
 
     Livewire::test('livewirecomponent.profile.edit-profile')
@@ -29,7 +28,7 @@ test('Profile update test', function () {
 });
 
 test('Profile following functionality test', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $followed = User::factory()->create();
 
     Livewire::test('livewirecomponent.profile.profile',['user' => $followed])

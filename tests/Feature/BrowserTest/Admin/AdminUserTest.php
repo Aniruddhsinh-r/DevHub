@@ -3,22 +3,22 @@
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
-require_once __DIR__.'/../../Helpers/adminLogin.php';
-require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__.'/../../Helpers/AdminLogin.php';
+require_once __DIR__.'/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Admin fetch user details', function () {
-    $user = userLogin();
-    adminLogin();
+    $user = UserLogin();
+    AdminLogin();
 
     visit('/admin/users')
     ->assertSee($user->name);
 });
 
 test('admin search and delete user', function () {
-    $user = userLogin();
-    adminLogin();
+    $user = UserLogin();
+    AdminLogin();
 
     visit('/admin/users?search='.$user->name)
     ->assertSee($user->name)
@@ -38,7 +38,7 @@ test('guest cant access user detail page', function () {
 
 test('Author cant access or search on user detail page', function () {
     $user = User::factory()->create();
-    userLogin();
+    UserLogin();
 
     visit('/admin/users?search='.$user->name)
     ->assertSee('403')

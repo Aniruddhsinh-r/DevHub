@@ -2,14 +2,14 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../../Helpers/userLogin.php';
-require_once __DIR__ . '/../../Helpers/adminLogin.php';
+require_once __DIR__ . '/../../Helpers/UserLogin.php';
+require_once __DIR__ . '/../../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Author follow other authers.', function () {
     $user = User::factory()->create();
-    userLogin();
+    UserLogin();
 
     visit(route('profile.show', $user))
     ->click('@follow-button')
@@ -23,7 +23,7 @@ test('Author follow other authers.', function () {
 
 test('Author can follow other but not twice.', function () {
     $user = User::factory()->create();
-    userLogin();
+    UserLogin();
 
     visit(route('profile.show', $user))
     ->click('@follow-button')
@@ -55,7 +55,7 @@ test('guest cant follow other author.', function () {
 });
 
 test('admin cant access follow functionality profile page.', function () {
-    adminLogin();
+    AdminLogin();
     $user = User::factory()->create();
 
     visit(route('profile.show', $user))

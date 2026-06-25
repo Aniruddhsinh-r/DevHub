@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
-function userLogin(array $permissions = ['article.create','article.edit','article.delete','article.publish'])
+function UserLogin(array $permissions = ['article.create','article.edit','article.delete','article.publish'])
 {
     $authorRole = Role::firstOrCreate(['name' => 'author']);
     foreach ($permissions as $permissionName) {

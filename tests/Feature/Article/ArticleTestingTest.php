@@ -4,8 +4,8 @@ use App\Models\Article;
 use Livewire\Livewire;
 use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/userLogin.php';
-require_once __DIR__ . '/../Helpers/adminLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
+require_once __DIR__ . '/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -38,7 +38,7 @@ test('user can comment like and bookmark article', function () {
 });
 
 test('admin views not count', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
 
     $article = Article::factory()->create();
     Livewire::test('livewirecomponent.admin.show-article',['article' => $article]);
@@ -56,7 +56,7 @@ test('guest cant access article page', function () {
 });
 
 test('admin cant access functional article page', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
     $article = Article::factory()->create();
 
     $this->actingAs($admin)->get(route('articles.show', $article))
@@ -66,7 +66,7 @@ test('admin cant access functional article page', function () {
 });
 
 test('author can access his draft article', function() {
-    $user = userLogin();
+    $user = UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT,'user_id'=>$user->id]);
     $this->actingAs($user)->get(route('articles.show', $article))
@@ -75,7 +75,7 @@ test('author can access his draft article', function() {
 });
 
 test('author can access his scheduled article', function() {
-    $user = userLogin();
+    $user = UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::SCHEDULED,'user_id'=>$user->id]);
     $this->actingAs($user)->get(route('articles.show', $article))
@@ -84,7 +84,7 @@ test('author can access his scheduled article', function() {
 });
 
 test('user can not access other draft article', function() {
-    $user = userLogin();
+    $user = UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT]);
     $this->actingAs($user)->get(route('articles.show', $article))
@@ -95,7 +95,7 @@ test('user can not access other draft article', function() {
 });
 
 test('user can access his scheduled article', function() {
-    $user = userLogin();
+    $user = UserLogin();
 
     $article = Article::factory()->create(['status'=>'scheduled']);
     $this->actingAs($user)->get(route('articles.show', $article))

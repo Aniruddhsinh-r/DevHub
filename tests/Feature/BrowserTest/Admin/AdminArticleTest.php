@@ -3,13 +3,13 @@
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../../Helpers/adminLogin.php';
-require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__.'/../../Helpers/AdminLogin.php';
+require_once __DIR__.'/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Admin search and see article', function () {
-    adminLogin();
+    AdminLogin();
 
     $article = Article::factory()->create([
         'title' => 'example Article',
@@ -22,7 +22,7 @@ test('Admin search and see article', function () {
 });
 
 test('Admin view not count', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
 
     $article = Article::factory()->create([
         'title' => 'example Article',
@@ -41,7 +41,7 @@ test('guest cant access admin article page', function () {
 });
 
 test('Author cant access admin article page', function () {
-    userLogin();
+    UserLogin();
 
     visit('/admin/articles')
     ->assertSee('403')

@@ -3,13 +3,13 @@
 use Livewire\Livewire;
 use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../Helpers/userLogin.php';
-require_once __DIR__.'/../Helpers/adminLogin.php';
+require_once __DIR__.'/../Helpers/UserLogin.php';
+require_once __DIR__.'/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('check article validation test', function () {
-    userLogin();
+    UserLogin();
     Livewire::test('livewirecomponent.article.create-article')
         ->set('title','')
         ->set('category_id','344')
@@ -55,7 +55,7 @@ test('check credentials validation test', function () {
 });
 
 test('check schedule article validation test require minutes', function () {
-    userLogin();
+    UserLogin();
 
     Livewire::test('livewirecomponent.article.create-article')
         ->set('title','expose your self')
@@ -69,7 +69,7 @@ test('check schedule article validation test require minutes', function () {
 });
 
 test('check profile update validation test', function () {
-    userLogin();
+    UserLogin();
 
     $test = Livewire::test('livewirecomponent.profile.edit-profile')
         ->set('name', '')
@@ -86,8 +86,8 @@ test('check profile update validation test', function () {
 });
 
 test('Author cant see admin profile', function () {
-    $admin = adminLogin();
-    userLogin();
+    $admin = AdminLogin();
+    UserLogin();
 
     $response = Livewire::test('livewirecomponent.profile.profile',['user' => $admin]);
     $response->assertStatus(302);
@@ -96,13 +96,13 @@ test('Author cant see admin profile', function () {
 });
 
 test('User cant see those auther who dose not exist in db', function () {
-    userLogin();
+    UserLogin();
 
     $this->get('/profile/4343223')->assertStatus(404);
 });
 
 test('Admin cant update his profile', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
 
     $response = $this->actingAs($admin)->get(route('profile.edit'),[
         'name' => 'Admin Name change',

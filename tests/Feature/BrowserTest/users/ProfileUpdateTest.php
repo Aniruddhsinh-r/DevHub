@@ -5,13 +5,13 @@ use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 
-require_once __DIR__.'/../../Helpers/adminLogin.php';
-require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__.'/../../Helpers/AdminLogin.php';
+require_once __DIR__.'/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('it update user detail', function () {
-    userLogin();
+    UserLogin();
 
     visit(route('profile.edit'))
     ->fill('name', 'Rathod Ani')
@@ -37,7 +37,7 @@ test('guest cant see author profile', function() {
 });
 
 test('Admin cant access follow button profile page', function () {
-    adminLogin();
+    AdminLogin();
 
     $user = User::factory()->create();
 

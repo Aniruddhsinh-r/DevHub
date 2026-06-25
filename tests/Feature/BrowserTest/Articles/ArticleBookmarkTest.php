@@ -2,13 +2,13 @@
 
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__.'/../../Helpers/UserLogin.php';
 require_once __DIR__.'/../../Helpers/adminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('User can bookmark article', function () {
-    userLogin();
+    UserLogin();
 
     $article = Article::factory()->create();
 
@@ -23,7 +23,7 @@ test('User can bookmark article', function () {
 });
 
 test('User can remove articles from bookmark', function () {
-    userLogin();
+    UserLogin();
 
     $article = Article::factory()->create();
 

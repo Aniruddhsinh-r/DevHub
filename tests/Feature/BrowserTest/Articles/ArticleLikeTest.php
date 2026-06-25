@@ -2,13 +2,13 @@
 
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../../Helpers/userLogin.php';
-require_once __DIR__.'/../../Helpers/adminLogin.php';
+require_once __DIR__.'/../../Helpers/UserLogin.php';
+require_once __DIR__.'/../../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('User can like article', function () {
-    $user = userLogin();
+    $user = UserLogin();
 
     $article = Article::factory()->create();
 
@@ -23,7 +23,7 @@ test('User can like article', function () {
 });
 
 test('User can unlike article', function () {
-    $user = userLogin();
+    $user = UserLogin();
 
     $article = Article::factory()->create();
 
@@ -42,7 +42,7 @@ test('User can unlike article', function () {
 });
 
 test('admin cant access article like page', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
 
     $article = Article::factory()->create();
 

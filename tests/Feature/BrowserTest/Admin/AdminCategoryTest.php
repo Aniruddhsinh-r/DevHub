@@ -3,13 +3,13 @@
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../../Helpers/adminLogin.php';
-require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__.'/../../Helpers/AdminLogin.php';
+require_once __DIR__.'/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Create category by admin', function () {
-    adminLogin();
+    AdminLogin();
 
     visit('/admin/categories')
     ->fill('name','Verdie Littel III')
@@ -19,7 +19,7 @@ test('Create category by admin', function () {
 });
 
 test('delete category', function () {
-    adminLogin();
+    AdminLogin();
 
     $category = Category::factory()->create([
         'name' => 'Verdie Littel III'
@@ -41,7 +41,7 @@ test('guest cant access admin category page', function () {
 });
 
 test('Author cant access admin category page', function () {
-    userLogin();
+    UserLogin();
 
     visit('/admin/categories')
     ->assertSee('403')

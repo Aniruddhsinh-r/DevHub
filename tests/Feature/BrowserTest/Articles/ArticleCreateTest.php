@@ -5,7 +5,7 @@ use App\Models\Category;
 use App\Models\User;
 use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../../Helpers/userLogin.php';
+require_once __DIR__ . '/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -15,7 +15,7 @@ test('it belongs to a user', function () {
 });
 
 test('article create', function () {
-    userLogin();
+    UserLogin();
     $category = Category::factory()->create();
 
     visit('/home')
@@ -35,7 +35,7 @@ test('article create', function () {
 });
 
 test('article update', function () {
-    userLogin();
+    UserLogin();
     $article = Article::factory()->create([
         'user_id' => auth()->id(),
     ]);
@@ -56,7 +56,7 @@ test('article update', function () {
 });
 
 test('article delete', function () {
-    userLogin();
+    UserLogin();
     $article = Article::factory()->create([
         'title' => 'article create for delete browser test checking',
         'user_id' => auth()->id()

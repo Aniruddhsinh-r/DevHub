@@ -8,7 +8,7 @@ require_once __DIR__ . '/../Helpers/AdminLogin.php';
 uses(RefreshDatabase::class);
 
 test('admin search articles', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
 
     Article::factory()->create([
         'title' => 'example article'
@@ -23,7 +23,7 @@ test('admin search articles', function () {
 });
 
 test('admin view not count', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
 
     $article = Article::factory()->create([
         'title' => 'example article'

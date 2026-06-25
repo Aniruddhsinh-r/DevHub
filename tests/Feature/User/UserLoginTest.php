@@ -1,13 +1,12 @@
 <?php
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../Helpers/userLogin.php';
-require_once __DIR__ . '/../Helpers/userLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('User Login and logout test', function () {
-    userLogin();
+    UserLogin();
 
     $this->post(route('login'), [
         'email' => 'adanirudda@gmail.com',
@@ -23,7 +22,7 @@ test('User Login and logout test', function () {
 });
 
 test('Logged in user cannot visit login form', function () {
-    $user = userLogin();
+    $user = UserLogin();
 
     $response = $this->actingAs($user)->get(route('login'));
 
@@ -31,7 +30,7 @@ test('Logged in user cannot visit login form', function () {
 });
 
 test('Logged in user cannot visit register form', function () {
-    $user = userLogin();
+    $user = UserLogin();
 
     $response = $this->actingAs($user)->get(route('register.create'));
 
@@ -39,7 +38,7 @@ test('Logged in user cannot visit register form', function () {
 });
 
 test('Login user cant login again', function () {
-    $user = userLogin();
+    $user = UserLogin();
 
     $response = $this->actingAs($user)->get(route('login'), [
         'email' => 'adanirudda@gmail.com',

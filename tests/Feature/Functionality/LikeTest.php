@@ -5,14 +5,14 @@ use App\Models\User;
 use App\Enums\ArticleStatus;
 use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/adminLogin.php';
-require_once __DIR__ . '/../Helpers/userLogin.php';
+require_once __DIR__ . '/../Helpers/AdminLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('user can like but not twice', function () {
     $article = Article::factory()->create();
-    $user = userLogin();
+    $user = UserLogin();
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
         ->call('toggleLike')
@@ -34,7 +34,7 @@ test('user can like but not twice', function () {
 });
 
 test('admin cant like', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
     $article = Article::factory()->create();
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
@@ -48,7 +48,7 @@ test('admin cant like', function () {
 });
 
 test('user cant like draft article', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $article = Article::factory()->create(['status' => ArticleStatus::DRAFT,'user_id' => $user->id]);
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])

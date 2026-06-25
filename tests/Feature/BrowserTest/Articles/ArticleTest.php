@@ -3,12 +3,12 @@
 use App\Models\Article;
 use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__.'/../../Helpers/userLogin.php';
+require_once __DIR__.'/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('visite specific articles', function () {
-    userLogin();
+    UserLogin();
 
     $article = Article::factory()->create([
         'title' => 'example Article',
@@ -22,7 +22,7 @@ test('visite specific articles', function () {
 });
 
 test('functionality check in articles.',function () {
-    userLogin();
+    UserLogin();
     $article = Article::factory()->create([
         'user_id' => auth()->id()
     ]);
@@ -48,7 +48,7 @@ test('guest cant view specific article', function () {
 });
 
 test('author can access his draft article', function() {
-    $user = userLogin();
+    $user = UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT,'user_id'=>$user->id]);
     visit(route('articles.show', $article))
@@ -57,7 +57,7 @@ test('author can access his draft article', function() {
 });
 
 test('author can access his scheduled article', function() {
-    $user = userLogin();
+    $user = UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::SCHEDULED,'user_id'=>$user->id]);
     visit(route('articles.show', $article))
@@ -66,7 +66,7 @@ test('author can access his scheduled article', function() {
 });
 
 test('user can not access other draft article', function() {
-    userLogin();
+    UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT]);
     visit(route('articles.show', $article))
@@ -77,7 +77,7 @@ test('user can not access other draft article', function() {
 });
 
 test('user can not access other scheduled article', function() {
-    userLogin();
+    UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::SCHEDULED]);
     visit(route('articles.show', $article))

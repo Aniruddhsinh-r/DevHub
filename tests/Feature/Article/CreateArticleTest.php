@@ -8,13 +8,13 @@ use App\Models\View;
 use Livewire\Livewire;
 use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/adminLogin.php';
-require_once __DIR__ . '/../Helpers/userLogin.php';
+require_once __DIR__ . '/../Helpers/AdminLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('Create Article test', function () {
-    $user = userLogin();
+    $user = UserLogin();
 
     Livewire::test('livewirecomponent.article.create-article')
         ->set('title','first testing article.')
@@ -33,7 +33,7 @@ test('Create Article test', function () {
 });
 
 test('user can delete his own article', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $article = Article::factory()->create([
         'user_id' => $user->id,
         'category_id' => Category::factory()->create()->id,
@@ -57,7 +57,7 @@ test('user can delete his own article', function () {
 });
 
 test('user cannot delete others article', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $article = Article::factory()->create();
 
     $response = Livewire::test('livewirecomponent.article.delete-article',['article' => $article]);
@@ -76,7 +76,7 @@ test('guest cannot access create article page', function () {
 });
 
 test('admin cannot access create article page', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
 
     $response = $this->actingAs($admin)->get(route('articles.create'));
 

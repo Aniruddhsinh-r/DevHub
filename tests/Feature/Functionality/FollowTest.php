@@ -3,13 +3,13 @@
 use App\Models\User;
 use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/userLogin.php';
-require_once __DIR__ . '/../Helpers/adminLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
+require_once __DIR__ . '/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('user can follow but not twice and also unfollow', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $followed = User::factory()->create();
 
     Livewire::test('livewirecomponent.profile.profile',['user' => $followed])
@@ -32,8 +32,8 @@ test('user can follow but not twice and also unfollow', function () {
 });
 
 test('admin cant access follow function page', function () {
-    $user = userLogin();
-    $admin = adminLogin();
+    $user = UserLogin();
+    $admin = AdminLogin();
 
     $this->get(route('profile.show', $user))
         ->assertStatus(403);
@@ -44,8 +44,8 @@ test('admin cant access follow function page', function () {
 });
 
 test('admin cant follow Authors', function () {
-    $user = userLogin();
-    $admin = adminLogin();
+    $user = UserLogin();
+    $admin = AdminLogin();
 
     Livewire::test('livewirecomponent.profile.profile',['user' => $user])
     ->call('toggleFollow')

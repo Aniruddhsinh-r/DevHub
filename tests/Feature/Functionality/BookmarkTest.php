@@ -4,13 +4,13 @@ use App\Models\Article;
 use Livewire\Livewire;
 use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/userLogin.php';
-require_once __DIR__ . '/../Helpers/adminLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
+require_once __DIR__ . '/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('admin cant bookmark article', function () {
-    $admin = adminLogin();
+    $admin = AdminLogin();
     $article = Article::factory()->create();
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
@@ -44,7 +44,7 @@ test('Guest cant bookmark article', function () {
 });
 
 test('user can bookmark article', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $article = Article::factory()->create();
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
@@ -55,7 +55,7 @@ test('user can bookmark article', function () {
 });
 
 test('user can bookmark but not twice', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $article = Article::factory()->create();
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
@@ -71,7 +71,7 @@ test('user can bookmark but not twice', function () {
 });
 
 test('user cant bookmark draft article', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT,'user_id'=>$user->id]);
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])

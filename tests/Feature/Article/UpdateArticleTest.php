@@ -4,12 +4,12 @@ use App\Models\Article;
 use Livewire\Livewire;
 use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/userLogin.php';
+require_once __DIR__ . '/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
 test('user can update his article', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $article = Article::factory()->create([
         'user_id' => $user->id
     ]);
@@ -30,7 +30,7 @@ test('user can update his article', function () {
 });
 
 test('user cannot update others article', function () {
-    $user = userLogin();
+    $user = UserLogin();
     $article = Article::factory()->create();
 
     $updateResponse = $this->actingAs($user)->get(route('articles.edit', $article), [

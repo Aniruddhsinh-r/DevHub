@@ -95,6 +95,7 @@
                 <a href="{{ route('articles.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
                 @role('author')
                     <a href="{{ route('profile.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">profile</a>
+                    <a href="{{ route('articles.create') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Create article</a>
                 @endrole
                 @guest
                     <a href="{{ route('register.create') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2">Sign Up</a>
