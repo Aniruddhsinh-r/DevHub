@@ -23,6 +23,7 @@
                     <h2 class="text-sm font-bold text-gray-900 tracking-tight">Existing Categories</h2>
                 </div>
 
+                @if($categories->count() > 0)
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -41,7 +42,8 @@
                                     <td class="px-5 py-3.5 text-xs text-gray-500 font-mono">{{ $category->articles_count }}</td>
                                     <td class="px-5 py-3.5 text-right">
                                         <button wire:click="remove({{ $category->id }})" dusk="delete-category-{{ $category->id }}"
-                                             wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE" class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete
+                                             {{-- wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE" --}}
+                                             class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete
                                         </button>
                                     </td>
                                 </tr>
@@ -52,6 +54,16 @@
                 <div class="m-5 font-semibold">
                     {{ $categories->links() }}
                 </div>
+                @else
+                <div class="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-gray-100 rounded-3xl m-5 bg-[#fafafa]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581a1.462 1.462 0 002.068 0l6.432-6.432a1.462 1.462 0 000-2.068l-9.581-9.581A2.25 2.25 0 009.568 3z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 6h.008v.008H6V6z" />
+                        </svg>
+                        <h3 class="text-md font-black text-gray-700">No Categories Found</h3>
+                        <p class="text-sm text-gray-500 mt-1 max-w-xs">There are no categories set up yet. Create your first category to start organizing your articles.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

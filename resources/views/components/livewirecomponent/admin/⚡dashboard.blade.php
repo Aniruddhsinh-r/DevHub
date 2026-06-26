@@ -152,6 +152,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                 </div>
 
                 <div class="space-y-2">
+                    @if($articles->count() > 0)
                     @foreach ($articles as $article)
                         <a href="{{ route('admin.article.show',$article) }}" wire:navigate class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
                             <div class="flex items-center gap-3 truncate max-w-[70%]">
@@ -166,6 +167,15 @@ new #[Layout('layouts::dashboard')] class extends Component
                             </div>
                         </a>
                     @endforeach
+                    @else
+                        <div class="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-gray-200 rounded-2xl m-4 bg-[#fafafa]">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                            </svg>
+                            <h3 class="text-md font-black text-gray-700">No Articles Found</h3>
+                            <p class="text-sm text-gray-500 mt-1 max-w-xs">We couldn't find any written entries. because Author haven't published yet any.</p>
+                        </div>
+                    @endif
                 </div>
             </div>
 

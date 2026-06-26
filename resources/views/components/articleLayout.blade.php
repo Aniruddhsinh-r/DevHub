@@ -28,9 +28,8 @@
                 </div>
                 <div class="text-right">
                     @if(auth()->id() === $article->user_id)
-                        <a href="{{ route('articles.edit', $article) }}"
-                           wire:navigate
-                           class="relative z-10 inline-block bg-black/65 hover:bg-black/75 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all shadow-md">
+                        <a href="{{ route('articles.edit', $article) }}" wire:navigate
+                         class="relative z-10 inline-block bg-black/65 hover:bg-black/75 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all shadow-md">
                             Edit Article
                         </a>
                     @else

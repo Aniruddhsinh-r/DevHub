@@ -24,7 +24,7 @@ new class extends Component
 
     public function rules() {
         return [
-            'email' => 'required|email|min:10|max:255|unique:users,email,' . $this->user->id,
+            'email' => 'required|email|min:10|max:255|unique:users,email,',
         ];
     }
 

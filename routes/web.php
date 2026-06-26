@@ -45,7 +45,7 @@ Route::middleware(['auth','admin'])->group(function () {
     Route::livewire('/admin/users/edit/{user}', 'livewirecomponent.admin.user-edit')->name('admin.edit.user');
     Route::livewire('/admin/categories', 'livewirecomponent.admin.category-list')->name('admin.categories');
     Route::livewire('/admin/articles', 'livewirecomponent.admin.article-list')->name('admin.articles');
-    Route::livewire('/admin/article/create', 'livewirecomponent.admin.admin-article-create')->name('admin.articles.create');
+    Route::livewire('/admin/article/{article}/update', 'livewirecomponent.admin.admin-article-update')->name('admin.articles.edit');
     Route::livewire('/admin/articles/{article}', 'livewirecomponent.admin.show-article')->name('admin.article.show');
     Route::livewire('/admin/articles/{user}/published', 'livewirecomponent.admin.user-articles')->name('admin.user.published');
     Route::livewire('/admin/profile', 'livewirecomponent.admin.admin-profile')->name('admin.profile');

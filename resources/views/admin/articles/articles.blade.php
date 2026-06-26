@@ -6,12 +6,6 @@
             </div>
 
             <div class="flex items-center gap-3">
-                <a href="{{ route('admin.articles.create') }}" wire:navigate class="inline-flex items-center gap-2 h-[52px] px-5 rounded-2xl bg-[#111827] hover:bg-gray-800 text-sm font-black text-white shadow-sm hover:shadow-lg transition-all duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Create Articles
-                </a>
                 <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 shadow-sm">
                     <span class="text-xs text-gray-400 font-bold uppercase tracking-wider block">Total Articles</span>
                     <span class="text-lg font-black text-[#111827]">{{ $articles->total() }}</span>
@@ -47,24 +41,41 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
-                @foreach ($articles as $article)
-                    <a href='{{ route('admin.article.show',$article) }}' wire:navigate class="p-5 bg-[#efefef] rounded-2xl">
-                        <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
-                        <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
-                        <div class="mt-5 flex items-center justify-between border-t border-gray-100">
-                            <div>
-                                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Published</p>
-                                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->created_at->diffForHumans() }}</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Date</p>
-                                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->created_at->format('d M Y') }}</p>
+            @if($articles->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
+                    @foreach ($articles as $article)
+                        <div x-data x-on:click="Livewire.navigate('{{ route('admin.article.show', $article) }}')" class="p-5 bg-[#efefef] rounded-2xl cursor-pointer hover:bg-gray-200 transition-all group">
+                            <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
+                            <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
+
+                            <div class="mt-5 flex items-center justify-between border-t border-gray-100 pt-3">
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Published</p>
+                                    <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->created_at->diffForHumans() }}</p>
+                                </div>
+
+                                <div class="text-right">
+                                    <a href="{{ route('admin.articles.edit', $article) }}" wire:navigate x-on:click.stop class="inline-block bg-black/65 hover:bg-black/75 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all shadow-md">
+                                        Edit Article
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </a>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+                
+                <div class="my-2 font-semibold">
+                    {{ $articles->appends(['search' => request('search')])->links() }}
+                </div>
+            @else
+                <div class="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-gray-200 rounded-2xl m-4 bg-[#fafafa]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                    <h3 class="text-md font-black text-gray-700">No Articles Found</h3>
+                    <p class="text-sm text-gray-500 mt-1 max-w-xs">We couldn't find any written entries. Try adjusting your search query or create a fresh article.</p>
+                </div>
+            @endif
             <div class="my-2 font-semibold">
                 {{ $articles->appends(['search' => request('search')])->links() }}
             </div>

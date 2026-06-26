@@ -190,7 +190,7 @@ new class extends Component
                                 </span>
                             </div>
 
-                            <div class="prose prose-lg max-w-none prose-headings:font-black prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-9 prose-p:text-[17px] prose-img:rounded-3xl prose-a:text-black hover:prose-a:text-gray-600">
+                            <div class="prose prose-lg max-w-none break-words prose-headings:font-black prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-9 prose-p:text-[17px] prose-img:rounded-3xl prose-a:text-black hover:prose-a:text-gray-600">
                                 {!! nl2br(e($article->body)) !!}
                             </div>
                         </div>

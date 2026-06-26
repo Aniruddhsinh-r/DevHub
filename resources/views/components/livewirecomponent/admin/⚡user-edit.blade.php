@@ -57,6 +57,9 @@ new #[Layout('layouts::dashboard')] class extends Component
 
         if (!empty($values['role'])) {
             $this->user->syncRoles($values['role']);
+            $this->user->comments()->delete();
+            $this->user->bookmarks()->delete();
+            $this->user->articles()->delete();
         }
 
         if ($this->delete_avatar) {

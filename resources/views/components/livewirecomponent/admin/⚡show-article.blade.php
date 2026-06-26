@@ -84,7 +84,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                                 </span>
                             </div>
 
-                            <div class="prose prose-lg max-w-none prose-headings:font-black prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-9 prose-p:text-[17px] prose-img:rounded-3xl prose-a:text-black hover:prose-a:text-gray-600">
+                            <div class="prose prose-lg max-w-none break-words prose-headings:font-black prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-9 prose-p:text-[17px] prose-img:rounded-3xl prose-a:text-black hover:prose-a:text-gray-600">
                                 {!! nl2br(e($article->body)) !!}
                             </div>
                         </div>
@@ -102,7 +102,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                         </div>
 
                         <div class="space-y-6">
-                            @foreach ($comments as $comment)
+                            @forelse ($comments as $comment)
                             <div class="flex gap-4">
                                 <a href="{{ route('admin.show.user',$comment->user) }}" wire:navigate class="w-11 h-11 mt-1 rounded-full border border-gray-200 bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                                     @if ($comment->user->avatar)
@@ -168,7 +168,14 @@ new #[Layout('layouts::dashboard')] class extends Component
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
+                            @empty
+                                <div class="flex flex-col items-center justify-center py-10 px-4 text-center border-2 border-dashed border-gray-100 rounded-2xl bg-gray-50/50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                    <p class="text-sm font-bold text-gray-500">There are no comments yet on this article.</p>
+                                </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>

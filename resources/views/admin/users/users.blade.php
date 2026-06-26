@@ -50,6 +50,7 @@
             </div>
 
             <div class="overflow-x-auto">
+                @if($users->count() > 0)
                 <table class="w-full min-w-full">
                     <thead class="bg-[#fafafa] border-b border-gray-100">
                         <tr>
@@ -113,6 +114,16 @@
                 <div class="m-5 font-semibold">
                     {{ $users->appends(['search' => request('search')])->links() }}
                 </div>
+                @else
+                    <div class="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-gray-100 rounded-3xl m-5 bg-[#fafafa]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-2.533-4.65l-2.21-.737a4.8 4.8 0 01-3.208-3.208l-.737-2.21a4.125 4.125 0 00-4.65-2.533 9.34 9.34 0 00-1.886-.755A4.125 4.125 0 005.516 5.3l-.738 2.209a4.8 4.8 0 01-3.208 3.208l-2.209.738A4.125 4.125 0 000 15.116a9.39 9.39 0 004.767 7.923M15 11h.008v.008H15V11zm1 4h.008v.008H16V15zm-4-4h.008v.008H12V11zm1 4h.008v.008H13V15z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3" />
+                        </svg>
+                        <h3 class="text-md font-black text-gray-700">No Users Found</h3>
+                        <p class="text-sm text-gray-500 mt-1 max-w-xs">There are no registered accounts on the platform yet or your search criteria returned zero results.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

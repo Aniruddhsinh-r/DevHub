@@ -15,9 +15,9 @@
 
             <form action="" method="GET" class="hidden sm:block">
                 <div class="relative">
-                    <input type="text" name="follower" value="{{ request('follower') }}" placeholder="Search following..." class="w-64 h-11 rounded-2xl border border-gray-200 bg-white pl-4 pr-11 text-sm font-medium text-black placeholder:text-gray-400 focus:outline-none focus:border-black transition-all duration-200">
+                    <input type="text" wire:model.live="search" value="{{ request('search') }}" placeholder="Search following..." class="w-64 h-11 rounded-2xl border border-gray-200 bg-white pl-4 pr-11 text-sm font-medium text-black placeholder:text-gray-400 focus:outline-none focus:border-black transition-all duration-200">
 
-                    @if (request('follower'))
+                    @if (request('search'))
                         <a href="{{ url()->current() }}" wire:navigate class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>

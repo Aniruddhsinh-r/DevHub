@@ -3,13 +3,16 @@
 use Livewire\Component;
 use App\Enums\ArticleStatus;
 use App\Models\Article;
-use App\Actions\UpdateArticle;
+use Livewire\Attributes\Layout;
 use App\Models\Category;
 use Livewire\WithFileUploads;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
 
-new class extends Component
+new #[Layout('layouts::dashboard')] class extends Component
 {
     use WithFileUploads;
 
@@ -20,7 +23,6 @@ new class extends Component
 
     public function mount(Article $article) {
         $this->article = $article;
-        Gate::authorize('update', $this->article);
 
         $this->title = $article->title;
         $this->excerpt = $article->excerpt;
@@ -56,15 +58,48 @@ new class extends Component
         $this->delete_cover = true;
     }
 
-    public function update(UpdateArticle $action) {
-        Gate::authorize('update', $this->article);
-
-        $values = $this->validate();
+    public function update() {
+        $data = $this->validate();
 
         $article = $this->article;
-        $values['delete_cover'] = $this->delete_cover;
+        $data['delete_cover'] = $this->delete_cover;
 
-        $action->handle($values, $article);
+        if (($data['title'] ?? null) && $data['title'] !== $article->title) {
+            $base = Str::slug($data['title'], '-');
+            $slug = $base;
+            $count = 2;
+
+            while (Article::where('slug', $slug)->where('id', '!=', $article->id)->exists()) {
+                $slug = $base . '-' . $count;
+                $count++;
+            }
+
+            $data['slug'] = $slug;
+        }
+
+        if (!empty($data['delete_cover'])) {
+            if ($article->avatar) {
+                Storage::disk('public')->delete($article->cover_path);
+            }
+            $data['cover_path'] = null;
+        }
+
+        if (!empty($data['cover_path'])) {
+            $data['cover_path'] = $data['cover_path']->store('articleCovers', 'public');
+            if ($article->cover_path) {
+                Storage::disk('public')->delete($article->cover_path);
+            }
+        }
+
+        if ($data['status'] === ArticleStatus::SCHEDULED) {
+            $data['published_at'] = now()->addHours((int)($data['scheduled_hours'] ?? 0))->addMinutes((int)($data['scheduled_minutes'] ?? 0));
+        } elseif ($data['status'] === ArticleStatus::PUBLISHED) {
+            $data['published_at'] = now();
+        } else {
+            $data['published_at'] = null;
+        }
+
+        $article->update($data);
 
         session()->flash('success', 'Article updated successfully.');
         $this->cover_path = null;

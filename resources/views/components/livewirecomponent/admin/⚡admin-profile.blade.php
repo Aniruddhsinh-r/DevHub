@@ -18,8 +18,6 @@ new #[Layout('layouts::dashboard')] class extends Component
 <div>
     <div class="min-h-screen py-12 px-4">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
-
-            <!-- Left Sidebar (Kept exactly the same) -->
             <div class="bg-white border border-gray-200 rounded-[2rem] p-6 shadow-sm h-fit">
                 <div class="flex flex-col items-center text-center">
                     @if ($admin->avatar)
@@ -34,7 +32,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                         <h1 class="text-xl font-black tracking-tight text-[#111111]">{{ $admin->name }}</h1>
                         <p class="text-sm text-gray-500 mt-1">{{ $admin->email }}</p>
                     </div>
-
+                    
                     <div class="w-full mt-7 border border-gray-300 rounded-xl py-2.5 text-sm font-bold text-[#111111]">Account Details</div>
                 </div>
 
@@ -63,9 +61,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                 <a href="{{ route('admin-profile.edit') }}" wire:navigate class="block w-full mt-8 bg-[#111111] text-white text-center rounded-xl py-3 text-sm font-black tracking-wide hover:bg-black transition-all duration-300">Edit Profile</a>
             </div>
 
-            <!-- Right Main Panel -->
             <div class="space-y-8">
-                <!-- Profile Overview Box -->
                 <div class="bg-[#707577] border border-gray-200 rounded-[2rem] p-8 shadow-sm">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                         <div>
@@ -78,7 +74,6 @@ new #[Layout('layouts::dashboard')] class extends Component
                     </div>
                 </div>
 
-                <!-- NEW SECTION: Admin System Status Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
                         <p class="text-xs font-black text-gray-400 uppercase tracking-wider">System Status</p>
@@ -103,7 +98,6 @@ new #[Layout('layouts::dashboard')] class extends Component
                     </div>
                 </div>
 
-                <!-- NEW SECTION: Management Shortcuts -->
                 <div class="bg-white border border-gray-200 rounded-[2rem] p-6 shadow-sm">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-xl font-black tracking-tight text-[#111111]">Quick Administrative Actions</h3>
