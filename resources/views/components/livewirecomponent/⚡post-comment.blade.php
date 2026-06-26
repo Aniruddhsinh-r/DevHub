@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\Auth;
 new class extends Component {
     public Article $article;
     public string $body = '';
-    public string $replybody = '';
+    public array $replybody = [];
 
     #[Computed]
     public function comments()
     {
-        return $this->article->comments()->whereNull('parent_id')->with(['user', 'replies.user'])->latest()->get();
+        return $this->article->comments()->whereNull('parent_id')->with(['user', 'replies.user', 'replies.replies'])->latest()->get();
     }
 
     public function postComment() {
@@ -46,14 +46,15 @@ new class extends Component {
         if ($this->article->user_id !== Auth::id()) {
             $this->article->user->notify(new CommentNotification($comment));
         }
-
         $this->body = '';
         $this->dispatch('live-notification', message: 'Comment successfully posted.');
     }
 
     public function postReply($parentId) {
-        $validated = $this->validate([
-            'replybody' => 'required|string|max:5000'
+        $this->validate([
+            "replybody.{$parentId}" => 'required|string|max:5000'
+        ], [
+            "replybody.{$parentId}.required" => 'The reply field cannot be empty.'
         ]);
 
         if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
@@ -65,7 +66,7 @@ new class extends Component {
             'user_id' => Auth::id(),
             'article_id' => $this->article->id,
             'parent_id' => $parentId,
-            'body' => $this->replybody,
+            'body' => $this->replybody[$parentId],
         ]);
 
         $parent = Comment::with('user')->find($parentId);
@@ -73,8 +74,7 @@ new class extends Component {
             $parent->user->notify(new CommentNotification($comment));
         }
 
-        $this->replybody = '';
-
+        unset($this->replybody[$parentId]);
         $this->dispatch('live-notification', message: 'Reply successfully posted.');
     }
 };
@@ -92,14 +92,13 @@ new class extends Component {
     </div>
 
     <div class="flex gap-4 mb-8">
-        <div class="w-11 h-11 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
+        <div class="w-11 h-11 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden shrink-0">
             @if (auth()->user()?->avatar)
-                <img src="{{ asset('storage/' . auth()->user()?->avatar) }}" alt="{{ auth()->user()?->name }}" class="w-11 h-11">
+                <img src="{{ asset('storage/' . auth()->user()?->avatar) }}" alt="{{ auth()->user()?->name }}" class="w-11 h-11 object-cover">
             @else
                 {{ substr(auth()->user()?->name, 0, 2) }}
             @endif
         </div>
-
         <div class="flex-1">
             <form wire:submit.prevent="postComment">
                 <div class="w-full">
@@ -117,89 +116,100 @@ new class extends Component {
         </div>
     </div>
 
-    {{-- COMMENTS LIST --}}
     <div class="space-y-6">
         @foreach ($this->comments as $comment)
-            <div class="flex gap-4" wire:key="comment-{{ $comment->id }}">
-                <a href="{{ route('profile.show', $comment->user) }}" wire:navigate class="w-11 h-11 mt-3 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
-                    @if ($comment->user->avatar)
-                        <img src="{{ asset('storage/' . $comment->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
-                    @else
-                        <span>{{ Str::upper(Str::substr($comment->user->name, 0, 2)) }}</span>
-                    @endif
+            <div class="flex gap-4 mt-2" wire:key="node-l1-{{ $comment->id }}" x-data="{ activeReplyId: null, showReplies: true }">
+                <a href="{{ route('profile.show', $comment->user) }}" wire:navigate class="w-11 h-11 mt-1 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white shadow-sm flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
+                    @if ($comment->user->avatar) <img src="{{ asset('storage/' . $comment->user->avatar) }}" class="w-full h-full object-cover"> @else <span>{{ Str::upper(Str::substr($comment->user->name, 0, 2)) }}</span> @endif
                 </a>
-
                 <div class="flex-1">
                     <div class="bg-[#f0f0f0] rounded-2xl px-5 py-3">
-                        <div class="w-full flex justify-between mb-2">
-                            <h4 class="font-black text-gray-900 text-sm">{{ $comment->user->name }}</h4>
-                            <p class="text-xs font-extrabold text-gray-600">{{ $comment->created_at->diffForHumans() }}</p>
-                        </div>
+                        <h4 class="font-black text-gray-900 text-sm mb-1">{{ $comment->user->name }}</h4>
                         <p class="text-sm text-gray-700 leading-7">{{ $comment->body }}</p>
                     </div>
+                    <div class="flex items-center gap-5 mt-2 ml-2 text-xs font-bold text-gray-500">
+                        <button @click="activeReplyId = activeReplyId === 'l1-{{ $comment->id }}' ? null : 'l1-{{ $comment->id }}'" class="hover:text-black transition">Reply</button>
+                        @if ($comment->replies->count() > 0)
+                            <button @click="showReplies = !showReplies" class="hover:text-black transition">View/Hide Replies ({{ $comment->replies->count() }})</button>
+                        @endif
+                    </div>
 
-                    <div x-data="{ activeReply: null, showReplies: false }">
-                        <div class="flex items-center gap-5 mt-3 ml-2 text-xs font-bold text-gray-500">
-                            <button @click="activeReply = activeReply === {{ $comment->id }} ? null : {{ $comment->id }}" class="hover:text-black transition">Reply</button>
+                    <div x-show="activeReplyId === 'l1-{{ $comment->id }}'" class="mt-3" x-cloak>
+                        <form wire:submit.prevent="postReply({{ $comment->id }})">
+                            <div class="w-full flex items-end gap-4">
+                                <input type="text" wire:model="replybody.{{ $comment->id }}" placeholder="Reply to {{ $comment->user->name }}..." class="flex-1 border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:ring-1 focus:ring-black">
+                                <button type="submit" class="bg-black text-white px-6 h-10 rounded-xl text-sm font-black">Reply</button>
+                            </div>
+                            @error("replybody.{$comment->id}") <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </form>
+                    </div>
 
-                            @if ($comment->replies->count() > 0)
-                                <button x-show="!showReplies" @click="showReplies = !showReplies" class="hover:text-black transition">View {{ $comment->replies->count() }} more reply</button>
-                            @endif
-                        </div>
+                    <div x-show="showReplies" class="pl-6 border-l-2 border-gray-100 mt-4 space-y-4" x-cloak>
+                        @foreach ($comment->replies as $replyL2)
+                            <div class="flex gap-4 mt-3" wire:key="node-l2-{{ $replyL2->id }}">
+                                <a href="{{ route('profile.show', $replyL2->user) }}" class="w-9 h-9 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
+                                    @if ($replyL2->user->avatar) <img src="{{ asset('storage/' . $replyL2->user->avatar) }}" class="w-full h-full object-cover"> @else <span>{{ Str::upper(Str::substr($replyL2->user->name, 0, 2)) }}</span> @endif
+                                </a>
 
-                        <div x-show="showReplies" class="py-4 pl-4 border-l border-gray-200 mt-2 space-y-4" x-cloak>
-                            @foreach ($comment->replies as $reply)
-                                <div class="flex gap-4" wire:key="reply-{{ $reply->id }}">
-                                    <a href="{{ route('profile.show', $reply->user) }}" wire:navigate>
-                                        <div class="w-11 h-11 mt-3 rounded-full object-cover border-2 border-[#0f0f0f] shadow-sm overflow-hidden flex items-center justify-center bg-[#0f0f0f] text-white text-xs font-bold uppercase">
-                                            @if ($reply->user->avatar)
-                                                <img src="{{ asset('storage/' . $reply->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
-                                            @else
-                                                <span>{{ Str::upper(Str::substr($reply->user->name, 0, 2)) }}</span>
-                                            @endif
-                                        </div>
-                                    </a>
+                                <div class="flex-1">
+                                    <div class="bg-[#f0f0f0] rounded-2xl px-5 py-3">
+                                        <h4 class="font-black text-gray-900 text-sm mb-1">{{ $replyL2->user->name }}</h4>
+                                        <p class="text-sm text-gray-700 leading-7">{{ $replyL2->body }}</p>
+                                    </div>
+                                    <div class="flex items-center gap-5 mt-2 ml-2 text-xs font-bold text-gray-500">
+                                        <button @click="activeReplyId = activeReplyId === 'l2-{{ $replyL2->id }}' ? null : 'l2-{{ $replyL2->id }}'" class="hover:text-black transition">Reply</button>
+                                    </div>
 
-                                    <div class="flex-1">
-                                        <div class="bg-[#f0f0f0] rounded-2xl px-5 py-2 my-2">
-                                            <div class="w-full flex justify-between mb-1">
-                                                <h4 class="font-black text-gray-900 text-sm">{{ $reply->user->name }}</h4>
-                                                <p class="text-xs font-extrabold text-gray-600">{{ $reply->created_at->diffForHumans() }}</p>
+                                    <div x-show="activeReplyId === 'l2-{{ $replyL2->id }}'" class="mt-3" x-cloak>
+                                        <form wire:submit.prevent="postReply({{ $replyL2->id }})">
+                                            <div class="w-full flex items-end gap-4">
+                                                <input type="text" wire:model="replybody.{{ $replyL2->id }}" placeholder="Reply to {{ $replyL2->user->name }}..." class="flex-1 border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:ring-1 focus:ring-black">
+                                                <button type="submit" class="bg-black text-white px-6 h-10 rounded-xl text-sm font-black">Reply</button>
                                             </div>
-                                            <p class="text-sm text-gray-700 leading-7">{{ $reply->body }}</p>
-                                        </div>
+                                            @error("replybody.{$replyL2->id}") <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                        </form>
+                                    </div>
 
-                                        <div class="flex items-center gap-5 ml-2 text-xs font-bold text-gray-500">
-                                            <button @click="activeReply = activeReply === {{ $reply->id }} ? null : {{ $reply->id }}" class="hover:text-black transition">Reply</button>
-                                        </div>
+                                    <div class="pl-6 border-l-2 border-gray-100 mt-4 space-y-4">
+                                        @foreach ($replyL2->replies as $replyL3)
+                                            <div class="flex gap-4 mt-3 pt-2 border-t border-dashed border-gray-100 first:border-0 first:pt-0" wire:key="node-l3-{{ $replyL3->id }}">
+                                                <a href="{{ route('profile.show', $replyL3->user) }}" class="w-9 h-9 rounded-full border-2 border-[#0f0f0f] bg-[#0f0f0f] text-white flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
+                                                    @if ($replyL3->user->avatar) <img src="{{ asset('storage/' . $replyL3->user->avatar) }}" class="w-full h-full object-cover"> @else <span>{{ Str::upper(Str::substr($replyL3->user->name, 0, 2)) }}</span> @endif
+                                                </a>
 
-                                        <div x-show="activeReply === {{ $reply->id }}" class="mt-2" x-cloak>
-                                            <form wire:submit.prevent="postReply({{ $comment->id }})">
-                                                <div class="w-full flex items-end gap-4">
-                                                    <div class="flex-1">
-                                                        <input type="text" wire:model="replybody" placeholder="Reply to {{ $reply->user->name }}..." class="w-full border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:ring-1 focus:ring-black">
+                                                <div class="flex-1">
+                                                    <div class="bg-[#f0f0f0] rounded-2xl px-5 py-3">
+                                                        <div class="flex items-center gap-2 mb-1">
+                                                            <h4 class="font-black text-gray-900 text-sm">{{ $replyL3->user->name }}</h4>
+
+                                                            @if($replyL3->parent_id !== $replyL2->id && $replyL3->parent)
+                                                                <span class="text-xs text-gray-400 font-bold flex items-center gap-1">
+                                                                    ↳ <span class="text-blue-600">@ {{ $replyL3->parent->user->name }}</span>
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                        <p class="text-sm text-gray-700 leading-7">{{ $replyL3->body }}</p>
                                                     </div>
-                                                    <button type="submit" class="bg-black hover:bg-gray-900 text-white px-6 h-10 rounded-xl text-sm font-black transition whitespace-nowrap">Comment</button>
-                                                </div>
-                                                @error('replybody') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                                                    <div class="flex items-center gap-5 mt-2 ml-2 text-xs font-bold text-gray-500">
+                                                        <button @click="activeReplyId = activeReplyId === 'l3-{{ $replyL3->id }}' ? null : 'l3-{{ $replyL3->id }}'" class="hover:text-black transition">Reply</button>
+                                                    </div>
 
-                        <div x-show="activeReply === {{ $comment->id }}" class="mt-3" x-cloak>
-                            <form wire:submit.prevent="postReply({{ $comment->id }})">
-                                <div class="w-full flex items-end gap-4">
-                                    <div class="flex-1">
-                                        <input type="text" wire:model="replybody" placeholder="Reply to {{ $comment->user->name }}..." class="w-full border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:ring-1 focus:ring-black">
+                                                    <div x-show="activeReplyId === 'l3-{{ $replyL3->id }}'" class="mt-3" x-cloak>
+                                                        <form wire:submit.prevent="postReply({{ $replyL2->id }})">
+                                                            <div class="w-full flex items-end gap-4">
+                                                                <input type="text" wire:model="replybody.{{ $replyL2->id }}" placeholder="Reply to {{ $replyL3->user->name }}..." class="flex-1 border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:ring-1 focus:ring-black">
+                                                                <button type="submit" class="bg-black text-white px-6 h-10 rounded-xl text-sm font-black">Reply</button>
+                                                            </div>
+                                                            @error("replybody.{$replyL2->id}") <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
-                                    <button type="submit" class="bg-black hover:bg-gray-900 text-white px-6 h-10 rounded-xl text-sm font-black transition whitespace-nowrap">Comment</button>
                                 </div>
-                                @error('replybody') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                            </form>
-                        </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

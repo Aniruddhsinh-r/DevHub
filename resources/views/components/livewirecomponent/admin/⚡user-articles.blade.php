@@ -8,7 +8,7 @@ use App\Models\User;
 new #[Layout('layouts::dashboard')] class extends Component
 {
     public User $user;
-    public User $articles;
+    public $articles;
 
     public function mount() {
         $this->articles = $this->user->articles()->with(['category'])->latest()->get();

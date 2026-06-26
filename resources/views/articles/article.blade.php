@@ -12,8 +12,7 @@
 
         <div class="w-full max-w-md lg:ml-auto">
             <form action="" method="GET" class="relative flex items-center bg-[#1c1f24] border border-white/10 rounded-xl focus-within:border-gray-500 transition-all shadow-2xl">
-
-                <input type="text" wire:model.blur="search" name='search' placeholder="Search archives..." class="flex-1 pl-5 pr-24 py-3.5 outline-none text-gray-200 text-sm font-light bg-transparent" value="{{ request('search') }}">
+                <input type="text" wire:model.live="search" placeholder="Search archives..." class="flex-1 pl-5 pr-24 py-3.5 outline-none text-gray-200 text-sm font-light bg-transparent" value="{{ request('search') }}">
 
                 @if ($search)
                     <button type="button" wire:click="$set('search', '')" class="absolute right-28 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#1c1f24] hover:bg-black hover:text-white text-gray-200 flex items-center justify-center transition-all duration-200 z-10">

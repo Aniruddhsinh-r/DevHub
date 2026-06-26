@@ -25,17 +25,23 @@ new class extends Component
 
     #[Validate('required|min:5|max:50')]
     public $name;
-    #[Validate('required|email|min:10|max:255')]
+    #[Validate]
     public $email;
     #[Validate('nullable|string|min:8|max:255')]
     public $password_confirmation;
-    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:max_width=1000,max_height=1000')]
+    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:2048')]
     public $avatar;
     #[Validate('nullable|max:2000|string')]
     public $bio;
     #[Sensitive]
     #[Validate('nullable|string|min:8|max:255|confirmed')]
     public $password;
+
+    public function rules() {
+        return [
+            'email' => 'required|email|min:10|max:255|unique:users,email,' . $this->user->id,
+        ];
+    }
 
     public function removeAvatar() {
         $this->avatar = null;

@@ -26,7 +26,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     #[Validate('required|min:5|max:50')]
     public $name;
-    #[Validate('required|email|min:10|max:255')]
+    #[Validate]
     public $email;
     #[Validate('nullable|string|min:8|max:255')]
     public $password_confirmation;
@@ -35,6 +35,12 @@ new #[Layout('layouts::dashboard')] class extends Component
     #[Sensitive]
     #[Validate('nullable|string|min:8|max:255|confirmed')]
     public $password;
+
+    public function rules() {
+        return [
+            'email' => 'required|email|min:10|max:255|unique:users,email,' . $this->user->id,
+        ];
+    }
 
     public function removeAvatar() {
         $this->avatar = null;

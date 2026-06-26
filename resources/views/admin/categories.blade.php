@@ -41,7 +41,7 @@
                                     <td class="px-5 py-3.5 text-xs text-gray-500 font-mono">{{ $category->articles_count }}</td>
                                     <td class="px-5 py-3.5 text-right">
                                         <button wire:click="remove({{ $category->id }})" dusk="delete-category-{{ $category->id }}"
-                                             wire:confirm="Are you sure you want to delete this User?" class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete
+                                             wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE" class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete
                                         </button>
                                     </td>
                                 </tr>

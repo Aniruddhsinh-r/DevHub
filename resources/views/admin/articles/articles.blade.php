@@ -6,6 +6,12 @@
             </div>
 
             <div class="flex items-center gap-3">
+                <a href="{{ route('admin.articles.create') }}" wire:navigate class="inline-flex items-center gap-2 h-[52px] px-5 rounded-2xl bg-[#111827] hover:bg-gray-800 text-sm font-black text-white shadow-sm hover:shadow-lg transition-all duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Create Articles
+                </a>
                 <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 shadow-sm">
                     <span class="text-xs text-gray-400 font-bold uppercase tracking-wider block">Total Articles</span>
                     <span class="text-lg font-black text-[#111827]">{{ $articles->total() }}</span>
@@ -21,7 +27,7 @@
                 <div class="relative w-full lg:w-64">
                     <form action="" method="GET">
                         <div class="relative">
-                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search articles..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
+                            <input type="text" wire:model.live="search" value="{{ request('search') }}" placeholder="Search articles..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
 
                             @if (request('search'))
                                 <a href="{{ url()->current() }}" wire:navigate class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">

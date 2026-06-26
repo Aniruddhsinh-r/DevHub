@@ -20,7 +20,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     public function render()
     {
         return view('admin.users.users', [
-            'users' => User::role(UserRole::AUTHOR)->where('name', 'LIKE', "%{$this->search}%")->paginate(6),
+            'users' => User::where('name', 'LIKE', "%{$this->search}%")->paginate(6),
         ]);
     }
 
