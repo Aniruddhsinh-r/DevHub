@@ -78,7 +78,7 @@ new #[Layout('layouts::dashboard')] class extends Component
         }
 
         if (!empty($data['delete_cover'])) {
-            if ($article->avatar) {
+            if ($article->cover_path) {
                 Storage::disk('public')->delete($article->cover_path);
             }
             $data['cover_path'] = null;

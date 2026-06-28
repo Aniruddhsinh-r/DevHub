@@ -35,7 +35,7 @@ class UpdateArticle
         }
 
         if (!empty($values['delete_cover'])) {
-            if ($article->avatar) {
+            if ($article->cover_path) {
                 Storage::disk('public')->delete($article->cover_path);
             }
             $data['cover_path'] = null;
