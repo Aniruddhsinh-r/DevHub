@@ -58,12 +58,21 @@
                                     <a href="{{ route('admin.articles.edit', $article) }}" wire:navigate x-on:click.stop class="inline-block bg-black/65 hover:bg-black/75 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all shadow-md">
                                         Edit Article
                                     </a>
+                                    <button type="button" x-on:click.stop="$dispatch('open-delete', { id: {{ $article->id }}, title: '{{ addslashes($article->title) }}', type: 'adminArticleDelete' })"
+                                        class="inline-block bg-black/65 hover:bg-black/75 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all shadow-md">
+                                        Remove
+                                    </button>
+                                    {{-- <button type="button"
+                                            x-on:click.stop="$dispatch('open-delete', { id: {{ $article->id }}, title: '{{ addslashes($article->title) }}', type: 'article' })"
+                                            class="inline-block bg-black/65 hover:bg-black/75 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all shadow-md">
+                                        Remove
+                                    </button> --}}
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
-                
+
                 <div class="my-2 font-semibold">
                     {{ $articles->appends(['search' => request('search')])->links() }}
                 </div>

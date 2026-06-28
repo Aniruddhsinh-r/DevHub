@@ -5,6 +5,7 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Gate;
 
@@ -40,6 +41,13 @@ new #[Layout('layouts::dashboard')] class extends Component
 
         $this->reset(['name']);
         $this->dispatch('live-notification', message: 'Category created successfully.');
+    }
+
+    #[On('trigger-delete')]
+    public function handleGlobalDelete($id, $type) {
+        if ($type === 'adminCategory') {
+            $this->remove($id);
+        }
     }
 
     public function remove($categoryId) {

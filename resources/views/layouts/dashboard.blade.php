@@ -128,6 +128,8 @@
             {{ $slot }}
         </div>
 
+        <livewire:livewirecomponent.home.delete-popup/>
+        
         @if (session()->has('success'))
             <div data-test="success-message" class="hidden">{{ session('success') }}</div>
             <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition

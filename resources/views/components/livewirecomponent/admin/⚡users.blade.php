@@ -1,27 +1,37 @@
 <?php
 
 use Livewire\Attributes\Layout;
-use Livewire\Component;
-use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
+use Livewire\Component;
 use App\Enums\UserRole;
-use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
     use WithPagination;
 
     public $search = '';
+    #[On('trigger-delete')]
     public function mount() {
         $this->search = request()->query('search', '');
     }
+
 
     public function render()
     {
         return view('admin.users.users', [
             'users' => User::where('name', 'LIKE', "%{$this->search}%")->paginate(6),
         ]);
+    }
+
+    #[On('trigger-delete')]
+    public function handleGlobalDelete($id, $type) {
+        if ($type === 'adminUserDelete') {
+            $this->remove($id);
+        }
     }
 
     public function remove($userId) {

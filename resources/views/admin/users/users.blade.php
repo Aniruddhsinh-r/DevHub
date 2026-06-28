@@ -101,8 +101,9 @@
                                         <a href="{{ route('admin.edit.user',$user) }}" wire:navigate class="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-gray-200 bg-green-100 hover:bg-green-400 text-xs font-bold hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
                                             edit
                                         </a>
-                                        <button wire:click="remove({{ $user->id }})"
-                                            wire:confirm="Are you sure you want to delete this User?" class="inline-flex items-center justify-center h-8 px-4 rounded-xl bg-rose-50 hover:bg-red-600 text-xs font-bold text-red-600 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <button type="button"
+                                            x-on:click="$dispatch('open-delete', { id: {{ $user->id }}, title: '{{ addslashes($user->name) }}', type: 'adminUserDelete' })"
+                                            class="inline-flex items-center justify-center h-8 px-4 rounded-xl bg-rose-50 hover:bg-red-600 text-xs font-bold text-red-600 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
                                             Remove
                                         </button>
                                     </div>

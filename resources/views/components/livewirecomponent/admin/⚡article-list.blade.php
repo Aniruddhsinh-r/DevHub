@@ -4,6 +4,8 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Enums\ArticleStatus;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
+use App\Actions\ArticleDelete;
 use Livewire\Attributes\Layout;
 
 new #[Layout('layouts::dashboard')] class extends Component
@@ -31,6 +33,22 @@ new #[Layout('layouts::dashboard')] class extends Component
                 ->latest()
                 ->paginate(9),
         ]);
+    }
+
+    #[On('trigger-delete')]
+    public function handleGlobalDelete($id, $type) {
+        if ($type === 'adminArticleDelete') {
+            $this->remove($id);
+        }
+    }
+
+    public function remove($articleId) {
+        $article = Article::findOrFail($articleId);
+        $action = app(ArticleDelete::class);
+        $action->handle($article);
+
+        session()->flash('success', 'Article deleted successfully.');
+        return $this->redirectRoute('admin.articles', navigate: true);
     }
 };
 ?>
