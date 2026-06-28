@@ -62,9 +62,7 @@ new class extends Component {
             return $this->redirectRoute('/', navigate: true);
         }
 
-        $parent = Comment::with('user')
-        ->where('article_id', $this->article->id)
-        ->find($parentId);
+        $parent = Comment::with('user')->where('article_id', $this->article->id)->find($parentId);
 
         if (!$parent) {
             unset($this->replybody[$parentId]);
@@ -79,6 +77,7 @@ new class extends Component {
             'body' => $this->replybody[$parentId],
         ]);
 
+        $parent = Comment::with('user')->find($parentId);
         if ($parent && $parent->user_id !== Auth::id()) {
             $parent->user->notify(new CommentNotification($comment));
         }

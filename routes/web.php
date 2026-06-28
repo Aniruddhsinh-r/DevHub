@@ -41,6 +41,7 @@ Route::middleware(['auth','admin'])->group(function () {
     Route::livewire('/admin/dashboard', 'livewirecomponent.admin.dashboard')->name('admin.dashboard');
     Route::livewire('/admin/users', 'livewirecomponent.admin.users')->name('admin.users');
     Route::livewire('/admin/users/{user}', 'livewirecomponent.admin.users-profile')->name('admin.show.user');
+    Route::livewire('/admin/user/{user}/followers', 'livewirecomponent.admin.admin-followers')->name('user.followers');
     Route::livewire('/admin/user/create', 'livewirecomponent.admin.create-user')->name('admin.users.create');
     Route::livewire('/admin/users/edit/{user}', 'livewirecomponent.admin.user-edit')->name('admin.edit.user');
     Route::livewire('/admin/categories', 'livewirecomponent.admin.category-list')->name('admin.categories');

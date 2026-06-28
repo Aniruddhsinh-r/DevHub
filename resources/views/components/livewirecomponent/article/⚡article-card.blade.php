@@ -4,6 +4,9 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Enums\ArticleStatus;
 use Livewire\WithPagination;
+use App\Actions\ArticleDelete;
+use Livewire\Attributes\On;
+use Illuminate\Support\Facades\Gate;
 
 new class extends Component
 {

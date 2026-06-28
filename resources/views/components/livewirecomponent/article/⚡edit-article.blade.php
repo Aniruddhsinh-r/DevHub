@@ -69,7 +69,7 @@ new class extends Component
         session()->flash('success', 'Article updated successfully.');
         $this->cover_path = null;
         return $this->redirectRoute('publishedarticle', navigate: true);
-    }
+    } 
 };
 ?>
 

@@ -62,11 +62,6 @@
                                         class="inline-block bg-black/65 hover:bg-black/75 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all shadow-md">
                                         Remove
                                     </button>
-                                    {{-- <button type="button"
-                                            x-on:click.stop="$dispatch('open-delete', { id: {{ $article->id }}, title: '{{ addslashes($article->title) }}', type: 'article' })"
-                                            class="inline-block bg-black/65 hover:bg-black/75 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-all shadow-md">
-                                        Remove
-                                    </button> --}}
                                 </div>
                             </div>
                         </div>
