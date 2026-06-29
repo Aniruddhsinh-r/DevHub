@@ -20,16 +20,16 @@
                         <a href="{{ route('home') }}" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
                     </div>
                     <div class="flex items-center gap-4 md:gap-8">
-                        <a href="{{ route('home') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">home</a>
-                        <a href="{{ route('articles.index') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">articles</a>
+                        <a href="{{ route('home') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Home</a>
+                        <a href="{{ route('articles.index') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Articles</a>
 
                         @auth
                             @role('author')
-                                <a href="{{ route('profile.index') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">profile</a>
+                                <a href="{{ route('profile.index') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Profile</a>
                                 <a href="{{ route('articles.create') }}" wire:navigate class="hidden sm:inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1a1a1a] rounded-full hover:bg-gray-800 transition-all duration-300 shadow-sm">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                    </svg>Create Article
+                                    </svg>Create article
                                 </a>
                             @endrole
 
@@ -96,10 +96,10 @@
                 x-transition:enter="transition ease-out duration-200"
                 class="md:hidden border-b border-gray-200 bg-white/95 backdrop-blur-lg absolute left-0 right-0 top-16 shadow-lg py-4 px-6 flex flex-col gap-4 z-40"
                 style="display: none;">
-                <a href="{{ route('home') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">home</a>
-                <a href="{{ route('articles.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">articles</a>
+                <a href="{{ route('home') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Home</a>
+                <a href="{{ route('articles.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Articles</a>
                 @role('author')
-                    <a href="{{ route('profile.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">profile</a>
+                    <a href="{{ route('profile.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Profile</a>
                     <a href="{{ route('articles.create') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Create article</a>
                 @endrole
                 @guest
@@ -157,18 +157,18 @@
                     <ul role="list" class="mt-4 space-y-3">
                         <li>
                             <a href="{{ route('articles.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                Latest Articles
+                                Latest articles
                             </a>
                         </li>
                         @auth
                             <li>
                                 <a href="{{ route('followings',auth()->user()) }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                    Following List
+                                    Following list
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('profile.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                    Your Profile
+                                    Your profile
                                 </a>
                             </li>
                             @else
@@ -179,7 +179,7 @@
                             </li>
                             <li>
                                 <a href="{{ route('register.create') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                    Create Account
+                                    Create account
                                 </a>
                             </li>
                         @endauth

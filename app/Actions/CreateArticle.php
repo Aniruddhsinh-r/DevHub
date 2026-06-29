@@ -36,12 +36,12 @@ class CreateArticle
             $data['cover_path'] = $values['cover_path']->store('articleCovers','public');
         }
 
-        if ($values['status'] === ArticleStatus::DRAFT) {
+        if ($values['status'] === ArticleStatus::SCHEDULED) {
             $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
         } elseif ($values['status'] === ArticleStatus::PUBLISHED) {
             $data['published_at'] = now();
         } else {
-            $data['published_at'] = null;
+            $data['published_at'] = now();
         }
 
         auth()->user()->articles()->create($data);

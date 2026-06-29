@@ -15,7 +15,7 @@ new class extends Component
         $this->user = $user;
         $this->articles = collect();
 
-        if ($this->user->hasRole(UserRole::ADMIN)) {
+        if ($this->user->hasRole(UserRole::SUPERADMIN)) {
             session()->flash('error', 'This author does not exist.');
             return $this->redirectRoute('home', navigate: true);
         }
@@ -28,7 +28,7 @@ new class extends Component
     }
 
     public function toggleFollow() {
-        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
+        if (!auth()->user()?->hasRole(UserRole::SUPERADMIN)) {
             session()->flash('error', 'Only Author can Follow others.');
             return $this->redirectRoute('/', navigate: true);
         }

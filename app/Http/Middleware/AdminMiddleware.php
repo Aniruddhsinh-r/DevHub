@@ -21,7 +21,7 @@ class AdminMiddleware
             return redirect()->route('login')->with('error', 'You must be logged in.');
         }
 
-        if (!Auth::user()->hasRole(UserRole::ADMIN)) {
+        if (!Auth::user()->hasRole([UserRole::ADMIN->value, UserRole::SUPERADMIN->value])) {
             abort(403, 'Unauthorized action');
         }
 

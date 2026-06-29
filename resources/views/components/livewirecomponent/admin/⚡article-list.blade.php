@@ -22,7 +22,6 @@ new #[Layout('layouts::dashboard')] class extends Component
     {
         return view('admin.articles.articles', [
             'articles' => Article::query()
-                ->where('status', ArticleStatus::PUBLISHED)
                 ->when($this->search, function ($query, $search) {
                     $query->where(function ($query) use ($search) {
                         $query->where('title', 'like', "%{$search}%")

@@ -1,4 +1,3 @@
-
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -99,7 +98,7 @@
                                             View
                                         </a>
                                         <a href="{{ route('admin.edit.user',$user) }}" wire:navigate class="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-gray-200 bg-green-100 hover:bg-green-400 text-xs font-bold hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
-                                            edit
+                                            Edit
                                         </a>
                                         <button type="button"
                                             x-on:click="$dispatch('open-delete', { id: {{ $user->id }}, title: '{{ addslashes($user->name) }}', type: 'adminUserDelete' })"

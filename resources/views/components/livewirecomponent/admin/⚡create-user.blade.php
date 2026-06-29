@@ -3,27 +3,18 @@
 use Livewire\Component;
 use App\Models\User;
 use App\Enums\UserRole;
-use Livewire\Attributes\Layout;
 use Illuminate\Validation\Rule;
-use Livewire\WithFileUploads;
-use Livewire\Attributes\Sensitive;
+use App\Mail\InvitationMail;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Sensitive;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
-    use WithFileUploads;
-
-    #[Validate('required|min:5|max:50')]
-    public $name = '';
     #[Validate]
     public $email = '';
-    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:2048')]
-    public $avatar = null;
-    #[Validate('nullable|max:2000|string')]
-    public $bio = '';
-    #[Sensitive]
-    #[Validate('nullable|string|min:8|max:255')]
-    public $password = '';
 
     public function rules() {
         return [
@@ -31,64 +22,72 @@ new #[Layout('layouts::dashboard')] class extends Component
         ];
     }
 
-    public function register() {
-        $values = $this->validate();
-
-        $avatarPath = null;
-        if ($values['avatar'] ?? false) {
-            $avatarPath = $values['avatar']->store('avatars', 'public');
-        }
-
-        $user = User::create([
-            'name' => $values['name'],
-            'email' => strtolower($values['email']),
-            'password' => Hash::make($values['password']),
-            'bio' => $values['bio'],
-            'avatar'=> $avatarPath,
-        ]);
-
-        $user->assignRole(UserRole::AUTHOR);
-        session()->flash('success', 'Account created successfully.');
-        return $this->redirectRoute('admin.users', navigate: true);
+    public function sendInvite() {
+        $to = $this->email;
+        $message = URL::temporarySignedRoute(
+            'invitation',
+            now()->addMinutes(30),
+            ['email' => $this->email]
+        );
+        Mail::to($to)->queue(new InvitationMail($message));
+        
+        $this->dispatch('live-notification', message: 'Invite sent successfully successfully.');
+        // session()->flash('success', 'Invite sent successfully successfully.');
     }
 };
 ?>
 
-<div>
-    <div class="min-h-screen flex flex-col justify-center sm:px-6 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <h2 class="text-center text-3xl font-extrabold tracking-tight text-gray-900">
-                Create user account
+<div class="max-w-md mx-auto mt-16 bg-white rounded-xl shadow-sm border border-gray-200">
+    <div class="p-8">
+        <!-- Professional Header Section -->
+        <div class="mb-6 border-b border-gray-100 pb-5">
+            <h2 class="text-xl font-semibold text-gray-900 tracking-tight">
+                Send User Invitation
             </h2>
+            <p class="mt-1 text-sm text-gray-500">
+                Generate a temporary registration token. The link sent will expire automatically after 30 minutes.
+            </p>
         </div>
 
-        <div class="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="bg-white py-8 px-4 shadow-sm border border-gray-100 sm:rounded-2xl sm:px-10">
-                <form wire:submit.prevent="register" class="space-y-5"
-                    enctype="multipart/form-data"
-                >
-                    @csrf
-                    <x-form.field name="name" type="text" label="Full name" placeholder="Enter Name"></x-form.field>
-
-                    <x-form.field name="email" type="email" label="Your email" placeholder="mailadd@gmail.com"></x-form.field>
-
-                    <x-form.field name="password" type="password" label="Password" placeholder="••••••••"></x-form.field>
-
-                    <x-form.field name="bio" type="textarea" label="Bio" placeholder="Tell us a little about yourself..."></x-form.field>
-
-                    <div class='space-y-0.5'>
-                        <label for="avatar" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Profile Pic</label>
-                        <input type="file" id="avatar" name="avatar" wire:model="avatar" class="border border-gray-400 w-full font-medium text-sm text-gray-700 rounded-md shadow-xs cursor-pointer file:bg-gray-700 file:text-white file:px-4 file:py-2 file:rounded-l-md file:border-0" placeholder="Profile Pic" />
-                    </div>
-
-                    <div class="mt-8">
-                        <button type="submit" wire:loading.attr="disabled" data-test="registerBTN" class="inline-flex justify-center py-2.5 w-full border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
-                            <span wire:loading wire:target="register">Processing...</span>
-                            <span wire:loading.remove wire:target="register">Register</span>
-                        </button>
-                    </div>
-                </form>
+        <!-- Clean Status Notification -->
+        @if (session()->has('message'))
+            <div class="mb-5 p-3.5 text-sm text-emerald-800 bg-emerald-50 rounded-lg border border-emerald-200 flex items-center space-x-2.5" role="alert">
+                <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="font-medium">{{ session('message') }}</span>
             </div>
-        </div>
+        @endif
+
+        <form wire:submit.prevent="sendInvite" class="space-y-4">
+            <div>
+                <label for="email" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                    Email Address
+                </label>
+                <div class="relative rounded-md shadow-sm">
+                    <input type="email" id="email" wire:model="email" placeholder="e.g., employee@company.com"
+                        class="block w-full px-3.5 py-2.5 rounded-md border border-gray-300 text-sm font-normal text-gray-900 placeholder-gray-400 bg-white shadow-inner transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-600 {{ $errors->has('email') ? 'border-red-300 bg-red-50/20 focus:ring-red-500/10 focus:border-red-500' : '' }}" />
+                </div>
+
+                @error('email')
+                    <p class="mt-2 text-xs text-red-600 font-medium flex items-center">
+                        <span class="mr-1">🚨</span> {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" wire:loading.attr="disabled" class="w-full h-[44px] flex items-center justify-center py-2.5 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition duration-150 ease-in-out disabled:opacity-75 disabled:cursor-not-allowed">
+                    <span wire:loading.remove wire:target="sendInvite">Issue Invitation Link</span>
+                    <span wire:loading.flex wire:target="sendInvite" class="items-center justify-center space-x-2">
+                        <svg class="animate-spin h-4 w-4 text-white shrink-0" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="text-white font-medium">Generating Token...</span>
+                    </span>
+                </button>
+            </div>
+        </form>
     </div>
 </div>

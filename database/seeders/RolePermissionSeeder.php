@@ -23,6 +23,7 @@ class RolePermissionSeeder extends Seeder
 
         $author = Role::firstOrCreate(['name' => UserRole::AUTHOR]);
         $admin = Role::firstOrCreate(['name' => UserRole::ADMIN]);
+        $superAdmin = Role::firstOrCreate(['name' => UserRole::SUPERADMIN]);
 
         $author->givePermissionTo([
             'article.create',
@@ -32,9 +33,14 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         $admin->givePermissionTo([
+            'article.create',
+            'article.edit',
+            'article.delete',
             'category.create',
             'category.delete',
             'user.manage',
         ]);
+
+        $superAdmin->givePermissionTo($admin->permissions);
     }
 }

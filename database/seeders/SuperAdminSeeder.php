@@ -3,12 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Enums\UserRole;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
-class AdminSeeder extends Seeder
+class SuperAdminSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,11 +17,11 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $user = User::updateOrCreate(
-            ['email' => 'haribhai@gmail.com'],
+            ['email' => 'harshrajsinh@gmail.com'],
             ['uuid' => Str::uuid(),
-            'name' => 'Hari bhai',
+            'name' => 'Harshrajsinh',
             'password' => Hash::make('Password'),
         ]);
-        $user->assignRole(UserRole::ADMIN);
+        $user->assignRole(UserRole::SUPERADMIN);
     }
 }

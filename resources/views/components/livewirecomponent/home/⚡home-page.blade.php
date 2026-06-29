@@ -12,7 +12,7 @@ new class extends Component
     public $articles;
 
     public function mount() {
-        if (Auth::user()?->hasRole(UserRole::ADMIN)) {
+        if (!Auth::user()?->hasRole(UserRole::AUTHOR)) {
             return to_route('admin.dashboard');
         }
         $this->articles = Article::where('status',ArticleStatus::PUBLISHED)->latest()->take(3)->get();
