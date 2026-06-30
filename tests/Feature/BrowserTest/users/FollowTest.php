@@ -1,14 +1,21 @@
 <?php
 
 use App\Models\User;
+use App\Enums\UserRole;
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../../Helpers/UserLogin.php';
 require_once __DIR__ . '/../../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
+    Role::firstOrCreate(['name' => UserRole::ADMIN, 'guard_name' => 'web']);
+});
 test('Author follow other authers.', function () {
     $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
     UserLogin();
 
     visit(route('profile.show', $user))
@@ -23,6 +30,7 @@ test('Author follow other authers.', function () {
 
 test('Author can follow other but not twice.', function () {
     $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
     UserLogin();
 
     visit(route('profile.show', $user))

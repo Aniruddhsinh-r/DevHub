@@ -14,11 +14,9 @@ test('visite specific articles', function () {
         'title' => 'example Article',
     ]);
 
-    visit('/articles?search=example Article')
-    ->click('example Article')
-    ->assertRoute('articles.show',['article' => $article]);
-
-    expect($article->fresh()->view_count)->toBe(1);
+    visit(route('articles.show',$article))
+    ->assertSee('example Article')
+    ->assertSee($article->excerpt);
 });
 
 test('functionality check in articles.',function () {

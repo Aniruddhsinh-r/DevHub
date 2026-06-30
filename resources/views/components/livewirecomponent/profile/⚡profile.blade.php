@@ -28,7 +28,8 @@ new class extends Component
     }
 
     public function toggleFollow() {
-        if (!auth()->check() || auth()->user()?->hasRole(UserRole::SUPERADMIN)) {
+
+        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
             session()->flash('error', 'Only Author can Follow others.');
             return $this->redirectRoute('/', navigate: true);
         }

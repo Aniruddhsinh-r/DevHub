@@ -27,7 +27,8 @@ test('delete category', function () {
 
     $page = visit('/admin/categories');
     $page->script('window.confirm = () => true;');
-    $page->click('[dusk="delete-category"]')
+    $page->click('[dusk="delete-category"]');
+    $page->click('[dusk="DeleteBTN"]')
     ->assertDontSee('Verdie Littel III');
 
     $this->assertDatabaseMissing('categories', [

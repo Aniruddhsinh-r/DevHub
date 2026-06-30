@@ -18,8 +18,7 @@ test('article create', function () {
     UserLogin();
     $category = Category::factory()->create();
 
-    visit('/home')
-    ->click('Create Article')
+    visit('/articles/create')
     ->fill('title', 'hither aniruddhsinh')
     ->select('category_id', $category->id)
     ->select('status', ArticleStatus::PUBLISHED->value)
@@ -40,8 +39,7 @@ test('article update', function () {
         'user_id' => auth()->id(),
     ]);
 
-    visit('/articles/myarticle')
-    ->click('[dusk="edit-article-' . $article->id . '"]')
+    visit('/articles/edit/'.$article->slug)
     ->fill('title', 'hither aniruddhsinh')
     ->select('status', ArticleStatus::PUBLISHED->value)
     ->fill('excerpt', 'this article is update by browser test case.')
@@ -64,7 +62,8 @@ test('article delete', function () {
 
     $page = visit('/articles/myarticle');
     $page->script('window.confirm = () => true;');
-    $page->click('[dusk="delete-article-' . $article->id . '"]')
+    $page->click('[dusk="delete-article-' . $article->id . '"]');
+    $page->click('[dusk="DeleteBTN"]')
         ->assertDontSee('article create for delete browser test checking');
 
     sleep(1);

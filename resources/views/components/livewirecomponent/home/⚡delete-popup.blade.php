@@ -28,7 +28,7 @@ new class extends Component
         <div class="mt-6 flex justify-end gap-3">
             <button type="button" @click="open = false" class="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancel</button>
 
-            <button type="button"
+            <button type="button" dusk="DeleteBTN"
                     @click="$dispatch('trigger-delete', { id: id, type: type }); open = false"
                     class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-500">
                 Yes, Delete

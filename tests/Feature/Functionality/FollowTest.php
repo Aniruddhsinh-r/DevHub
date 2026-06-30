@@ -49,12 +49,14 @@ test('admin cant access follow function page', function () {
 });
 
 test('admin cant follow Authors', function () {
-    $user = UserLogin();
+    Role::create(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
     $admin = AdminLogin();
 
     Livewire::test('livewirecomponent.profile.profile',['user' => $user])
     ->call('toggleFollow')
-    ->assertDispatched('live-notification', message: 'Only Author can Follow others.');
+    ->assertSessionHas('error', 'Only Author can Follow others.');
 
     $this->assertDatabaseMissing('follows', [
         'follower_id' => $admin->id,

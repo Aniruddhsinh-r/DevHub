@@ -10,12 +10,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 
 require_once __DIR__ . '/../Helpers/AdminLogin.php';
-
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
     Role::firstOrCreate(['name' => UserRole::ADMIN, 'guard_name' => 'web']);
+    Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
 });
 test('Admin User find test', function () {
     $admin = AdminLogin();
@@ -39,8 +39,8 @@ test('Admin User delete test', function () {
     $removeuser = User::factory()->create();
     $removeuser->assignRole(UserRole::AUTHOR);
     $article = Article::factory()->create(['user_id' => $removeuser->id,]);
-    Comment::factory()->create(['user_id' => $removeuser->id,'article_id' => $article->id]);
 
+    Comment::factory()->create(['user_id' => $removeuser->id,'article_id' => $article->id]);
     Article::factory()->create(['user_id' => $removeuser->id, ]);
     Comment::factory()->create(['user_id' => $removeuser->id, 'article_id'=> $article->id]);
     Like::factory()->create(['user_id' => $removeuser->id]);

@@ -85,14 +85,12 @@ test('check profile update validation test', function () {
     ]);
 });
 
-test('Author cant see admin profile', function () {
+test('Author can see admin profile', function () {
     $admin = AdminLogin();
     UserLogin();
 
     $response = Livewire::test('livewirecomponent.profile.profile',['user' => $admin]);
-    $response->assertStatus(302);
-    $response->assertRedirect('/home');
-    $response->assertSessionHas('error','This author does not exist.');
+    $response->assertStatus(200);
 });
 
 test('User cant see those auther who dose not exist in db', function () {

@@ -42,8 +42,10 @@ test('user can delete his own article', function () {
     Like::factory()->create(['article_id' => $article->id]);
     View::factory()->create(['article_id' => $article->id]);
 
-    Livewire::test('livewirecomponent.article.delete-article',['article' => $article])
-        ->call('delete');
+    Livewire::actingAs($user)
+        ->test('livewirecomponent.article.my-articles')
+        ->call('remove', $article->id)
+        ->assertRedirect(route('publishedarticle'));
 
     $this->assertSoftDeleted('articles', [
         'id' => $article->id,
@@ -60,7 +62,9 @@ test('user cannot delete others article', function () {
     $user = UserLogin();
     $article = Article::factory()->create();
 
-    $response = Livewire::test('livewirecomponent.article.delete-article',['article' => $article]);
+    $response = Livewire::actingAs($user)
+        ->test('livewirecomponent.article.my-articles')
+        ->call('remove', $article->id);
     $response->assertStatus(403);
 
     $this->assertDatabaseHas('articles', [
