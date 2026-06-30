@@ -20,9 +20,10 @@ beforeEach(function () {
 test('Admin User find test', function () {
     $admin = AdminLogin();
 
-    User::factory()->create([
+    $user = User::factory()->create([
         'name' => 'ishigory'
     ]);
+    $user->assignRole(UserRole::AUTHOR);
 
     $response = $this->actingAs($admin)->get(route('admin.users', [
         'search' => 'ishigory'
@@ -36,6 +37,7 @@ test('Admin User delete test', function () {
     AdminLogin();
 
     $removeuser = User::factory()->create();
+    $removeuser->assignRole(UserRole::AUTHOR);
     $article = Article::factory()->create(['user_id' => $removeuser->id,]);
     Comment::factory()->create(['user_id' => $removeuser->id,'article_id' => $article->id]);
 

@@ -28,14 +28,19 @@ new class extends Component
     }
 
     public function toggleFollow() {
-        if (!auth()->user()?->hasRole(UserRole::SUPERADMIN)) {
+        if (!auth()->check() || auth()->user()?->hasRole(UserRole::SUPERADMIN)) {
             session()->flash('error', 'Only Author can Follow others.');
             return $this->redirectRoute('/', navigate: true);
         }
 
+        if (!$this->user->hasRole(UserRole::AUTHOR)) {
+            $this->dispatch('live-notification', message: 'You cant follow this profile.');
+            return ;
+        }
+
         if(Auth::id() !== $this->user->id) {
-            Auth::user()->following()->toggle($this->user);
-            $alreadyFollowing = Auth::user()->following()->where('followed_id', $this->user->id)->exists();
+            Auth::user()?->following()->toggle($this->user);
+            $alreadyFollowing = Auth::user()?->following()->where('followed_id', $this->user->id)->exists();
 
             if ($alreadyFollowing) {
                 $this->user->notify(new NewFollowerNotification(Auth::user()));
@@ -107,18 +112,18 @@ new class extends Component
                                 <span class="text-gray-900 font-semibold">{{ $articles->count() }}</span>
                             </div>
                         </div>
-                        @role('author')
+                        @if ($user->hasRole(UserRole::AUTHOR))
                             <form wire:submit.prevent="toggleFollow">
                                 @csrf
                                 <button data-test="follow-button" class="mt-6 bg-blue-600 hover:bg-blue-800 transition text-white font-semibold py-2.5 rounded-xl text-sm w-full">
-                                    @if (auth()->user()->following()->where('followed_id', $user->id)->exists())
+                                    @if (auth()->user()?->following()->where('followed_id', $user->id)->exists())
                                         Unfollow
                                     @else
                                         Follow
                                     @endif
                                 </button>
                             </form>
-                        @endrole
+                        @endif
                     </div>
                 </div>
             </div>

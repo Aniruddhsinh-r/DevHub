@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 require_once __DIR__.'/../../Helpers/AdminLogin.php';
@@ -8,8 +9,13 @@ require_once __DIR__.'/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
+    Role::firstOrCreate(['name' => UserRole::ADMIN, 'guard_name' => 'web']);
+});
 test('Admin fetch user details', function () {
-    $user = UserLogin();
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
     AdminLogin();
 
     visit('/admin/users')
@@ -17,7 +23,8 @@ test('Admin fetch user details', function () {
 });
 
 test('admin search and delete user', function () {
-    $user = UserLogin();
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
     AdminLogin();
 
     visit('/admin/users?search='.$user->name)

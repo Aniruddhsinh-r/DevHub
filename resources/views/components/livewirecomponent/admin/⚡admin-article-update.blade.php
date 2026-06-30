@@ -91,9 +91,9 @@ new #[Layout('layouts::dashboard')] class extends Component
             }
         }
 
-        if ($data['status'] === ArticleStatus::SCHEDULED) {
+        if ($data['status'] === ArticleStatus::SCHEDULED->value) {
             $data['published_at'] = now()->addHours((int)($data['scheduled_hours'] ?? 0))->addMinutes((int)($data['scheduled_minutes'] ?? 0));
-        } elseif ($data['status'] === ArticleStatus::PUBLISHED) {
+        } elseif ($data['status'] === ArticleStatus::PUBLISHED->value) {
             $data['published_at'] = now();
         } else {
             $data['published_at'] = null;

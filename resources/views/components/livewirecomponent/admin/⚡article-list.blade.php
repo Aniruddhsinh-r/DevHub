@@ -13,6 +13,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     use WithPagination;
     public $search = '';
+    public $selectedArticles = [];
 
     public function mount() {
         $this->search = request()->query('search', '');
@@ -35,7 +36,18 @@ new #[Layout('layouts::dashboard')] class extends Component
     }
 
     #[On('trigger-delete')]
-    public function handleGlobalDelete($id, $type) {
+    public function handleGlobalDelete($id, $type, ArticleDelete $articleDelete) {
+        if ($type === 'adminArticleBulkDelete') {
+            if (!empty($id)) {
+                $articles = Article::whereIn('id', $id)->get();
+                foreach ($articles as $article) {
+                    $articleDelete->handle($article);
+                }
+                $this->selectedArticles = [];
+                $this->dispatch('live-notification', message: 'Selected articles deleted successfully.');
+            }
+        }
+
         if ($type === 'adminArticleDelete') {
             $this->remove($id);
         }

@@ -41,7 +41,7 @@
                                     <td class="px-5 py-3.5 text-sm font-bold text-gray-900">{{ $category->slug }}</td>
                                     <td class="px-5 py-3.5 text-xs text-gray-500 font-mono">{{ $category->articles_count }}</td>
                                     <td class="px-5 py-3.5 text-right">
-                                        <button dusk="delete-category-{{ $category->id }}"
+                                        <button dusk="delete-category"
                                              x-on:click="$dispatch('open-delete', { id: {{ $category->id }}, title: '{{ addslashes($category->title) }}', type: 'adminCategory' })"
                                              class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete
                                         </button>
