@@ -19,7 +19,7 @@ new class extends Component
     #[Validate('nullable|max:2000|string')]
     public $bio = '';
     #[Sensitive]
-    #[Validate('nullable|string|min:8|max:255')]
+    #[Validate('require|string|min:8|max:255')]
     public $password = '';
 
     public function rules() {

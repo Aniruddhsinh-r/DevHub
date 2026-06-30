@@ -78,7 +78,6 @@ new class extends Component
             </div>
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-3">
-                    {{-- <input type="file" wire:model="avatar" id="avatar" class="hidden" accept="image/*" @change="imageUrl = URL.createObjectURL($event.target.files[0])"> --}}
                     <input type="file" wire:model="avatar" id="avatar" x-ref="avatarInput" class="hidden" accept="image/*" @change="imageUrl = URL.createObjectURL($event.target.files[0])">
                     <div class="flex items-center gap-3">
                         <label for="avatar" class="cursor-pointer bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
@@ -86,9 +85,12 @@ new class extends Component
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>Change Image
                         </label>
-                        <button type="button" wire:click="removeAvatar" @click="imageUrl = 'https://ui-avatars.com/api/?name={{ urlencode($user->name) }}'; $refs.avatarInput.value = '';" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                            Remove
-                        </button>
+                        
+                        @if($user->avatar || $avatar)
+                            <button type="button" wire:click="removeAvatar" @click="imageUrl = 'https://ui-avatars.com/api/?name={{ urlencode($user->name) }}'; $refs.avatarInput.value = '';" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                                Remove
+                            </button>
+                        @endif
                     </div>
                 </div>
                 @error('avatar')

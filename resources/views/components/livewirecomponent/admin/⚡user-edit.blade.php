@@ -116,9 +116,11 @@ new #[Layout('layouts::dashboard')] class extends Component
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                         </svg>Change Image
                                     </label>
-                                    <button type="button" wire:click="removeAvatar" @click="imageUrl = 'https://ui-avatars.com/api/?name={{ urlencode($user->name) }}'; $refs.avatarInput.value = '';" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                                        Remove
-                                    </button>
+                                    @if($user->avatar || $avatar)
+                                        <button type="button" wire:click="removeAvatar" @click="imageUrl = 'https://ui-avatars.com/api/?name={{ urlencode($user->name) }}'; $refs.avatarInput.value = '';" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                                            Remove
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                             @error('avatar')
