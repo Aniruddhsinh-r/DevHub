@@ -7,6 +7,7 @@ namespace App\Actions;
 use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
+use App\Events\ArticleCreate;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -57,6 +58,7 @@ class UpdateArticle
         }
 
         $article->update($data);
+        ArticleCreate::dispatch();
     }
     /** Helper to check for valid file */
     private function hasFile(array $values, string $key): bool

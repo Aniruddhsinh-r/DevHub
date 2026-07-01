@@ -11,7 +11,6 @@ use App\Models\View;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
-
     public $articleCount = null;
     public $users = null;
     public $articles = null;

@@ -8,9 +8,9 @@ use App\Models\Category;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Gate;
+use Livewire\Attributes\On;
+use App\Events\CategoryCreated;
+use App\Actions\UpdateArticle;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
@@ -33,6 +33,19 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->scheduled_hours = $diff > 0 ? floor($diff / 60) : 0;
         $this->scheduled_minutes = $diff > 0 ? ($diff % 60) : 0;
         $this->categories = Category::select('id','name')->orderBy('name')->get();
+    }
+
+    #[On('echo:categories,CategoryCreated')]
+    public function refreshCategoriesList()
+    {
+        $this->dispatch('$refresh');
+    }
+
+    public function render()
+    {
+        return view('articles.articleForm', [
+            'categories' => Category::select('id','name')->orderBy('name')->get()
+        ]);
     }
 
     #[Validate('required|min:6|max:255')]
@@ -58,48 +71,13 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->delete_cover = true;
     }
 
-    public function update() {
-        $data = $this->validate();
+    public function update(UpdateArticle $action) {
+        $values = $this->validate();
 
         $article = $this->article;
-        $data['delete_cover'] = $this->delete_cover;
+        $values['delete_cover'] = $this->delete_cover;
 
-        if (($data['title'] ?? null) && $data['title'] !== $article->title) {
-            $base = Str::slug($data['title'], '-');
-            $slug = $base;
-            $count = 2;
-
-            while (Article::where('slug', $slug)->where('id', '!=', $article->id)->exists()) {
-                $slug = $base . '-' . $count;
-                $count++;
-            }
-
-            $data['slug'] = $slug;
-        }
-
-        if (!empty($data['delete_cover'])) {
-            if ($article->cover_path) {
-                Storage::disk('public')->delete($article->cover_path);
-            }
-            $data['cover_path'] = null;
-        }
-
-        if (!empty($data['cover_path'])) {
-            $data['cover_path'] = $data['cover_path']->store('articleCovers', 'public');
-            if ($article->cover_path) {
-                Storage::disk('public')->delete($article->cover_path);
-            }
-        }
-
-        if ($data['status'] === ArticleStatus::SCHEDULED->value) {
-            $data['published_at'] = now()->addHours((int)($data['scheduled_hours'] ?? 0))->addMinutes((int)($data['scheduled_minutes'] ?? 0));
-        } elseif ($data['status'] === ArticleStatus::PUBLISHED->value) {
-            $data['published_at'] = now();
-        } else {
-            $data['published_at'] = null;
-        }
-
-        $article->update($data);
+        $action->handle($values, $article);
 
         session()->flash('success', 'Article updated successfully.');
         $this->cover_path = null;

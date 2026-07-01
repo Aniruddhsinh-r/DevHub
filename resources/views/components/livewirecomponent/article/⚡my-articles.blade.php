@@ -5,14 +5,34 @@ use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\ArticleDelete;
 use Livewire\Attributes\On;
+use App\Events\ArticleCreate;
 use Illuminate\Support\Facades\Gate;
 
 new class extends Component
 {
-    public $articles;
-    public function mount() {
-        $this->articles = Article::with(['user','category'])->where('user_id',Auth::id())->latest()->get();
+    public function loadArticles()
+    {
+        $this->articles = Article::with(['user', 'category'])
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
     }
+
+    public function mount()
+    {
+        $this->loadArticles();
+    }
+
+    #[On('echo:articles,ArticleCreate')]
+    public function refreshArticles()
+    {
+        $this->loadArticles();
+    }
+
+    // public $articles;
+    // public function mount() {
+    //     $this->articles = Article::with(['user','category'])->where('user_id',Auth::id())->latest()->get();
+    // }
 
     #[On('trigger-delete')]
     public function handleGlobalDelete($id, $type) {
@@ -27,6 +47,7 @@ new class extends Component
         $action = app(ArticleDelete::class);
         $action->handle($article);
 
+        ArticleCreate::dispatch();
         session()->flash('success', 'Article deleted successfully.');
         return $this->redirectRoute('publishedarticle', navigate: true);
     }
@@ -48,9 +69,9 @@ new class extends Component
                 </div>
             </div>
 
-            @if($articles->count() > 0)
+            @if($this->articles->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach($articles as $article)
+                    @foreach($this->articles as $article)
                         <div class="group bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative">
                             <a href="{{ route('articles.show',$article) }}" wire:navigate class="block relative overflow-hidden h-52">
                                 @if ($article->cover_path)

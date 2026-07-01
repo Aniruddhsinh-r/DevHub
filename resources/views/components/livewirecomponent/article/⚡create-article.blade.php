@@ -4,16 +4,17 @@ use Livewire\Component;
 use App\Actions\CreateArticle;
 use App\Models\Article;
 use App\Models\Category;
+use Livewire\Attributes\On;
+use App\Enums\ArticleStatus;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
+use App\Events\CategoryCreated;
 use Livewire\Attributes\Validate;
-use App\Enums\ArticleStatus;
 use Illuminate\Support\Facades\Gate;
 
 new class extends Component
 {
     use WithFileUploads;
-    public $categories;
     public $article;
 
     #[Validate('required|min:6|max:255')]
@@ -35,8 +36,20 @@ new class extends Component
 
     public function mount() {
         Gate::authorize('create', Article::class);
-        $this->categories = Category::select('id','name')->orderBy('name')->get();
         $this->article = new Article();
+    }
+
+    #[On('echo:categories,CategoryCreated')]
+    public function refreshCategoriesList()
+    {
+        $this->dispatch('$refresh');
+    }
+
+    public function render()
+    {
+        return view('articles.articleForm', [
+            'categories' => Category::select('id','name')->orderBy('name')->get()
+        ]);
     }
 
     public function store(CreateArticle $action) {

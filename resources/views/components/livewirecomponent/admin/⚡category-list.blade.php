@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use App\Events\CategoryCreated;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,7 +15,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     use WithPagination;
     #[Validate('required|min:3|max:20|string|unique:categories,name')]
     public $name = '';
-
+    
     public function render() {
         return view('admin.categories', [
             'categories' => Category::withCount('articles')->latest()->paginate(6),
@@ -38,6 +39,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             'slug' => $slug,
             'created_at' => now(),
         ]);
+        CategoryCreated::dispatch();
 
         $this->reset(['name']);
         $this->dispatch('live-notification', message: 'Category created successfully.');
@@ -55,6 +57,7 @@ new #[Layout('layouts::dashboard')] class extends Component
         Gate::authorize('delete', $category);
 
         $category->delete();
+        CategoryCreated::dispatch();
         $this->dispatch('live-notification', message: 'Category deleted successfully.');
     }
 };

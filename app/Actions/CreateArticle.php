@@ -8,6 +8,7 @@ use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Support\Str;
+use App\Events\ArticleCreate;
 use Illuminate\Container\Attributes\CurrentUser;
 
 class CreateArticle
@@ -45,5 +46,6 @@ class CreateArticle
         }
 
         auth()->user()->articles()->create($data);
+        ArticleCreate::dispatch();
     }
 }

@@ -5,18 +5,24 @@ use App\Models\Article;
 use App\Enums\ArticleStatus;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use App\Events\ArticleCreate;
 use App\Actions\ArticleDelete;
 use Livewire\Attributes\Layout;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
-
     use WithPagination;
     public $search = '';
     public $selectedArticles = [];
 
     public function mount() {
         $this->search = request()->query('search', '');
+    }
+
+    #[On('echo:articles,ArticleCreate')]
+    public function refreshCategoriesList()
+    {
+        $this->dispatch('$refresh');
     }
 
     public function render()
@@ -44,6 +50,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                     $articleDelete->handle($article);
                 }
                 $this->selectedArticles = [];
+                ArticleCreate::dispatch();
                 $this->dispatch('live-notification', message: 'Selected articles deleted successfully.');
             }
         }
@@ -57,6 +64,7 @@ new #[Layout('layouts::dashboard')] class extends Component
         $article = Article::findOrFail($articleId);
         $action = app(ArticleDelete::class);
         $action->handle($article);
+        ArticleCreate::dispatch();
 
         session()->flash('success', 'Article deleted successfully.');
         return $this->redirectRoute('admin.articles', navigate: true);

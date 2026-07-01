@@ -5,7 +5,9 @@ use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Actions\UpdateArticle;
 use App\Models\Category;
+use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
+use App\Events\CategoryCreated;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,7 +16,6 @@ new class extends Component
     use WithFileUploads;
 
     public Article $article;
-    public $categories;
 
     public $delete_cover = false;
 
@@ -30,7 +31,19 @@ new class extends Component
         $diff = ($article->published_at && $article->status === ArticleStatus::SCHEDULED) ? now()->diffInMinutes($article->published_at, false) : 0;
         $this->scheduled_hours = $diff > 0 ? floor($diff / 60) : 0;
         $this->scheduled_minutes = $diff > 0 ? ($diff % 60) : 0;
-        $this->categories = Category::select('id','name')->orderBy('name')->get();
+    }
+
+    #[On('echo:categories,CategoryCreated')]
+    public function refreshCategoriesList()
+    {
+        $this->dispatch('$refresh');
+    }
+
+    public function render()
+    {
+        return view('articles.articleForm', [
+            'categories' => Category::select('id','name')->orderBy('name')->get()
+        ]);
     }
 
     #[Validate('required|min:6|max:255')]

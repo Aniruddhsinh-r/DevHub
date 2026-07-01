@@ -6,6 +6,7 @@ use App\Enums\ArticleStatus;
 use Livewire\WithPagination;
 use App\Actions\ArticleDelete;
 use Livewire\Attributes\On;
+use App\Events\ArticleCreate;
 use Illuminate\Support\Facades\Gate;
 
 new class extends Component
@@ -15,6 +16,12 @@ new class extends Component
 
     public function mount() {
         $this->search = request()->query('search', '');
+    }
+
+    #[On('echo:articles,ArticleCreate')]
+    public function refreshCategoriesList()
+    {
+        $this->dispatch('$refresh');
     }
 
     public function render()
