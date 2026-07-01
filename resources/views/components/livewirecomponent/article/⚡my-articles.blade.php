@@ -10,21 +10,13 @@ use Illuminate\Support\Facades\Gate;
 
 new class extends Component
 {
+    #[On('echo:articles,ArticleCreate')]
     public function loadArticles()
     {
-        $this->articles = Article::with(['user', 'category'])
-            ->where('user_id', Auth::id())
-            ->latest()
-            ->get();
+        $this->articles = Article::with(['user', 'category'])->where('user_id', Auth::id())->latest()->get();
     }
 
     public function mount()
-    {
-        $this->loadArticles();
-    }
-
-    #[On('echo:articles,ArticleCreate')]
-    public function refreshArticles()
     {
         $this->loadArticles();
     }

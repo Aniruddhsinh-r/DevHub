@@ -1,16 +1,22 @@
 <?php
 
 use Livewire\Component;
-use App\Models\User;
+use App\Models\Article;
+use Livewire\Attributes\On;
 use App\Enums\ArticleStatus;
+use App\Events\ArticleCreate;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component
 {
-    public $articles;
-    public function mount() {
+    #[On('echo:articles,ArticleCreate')]
+    public function loadArticles()
+    {
         $user = Auth::user();
         $this->articles = $user->articles()->where('status', ArticleStatus::DRAFT)->latest()->get();
+    }
+    public function mount() {
+        $this->loadArticles();
     }
 };
 ?>
@@ -26,9 +32,9 @@ new class extends Component
         <a href="{{ route('publishedarticle') }}" wire:navigate class="bg-[#111111] text-white px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.18em] hover:bg-black transition-all duration-300">All Articles</a>
     </div>
 
-    @if($articles->count() > 0)
+    @if($this->articles->count() > 0)
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        @foreach ($articles as $article)
+        @foreach ($this->articles as $article)
             <a class="group bg-[#cfcfcf] border border-[#d7d7d6] rounded-[1.7rem] p-5 hover:-translate-y-1 hover:border-[#111111] transition-all duration-500 shadow-lg" href="{{ route('articles.edit',$article) }}" wire:navigate>
                 <div class="flex items-center justify-between mb-5">
                     <span class="px-3 py-1.5 rounded-full bg-[#111111] text-white text-[9px] font-black uppercase tracking-[0.18em]">Draft</span>
