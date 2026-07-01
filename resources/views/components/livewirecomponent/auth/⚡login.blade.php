@@ -15,7 +15,7 @@ new class extends Component
     public $email = '';
     public $remember = '';
     #[Sensitive]
-    #[Validate('require|string|min:8|max:255')]
+    #[Validate('required|string|min:8|max:255')]
     public $password = '';
 
     public function login() {

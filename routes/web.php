@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {return redirect('/home');})->name('/');
 Route::livewire('/home', 'livewirecomponent.home.home-page')->name('home');
 Route::livewire('/articles', 'livewirecomponent.article.article-card')->name('articles.index');
+Route::livewire('/invitation/{email}', 'livewirecomponent.invitation')->name('invitation')->middleware('signed');
 
 Route::middleware('guest')->group(function () {
-    Route::livewire('/invitation/{email}', 'livewirecomponent.invitation')->name('invitation')->middleware('signed');
     Route::livewire('/password/forgot', 'livewirecomponent.auth.password-forgot')->name('password.forgot');
     Route::livewire('/password/forgot/otp', 'livewirecomponent.auth.verify-otp')->name('password.forgot.otp')->middleware('throttle:otp');
     Route::livewire('/password/reset/password', 'livewirecomponent.auth.reset-password')->name('password.reset');

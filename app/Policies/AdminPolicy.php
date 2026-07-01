@@ -16,14 +16,14 @@ class AdminPolicy
     }
 
     public function create(User $user): bool {
-        return $user->can('category.create');
+        return $user->can('category.create') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
     public function delete(User $user): bool {
-        return $user->can('category.delete');
+        return $user->can('category.delete') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
     public function remove(User $user): bool {
-        return $user->can('user.manage') && $user->hasRole(UserRole::ADMIN);
+        return $user->can('user.manage') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 }

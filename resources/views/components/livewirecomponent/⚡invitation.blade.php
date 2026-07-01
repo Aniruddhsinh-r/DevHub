@@ -27,8 +27,8 @@ new class extends Component
         $this->originalEmail = $request->route('email');
     
         if (User::where('email', $this->email)->exists()) {
-            session()->flash('error', 'This account already exists. Please log in.');
-            return $this->redirectRoute('login', navigate: true);
+            session()->flash('success', 'You already have an account with us! Try logging in.');
+            return $this->redirectRoute('home', navigate: true);
         }
     }
 
