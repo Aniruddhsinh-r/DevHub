@@ -6,6 +6,8 @@ use App\Enums\UserRole;
 use Illuminate\Http\Request;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 new class extends Component
 {

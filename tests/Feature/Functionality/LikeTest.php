@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Article;
-use App\Models\User;
 use App\Enums\ArticleStatus;
 use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -39,8 +38,7 @@ test('admin cant like', function () {
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
     ->call('toggleLike')
-    ->assertRedirect(route('/'))
-    ->assertSessionHas('error', 'Only Author can Like article.');
+    ->assertForbidden();
 
     $this->assertDatabaseMissing('likes', [
         'user_id' => $admin->id,
@@ -53,7 +51,7 @@ test('user cant like draft article', function () {
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
         ->call('toggleLike')
-        ->assertDispatched('live-notification', message: 'You cant like draft articles.');
-
+        ->assertForbidden();
+        
     $this->assertDatabaseMissing('likes',['article_id'=>$article->id , 'user_id'=>$user->id]);
 });

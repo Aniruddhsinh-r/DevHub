@@ -11,7 +11,7 @@ new class extends Component
 {
     public $articles;
     public function mount() {
-        $this->articles = Article::where('user_id',Auth::id())->latest()->get();
+        $this->articles = Article::with(['user','category'])->where('user_id',Auth::id())->latest()->get();
     }
 
     #[On('trigger-delete')]

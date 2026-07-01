@@ -15,7 +15,7 @@ new class extends Component
         if (Auth::user()?->hasRole([UserRole::SUPERADMIN,UserRole::ADMIN])) {
             return to_route('admin.dashboard');
         }
-        $this->articles = Article::where('status',ArticleStatus::PUBLISHED)->latest()->take(3)->get();
+        $this->articles = Article::with(['user','category'])->where('status',ArticleStatus::PUBLISHED)->latest()->take(3)->get();
     }
 
     public function logout()

@@ -5,9 +5,11 @@ use App\Enums\UserRole;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
@@ -25,6 +27,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     #[Validate('nullable|image|mimes:jpeg,png,jpg,gif|max:2048')]
     public $avatar;
     public $delete_avatar = false;
+    public $originalRole = null;
 
     public function mount(User $user) {
         $this->user = $user;
@@ -32,12 +35,13 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->email = $this->user->email;
         $this->bio = $this->user->bio;
         $this->role = $this->user->getRoleNames()->first();
+        $this->originalRole = $this->role;
     }
 
     public function rules() {
         return [
             'email' => 'required|email|min:10|max:255|unique:users,email,' . $this->user->id,
-            'role' => ['nullable', new Enum(UserRole::class)],
+            'role' => ['required', new Enum(UserRole::class)],
         ];
     }
 
@@ -55,7 +59,8 @@ new #[Layout('layouts::dashboard')] class extends Component
             'bio' => $values['bio'],
         ];
 
-        if (!empty($values['role'])) {
+        if ($this->role !== $this->originalRole) {
+            Gate::authorize('roleChange', $this->user);
             $this->user->syncRoles($values['role']);
             $this->user->comments()->delete();
             $this->user->bookmarks()->delete();
@@ -154,7 +159,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                         <p class="text-xs text-gray-500 mt-1">Leave these fields completely blank if you do not want to modify your password.</p>
                     </div>
 
-                    <div>
+                    {{-- <div>
                         <label class="block text-xs font-black uppercase tracking-wider text-gray-700 mb-2">Role</label>
                         <select wire:model="role" class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 focus:bg-white focus:ring-2 focus:ring-black focus:border-black transition-all outline-none">
                             <option value="">Select a role</option>
@@ -162,6 +167,27 @@ new #[Layout('layouts::dashboard')] class extends Component
                             <option value="author">Author</option>
                         </select>
                         @error('role') <p class="text-xs text-red-500 mt-1 font-medium">{{ $message }}</p> @enderror
+                    </div> --}}
+                    <div>
+                        <label class="block text-xs font-black uppercase tracking-wider text-gray-700 mb-3">
+                            Role
+                        </label>
+
+                        <div class="flex gap-6">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="radio" wire:model="role" value="admin" class="h-4 w-4 text-black border-gray-300 focus:ring-black">
+                                <span class="text-sm font-medium text-gray-800">Admin</span>
+                            </label>
+
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="radio" wire:model="role" value="author" class="h-4 w-4 text-black border-gray-300 focus:ring-black" >
+                                <span class="text-sm font-medium text-gray-800">Author</span>
+                            </label>
+                        </div>
+
+                        @error('role')
+                            <p class="text-xs text-red-500 mt-2 font-medium">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
             </div>

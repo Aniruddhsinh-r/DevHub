@@ -9,14 +9,11 @@ Route::livewire('/articles', 'livewirecomponent.article.article-card')->name('ar
 Route::livewire('/invitation/{email}', 'livewirecomponent.invitation')->name('invitation')->middleware('signed');
 
 Route::middleware('guest')->group(function () {
+    Route::livewire('/register', 'livewirecomponent.auth.register')->name('register.create');
+    Route::livewire('/login', 'livewirecomponent.auth.login')->name('login');
     Route::livewire('/password/forgot', 'livewirecomponent.auth.password-forgot')->name('password.forgot');
     Route::livewire('/password/forgot/otp', 'livewirecomponent.auth.verify-otp')->name('password.forgot.otp')->middleware('throttle:otp');
     Route::livewire('/password/reset/password', 'livewirecomponent.auth.reset-password')->name('password.reset');
-});
-
-Route::middleware('guest')->group(function () {
-    Route::livewire('/register', 'livewirecomponent.auth.register')->name('register.create');
-    Route::livewire('/login', 'livewirecomponent.auth.login')->name('login');
 });
 
 Route::middleware('auth')->group(function () {

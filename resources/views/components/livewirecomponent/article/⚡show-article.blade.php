@@ -6,6 +6,7 @@ use App\Models\View;
 use App\Models\Like;
 use App\Enums\UserRole;
 use App\Enums\ArticleStatus;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component
@@ -32,17 +33,7 @@ new class extends Component
     }
 
     public function toggleLike() {
-        // $this->authorize('like', $this->article);
-
-        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
-            session()->flash('error', 'Only Author can Like article.');
-            return $this->redirectRoute('/', navigate: true);
-        }
-
-        if ($this->article->status !== ArticleStatus::PUBLISHED) {
-            $this->dispatch('live-notification', message: 'You cant like draft articles.');
-            return;
-        }
+        Gate::authorize('like', $this->article);
 
         $like = $this->article->likes()->where('user_id', auth()->id())->first();
         if ($like) {
@@ -57,16 +48,7 @@ new class extends Component
 
     public function toggleBookmark()
     {
-        // $this->authorize('bookmark', $this->article);
-        if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
-            session()->flash('error', 'Only Author can bookmark article.');
-            return $this->redirectRoute('/', navigate: true);
-        }
-
-        if ($this->article->status !==  ArticleStatus::PUBLISHED) {
-            $this->dispatch('live-notification', message: 'You cant bookmark draft articles');
-            return;
-        }
+        Gate::authorize('bookmark', $this->article);
 
         Auth::user()->bookmarkedArticles()->toggle($this->article->id);
 

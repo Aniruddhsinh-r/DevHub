@@ -26,6 +26,8 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     #[Validate('required|min:5|max:50')]
     public $name;
+    #[Validate('nullable|max:2000|string')]
+    public $bio;
     #[Validate]
     public $email;
     #[Validate('nullable|string|min:8|max:255')]
@@ -55,21 +57,22 @@ new #[Layout('layouts::dashboard')] class extends Component
             return;
         }
 
-        $values = $this->validate();
+        $this->validate();
         $values['delete_avatar'] = $this->delete_avatar;
 
         $data = [
             'name' => $values['name'],
-            'email' => $values['email']
+            'email' => $values['email'],
+            'bio' => $values['bio']
         ];
 
-        if (!empty($values['delete_avatar'])) {
+        if ($this->delete_avatar) {
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
             $data['avatar'] = null;
         }
-        if (!empty($values['avatar'])) {
+        if ($this->avatar && is_object($this->avatar)) {
             $data['avatar'] = $values['avatar']->store('avatars', 'public');
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);

@@ -20,7 +20,7 @@ new class extends Component
     public function render()
     {
         return view('articles.article', [
-            'articles' => Article::query()
+            'articles' => Article::query()->with(['user','category'])
                 ->where('status', ArticleStatus::PUBLISHED)
                 ->when($this->search, function ($query, $search) {
                     $query->where(function ($query) use ($search) {

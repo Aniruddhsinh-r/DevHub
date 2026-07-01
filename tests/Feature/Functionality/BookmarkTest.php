@@ -14,8 +14,7 @@ test('admin cant bookmark article', function () {
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
         ->call('toggleBookmark')
-        ->assertRedirect(route('/'))
-        ->assertSessionHas('error', 'Only Author can bookmark article.');
+        ->assertForbidden();
 
     $this->assertDatabaseMissing('bookmarks',['article_id'=>$article->id, 'user_id'=>$admin->id]);
 });
@@ -34,8 +33,7 @@ test('Guest cant bookmark article', function () {
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
         ->call('toggleBookmark')
-        ->assertRedirect(route('/'))
-        ->assertSessionHas('error', 'Only Author can bookmark article.');
+        ->assertForbidden();
 
     $this->assertDatabaseMissing('bookmarks', [
         'article_id' => $article->id,
@@ -75,7 +73,7 @@ test('user cant bookmark draft article', function () {
 
     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
         ->call('toggleBookmark')
-        ->assertDispatched('live-notification', message: 'You cant bookmark draft articles');
+        ->assertForbidden();
 
     $this->assertDatabaseMissing('bookmarks',['article_id'=>$article->id , 'user_id'=>$user->id]);
 });

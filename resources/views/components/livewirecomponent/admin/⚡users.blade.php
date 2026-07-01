@@ -14,7 +14,6 @@ new #[Layout('layouts::dashboard')] class extends Component
     use WithPagination;
 
     public $search = '';
-    #[On('trigger-delete')]
     public function mount() {
         $this->search = request()->query('search', '');
     }

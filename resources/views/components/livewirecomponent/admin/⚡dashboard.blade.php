@@ -23,7 +23,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     public function mount() {
         $this->articleCount = Article::where('status',ArticleStatus::PUBLISHED)->count();
-        $this->articles = Article::where('status', ArticleStatus::PUBLISHED)->latest()->take(4)->get();
+        $this->articles = Article::with(['user','category'])->where('status', ArticleStatus::PUBLISHED)->latest()->take(4)->get();
         $this->draftArticle = Article::where('status',ArticleStatus::DRAFT)->count();
         $this->users = User::count();
         $this->comments = Comment::count();

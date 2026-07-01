@@ -23,7 +23,17 @@ class AdminPolicy
         return $user->can('category.delete') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
-    public function remove(User $user): bool {
+    public function remove(User $user, User $target): bool {
+        if ($user->is($target)) {
+            return false;
+        }
+        if ($target->hasRole(UserRole::SUPERADMIN)) {
+            return false;
+        }
         return $user->can('user.manage') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
+    }
+
+    public function roleChange(User $user): bool {
+        return $user->can('user.manage') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]); 
     }
 }
