@@ -3,6 +3,7 @@
 use Livewire\Component;
 use App\Models\User;
 use App\Enums\UserRole;
+use App\Events\UserCreate;
 use Illuminate\Http\Request;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\URL;
@@ -53,6 +54,7 @@ new class extends Component
         $user->assignRole(UserRole::AUTHOR);
         Auth::login($user, $remember = true);
 
+        UserCreate::dispatch();
         session()->flash('success', 'Account created successfully.');
         return $this->redirectRoute('home', navigate: true);
     }

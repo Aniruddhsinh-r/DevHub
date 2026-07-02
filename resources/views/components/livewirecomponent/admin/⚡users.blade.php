@@ -8,6 +8,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Enums\UserRole;
 use App\Events\ArticleCreate;
+use App\Events\UserCreate;
 use App\Models\User;
 
 new #[Layout('layouts::dashboard')] class extends Component
@@ -19,6 +20,11 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->search = request()->query('search', '');
     }
 
+    #[On('echo:users,UserCreate')]
+    public function refresUsersList()
+    {
+        $this->dispatch('$refresh');
+    }
 
     public function render()
     {
@@ -48,6 +54,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             $user->delete();
         });
         ArticleCreate::dispatch();
+        UserCreate::dispatch();
         $this->dispatch('live-notification', message: 'User removed successfully.');
     }
 };

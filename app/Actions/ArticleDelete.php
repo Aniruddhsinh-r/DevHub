@@ -6,6 +6,7 @@ namespace App\Actions;
 
 use App\Models\Article;
 use App\Models\User;
+use App\Events\ArticleCreate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Container\Attributes\CurrentUser;
 
@@ -23,5 +24,7 @@ class ArticleDelete
         $article->views()->delete();
         $article->bookmarks()->detach();
         $article->delete();
+
+        ArticleCreate::dispatch();
     }
 }

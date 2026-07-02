@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\User;
+use App\Events\UserCreate;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
@@ -88,6 +89,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             session()->flash('success', 'Your profile is successfully updated.');
             return $this->redirectRoute('admin.profile', navigate: true);
         }
+        UserCreate::dispatch();
         $this->dispatch('live-notification', message: 'Failed to update profile.');
     }
 };

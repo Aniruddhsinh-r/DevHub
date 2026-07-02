@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\User;
+use App\Events\UserCreate;
 use Livewire\WithFileUploads;
 use App\Actions\UpdateProfile;
 use Illuminate\Validation\Rule;
@@ -60,6 +61,7 @@ new class extends Component
             return $this->redirectRoute('profile.index', navigate: true);
         }
 
+        UserCreate::dispatch();
         $this->dispatch('live-notification', message: 'Failed to update profile.');
     }
 };

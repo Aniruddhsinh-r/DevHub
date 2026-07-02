@@ -7,6 +7,7 @@ use App\Models\Like;
 use Livewire\Attributes\On;
 use App\Enums\ArticleStatus;
 use App\Events\ArticleCreate;
+use App\Events\UserCreate;
 use Livewire\Attributes\Layout;
 use App\Models\User;
 use App\Models\View;
@@ -23,6 +24,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     public $topUser;
 
     #[On('echo:articles,ArticleCreate')]
+    #[On('echo:users,UserCreate')]
     public function loadArticles()
     {
         $this->articleCount = Article::where('status',ArticleStatus::PUBLISHED)->count();

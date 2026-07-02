@@ -3,6 +3,7 @@
 use Livewire\Component;
 use App\Models\User;
 use App\Enums\UserRole;
+use App\Events\UserCreate;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewFollowerNotification;
 
@@ -28,7 +29,6 @@ new class extends Component
     }
 
     public function toggleFollow() {
-
         if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
             session()->flash('error', 'Only Author can Follow others.');
             return $this->redirectRoute('/', navigate: true);
@@ -49,6 +49,7 @@ new class extends Component
             } else {
                 $this->dispatch('live-notification', message: 'Unfollow successfully.');
             }
+            UserCreate::dispatch(); 
             return;
         }
         $this->dispatch('live-notification', message: 'You cant follow yourself.');

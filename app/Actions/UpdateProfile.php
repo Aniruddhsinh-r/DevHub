@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Models\User;
+use App\Events\UserCreate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
@@ -55,7 +56,8 @@ class UpdateProfile
         if (!empty($values['password'])) {
             $data['password'] = Hash::make($values['password']);
         }
-
+        
+        UserCreate::dispatch();
         return $user->update($data);
     }
 }

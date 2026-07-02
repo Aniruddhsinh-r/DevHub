@@ -3,6 +3,7 @@
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use App\Events\ArticleCreate;
+use App\Events\UserCreate;
 use Livewire\Component;
 use App\Models\User;
 
@@ -10,13 +11,16 @@ new #[Layout('layouts::dashboard')] class extends Component
 {
     public User $user;
 
-    public function loadArticles()
+    #[On('echo:users,UserCreate')]
+    #[On('echo:articles,ArticleCreate')]
+    public function refreshData(User $user)
     {
+        $this->user->refresh();
         $this->articles = $this->user->articles()->with(['category'])->latest()->take(3)->get();
     }
 
-    public function mount() {
-        $this->loadArticles();
+    public function mount(User $user) {
+        $this->refreshData($user);
     }
 };
 ?>

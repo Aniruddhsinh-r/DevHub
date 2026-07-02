@@ -20,7 +20,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     }
 
     #[On('echo:articles,ArticleCreate')]
-    public function refreshCategoriesList()
+    public function refreshArticlesList()
     {
         $this->dispatch('$refresh');
     }

@@ -3,6 +3,8 @@
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Follow;
+use Livewire\Attributes\On;
+use App\Events\UserCreate;
 use Livewire\WithPagination;
 
 new class extends Component
@@ -14,6 +16,12 @@ new class extends Component
 
     public function mount() {
         $this->search = request()->query('follower', '');
+    }
+
+    #[On('echo:users,UserCreate')]
+    public function refresUsersList()
+    {
+        $this->dispatch('$refresh');
     }
 
     public function render()

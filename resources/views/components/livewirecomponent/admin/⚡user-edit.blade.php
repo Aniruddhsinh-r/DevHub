@@ -3,6 +3,7 @@ use Livewire\Component;
 use App\Models\User;
 use App\Enums\UserRole;
 use App\Events\ArticleCreate;
+use App\Events\UserCreate;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -87,6 +88,7 @@ new #[Layout('layouts::dashboard')] class extends Component
         }
 
         ArticleCreate::dispatch();
+        UserCreate::dispatch();
         $this->dispatch('live-notification', message: 'Failed to update profile.');
     }
 };

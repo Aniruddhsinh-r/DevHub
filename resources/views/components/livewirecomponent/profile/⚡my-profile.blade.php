@@ -2,13 +2,19 @@
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-
+use Livewire\Attributes\On;
+use App\Events\UserCreate;
 
 new class extends Component
 {
     public $user;
-    public function mount() {
+    #[On('echo:users,UserCreate')]
+    public function refresUsersList()
+    {
         $this->user = Auth::user();
+    }
+    public function mount() {
+        $this->refresUsersList();
     }
 };
 ?>

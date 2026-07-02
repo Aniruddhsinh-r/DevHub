@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use App\Events\UserCreate;
 use App\Enums\UserRole;
 
 use Illuminate\Container\Attributes\CurrentUser;
@@ -34,6 +35,8 @@ class UserRegister
         $user->assignRole(UserRole::AUTHOR);
         Auth::login($user, $remember = true);
 
+        UserCreate::dispatch();
+        
         $to = $values['email'];
         $message = $user->name;
 
