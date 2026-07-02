@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Enums\UserRole;
+use App\Events\ArticleCreate;
 use App\Models\User;
 
 new #[Layout('layouts::dashboard')] class extends Component
@@ -46,6 +47,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             $user->notifications()->delete();
             $user->delete();
         });
+        ArticleCreate::dispatch();
         $this->dispatch('live-notification', message: 'User removed successfully.');
     }
 };

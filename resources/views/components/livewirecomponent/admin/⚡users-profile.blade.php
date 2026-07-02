@@ -2,16 +2,21 @@
 
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use App\Events\ArticleCreate;
 use Livewire\Component;
 use App\Models\User;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
-    public $articles;
     public User $user;
 
+    public function loadArticles()
+    {
+        $this->articles = $this->user->articles()->with(['category'])->latest()->take(3)->get();
+    }
+
     public function mount() {
-        $this->articles = $this->user->articles()->with(['category'])->latest()->get();
+        $this->loadArticles();
     }
 };
 ?>
@@ -69,7 +74,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
                             <div class="flex items-center justify-between gap-4">
                                 <span class="text-gray-500 font-medium">Total Articles</span>
-                                <span class="text-gray-900 font-semibold">{{ $articles->count() }}</span>
+                                <span class="text-gray-900 font-semibold">{{ $this->articles->count() }}</span>
                             </div>
                         </div>
                     </div>
@@ -83,9 +88,9 @@ new #[Layout('layouts::dashboard')] class extends Component
                     </h2>
                 </div>
 
-                @if($articles->count() > 0)
+                @if($this->articles->count() > 0)
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                        @foreach ($articles->take(3) as $article)
+                        @foreach ($this->articles as $article)
                             <a href='{{ route('admin.article.show',$article) }}' wire:navigate class="p-5 bg-[#efefef] rounded-2xl">
                                 <h3 class="text-xl line-clamp-1 font-black leading-tight tracking-tight text-gray-800">{{ $article->title }}</h3>
                                 <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
@@ -114,7 +119,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                     </div>
                 @endif
 
-            @if ($articles->count() > 3)
+            @if ($this->articles->count() > 3)
                 <a href="{{ route('admin.user.published',$user) }}" wire:navigate class="flex justify-center mt-8">
                     <button class="border border-gray-300 hover:border-black hover:bg-black hover:text-white transition px-6 py-2.5 rounded-xl text-sm font-semibold text-gray-800">Show More Articles</button>
                 </a>

@@ -4,7 +4,9 @@ use Livewire\Component;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Like;
+use Livewire\Attributes\On;
 use App\Enums\ArticleStatus;
+use App\Events\ArticleCreate;
 use Livewire\Attributes\Layout;
 use App\Models\User;
 use App\Models\View;
@@ -20,7 +22,9 @@ new #[Layout('layouts::dashboard')] class extends Component
     public $draftArticle = null;
     public $topUser;
 
-    public function mount() {
+    #[On('echo:articles,ArticleCreate')]
+    public function loadArticles()
+    {
         $this->articleCount = Article::where('status',ArticleStatus::PUBLISHED)->count();
         $this->articles = Article::with(['user','category'])->where('status', ArticleStatus::PUBLISHED)->latest()->take(4)->get();
         $this->draftArticle = Article::where('status',ArticleStatus::DRAFT)->count();
@@ -29,6 +33,9 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->views = View::count();
         $this->likes = Like::count();
         $this->topUser = User::withCount('articles')->orderByDesc('articles_count')->first();
+    }
+    public function mount() {
+        $this->loadArticles();
     }
 };
 ?>
@@ -70,7 +77,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                     </span>
                 </div>
                 <h2 class="mt-4 text-2xl font-black text-[#111827]">
-                    {{ $articleCount }}
+                    {{ $this->articleCount }}
                 </h2>
                 <p class="mt-1 text-xs text-gray-400">
                     Total published articles
@@ -90,7 +97,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                     </span>
                 </div>
                 <h2 class="mt-4 text-2xl font-black text-[#111827]">
-                    {{ $users }}
+                    {{ $this->users }}
                 </h2>
                 <p class="mt-1 text-xs text-gray-400">
                     Registered users
@@ -110,7 +117,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                     </span>
                 </div>
                 <h2 class="mt-4 text-2xl font-black text-[#111827]">
-                    {{ $comments }}
+                    {{ $this->comments }}
                 </h2>
                 <p class="mt-1 text-xs text-gray-400">
                     Total article comments
@@ -131,7 +138,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                     </span>
                 </div>
                 <h2 class="mt-4 text-2xl font-black text-[#111827]">
-                    {{ $views }}
+                    {{ $this->views }}
                 </h2>
                 <p class="mt-1 text-xs text-gray-400">
                     Total article views
@@ -151,8 +158,8 @@ new #[Layout('layouts::dashboard')] class extends Component
                 </div>
 
                 <div class="space-y-2">
-                    @if($articles->count() > 0)
-                    @foreach ($articles as $article)
+                    @if($this->articles->count() > 0)
+                    @foreach ($this->articles as $article)
                         <a href="{{ route('admin.article.show',$article) }}" wire:navigate class="flex items-center justify-between p-3 bg-[#f3f4f6] rounded-xl hover:bg-gray-200/60 transition group">
                             <div class="flex items-center gap-3 truncate max-w-[70%]">
                                 <div class="w-6 h-6 rounded-md bg-gray-900 text-white flex items-center justify-center font-bold text-[10px] shrink-0">{{ $loop->iteration }}</div>
@@ -190,7 +197,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                 <div class="flex items-center justify-between border-b border-gray-50 pb-4">
                     <div>
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Total Likes</span>
-                        <span class="text-3xl font-black text-gray-900 tracking-tight">{{ $likes }}</span>
+                        <span class="text-3xl font-black text-gray-900 tracking-tight">{{ $this->likes }}</span>
                     </div>
                     <span class="p-2 bg-rose-50 text-rose-600 rounded-xl text-xs font-semibold">❤️ Likes</span>
                 </div>
@@ -199,32 +206,32 @@ new #[Layout('layouts::dashboard')] class extends Component
                     <div class="flex items-center justify-between">
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Top Contributor</span>
                         <span class="text-[9px] font-extrabold bg-emerald-50 text-emerald-700 uppercase tracking-wider px-2 py-0.5 rounded-full border border-emerald-100 animate-pulse">
-                            {{ $topUser->articles_count }} Posts
+                            {{ $this->topUser->articles_count }} Posts
                         </span>
                     </div>
 
-                    <a href="{{ route('admin.show.user',$topUser) }}" wire:navigate class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
+                    <a href="{{ route('admin.show.user',$this->topUser) }}" wire:navigate class="relative group flex items-start gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50/50 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-gray-200">
                         <div class="relative shrink-0">
                             @if ($topUser->avatar)
-                                <img src="{{ asset('storage/' . $topUser->avatar) }}" alt="{{ $topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500 object-cover">
+                                <img src="{{ asset('storage/' . $this->topUser->avatar) }}" alt="{{ $this->topUser->name }}" class="w-10 h-10 rounded-full bg-black shrink-0 group-hover:scale-110 transition-transform duration-500 object-cover">
                             @else
                                 <div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shrink-0 group-hover:scale-110 transition-transform duration-500">
-                                    {{ mb_substr($topUser->name, 0, 2) }}
+                                    {{ mb_substr($this->topUser->name, 0, 2) }}
                                 </div>
                             @endif
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex flex-col">
                                 <span class="text-sm font-bold text-gray-900 tracking-tight hover:text-indigo-600 transition-colors cursor-pointer truncate">
-                                    {{ $topUser->name }}
+                                    {{ $this->topUser->name }}
                                 </span>
                                 <span class="text-[11px] text-gray-400 font-medium tracking-normal truncate mt-0.5">
-                                    {{ $topUser->email }}
+                                    {{ $this->topUser->email }}
                                 </span>
                             </div>
 
                             <p class="text-[11px] text-gray-500/90 font-normal mt-2 line-clamp-2 leading-relaxed whitespace-normal pr-1">
-                                {{ $topUser->bio }}
+                                {{ $this->topUser->bio }}
                             </p>
                         </div>
                     </a>

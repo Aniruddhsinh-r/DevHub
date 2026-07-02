@@ -1,14 +1,20 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\On;
+use App\Events\ArticleCreate;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component
 {
-    public $articles;
+    #[On('echo:articles,ArticleCreate')]
+    public function loadArticles()
+    {
+        $this->articles = Auth::user()->bookmarkedArticles()->with(['user', 'category'])->latest()->get();
+    }
 
     public function mount() {
-        $this->articles = Auth::user()->bookmarkedArticles()->with(['user', 'category'])->latest()->get();
+        $this->loadArticles();
     }
 };
 ?>
@@ -27,7 +33,7 @@ new class extends Component
         </div>
     </div>
 
-    @if($articles->isEmpty())
+    @if($this->articles->isEmpty())
         <div class="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300 shadow-sm max-w-md mx-auto">
             <div class="inline-flex p-4 bg-gray-50 rounded-full text-gray-400 mb-4">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -43,7 +49,9 @@ new class extends Component
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @auth
-                @include('components.articleLayout')
+                @foreach($this->articles as $article)
+                    @include('components.articleLayout')
+                @endforeach
             @endauth
         </div>
     @endif

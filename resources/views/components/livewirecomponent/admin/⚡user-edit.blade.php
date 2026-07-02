@@ -2,6 +2,7 @@
 use Livewire\Component;
 use App\Models\User;
 use App\Enums\UserRole;
+use App\Events\ArticleCreate;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -64,7 +65,6 @@ new #[Layout('layouts::dashboard')] class extends Component
             $this->user->syncRoles($values['role']);
             $this->user->comments()->delete();
             $this->user->bookmarks()->delete();
-            $this->user->articles()->delete();
         }
 
         if ($this->delete_avatar) {
@@ -86,6 +86,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             return $this->redirectRoute('admin.users', navigate: true);
         }
 
+        ArticleCreate::dispatch();
         $this->dispatch('live-notification', message: 'Failed to update profile.');
     }
 };

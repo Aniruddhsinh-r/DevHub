@@ -2,16 +2,24 @@
 
 use Livewire\Component;
 use App\Models\User;
+use Livewire\Attributes\On;
 use App\Enums\ArticleStatus;
+use App\Events\ArticleCreate;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 
 new #[Layout('layouts::dashboard')] class extends Component {
     public $articles;
-    public function mount()
+
+    #[On('echo:articles,ArticleCreate')]
+    public function loadArticles()
     {
         $user = Auth::user();
         $this->articles = $user->articles()->where('status', ArticleStatus::DRAFT)->latest()->get();
+    }
+    public function mount()
+    {
+        $this->loadArticles();
     }
 };
 ?>

@@ -7,6 +7,7 @@ use Livewire\Attributes\Computed;
 use App\Enums\ArticleStatus;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use App\Events\ArticleCreate;
 use App\Enums\UserRole;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,6 +47,7 @@ new class extends Component {
         if ($this->article->user_id !== Auth::id()) {
             $this->article->user->notify(new CommentNotification($comment));
         }
+        ArticleCreate::dispatch();
         $this->body = '';
         $this->dispatch('live-notification', message: 'Comment successfully posted.');
     }
@@ -82,6 +84,7 @@ new class extends Component {
             $parent->user->notify(new CommentNotification($comment));
         }
 
+        ArticleCreate::dispatch();
         unset($this->replybody[$parentId]);
         $this->dispatch('live-notification', message: 'Reply successfully posted.');
     }

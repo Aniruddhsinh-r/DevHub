@@ -21,11 +21,6 @@ new class extends Component
         $this->loadArticles();
     }
 
-    // public $articles;
-    // public function mount() {
-    //     $this->articles = Article::with(['user','category'])->where('user_id',Auth::id())->latest()->get();
-    // }
-
     #[On('trigger-delete')]
     public function handleGlobalDelete($id, $type) {
         if ($type === 'article') {

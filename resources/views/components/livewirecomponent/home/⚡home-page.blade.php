@@ -3,19 +3,24 @@
 use Livewire\Component;
 use App\Models\Article;
 use App\Enums\UserRole;
+use Livewire\Attributes\On;
 use App\Enums\ArticleStatus;
+use App\Events\ArticleCreate;
 use Livewire\Attributes\Reactive;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component
 {
-    public $articles;
-
-    public function mount() {
+    #[On('echo:articles,ArticleCreate')]
+    public function loadArticles()
+    {
         if (Auth::user()?->hasRole([UserRole::SUPERADMIN,UserRole::ADMIN])) {
             return to_route('admin.dashboard');
         }
         $this->articles = Article::with(['user','category'])->where('status',ArticleStatus::PUBLISHED)->latest()->take(3)->get();
+    }
+    public function mount() {
+        $this->loadArticles();
     }
 
     public function logout()
@@ -71,9 +76,11 @@ new class extends Component
         </div>
     </header>
 
-    @if($articles->count() > 0)
+    @if($this->articles->count() > 0)
         <div class="grid grid-cols-1 mx-4 md:grid-cols-2 xl:grid-cols-3 gap-8 my-10">
-            @include('components.articleLayout')
+            @foreach($this->articles as $article)
+                @include('components.articleLayout')
+            @endforeach
         </div>
     @else
         <div class="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-gray-200 rounded-[2rem] m-4 bg-[#fafafa]">

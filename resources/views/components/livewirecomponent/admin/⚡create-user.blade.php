@@ -32,7 +32,6 @@ new #[Layout('layouts::dashboard')] class extends Component
         Mail::to($to)->queue(new InvitationMail($message));
         
         $this->dispatch('live-notification', message: 'Invite sent successfully successfully.');
-        // session()->flash('success', 'Invite sent successfully successfully.');
     }
 };
 ?>

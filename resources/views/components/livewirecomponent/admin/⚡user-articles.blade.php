@@ -2,16 +2,24 @@
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use App\Models\Article;
 use App\Models\User;
+use App\Models\Article;
+use Livewire\Attributes\On;
+use App\Events\ArticleCreate;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
     public User $user;
     public $articles;
 
-    public function mount() {
+    #[On('echo:articles,ArticleCreate')]
+    public function loadArticles()
+    {
         $this->articles = $this->user->articles()->with(['category'])->latest()->get();
+    }
+    public function mount() {
+        // $this->articles = $this->user->articles()->with(['category'])->latest()->get();
+        $this->loadArticles();
     }
 };
 ?>

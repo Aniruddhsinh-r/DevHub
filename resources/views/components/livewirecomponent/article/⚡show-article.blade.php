@@ -6,6 +6,7 @@ use App\Models\View;
 use App\Models\Like;
 use App\Enums\UserRole;
 use App\Enums\ArticleStatus;
+use App\Events\ArticleCreate;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +30,7 @@ new class extends Component
             View::create(['user_id' => Auth::id(), 'article_id' => $this->article->id]);
         }
         $this->article->refresh();
+        ArticleCreate::dispatch();
         return;
     }
 
@@ -43,16 +45,17 @@ new class extends Component
         }
 
         Like::create(['user_id' => auth()->id(),'article_id' => $this->article->id,]);
+        ArticleCreate::dispatch();
         $this->dispatch('live-notification', message: 'article like');
     }
 
     public function toggleBookmark()
     {
         Gate::authorize('bookmark', $this->article);
-
         Auth::user()->bookmarkedArticles()->toggle($this->article->id);
 
         $message = $this->article->isBookmarkedByMe() ? 'article bookmark' : 'remove from bookmark';
+        ArticleCreate::dispatch();
         $this->dispatch('live-notification', message: $message);
     }
 };

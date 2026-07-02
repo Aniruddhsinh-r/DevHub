@@ -29,7 +29,9 @@
 
     @if($articles->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
-            @include('components.articleLayout')
+            @foreach($articles as $article)
+                @include('components.articleLayout')
+            @endforeach
         </div>
     @else
         <div class="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-gray-200 rounded-[2rem] m-4 bg-[#fafafa]">

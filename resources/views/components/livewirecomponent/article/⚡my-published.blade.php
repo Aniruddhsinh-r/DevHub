@@ -2,14 +2,20 @@
 
 use Livewire\Component;
 use App\Models\User;
+use Livewire\Attributes\On;
+use App\Events\ArticleCreate;
 use App\Enums\ArticleStatus;
 
 new class extends Component
 {
-    public $articles;
+    #[On('echo:articles,ArticleCreate')]
+    public function loadArticles(User $user)
+    {
+        $this->articles = $user->articles()->where('status', ArticleStatus::PUBLISHED)->latest()->get();
+    }
 
     public function mount(User $user) {
-        $this->articles = $user->articles()->where('status', ArticleStatus::PUBLISHED)->latest()->get();
+        $this->loadArticles($user);
     }
 };
 ?>
@@ -23,9 +29,11 @@ new class extends Component
                 </div>
             </div>
 
-            @if($articles->count() > 0)
+            @if($this->articles->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @include('components.articleLayout')
+                    @foreach($this->articles as $article)
+                        @include('components.articleLayout')
+                    @endforeach
                 </div>
             @else
                 <div class="bg-white border border-gray-200 rounded-[3rem] p-20 text-center shadow-sm">
