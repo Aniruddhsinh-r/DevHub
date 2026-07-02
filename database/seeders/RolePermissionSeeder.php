@@ -37,6 +37,7 @@ class RolePermissionSeeder extends Seeder
             'article.edit',
             'article.delete',
             'category.create',
+            'article.publish',
             'category.delete',
             'user.manage',
         ]);

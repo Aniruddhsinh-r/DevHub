@@ -53,7 +53,7 @@ new class extends Component
     }
 
     public function store(CreateArticle $action) {
-        if ($this->status === ArticleStatus::PUBLISHED) {
+        if ($this->status === ArticleStatus::PUBLISHED->value) {
             Gate::authorize('publish', Article::class);
         }
 
