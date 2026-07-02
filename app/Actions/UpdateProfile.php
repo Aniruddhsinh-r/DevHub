@@ -15,8 +15,6 @@ use Illuminate\Validation\ValidationException;
 
 class UpdateProfile
 {
-    public function __construct(#[CurrentUser] protected User $user) {}
-
     public function handle(array $values, ?User $user = null): bool
     {
         $user = Auth::user();

@@ -13,14 +13,6 @@ class ArticleCreate implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Get the channels the event should broadcast on.
      *
      * @return array<int, Channel>

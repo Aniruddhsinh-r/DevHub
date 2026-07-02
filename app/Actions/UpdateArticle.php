@@ -14,8 +14,6 @@ use Illuminate\Support\Str;
 
 class UpdateArticle
 {
-    public function __construct(#[CurrentUser] protected User $user) {}
-
     public function handle(array $values, Article $article): void
     {
         $data = collect($values)->only([
@@ -49,7 +47,7 @@ class UpdateArticle
             }
         }
 
-        if ($values['status'] === ArticleStatus::SCHEDULED->value) {
+        if ($values['status'] === ArticleStatus::SCHEDULED) {
             $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
         } elseif ($values['status'] === ArticleStatus::PUBLISHED) {
             $data['published_at'] = now();

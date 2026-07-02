@@ -40,6 +40,7 @@ new class extends Component
         $like = $this->article->likes()->where('user_id', auth()->id())->first();
         if ($like) {
             $like->delete();
+            ArticleCreate::dispatch();
             $this->dispatch('live-notification', message: 'article unlike');
             return;
         }

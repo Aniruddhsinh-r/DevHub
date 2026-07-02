@@ -41,7 +41,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     }
 
     public function store(CreateArticle $action) {
-        if ($this->status === ArticleStatus::PUBLISHED->value) {
+        if ($this->status === ArticleStatus::PUBLISHED) {
             Gate::authorize('publish', Article::class);
         }
         

@@ -13,8 +13,6 @@ use Illuminate\Container\Attributes\CurrentUser;
 
 class CreateArticle
 {
-    public function __construct(#[CurrentUser] protected User $user) {}
-
     public function handle(array $values, ?User $user = null): void
     {
         $title = $values['title'];
@@ -44,6 +42,7 @@ class CreateArticle
         } else {
             $data['published_at'] = null;
         }
+        
 
         auth()->user()->articles()->create($data);
         ArticleCreate::dispatch();
