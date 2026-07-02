@@ -4,13 +4,14 @@ use Livewire\Component;
 use App\Actions\CreateArticle;
 use App\Models\Article;
 use App\Models\Category;
+use App\Enums\ArticleStatus;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use App\Enums\ArticleStatus;
 use Illuminate\Support\Facades\Gate;
 
-new class extends Component
+new #[Layout('layouts::dashboard')] class extends Component
 {
     use WithFileUploads;
     public $categories;
