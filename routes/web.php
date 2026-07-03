@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {return redirect('/home');})->name('/');
 Route::livewire('/home', 'livewirecomponent.home.home-page')->name('home');
 Route::livewire('/articles', 'livewirecomponent.article.article-card')->name('articles.index');
-Route::livewire('/invitation/{email}', 'livewirecomponent.invitation')->name('invitation')->middleware('signed');
+Route::livewire('/invitation/{email}', 'livewirecomponent.invitation')->name('invitation');
 
 Route::middleware('guest')->group(function () {
     Route::livewire('/register', 'livewirecomponent.auth.register')->name('register.create');
@@ -46,9 +46,10 @@ Route::middleware(['auth','admin'])->group(function () {
     Route::livewire('/admin/users/{user}', 'livewirecomponent.admin.users-profile')->name('admin.show.user');
     Route::livewire('/admin/user/{user}/followers', 'livewirecomponent.admin.admin-followers')->name('user.followers');
     Route::livewire('/admin/user/create', 'livewirecomponent.admin.create-user')->name('admin.users.create');
-    Route::livewire('/admin/articles/create', 'livewirecomponent.admin.create-articles')->name('admin.articles.create');
     Route::livewire('/admin/users/edit/{user}', 'livewirecomponent.admin.user-edit')->name('admin.edit.user');
+    Route::livewire('/admin/invitations', 'livewirecomponent.admin.invitations')->name('admin.invitations');
     Route::livewire('/admin/categories', 'livewirecomponent.admin.category-list')->name('admin.categories');
+    Route::livewire('/admin/articles/create', 'livewirecomponent.admin.create-articles')->name('admin.articles.create');
     Route::livewire('/admin/articles', 'livewirecomponent.admin.article-list')->name('admin.articles');
     Route::livewire('/admin/articles/drafts', 'livewirecomponent.admin.admin-drafts')->name('admin.drafts');
     Route::livewire('/admin/article/{article}/update', 'livewirecomponent.admin.admin-article-update')->name('admin.articles.edit');

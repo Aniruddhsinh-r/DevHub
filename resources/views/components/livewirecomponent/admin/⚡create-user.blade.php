@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\User;
+use App\Models\Invitation;
 use App\Enums\UserRole;
 use Illuminate\Validation\Rule;
 use App\Mail\InvitationMail;
@@ -23,14 +24,23 @@ new #[Layout('layouts::dashboard')] class extends Component
     }
 
     public function sendInvite() {
-        $to = $this->email;
+        $this->validate();
+        $exist = Invitation::where('email',$this->email)->exists();
+        if(!$exist) {
+            Invitation::create([
+                'email' => strtolower($this->email),
+                'expired_at' => now()->addMinutes(30)
+            ]);
+        }
+        
+        $to = strtolower($this->email);
         $message = URL::temporarySignedRoute(
             'invitation',
             now()->addMinutes(30),
-            ['email' => $this->email]
+            ['email' => strtolower($this->email)]
         );
+
         Mail::to($to)->queue(new InvitationMail($message));
-        
         $this->dispatch('live-notification', message: 'Invite sent successfully successfully.');
     }
 };

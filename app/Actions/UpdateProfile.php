@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Validation\ValidationException;
 
 class UpdateProfile

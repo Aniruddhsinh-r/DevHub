@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
             ['email' => 'haribhai@gmail.com'],
             ['uuid' => Str::uuid(),
             'name' => 'Hari bhai',
-            'password' => Hash::make('Password'),
+            'password' => Hash::make('password'),
         ]);
         $user->assignRole(UserRole::ADMIN);
     }

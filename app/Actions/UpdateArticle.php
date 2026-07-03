@@ -8,7 +8,6 @@ use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
 use App\Events\ArticleCreate;
-use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 

@@ -122,6 +122,13 @@
                         </svg>
                         <span class="text-sm md:block sm:hidden hidden">Categories</span>
                     </a>
+
+                    <a href="{{ route('admin.invitations') }}" wire:navigate class="flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all duration-200 md:justify-start sm:justify-center justify-center {{ request()->is('admin/invitations') ? 'bg-white text-gray-900 font-semibold shadow-sm' : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 font-medium' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3 3l18 9-18 9 3-9h6"/>
+                        </svg>
+                        <span class="text-sm md:block sm:hidden hidden">Invitations</span>
+                    </a>
                 </nav>
             </div>
         </aside>

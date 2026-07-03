@@ -20,7 +20,7 @@ class SuperAdminSeeder extends Seeder
             ['email' => 'harshrajsinh@gmail.com'],
             ['uuid' => Str::uuid(),
             'name' => 'Harshrajsinh',
-            'password' => Hash::make('Password'),
+            'password' => Hash::make('password'),
         ]);
         $user->assignRole(UserRole::SUPERADMIN);
     }

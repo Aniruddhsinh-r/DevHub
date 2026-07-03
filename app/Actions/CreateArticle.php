@@ -9,7 +9,6 @@ use App\Models\Article;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Events\ArticleCreate;
-use Illuminate\Container\Attributes\CurrentUser;
 
 class CreateArticle
 {

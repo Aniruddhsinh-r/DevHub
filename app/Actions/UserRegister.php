@@ -11,12 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Events\UserCreate;
 use App\Enums\UserRole;
 
-use Illuminate\Container\Attributes\CurrentUser;
-
 class UserRegister
 {
-    public function __construct(#[CurrentUser] protected User $user) {}
-
     public function handle(array $values, ?User $user = null): void
     {
         $avatarPath = null;
