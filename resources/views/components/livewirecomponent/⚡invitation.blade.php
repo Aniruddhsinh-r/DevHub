@@ -31,8 +31,8 @@ new class extends Component
         $this->originalEmail = $request->route('email');
 
         $Registered = User::where('email', $this->email)->exists();
-        $expire = Invitation::where('email', $this->email)->where('expired_at', '<', now())->exists();
-        
+        $expire = Invitation::where('email', $this->email)->where('expires_at', '<', now())->exists();
+
         if ($Registered || $expire) {
             session()->flash('error', 'This invitation link is invalid or has expired.');
             return $this->redirectRoute('home', navigate: true);

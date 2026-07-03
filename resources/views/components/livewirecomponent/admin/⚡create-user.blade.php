@@ -29,7 +29,7 @@ new #[Layout('layouts::dashboard')] class extends Component
         if(!$exist) {
             Invitation::create([
                 'email' => strtolower($this->email),
-                'expired_at' => now()->addMinutes(30)
+                'expires_at' => now()->addMinutes(30)
             ]);
         }
         
