@@ -3,12 +3,16 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
-
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['email','expires_at'])]
+#[Fillable(['email','expires_at','status'])]
 #[Hidden(['token'])]
 class Invitation extends Model
 {
-    //
+    protected function casts(): array
+    {
+        return [
+            'expires_at' => 'datetime',
+        ];
+    }
 }

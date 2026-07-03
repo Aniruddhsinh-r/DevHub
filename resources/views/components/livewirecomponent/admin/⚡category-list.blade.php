@@ -15,7 +15,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     use WithPagination;
     #[Validate('required|min:3|max:20|string|unique:categories,name')]
     public $name = '';
-    
+
     public function render() {
         return view('admin.categories', [
             'categories' => Category::withCount('articles')->latest()->paginate(6),
@@ -24,11 +24,9 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     public function create() {
         Gate::authorize('create', Category::class);
-
         $this->validate();
 
         $slug = Str::slug($this->name, '-');
-
         if (Category::where('slug', $slug)->exists()) {
             $this->addError('name', 'A category with a similar name already exists in the system.');
             return;

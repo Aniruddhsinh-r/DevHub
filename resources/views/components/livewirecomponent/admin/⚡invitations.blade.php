@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\Invitation;
+use Livewire\Attributes\On;
 use App\Mail\InvitationMail;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -10,8 +11,7 @@ use Illuminate\Support\Facades\Mail;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
-    public function with(): array
-    {
+    public function with() {
         Invitation::where('status', 'pending')->where('expires_at', '<', now())->update(['status' => 'expired']);
         return [
             'invitations' => Invitation::latest()->get(),
@@ -20,7 +20,6 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     #[Validate]
     public $email = '';
-
     public function rules() {
         return [
             'email' => 'required|email|min:10|max:255|unique:users,email,',
@@ -36,7 +35,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                 'expires_at' => now()->addMinutes(30)
             ]);
         }
-        
+
         $to = strtolower($this->email);
         $message = URL::temporarySignedRoute(
             'invitation',
@@ -49,13 +48,14 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->dispatch('live-notification', message: 'Invite sent successfully successfully.');
     }
 
-    public function resend(int $id): void
-    {
+    public function resend($id) {
         $invitation = Invitation::findOrFail($id);
 
-        if ($invitation->created_at->addMinutes(30)->isPast()) {
+        if ($invitation->status === 'accepted') {
+            $this->dispatch('live-notification', message: "Unable to send invitation.");
+        } else if ($invitation->expires_at < now()) {
             $invitation->update([
-                'created_at' => now(), 
+                'created_at' => now(),
                 'status' => 'pending',
                 'expires_at' => now()->addMinutes(30)
             ]);
@@ -65,16 +65,23 @@ new #[Layout('layouts::dashboard')] class extends Component
                 now()->addMinutes(30),
                 ['email' => strtolower($invitation->email)]
             );
+
             Mail::to($invitation->email)->queue(new InvitationMail($message));
             $this->dispatch('live-notification', message: 'Invitation resent successfully.');
         } else {
-            $remaining = $invitation->created_at->addMinutes(30)->diffForHumans();
+            $remaining = $invitation->expires_at->diffForHumans(null, true);
             $this->dispatch('live-notification', message: "Please wait {$remaining} before resending.");
         }
     }
 
-    public function remove(int $id): void
-    {
+    #[On('trigger-delete')]
+    public function handleGlobalDelete($id, $type) {
+        if ($type === 'Invitation') {
+            $this->remove($id);
+        }
+    }
+
+    public function remove($id) {
         Invitation::findOrFail($id)->delete();
         $this->dispatch('live-notification', message: 'Invitation removed successfully.');
     }
@@ -97,7 +104,7 @@ new #[Layout('layouts::dashboard')] class extends Component
         <div class="p-6 bg-[#fafafa] border-b border-gray-100">
             <form wire:submit="sendInvite" class="flex items-center gap-4">
                 <div class="relative flex-grow">
-                    <input type="email" wire:model="email" placeholder="Enter colleague's email address..." 
+                    <input type="email" wire:model="email" placeholder="Enter colleague's email address..."
                         class="w-full h-12 rounded-2xl border border-gray-200 bg-white px-5 text-sm font-medium text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all">
                     @error('email') <span class="absolute -bottom-5 left-2 text-[10px] font-bold text-rose-500 uppercase">{{ $message }}</span> @enderror
                 </div>
@@ -122,7 +129,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="px-8 py-5 text-sm font-bold text-gray-900">{{ $invite->email }}</td>
                             <td class="px-8 py-5">
-                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase 
+                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase
                                     {{ match($invite->status) {
                                         'accepted' => 'bg-emerald-50 text-emerald-600 border border-emerald-100',
                                         'expired'  => 'bg-rose-50 text-rose-600 border border-rose-100',
@@ -136,7 +143,8 @@ new #[Layout('layouts::dashboard')] class extends Component
                                 @if($invite->status !== 'accepted')
                                     <button wire:click="resend({{ $invite->id }})" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 uppercase underline decoration-2 underline-offset-4">Resend</button>
                                 @endif
-                                <button wire:click="remove({{ $invite->id }})" class="text-[11px] font-bold text-rose-500 hover:text-rose-700 uppercase underline decoration-2 underline-offset-4">Remove</button>
+                                <button class="text-[11px] font-bold text-rose-500 hover:text-rose-700 uppercase underline decoration-2 underline-offset-4"
+                                     x-on:click="$dispatch('open-delete', { id: {{ $invite->id }}, title: '{{ addslashes($invite->title) }}', type: 'Invitation' })">Remove</button>
                             </td>
                         </tr>
                     @empty
