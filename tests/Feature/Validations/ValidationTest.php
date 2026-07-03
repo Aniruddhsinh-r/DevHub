@@ -13,7 +13,9 @@ test('check article validation test', function () {
     Livewire::test('livewirecomponent.article.create-article')
         ->set('title','')
         ->set('category_id','344')
-        ->set('excerpt','article created by kishan that gonna delete for purpose. wetw rtt wtwtwrgr  wrgg g rt t ret r t rt er ter e d gd g g')
+        ->set('excerpt','article created by kishan that gonna delete for purpose. wetw rtt wtwtwrgr  wrgg g rt t ret r t rt er ter 
+        e d gd g gwer w rw rwe rw r ewr wer wr wer we rw erw rw er wee d gd g gwer w rw rwe rw r ewr wer wr wer we rw erw rw er we
+        e d gd g gwer w rw rwe rw r ewr wer wr wer we rw erw rw er wee d gd g gwer w rw rwe rw r ewr wer wr wer we rw erw rw er we.')
         ->set('body','')
         ->set('status','anything')
         ->call('store')

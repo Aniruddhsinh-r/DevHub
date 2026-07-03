@@ -24,7 +24,7 @@ class UpdateArticle
             $slug = $base;
             $count = 2;
 
-            while (Article::where('slug', $slug)->where('id', '!=', $article->id)->exists()) {
+            while (Article::where('slug', $slug)->where('id', '!=', $article->id)->withoutTrashed()->exists()) {
                 $slug = $base . '-' . $count;
                 $count++;
             }

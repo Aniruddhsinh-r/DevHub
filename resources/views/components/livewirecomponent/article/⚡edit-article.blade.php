@@ -46,9 +46,9 @@ new class extends Component
         ]);
     }
 
-    #[Validate('required|min:6|max:255')]
+    #[Validate('required|min:6|max:50')]
     public $title;
-    #[Validate('required|min:10|max:80')]
+    #[Validate('required|min:10|max:255')]
     public $excerpt;
     #[Validate('required|min:30|max:50000')]
     public $body;

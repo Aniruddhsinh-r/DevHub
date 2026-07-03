@@ -23,7 +23,7 @@ class CreateArticle
         $base = Str::slug($title, '-');
         $slug = $base;
         $count = 2;
-        while (Article::where('slug', $slug)->exists()) {
+        while (Article::where('slug', $slug)->withoutTrashed()->exists()) {
             $slug = $base . '-' . $count;
             $count++;
         }

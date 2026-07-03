@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('title');
-            $table->string('slug')->unique()->index();
+            $table->string('slug');
+            $table->unique(['slug', 'deleted_at']);
             $table->string('excerpt');
             $table->longText('body');
             $table->enum('status', ['draft', 'scheduled', 'published'])->default('draft');
