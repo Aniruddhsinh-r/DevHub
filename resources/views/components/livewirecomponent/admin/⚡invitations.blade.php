@@ -86,10 +86,10 @@ new #[Layout('layouts::dashboard')] class extends Component
             <span class="text-[11px] font-black uppercase tracking-[0.25em] text-indigo-500">System Access</span>
             <h1 class="text-3xl font-black text-[#111827] mt-1 tracking-tight">Invitation Center</h1>
         </div>
-        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-3 text-right">
-            <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest block">Pending Invites</span>
-            <span class="text-2xl font-black text-indigo-900">{{ $invitations->where('status', 'pending')->count() }}</span>
-        </div>
+        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-3 flex items-baseline gap-3">
+    <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Pending Invites:</span>
+    <span class="text-2xl font-black text-indigo-900">{{ $invitations->where('status', 'pending')->count() }}</span>
+</div>
     </div>
 
     <div class="bg-white border border-gray-200 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">

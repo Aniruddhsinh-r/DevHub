@@ -15,14 +15,14 @@
                     Delete Selected ({{ count($selectedArticles) }})
                 </button>
             @endif
-            <a href="{{ route('admin.articles.create') }}" wire:navigate class="inline-flex items-center gap-2 h-[52px] px-5 rounded-2xl bg-[#111827] hover:bg-gray-800 text-sm font-black text-white shadow-sm hover:shadow-lg transition-all duration-200">
+            <a href="{{ route('admin.articles.create') }}" wire:navigate class="inline-flex items-center gap-2 h-[44px] px-5 rounded-2xl bg-[#111827] hover:bg-gray-800 text-sm font-black text-white shadow-sm hover:shadow-lg transition-all duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
                 Create Article
             </a>
-            <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 shadow-sm">
-                <span class="text-xs text-gray-400 font-bold uppercase tracking-wider block">Total Articles</span>
+            <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 shadow-md flex items-baseline gap-2">
+                <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Total Articles:</span>
                 <span class="text-lg font-black text-[#111827]">{{ $articles->total() }}</span>
             </div>
         </div>
