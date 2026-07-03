@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['email'])]
+#[Fillable(['email','expires_at'])]
 #[Hidden(['token'])]
 class Invitation extends Model
 {

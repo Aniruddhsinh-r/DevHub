@@ -48,7 +48,6 @@ new #[Layout('layouts::dashboard')] class extends Component
 
 <div class="max-w-md mx-auto mt-16 bg-white rounded-xl shadow-sm border border-gray-200">
     <div class="p-8">
-        <!-- Professional Header Section -->
         <div class="mb-6 border-b border-gray-100 pb-5">
             <h2 class="text-xl font-semibold text-gray-900 tracking-tight">
                 Send User Invitation
@@ -58,7 +57,6 @@ new #[Layout('layouts::dashboard')] class extends Component
             </p>
         </div>
 
-        <!-- Clean Status Notification -->
         @if (session()->has('message'))
             <div class="mb-5 p-3.5 text-sm text-emerald-800 bg-emerald-50 rounded-lg border border-emerald-200 flex items-center space-x-2.5" role="alert">
                 <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -70,9 +68,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
         <form wire:submit.prevent="sendInvite" class="space-y-4">
             <div>
-                <label for="email" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
-                    Email Address
-                </label>
+                <label for="email" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Email Address</label>
                 <div class="relative rounded-md shadow-sm">
                     <input type="email" id="email" wire:model="email" placeholder="e.g., employee@company.com"
                         class="block w-full px-3.5 py-2.5 rounded-md border border-gray-300 text-sm font-normal text-gray-900 placeholder-gray-400 bg-white shadow-inner transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-600 {{ $errors->has('email') ? 'border-red-300 bg-red-50/20 focus:ring-red-500/10 focus:border-red-500' : '' }}" />

@@ -23,17 +23,16 @@ new class extends Component
 
     public function mount(Request $request)
     {
-        if (!$request->hasValidSignature()) {
-            session()->flash('error', 'This invitation link has expired or is invalid.');
+        if (Auth::check()) {
+            session()->flash('error', 'You are already loged in our system.');
             return $this->redirectRoute('home', navigate: true);
         }
         $this->email = $request->route('email');
         $this->originalEmail = $request->route('email');
 
         $Registered = User::where('email', $this->email)->exists();
-        $expire = Invitation::where('email', $this->email)->where('expires_at', '<', now())->exists();
 
-        if ($Registered || $expire) {
+        if ($Registered || !$request->hasValidSignature()) {
             session()->flash('error', 'This invitation link is invalid or has expired.');
             return $this->redirectRoute('home', navigate: true);
         }

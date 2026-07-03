@@ -56,7 +56,8 @@ new #[Layout('layouts::dashboard')] class extends Component
         if ($invitation->created_at->addMinutes(30)->isPast()) {
             $invitation->update([
                 'created_at' => now(), 
-                'status' => 'pending'
+                'status' => 'pending',
+                'expires_at' => now()->addMinutes(30)
             ]);
 
             $message = URL::temporarySignedRoute(
@@ -86,14 +87,13 @@ new #[Layout('layouts::dashboard')] class extends Component
             <span class="text-[11px] font-black uppercase tracking-[0.25em] text-indigo-500">System Access</span>
             <h1 class="text-3xl font-black text-[#111827] mt-1 tracking-tight">Invitation Center</h1>
         </div>
-        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-3 flex items-baseline gap-3">
-    <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Pending Invites:</span>
-    <span class="text-2xl font-black text-indigo-900">{{ $invitations->where('status', 'pending')->count() }}</span>
-</div>
+        <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 shadow-md flex items-baseline gap-2">
+            <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Pending Invites:</span>
+            <span class="text-lg font-black text-[#111827]">{{ $invitations->where('status', 'pending')->count() }}</span>
+        </div>
     </div>
 
     <div class="bg-white border border-gray-200 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
-        
         <div class="p-6 bg-[#fafafa] border-b border-gray-100">
             <form wire:submit="sendInvite" class="flex items-center gap-4">
                 <div class="relative flex-grow">
@@ -123,13 +123,17 @@ new #[Layout('layouts::dashboard')] class extends Component
                             <td class="px-8 py-5 text-sm font-bold text-gray-900">{{ $invite->email }}</td>
                             <td class="px-8 py-5">
                                 <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase 
-                                    {{ $invite->status === 'pending' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600' }}">
+                                    {{ match($invite->status) {
+                                        'accepted' => 'bg-emerald-50 text-emerald-600 border border-emerald-100',
+                                        'expired'  => 'bg-rose-50 text-rose-600 border border-rose-100',
+                                        'pending'  => 'bg-amber-50 text-amber-600 border border-amber-100',
+                                    } }}">
                                     {{ $invite->status }}
                                 </span>
                             </td>
                             <td class="px-8 py-5 text-sm text-gray-500 font-medium">{{ $invite->created_at->format('M d, Y') }}</td>
                             <td class="px-8 py-5 text-right space-x-2">
-                                @if($invite->status === 'pending')
+                                @if($invite->status !== 'accepted')
                                     <button wire:click="resend({{ $invite->id }})" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 uppercase underline decoration-2 underline-offset-4">Resend</button>
                                 @endif
                                 <button wire:click="remove({{ $invite->id }})" class="text-[11px] font-bold text-rose-500 hover:text-rose-700 uppercase underline decoration-2 underline-offset-4">Remove</button>

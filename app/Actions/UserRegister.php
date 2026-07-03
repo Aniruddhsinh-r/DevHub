@@ -13,7 +13,7 @@ use App\Enums\UserRole;
 
 class UserRegister
 {
-    public function handle(array $values, ?User $user = null): void
+    public function handle(array $values): void
     {
         $avatarPath = null;
         if ($values['avatar'] ?? false) {

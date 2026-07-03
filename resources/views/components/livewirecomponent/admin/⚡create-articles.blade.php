@@ -46,7 +46,6 @@ new #[Layout('layouts::dashboard')] class extends Component
         }
         
         $values = $this->validate();
-
         $action->handle($values);
 
         session()->flash('success', 'Article created successfully.');

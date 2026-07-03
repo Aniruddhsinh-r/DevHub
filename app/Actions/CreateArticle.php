@@ -12,7 +12,7 @@ use App\Events\ArticleCreate;
 
 class CreateArticle
 {
-    public function handle(array $values, ?User $user = null): void
+    public function handle(array $values): void
     {
         $title = $values['title'];
 
