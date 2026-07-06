@@ -40,7 +40,6 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->body = $article->body;
         $this->category_id = $article->category_id;
         $this->status = $article->status;
-        $diff = ($article->published_at && $article->status === ArticleStatus::SCHEDULED) ? now()->diffInMinutes($article->published_at, false) : 0;
         $this->categories = Category::select('id','name')->orderBy('name')->get();
 
         if ($article->published_at && $article->status === ArticleStatus::SCHEDULED) {

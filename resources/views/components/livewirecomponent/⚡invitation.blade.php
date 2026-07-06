@@ -43,15 +43,16 @@ new class extends Component
     public function registerAccount(Request $request)
     {
         $this->validate();
-        $existingEmail = User::where('email',$this->email)->exists();
+        $existingEmail = User::where('email',$this->email)->first();
 
-        if ($this->email !== $this->originalEmail || $existingEmail) {
+        if ($this->email !== $this->originalEmail) {
             $this->email = $this->originalEmail;
             $this->addError('email', 'This invitation is no longer valid.');
             return;
         }
 
-        if ($existingEmail->expires_at->isPast()) {
+        $expired = Invitation::where('email',$this->email)->first();
+        if ($expired->expires_at->isPast()) {
             abort(410);
         }
 

@@ -42,7 +42,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                         <div class="mt-5 flex items-center justify-between border-t border-gray-100">
                             <div>
                                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Published</p>
-                                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->created_at->diffForHumans() }}</p>
+                                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->publish_at->diffForHumans() }}</p>
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Date</p>

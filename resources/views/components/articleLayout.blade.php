@@ -27,7 +27,7 @@
         <div class="mt-5 flex items-center justify-between border-t border-gray-50 pt-3">
             <div>
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">{{ $article->status }}</p>
-                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->created_at->diffForHumans() }}</p>
+                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->publish_at->diffForHumans() }}</p>
             </div>
             <div class="text-right">
                 @if(auth()->id() === $article->user_id)

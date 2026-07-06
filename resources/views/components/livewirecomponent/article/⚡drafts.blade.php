@@ -46,7 +46,7 @@ new class extends Component
                 </div>
                 <div class="pt-4 border-t border-dashed border-gray-300 flex items-center justify-between">
                     <div>
-                        <p class="text-[9px] uppercase tracking-[0.18em] text-gray-400 font-black">Updated</p>
+                        <p class="text-[9px] uppercase tracking-[0.18em] text-gray-400 font-black">Create</p>
                         <p class="mt-1 text-xs font-bold text-[#111111]">{{ $article->created_at->diffForHumans()}}</p>
                     </div>
                     <button class="px-4 py-2.5 rounded-xl bg-[#111111] text-white text-[10px] font-black uppercase tracking-[0.15em] hover:bg-black transition-all duration-300">Edit</button>

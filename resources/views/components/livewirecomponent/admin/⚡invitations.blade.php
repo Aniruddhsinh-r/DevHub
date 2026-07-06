@@ -43,7 +43,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                 'expires_at' => now()->addMinutes(30)
             ]);
         } 
-        if ($exist->expires_at > now()) {
+        if ($exist?->expires_at > now()) {
             $remaining = $exist->expires_at->diffForHumans(null, true);
             $this->dispatch('live-notification', message: "Please wait {$remaining} before resending.");
             return ;
