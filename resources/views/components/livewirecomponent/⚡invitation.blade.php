@@ -32,9 +32,11 @@ new class extends Component
 
         $Registered = User::where('email', $this->email)->exists();
 
-        if ($Registered || !$request->hasValidSignature()) {
-            session()->flash('error', 'This invitation link is invalid or has expired.');
-            return $this->redirectRoute('home', navigate: true);
+        if (! $request->hasValidSignature()) {
+            abort(403);
+        }
+        if ($Registered) {
+            abort(409);
         }
     }
 
@@ -47,6 +49,10 @@ new class extends Component
             $this->email = $this->originalEmail;
             $this->addError('email', 'This invitation is no longer valid.');
             return;
+        }
+
+        if ($existingEmail->expires_at->isPast()) {
+            abort(410);
         }
 
         $user = User::create([

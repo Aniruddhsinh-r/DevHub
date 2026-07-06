@@ -19,7 +19,18 @@ new #[Layout('layouts::dashboard')] class extends Component
     public Article $article;
     public $categories;
 
-    public $delete_cover = false;
+    public bool $scheduleChanged = false;
+    public bool $delete_cover = false;
+
+    public function updatedScheduledHours()
+    {
+        $this->scheduleChanged = true;
+    }
+
+    public function updatedScheduledMinutes()
+    {
+        $this->scheduleChanged = true;
+    }
 
     public function mount(Article $article) {
         $this->article = $article;
@@ -30,9 +41,14 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->category_id = $article->category_id;
         $this->status = $article->status;
         $diff = ($article->published_at && $article->status === ArticleStatus::SCHEDULED) ? now()->diffInMinutes($article->published_at, false) : 0;
-        $this->scheduled_hours = $diff > 0 ? floor($diff / 60) : 0;
-        $this->scheduled_minutes = $diff > 0 ? ($diff % 60) : 0;
         $this->categories = Category::select('id','name')->orderBy('name')->get();
+
+        if ($article->published_at && $article->status === ArticleStatus::SCHEDULED) {
+            $remainingMinutes = max(0, now()->diffInMinutes($article->published_at, false));
+
+            $this->scheduled_hours = intdiv($remainingMinutes, 60);
+            $this->scheduled_minutes = $remainingMinutes % 60;
+        }
     }
 
     #[On('echo:categories,CategoryCreated')]
@@ -76,6 +92,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
         $article = $this->article;
         $values['delete_cover'] = $this->delete_cover;
+        $values['schedule_changed'] = $this->scheduleChanged;
 
         $action->handle($values, $article);
 

@@ -28,7 +28,6 @@
                                 <div class="red text-sm text-red-600">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <div class="space-y-1.5">
                             <label for="status" class="block text-xs font-bold uppercase tracking-wider text-gray-700">Visibility</label>
                             <select x-model="status" name="status" wire:model.live="status" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-black outline-none transition-all">
@@ -42,12 +41,12 @@
                         <div x-data="{ hours: '{{ old('scheduled_hours') ?? null }}',minutes: '{{ old('scheduled_minutes') ?? null }}' }" class="flex items-end space-x-2">
                             <div class="w-20">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Hours</label>
-                                <input type="text" name="scheduled_hours" value="0" wire:model="scheduled_hours" placeholder="HH" x-model="hours" @input="hours = hours.replace(/\D/g, '').slice(0, 2); if(parseInt(hours) > 48) hours = '48'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-50tline-none">
+                                <input type="text" name="scheduled_hours" wire:model="scheduled_hours" placeholder="HH" @input="hours = hours.replace(/\D/g, '').slice(0, 2); if(parseInt(hours) > 48) hours = '48'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-50tline-none">
                             </div>
                             <span class="text-gray-400 font-bold pb-2">:</span>
                             <div class="w-20">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Mins</label>
-                                <input type="text" name="scheduled_minutes" wire:model="scheduled_minutes" placeholder="MM" x-model="minutes" @input="minutes = minutes.replace(/\D/g, '').slice(0, 2); if(parseInt(minutes) > 59) minutes = '59'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-500 outline-none">
+                                <input type="text" name="scheduled_minutes" wire:model="scheduled_minutes" placeholder="MM" @input="minutes = minutes.replace(/\D/g, '').slice(0, 2); if(parseInt(minutes) > 59) minutes = '59'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-500 outline-none">
                             </div>
                         </div>
                         @error('scheduled_minutes')

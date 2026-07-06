@@ -21,7 +21,7 @@ class ArticleFactory extends Factory
      */
     public function definition(): array
     {
-        $title = fake()->sentence(15);
+        $title = fake()->sentence(5);
         $status = ArticleStatus::PUBLISHED;
         return [
             'user_id' => User::factory()->author()->create(),
@@ -32,6 +32,7 @@ class ArticleFactory extends Factory
             'body' => fake()->paragraphs(6, true),
             'status' => $status,
             'published_at' => $status === ArticleStatus::PUBLISHED ? fake()->dateTimeBetween('-1 month', 'now') : null,
+            'publish_at' => now(),
             'created_at' => now(),
         ];
     }

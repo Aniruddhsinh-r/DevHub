@@ -25,7 +25,8 @@ class Article extends Model
         'body',
         'status',
         'cover_path',
-        'published_at'
+        'published_at',
+        'publish_at'
     ];
 
     /**
@@ -73,6 +74,7 @@ class Article extends Model
     {
         return [
             'published_at' => 'datetime',
+            'publish_at' => 'datetime',
             'status' => ArticleStatus::class,
         ];
     }

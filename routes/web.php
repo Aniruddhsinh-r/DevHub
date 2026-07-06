@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {return redirect('/home');})->name('/');
 Route::livewire('/home', 'livewirecomponent.home.home-page')->name('home');
 Route::livewire('/articles', 'livewirecomponent.article.article-card')->name('articles.index');
+Route::livewire('/invitation/expire', 'livewirecomponent.pages.already-exist')->name('invite.exist');
 Route::livewire('/invitation/{email}', 'livewirecomponent.invitation')->name('invitation');
 
 Route::middleware('guest')->group(function () {

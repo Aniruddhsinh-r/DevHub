@@ -88,7 +88,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-semibold text-gray-600 whitespace-nowrap">
-                                    {{ $article->created_at->diffForHumans() }}
+                                    {{ $article->publish_at?->diffForHumans() ?? 'Not published'}}
                                 </td>
                                 <td class="px-6 py-4 text-right whitespace-nowrap" x-on:click.stop>
                                     <div class="flex items-center justify-end gap-2">

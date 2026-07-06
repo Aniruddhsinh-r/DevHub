@@ -13,5 +13,5 @@ Artisan::command('inspire', function () {
 Schedule::call(function () {
     Article::where('status', ArticleStatus::SCHEDULED)
         ->where('published_at', '<=', now())
-        ->update(['status' => ArticleStatus::PUBLISHED]);
+        ->update(['status' => ArticleStatus::PUBLISHED, 'publish_at' => now(), 'published_at' => null]);
 })->everyMinute();

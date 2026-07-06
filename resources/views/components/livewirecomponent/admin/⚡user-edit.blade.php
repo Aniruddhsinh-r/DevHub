@@ -83,12 +83,11 @@ new #[Layout('layouts::dashboard')] class extends Component
         }
 
         if ($this->user->update($data)) {
+            UserCreate::dispatch();
+            ArticleCreate::dispatch();
             session()->flash('success', 'This user profile updated successfully.');
             return $this->redirectRoute('admin.users', navigate: true);
         }
-
-        ArticleCreate::dispatch();
-        UserCreate::dispatch();
         $this->dispatch('live-notification', message: 'Failed to update profile.');
     }
 };

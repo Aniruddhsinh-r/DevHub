@@ -25,14 +25,19 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     public function sendInvite() {
         $this->validate();
-        $exist = Invitation::where('email',$this->email)->exists();
+        $exist = Invitation::where('email',$this->email)->first();
         if(!$exist) {
             Invitation::create([
                 'email' => strtolower($this->email),
                 'expires_at' => now()->addMinutes(30)
             ]);
+        } 
+        if ($exist->expires_at > now()) {
+            $remaining = $exist->expires_at->diffForHumans(null, true);
+            $this->dispatch('live-notification', message: "Please wait {$remaining} before resending.");
+            return ;
         }
-        
+
         $to = strtolower($this->email);
         $message = URL::temporarySignedRoute(
             'invitation',
@@ -41,7 +46,7 @@ new #[Layout('layouts::dashboard')] class extends Component
         );
 
         Mail::to($to)->queue(new InvitationMail($message));
-        $this->dispatch('live-notification', message: 'Invite sent successfully successfully.');
+        $this->dispatch('live-notification', message: 'Invite sent successfully.');
     }
 };
 ?>

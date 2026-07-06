@@ -11,15 +11,23 @@ use Illuminate\Support\Facades\Mail;
 
 new #[Layout('layouts::dashboard')] class extends Component
 {
+    #[Validate]
+    public $email = '';
+    public $search = '';
+
     public function with() {
         Invitation::where('status', 'pending')->where('expires_at', '<', now())->update(['status' => 'expired']);
         return [
-            'invitations' => Invitation::latest()->get(),
+            'invitations' => Invitation::latest()->when($this->search, function ($query) {
+                $query->where('email', 'like', '%' . $this->search . '%');
+            })->get(),
         ];
     }
 
-    #[Validate]
-    public $email = '';
+    public function mount() {
+        $this->search = request()->query('search', '');
+    }
+
     public function rules() {
         return [
             'email' => 'required|email|min:10|max:255|unique:users,email,',
@@ -28,12 +36,17 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     public function sendInvite() {
         $this->validate();
-        $exist = Invitation::where('email',$this->email)->exists();
+        $exist = Invitation::where('email',$this->email)->first();
         if(!$exist) {
             Invitation::create([
                 'email' => strtolower($this->email),
                 'expires_at' => now()->addMinutes(30)
             ]);
+        } 
+        if ($exist->expires_at > now()) {
+            $remaining = $exist->expires_at->diffForHumans(null, true);
+            $this->dispatch('live-notification', message: "Please wait {$remaining} before resending.");
+            return ;
         }
 
         $to = strtolower($this->email);
@@ -45,7 +58,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
         $this->email = '';
         Mail::to($to)->queue(new InvitationMail($message));
-        $this->dispatch('live-notification', message: 'Invite sent successfully successfully.');
+        $this->dispatch('live-notification', message: 'Invite sent successfully.');
     }
 
     public function resend($id) {
@@ -102,16 +115,36 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     <div class="bg-white border border-gray-200 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
         <div class="p-6 bg-[#fafafa] border-b border-gray-100">
-            <form wire:submit="sendInvite" class="flex items-center gap-4">
-                <div class="relative flex-grow">
-                    <input type="email" wire:model="email" placeholder="Enter colleague's email address..."
-                        class="w-full h-12 rounded-2xl border border-gray-200 bg-white px-5 text-sm font-medium text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all">
-                    @error('email') <span class="absolute -bottom-5 left-2 text-[10px] font-bold text-rose-500 uppercase">{{ $message }}</span> @enderror
+            <div class="flex flex-col md:flex-row md:items-center gap-6 md:gap-4 justify-between w-full">
+                
+                <form wire:submit="sendInvite" class="flex items-center gap-4 flex-grow max-w-2xl w-full">
+                    <div class="relative flex-grow">
+                        <input type="email" wire:model="email" placeholder="Enter colleague's email address..."
+                            class="w-full h-12 rounded-2xl border border-gray-200 bg-white px-5 text-sm font-medium text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all">
+                        @error('email') 
+                            <span class="absolute -bottom-5 left-2 text-[10px] font-bold text-rose-500 uppercase">{{ $message }}</span> 
+                        @enderror
+                    </div>
+                    <button type="submit" class="h-12 px-6 rounded-2xl bg-[#111827] hover:bg-black text-sm font-black text-white transition-all shadow-md shrink-0">Send Invite</button>
+                </form>
+
+                <div class="relative w-full md:w-72 shrink-0">
+                    <input type="text" wire:model.live="search" placeholder="Search articles..." 
+                        class="w-full h-12 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-12 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
+                    @if ($search)
+                        <button type="button" wire:click="$set('search', '')" class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    @endif
+                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </span>
                 </div>
-                <button type="submit" class="h-12 px-6 rounded-2xl bg-[#111827] hover:bg-black text-sm font-black text-white transition-all shadow-md">
-                    Send Invite
-                </button>
-            </form>
+            </div>
         </div>
 
         <div class="overflow-x-auto">
