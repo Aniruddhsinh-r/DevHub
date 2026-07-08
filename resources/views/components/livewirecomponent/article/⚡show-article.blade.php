@@ -128,19 +128,21 @@ new class extends Component
                     {{ $article->excerpt }}
                 </p>
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
-                    <a href="{{ route('profile.show',$article->user) }}" wire:navigate class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
-                            @if ($article->user->avatar)
-                                <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="{{ $article->user->name }}" class="w-9 h-9">
-                            @else
-                                {{ substr($article->user->name, 0, 2) }}
-                            @endif
-                        </div>
-                        <div>
-                            <p class="font-black text-white uppercase tracking-wide text-xs">{{ $article->user->name }}</p>
-                            <p class="text-gray-400 text-xs mt-0.5">Author</p>
-                        </div>
-                    </a>
+                    @if ($article->user->hasRole(UserRole::AUTHOR))
+                        <a href="{{ route('profile.show',$article->user) }}" wire:navigate class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
+                                @if ($article->user->avatar)
+                                    <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="{{ $article->user->name }}" class="w-9 h-9">
+                                @else
+                                    {{ substr($article->user->name, 0, 2) }}
+                                @endif
+                            </div>
+                            <div>
+                                <p class="font-black text-white uppercase tracking-wide text-xs">{{ $article->user->name }}</p>
+                                <p class="text-gray-400 text-xs mt-0.5">Author</p>
+                            </div>
+                        </a>
+                    @endif
                     <div class="h-8 w-px bg-white/10 hidden md:block"></div>
                     <div>
                         <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Published</p>
@@ -183,22 +185,24 @@ new class extends Component
                     </article>
 
                     {{-- AUTHOR CARD --}}
-                    <a href="{{ route('profile.show',$article->user) }}" wire:navigate class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
-                        <div class="flex flex-col md:flex-row md:items-center gap-6">
-                            <div class="w-24 h-24 rounded-full bg-[#111827] text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-gray-100">
-                                @if ($article->user->avatar)
-                                    <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="{{ $article->user->name }}" class="w-full h-full object-cover">
-                                @else
-                                    <span>{{ Str::upper(Str::substr($article->user->name, 0, 2)) }}</span>
-                                @endif
+                    @if ($article->user->hasRole(UserRole::AUTHOR))
+                        <a href="{{ route('profile.show',$article->user) }}" wire:navigate class="block mt-10 bg-white rounded-[20px] border border-gray-100 shadow-lg shadow-gray-100/50 p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-gray-200 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
+                            <div class="flex flex-col md:flex-row md:items-center gap-6">
+                                <div class="w-24 h-24 rounded-full bg-[#111827] text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-gray-100">
+                                    @if ($article->user->avatar)
+                                        <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="{{ $article->user->name }}" class="w-full h-full object-cover">
+                                    @else
+                                        <span>{{ Str::upper(Str::substr($article->user->name, 0, 2)) }}</span>
+                                    @endif
+                                </div>
+                                <div>
+                                    <p class="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black mb-2">Written By</p>
+                                    <h3 class="text-lg md:text-xl lg:text-2xl font-black text-gray-900 tracking-tight">{{ $article->user->name }}</h3>
+                                    <p class="mt-4 text-gray-600 leading-8 text-[15px] max-w-3xl">{{ $article->user->bio }}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black mb-2">Written By</p>
-                                <h3 class="text-lg md:text-xl lg:text-2xl font-black text-gray-900 tracking-tight">{{ $article->user->name }}</h3>
-                                <p class="mt-4 text-gray-600 leading-8 text-[15px] max-w-3xl">{{ $article->user->bio }}</p>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    @endif
 
                     @role('author')
                         <livewire:livewirecomponent.post-comment :article="$article" />
