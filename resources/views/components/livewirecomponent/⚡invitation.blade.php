@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Enums\UserRole;
 use App\Models\Invitation;
 use App\Events\UserCreate;
+use Livewire\Attributes\On;
 use Illuminate\Http\Request;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\URL;
@@ -21,6 +22,12 @@ new class extends Component
     public $password = '';
     public $originalEmail = '';
 
+    #[On('echo:users,UserCreate')]
+    public function refresUsersList()
+    {
+        $this->dispatch('$refresh');
+    }
+
     public function mount(Request $request)
     {
         if (Auth::check()) {
@@ -31,9 +38,10 @@ new class extends Component
         $this->originalEmail = $request->route('email');
 
         $Registered = User::where('email', $this->email)->exists();
+        $removed = Invitation::where('email', $this->email)->where('status', 'pending')->first();
 
-        if (! $request->hasValidSignature()) {
-            abort(403);
+        if (!$request->hasValidSignature() || !$removed) {
+            abort(410);
         }
         if ($Registered) {
             abort(409);

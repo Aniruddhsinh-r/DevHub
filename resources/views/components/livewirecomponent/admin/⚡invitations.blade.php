@@ -2,6 +2,8 @@
 
 use Livewire\Component;
 use App\Models\Invitation;
+use App\Models\User;
+use App\Events\UserCreate;
 use Livewire\Attributes\On;
 use App\Mail\InvitationMail;
 use Livewire\Attributes\Layout;
@@ -14,6 +16,12 @@ new #[Layout('layouts::dashboard')] class extends Component
     #[Validate]
     public $email = '';
     public $search = '';
+
+    #[On('echo:users,UserCreate')]
+    public function refresUsersList()
+    {
+        $this->dispatch('$refresh');
+    }
 
     public function with() {
         Invitation::where('status', 'pending')->where('expires_at', '<', now())->update(['status' => 'expired']);
@@ -30,34 +38,52 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     public function rules() {
         return [
-            'email' => 'required|email|min:10|max:255|unique:users,email,',
+            'email' => 'required|email|min:10|max:255',
         ];
     }
 
     public function sendInvite() {
         $this->validate();
-        $exist = Invitation::where('email',$this->email)->first();
+        $email = strtolower($this->email);
+
+        $deleted = User::onlyTrashed()->where('email',$email)->first();
+        if($deleted) {
+            $this->addError('email', 'This email is blocked.');
+            $this->dispatch('open-recovery', 
+                id: $deleted->id, 
+                email: $deleted->email, 
+                type: 'User'
+            );
+            return;
+        }
+        $activeUser = User::where('email', $email)->first();
+        if ($activeUser) {
+            $this->addError('email', 'This email is already registered to an active account.');
+            return;
+        }
+
+        $exist = Invitation::where('email',$email)->first();
         if(!$exist) {
             Invitation::create([
-                'email' => strtolower($this->email),
+                'email' => $email,
                 'expires_at' => now()->addMinutes(30)
             ]);
-        } 
-        if ($exist?->expires_at > now()) {
+        } elseif ($exist?->expires_at > now()) {
             $remaining = $exist->expires_at->diffForHumans(null, true);
             $this->dispatch('live-notification', message: "Please wait {$remaining} before resending.");
             return ;
         }
 
-        $to = strtolower($this->email);
+        $to = $email;
         $message = URL::temporarySignedRoute(
             'invitation',
             now()->addMinutes(30),
-            ['email' => strtolower($this->email)]
+            ['email' => $email]
         );
 
         $this->email = '';
         Mail::to($to)->queue(new InvitationMail($message));
+        UserCreate::dispatch();
         $this->dispatch('live-notification', message: 'Invite sent successfully.');
     }
 
@@ -80,6 +106,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             );
 
             Mail::to($invitation->email)->queue(new InvitationMail($message));
+            UserCreate::dispatch();
             $this->dispatch('live-notification', message: 'Invitation resent successfully.');
         } else {
             $remaining = $invitation->expires_at->diffForHumans(null, true);
@@ -97,6 +124,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     public function remove($id) {
         Invitation::findOrFail($id)->delete();
         $this->dispatch('live-notification', message: 'Invitation removed successfully.');
+        UserCreate::dispatch();
     }
 };
 ?>
@@ -116,20 +144,29 @@ new #[Layout('layouts::dashboard')] class extends Component
     <div class="bg-white border border-gray-200 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
         <div class="p-6 bg-[#fafafa] border-b border-gray-100">
             <div class="flex flex-col md:flex-row md:items-center gap-6 md:gap-4 justify-between w-full">
-                
+
                 <form wire:submit="sendInvite" class="flex items-center gap-4 flex-grow max-w-2xl w-full">
                     <div class="relative flex-grow">
                         <input type="email" wire:model="email" placeholder="Enter colleague's email address..."
                             class="w-full h-12 rounded-2xl border border-gray-200 bg-white px-5 text-sm font-medium text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all">
-                        @error('email') 
-                            <span class="absolute -bottom-5 left-2 text-[10px] font-bold text-rose-500 uppercase">{{ $message }}</span> 
+                        @error('email')
+                            <span class="absolute -bottom-5 left-2 text-[10px] font-bold text-rose-500 uppercase">{{ $message }}</span>
                         @enderror
                     </div>
-                    <button type="submit" class="h-12 px-6 rounded-2xl bg-[#111827] hover:bg-black text-sm font-black text-white transition-all shadow-md shrink-0">Send Invite</button>
+                    <button type="submit" class="h-12 px-6 rounded-2xl bg-[#111827] hover:bg-black text-sm font-black text-white transition-all shadow-md shrink-0">
+                        <span wire:loading.remove wire:target="sendInvite">Send Invite</span>
+                        <span wire:loading.flex wire:target="sendInvite" class="items-center justify-center space-x-2">
+                            <svg class="animate-spin h-4 w-4 text-white shrink-0" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span class="text-white font-medium"> Sending...</span>
+                        </span>
+                    </button>
                 </form>
 
                 <div class="relative w-full md:w-72 shrink-0">
-                    <input type="text" wire:model.live="search" placeholder="Search articles..." 
+                    <input type="text" wire:model.live="search" placeholder="Search articles..."
                         class="w-full h-12 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-12 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
                     @if ($search)
                         <button type="button" wire:click="$set('search', '')" class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
@@ -177,7 +214,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                                     <button wire:click="resend({{ $invite->id }})" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 uppercase underline decoration-2 underline-offset-4">Resend</button>
                                 @endif
                                 <button class="text-[11px] font-bold text-rose-500 hover:text-rose-700 uppercase underline decoration-2 underline-offset-4"
-                                     x-on:click="$dispatch('open-delete', { id: {{ $invite->id }}, title: '{{ addslashes($invite->title) }}', type: 'Invitation' })">Remove</button>
+                                     x-on:click="$dispatch('open-delete', { id: {{ $invite->id }}, title: '{{ addslashes($invite->email) }}', type: 'Invitation' })">Remove</button>
                             </td>
                         </tr>
                     @empty

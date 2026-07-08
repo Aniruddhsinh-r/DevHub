@@ -108,6 +108,13 @@
                         <span class="text-sm md:block sm:hidden hidden">Users</span>
                     </a>
 
+                    <a href="{{ route('admin.deleted.users') }}" wire:navigate class="flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all duration-200 md:justify-start sm:justify-center justify-center {{ request()->is('admin/deleted-users*') ? 'bg-white text-gray-900 font-semibold shadow-sm' : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 font-medium' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m13.5 0v7.125A2.625 2.625 0 0118.375 20.25H5.625A2.625 2.625 0 013 17.625V10.5A2.625 2.625 0 015.625 7.875h12.75A2.625 2.625 0 0121 10.5z"/>
+                        </svg>
+                        <span class="text-sm md:block sm:hidden hidden">Recover user</span>
+                    </a>
+
                     <a href="{{ route('admin.articles') }}" wire:navigate class="flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all duration-200 md:justify-start sm:justify-center justify-center {{ request()->is('admin/article*') ? 'bg-white text-gray-900 font-semibold shadow-sm' : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 font-medium' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
@@ -138,6 +145,7 @@
         </div>
 
         <livewire:livewirecomponent.home.delete-popup/>
+        <livewire:livewirecomponent.home.recovery-popup/>
 
         @if (session()->has('success'))
             <div data-test="success-message" class="hidden">{{ session('success') }}</div>

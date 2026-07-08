@@ -20,7 +20,7 @@
             <h1 class="mt-8 text-8xl font-black tracking-tight text-amber-400">410</h1>
             <h2 class="mt-6 text-4xl font-bold">Invitation Expired</h2>
             <p class="mt-6 text-lg leading-8 text-zinc-400">
-                This invitation link has expired and is no longer valid.
+                This invitation link has expired or cancelled by the administrator.
                 Invitation links are available for a limited time to help keep your account secure.
             </p>
             <p class="mt-3 text-zinc-500">Please contact your administrator to request a new invitation.</p>

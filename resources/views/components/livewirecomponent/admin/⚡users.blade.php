@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use App\Models\Invitation;
 use Livewire\Component;
 use App\Enums\UserRole;
 use App\Events\ArticleCreate;
@@ -29,7 +30,10 @@ new #[Layout('layouts::dashboard')] class extends Component
     public function render()
     {
         return view('admin.users.users', [
-            'users' => User::where('name', 'LIKE', "%{$this->search}%")->where('id', '!=', auth()->id())->withoutRole(UserRole::SUPERADMIN)->latest()->paginate(6),
+            'users' => User::where(function ($query) {
+                $query->where('name', 'like', "%{$this->search}%")
+                ->orWhere('email', 'like', "%{$this->search}%");
+            })->where('id', '!=', auth()->id())->withoutRole(UserRole::SUPERADMIN)->latest()->paginate(6),
         ]);
     }
 
@@ -52,6 +56,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             $user->articles()->delete();
             $user->notifications()->delete();
             $user->delete();
+            Invitation::where('email',$user->email)->delete();
         });
         ArticleCreate::dispatch();
         UserCreate::dispatch();

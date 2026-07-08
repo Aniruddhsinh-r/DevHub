@@ -20,6 +20,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     public $categories;
 
     public bool $scheduleChanged = false;
+    public bool $schedule_changed = false;
     public bool $delete_cover = false;
 
     public function updatedScheduledHours()

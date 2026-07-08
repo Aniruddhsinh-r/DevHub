@@ -4,6 +4,7 @@ use Livewire\Component;
 use App\Models\User;
 use App\Models\Invitation;
 use App\Enums\UserRole;
+use App\Events\UserCreate;
 use Illuminate\Validation\Rule;
 use App\Mail\InvitationMail;
 use Livewire\Attributes\Layout;
@@ -19,20 +20,36 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     public function rules() {
         return [
-            'email' => 'required|email|min:10|max:255|unique:users,email,',
+            'email' => 'required|email|min:10|max:255',
         ];
     }
 
     public function sendInvite() {
         $this->validate();
         $exist = Invitation::where('email',$this->email)->first();
+        $deleted = User::onlyTrashed()->where('email',$this->email)->first();
+
+        if($deleted) {
+            $this->addError('email', 'This email is blocked.');
+            $this->dispatch('open-recovery', 
+                id: $deleted->id, 
+                email: $deleted->email, 
+                type: 'User'
+            );
+            return;
+        }
+        $activeUser = User::where('email', $email)->first();
+        if ($activeUser) {
+            $this->addError('email', 'This email is already registered to an active account.');
+            return;
+        }
+
         if(!$exist) {
             Invitation::create([
                 'email' => strtolower($this->email),
                 'expires_at' => now()->addMinutes(30)
             ]);
-        } 
-        if ($exist?->expires_at > now()) {
+        } elseif ($exist?->expires_at > now()) {
             $remaining = $exist->expires_at->diffForHumans(null, true);
             $this->dispatch('live-notification', message: "Please wait {$remaining} before resending.");
             return ;
@@ -45,6 +62,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             ['email' => strtolower($this->email)]
         );
 
+        UserCreate::dispatch();
         Mail::to($to)->queue(new InvitationMail($message));
         $this->dispatch('live-notification', message: 'Invite sent successfully.');
     }

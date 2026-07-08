@@ -48,7 +48,7 @@ class UpdateArticle
 
         if ($values['status'] === ArticleStatus::SCHEDULED) {
             $data['publish_at'] = null;
-            if ($values['schedule_changed']) {
+            if ($values['schedule_changed'] ?? false) {
                 $data['published_at'] = now()->addHours((int) ($values['scheduled_hours'] ?? 0))->addMinutes((int) ($values['scheduled_minutes'] ?? 0));
             } else {
                 $data['published_at'] = $article->published_at;
