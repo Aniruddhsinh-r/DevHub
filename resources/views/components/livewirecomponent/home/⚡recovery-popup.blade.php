@@ -14,13 +14,14 @@ new class extends Component
     {
         if ($type === 'User') {
             $user = User::onlyTrashed()->find($id);
+            $userDeletionTime = $user->deleted_at;
+
             if ($user) {
                 $user->restore();
-                
-                // $this->dispatch('live-notification', message: 'User restored successfully!');
+                $user->articles()->onlyTrashed()->where('deleted_at', $userDeletionTime)->restore();
+
                 session()->flash('success', 'User restored successfully!');
                 $this->dispatch('user-restored', email: $user->email);
-                // return redirect()->route('admin.invitations', ['email' => $user->email], navigate: true);
                 return $this->redirectRoute('admin.invitations', navigate: true);
             }
         }

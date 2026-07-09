@@ -13,6 +13,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 {
     use WithPagination;
     public $search = '';
+    public $selectAll = false;
     public $selectedArticles = [];
 
     public function mount() {
@@ -41,6 +42,28 @@ new #[Layout('layouts::dashboard')] class extends Component
         ]);
     }
 
+    public function updatedSelectAll($value)
+    {
+        if ($value) {
+            // Get all current page article SLUGS instead of IDs
+            $this->selectedArticles = Article::query()
+                ->when($this->search, function ($query, $search) {
+                    $query->where(function ($query) use ($search) {
+                        $query->where('title', 'like', "%{$search}%")
+                            ->orWhere('excerpt', 'like', "%{$search}%")
+                            ->orWhere('body', 'like', "%{$search}%");
+                    });
+                })
+                ->latest()
+                ->paginate(9)
+                ->pluck('id') // Changed from 'id' to 'slug'
+                ->map(fn($id) => (string)$id)
+                ->toArray();
+        } else {
+            $this->selectedArticles = [];
+        }
+    }
+    
     #[On('trigger-delete')]
     public function handleGlobalDelete($id, $type, ArticleDelete $articleDelete) {
         if ($type === 'adminArticleBulkDelete') {

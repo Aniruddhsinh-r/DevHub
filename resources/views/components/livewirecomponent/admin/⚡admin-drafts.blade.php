@@ -77,7 +77,7 @@ new #[Layout('layouts::dashboard')] class extends Component {
             <p class="text-md text-gray-500 mt-1 max-w-xs">We have not published any Draft articles yet. Wonna create
                 one!</p>
             <div class="mt-5">
-                <a href="{{ route('articles.create') }}" wire:navigate
+                <a href="{{ route('admin.articles.create') }}" wire:navigate
                     class="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition-all shadow-md group">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         class="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" fill="none"

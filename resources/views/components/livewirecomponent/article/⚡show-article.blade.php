@@ -145,8 +145,8 @@ new class extends Component
                     @endif
                     <div class="h-8 w-px bg-white/10 hidden md:block"></div>
                     <div>
-                        <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">Published</p>
-                        <p class="mt-0.5 font-bold text-white text-sm">{{ $article->publish_at->format('F d, Y') }}</p>
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black">{{$article->status}}</p>
+                        <p class="mt-0.5 font-bold text-white text-sm">{{ $article->published_at?->diffForHumans() ?? 'Not published'}}</p>
                     </div>
                     <div class="h-8 w-px bg-white/10 hidden md:block"></div>
                     <div>
@@ -205,7 +205,9 @@ new class extends Component
                     @endif
 
                     @role('author')
-                        <livewire:livewirecomponent.post-comment :article="$article" />
+                        @if ($article->status === ArticleStatus::PUBLISHED)
+                            <livewire:livewirecomponent.post-comment :article="$article" />
+                        @endif
                     @endrole
                 </div>
 

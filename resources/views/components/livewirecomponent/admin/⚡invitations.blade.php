@@ -153,7 +153,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                             <span class="absolute -bottom-5 left-2 text-[10px] font-bold text-rose-500 uppercase">{{ $message }}</span>
                         @enderror
                     </div>
-                    <button type="submit" class="h-12 px-6 rounded-2xl bg-[#111827] hover:bg-black text-sm font-black text-white transition-all shadow-md shrink-0">
+                    <button type="submit" class="h-12 px-6 rounded-2xl cursor-pointer bg-[#111827] hover:bg-black text-sm font-black text-white transition-all shadow-md shrink-0">
                         <span wire:loading.remove wire:target="sendInvite">Send Invite</span>
                         <span wire:loading.flex wire:target="sendInvite" class="items-center justify-center space-x-2">
                             <svg class="animate-spin h-4 w-4 text-white shrink-0" fill="none" viewBox="0 0 24 24">

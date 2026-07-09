@@ -7,8 +7,8 @@
 
         <div class="flex items-center gap-3">
             @if(count($selectedArticles) > 0)
-                <button x-on:click="$dispatch('open-delete', { id: {{ json_encode($selectedArticles) }}, title: '{{ count($selectedArticles) }} selected articles', type: 'adminArticleBulkDelete'})"
-                     class="inline-flex items-center gap-2 h-[52px] px-5 rounded-2xl bg-red-600 hover:bg-red-700 text-sm font-black text-white shadow-sm hover:shadow-lg transition-all duration-200 animate-fade-in">
+                <button x-on:click="$dispatch('open-delete', { id: $wire.selectedArticles, title: $wire.selectedArticles.length + ' selected articles', type: 'adminArticleBulkDelete'})"
+                     class="inline-flex cursor-pointer items-center gap-2 h-[52px] px-5 rounded-2xl bg-red-600 hover:bg-red-700 text-sm font-black text-white shadow-sm hover:shadow-lg transition-all duration-200 animate-fade-in">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -34,16 +34,16 @@
                 <h2 class="text-lg font-black text-[#111827] tracking-tight">All Written Articles</h2>
             </div>
             <div class="relative w-full lg:w-64">
-                <form action="" method="GET">
+                <form wire:submit.prevent="">
                     <div class="relative">
                         <input type="text" wire:model.live="search" value="{{ request('search') }}" placeholder="Search articles..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
 
-                        @if (request('search'))
-                            <a href="{{ url()->current() }}" wire:navigate class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
+                        @if ($search)
+                            <button type="button" wire:click="$set('search', '')" class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
-                            </a>
+                            </button>
                         @endif
 
                         <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200">
@@ -61,8 +61,9 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-gray-100 bg-[#fafafa]">
-                            <th class="pl-6 py-4 text-xs font-black uppercase tracking-wider text-gray-400">
-                                box
+                            <th class="pl-6 py-4 text-xs font-black uppercase tracking-wider text-gray-400 w-12">
+                                {{-- <input type="checkbox" wire:model.live="selectAll" class="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"> --}}
+                                <button type="button" wire:click="$toggle('selectAll')" class="text-[11px] font-bold cursor-pointer text-indigo-600 hover:text-indigo-800 uppercase underline decoration-2 underline-offset-4">All</button>
                             </th>
                             <th class="pr-6 py-4 text-xs font-black uppercase tracking-wider text-gray-400">Article Title</th>
                             <th class="px-6 py-4 text-xs font-black uppercase tracking-wider text-gray-400">Status</th>
@@ -88,7 +89,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-semibold text-gray-600 whitespace-nowrap">
-                                    {{ $article->publish_at?->diffForHumans() ?? 'Not published'}}
+                                    {{ $article->published_at?->diffForHumans() ?? 'Not published'}}
                                 </td>
                                 <td class="px-6 py-4 text-right whitespace-nowrap" x-on:click.stop>
                                     <div class="flex items-center justify-end gap-2">
@@ -96,7 +97,7 @@
                                             Edit
                                         </a>
                                         <button type="button" x-on:click="$dispatch('open-delete', { id: {{ $article->id }}, title: '{{ addslashes($article->title) }}', type: 'adminArticleDelete' })"
-                                            class="inline-flex items-center justify-center bg-red-50 hover:bg-red-600 text-red-600 hover:text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all duration-150">
+                                            class="inline-flex cursor-pointer items-center justify-center bg-red-50 hover:bg-red-600 text-red-600 hover:text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all duration-150">
                                             Remove
                                         </button>
                                     </div>

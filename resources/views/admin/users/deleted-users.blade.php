@@ -26,8 +26,24 @@
             </div>
 
             <div class="relative w-full lg:w-64">
-                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search deleted users..."
-                class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] px-4 text-sm">
+                <form wire:submit.prevent="">
+                    <div class="relative">
+                        <input type="text" wire:model.live="search" value="{{ request('search') }}" placeholder="Search deleted users..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
+                        @if ($search)
+                            <button type="button" wire:click="$set('search', '')" class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        @endif
+                        
+                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -67,12 +83,12 @@
                         <td class="px-6 py-4 text-right">
                             <div class="flex justify-end gap-2">
                                 <button wire:click="restore({{ $user->id }})"
-                                    class="h-8 px-4 rounded-xl bg-green-100 hover:bg-green-600 text-green-700 hover:text-white text-xs font-bold">
+                                    class="h-8 px-4 rounded-xl cursor-pointer bg-green-100 hover:bg-green-600 text-green-700 hover:text-white text-xs font-bold">
                                     Restore
                                 </button>
 
                                 <button x-on:click="$dispatch('open-delete', { id: {{ $user->id }}, title: '{{ addslashes($user->name) }}', type: 'adminUserDelete' })"
-                                    class="h-8 px-4 rounded-xl bg-red-100 hover:bg-red-600 text-red-700 hover:text-white text-xs font-bold">
+                                    class="h-8 px-4 rounded-xl cursor-pointer bg-red-100 hover:bg-red-600 text-red-700 hover:text-white text-xs font-bold">
                                     Delete Forever
                                 </button>
                             </div>

@@ -26,18 +26,18 @@
                     <p class="text-sm text-gray-500 mt-1">Manage your community members and user accounts.</p>
                 </div>
                 <div class="relative w-full lg:w-64">
-                    <form action="" method="GET">
+                    <form wire:submit.prevent="">
                         <div class="relative">
                             <input type="text" wire:model.live="search" value="{{ request('search') }}" placeholder="Search users..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
 
-                            @if (request('search'))
-                                <a href="{{ url()->current() }}" wire:navigate class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
+                            @if ($search)
+                                <button type="button" wire:click="$set('search', '')" class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
-                                </a>
+                                </button>
                             @endif
-
+                            
                             <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -102,7 +102,7 @@
                                         </a>
                                         <button type="button"
                                             x-on:click="$dispatch('open-delete', { id: {{ $user->id }}, title: '{{ addslashes($user->name) }}', type: 'adminUserDelete' })"
-                                            class="inline-flex items-center justify-center h-8 px-4 rounded-xl bg-rose-50 hover:bg-red-600 text-xs font-bold text-red-600 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
+                                            class="inline-flex items-center cursor-pointer justify-center h-8 px-4 rounded-xl bg-rose-50 hover:bg-red-600 text-xs font-bold text-red-600 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md">
                                             Remove
                                         </button>
                                     </div>

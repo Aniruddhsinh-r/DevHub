@@ -43,8 +43,8 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->status = $article->status;
         $this->categories = Category::select('id','name')->orderBy('name')->get();
 
-        if ($article->published_at && $article->status === ArticleStatus::SCHEDULED) {
-            $remainingMinutes = max(0, now()->diffInMinutes($article->published_at, false));
+        if ($article->duration && $article->status === ArticleStatus::SCHEDULED) {
+            $remainingMinutes = max(0, now()->diffInMinutes($article->duration, false));
 
             $this->scheduled_hours = intdiv($remainingMinutes, 60);
             $this->scheduled_minutes = $remainingMinutes % 60;

@@ -47,18 +47,18 @@ class UpdateArticle
         }
 
         if ($values['status'] === ArticleStatus::SCHEDULED) {
-            $data['publish_at'] = null;
+            $data['published_at'] = null;
             if ($values['schedule_changed'] ?? false) {
-                $data['published_at'] = now()->addHours((int) ($values['scheduled_hours'] ?? 0))->addMinutes((int) ($values['scheduled_minutes'] ?? 0));
+                $data['duration'] = now()->addHours((int) ($values['scheduled_hours'] ?? 0))->addMinutes((int) ($values['scheduled_minutes'] ?? 0));
             } else {
-                $data['published_at'] = $article->published_at;
+                $data['duration'] = $article->duration;
             }
         } elseif ($values['status'] === ArticleStatus::PUBLISHED) {
-            $data['published_at'] = null;
-            $data['publish_at'] = $article->publish_at ?? now();
+            $data['duration'] = null;
+            $data['published_at'] = $article->published_at ?? now();
         } else {
+            $data['duration'] = null;
             $data['published_at'] = null;
-            $data['publish_at'] = null;
         }
 
         $article->update($data);

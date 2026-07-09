@@ -14,7 +14,7 @@
                     @csrf
                     <x-form.field name="name" type="text" label="Category Name" placeholder="e.g., Technology, Helth, Coding..."></x-form.field>
 
-                    <button type="submit" data-test="CreateCategory" class="w-full py-2.5 px-4 bg-[#111827] text-white hover:bg-gray-800 font-semibold text-sm rounded-xl shadow-sm transition-all duration-200 mt-2 flex items-center justify-center gap-2">Create Category</button>
+                    <button type="submit" data-test="CreateCategory" class="w-full cursor-pointer py-2.5 px-4 bg-[#111827] text-white hover:bg-gray-800 font-semibold text-sm rounded-xl shadow-sm transition-all duration-200 mt-2 flex items-center justify-center gap-2">Create Category</button>
                 </form>
             </div>
 
@@ -43,7 +43,7 @@
                                     <td class="px-5 py-3.5 text-right">
                                         <button dusk="delete-category"
                                              x-on:click="$dispatch('open-delete', { id: {{ $category->id }}, title: '{{ addslashes($category->title) }}', type: 'adminCategory' })"
-                                             class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete
+                                             class="text-xs cursor-pointer font-bold text-rose-600 hover:text-rose-800 transition-colors">Delete
                                         </button>
                                     </td>
                                 </tr>

@@ -31,8 +31,8 @@ class ArticleFactory extends Factory
             'excerpt' => fake()->paragraph(1),
             'body' => fake()->paragraphs(6, true),
             'status' => $status,
-            'published_at' => $status === ArticleStatus::PUBLISHED ? fake()->dateTimeBetween('-1 month', 'now') : null,
-            'publish_at' => now(),
+            'duration' => $status === ArticleStatus::PUBLISHED ? fake()->dateTimeBetween('-1 month', 'now') : null,
+            'published_at' => now(),
             'created_at' => now(),
         ];
     }

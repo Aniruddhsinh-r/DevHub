@@ -41,8 +41,8 @@ new #[Layout('layouts::dashboard')] class extends Component
                         <p class="mt-2 h-10 text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $article->excerpt }}</p>
                         <div class="mt-5 flex items-center justify-between border-t border-gray-100">
                             <div>
-                                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Published</p>
-                                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->publish_at->diffForHumans() }}</p>
+                                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">{{ $article->status }}</p>
+                                <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $article->published_at?->diffForHumans() ?? 'Not published'}}</p>
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-gray-400">Date</p>

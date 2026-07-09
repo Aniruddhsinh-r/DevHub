@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('excerpt'); 
             $table->longText('body');
             $table->enum('status', ['draft', 'scheduled', 'published'])->default('draft');
+            $table->timestamp('duration')->nullable();
             $table->timestamp('published_at')->nullable();
-            $table->timestamp('publish_at')->nullable();
             $table->integer('view_count')->default(0);
             $table->string('cover_path')->nullable();
             $table->timestamps();

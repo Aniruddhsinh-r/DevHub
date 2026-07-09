@@ -35,11 +35,11 @@ class CreateArticle
         }
 
         if ($values['status'] === ArticleStatus::SCHEDULED->value) {
-            $data['published_at'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
+            $data['duration'] = now()->addHours((int)($values['scheduled_hours'] ?? 0))->addMinutes((int)($values['scheduled_minutes'] ?? 0));
         } elseif ($values['status'] === ArticleStatus::PUBLISHED->value) {
-            $data['publish_at'] = now();
+            $data['published_at'] = now();
         } else {
-            $data['publish_at'] = null;
+            $data['published_at'] = null;
         }
 
         auth()->user()->articles()->create($data);

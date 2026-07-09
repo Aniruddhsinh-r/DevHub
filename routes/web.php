@@ -47,7 +47,7 @@ Route::middleware(['auth','admin'])->group(function () {
     Route::livewire('/admin/users/{user}', 'livewirecomponent.admin.users-profile')->name('admin.show.user');
     Route::livewire('/admin/user/{user}/followers', 'livewirecomponent.admin.admin-followers')->name('user.followers');
     Route::livewire('/admin/user/create', 'livewirecomponent.admin.create-user')->name('admin.users.create');
-    Route::livewire('/admin/user/recover-users', 'livewirecomponent.admin.deleted-users')->name('admin.deleted.users');
+    Route::livewire('/admin/recover-users', 'livewirecomponent.admin.deleted-users')->name('admin.deleted.users');
     Route::livewire('/admin/users/edit/{user}', 'livewirecomponent.admin.user-edit')->name('admin.edit.user');
     Route::livewire('/admin/invitations', 'livewirecomponent.admin.invitations')->name('admin.invitations');
     Route::livewire('/admin/categories', 'livewirecomponent.admin.category-list')->name('admin.categories');

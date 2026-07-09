@@ -43,7 +43,7 @@ new class extends Component
                         </svg>
                     </div>
                     <h2 class="text-2xl font-black text-gray-900">No articles published yet</h2>
-                    <p class="text-gray-500 mt-2 font-medium">You haven't published any content to your profile.</p>
+                    <p class="text-gray-500 mt-2 font-medium">No content has been published on this profile yet.</p>
                 </div>
             @endif
         </div>

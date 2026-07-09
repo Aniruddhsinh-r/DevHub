@@ -25,8 +25,8 @@ class Article extends Model
         'body',
         'status',
         'cover_path',
-        'published_at',
-        'publish_at'
+        'duration',
+        'published_at'
     ];
 
     /**
@@ -73,8 +73,8 @@ class Article extends Model
     protected function casts(): array
     {
         return [
+            'duration' => 'datetime',
             'published_at' => 'datetime',
-            'publish_at' => 'datetime',
             'status' => ArticleStatus::class,
         ];
     }
