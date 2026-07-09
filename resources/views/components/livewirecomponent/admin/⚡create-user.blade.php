@@ -26,14 +26,14 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     public function sendInvite() {
         $this->validate();
-        $exist = Invitation::where('email',$this->email)->first();
-        $deleted = User::onlyTrashed()->where('email',$this->email)->first();
+        $email = strtolower($this->email);
 
+        $deleted = User::onlyTrashed()->where('email',$email)->first();
         if($deleted) {
             $this->addError('email', 'This email is blocked.');
-            $this->dispatch('open-recovery', 
-                id: $deleted->id, 
-                email: $deleted->email, 
+            $this->dispatch('open-recovery',
+                id: $deleted->id,
+                email: $deleted->email,
                 type: 'User'
             );
             return;
@@ -44,9 +44,10 @@ new #[Layout('layouts::dashboard')] class extends Component
             return;
         }
 
+        $exist = Invitation::where('email',$email)->first();
         if(!$exist) {
             Invitation::create([
-                'email' => strtolower($this->email),
+                'email' => $email,
                 'expires_at' => now()->addMinutes(30)
             ]);
         } elseif ($exist?->expires_at > now()) {
@@ -55,15 +56,16 @@ new #[Layout('layouts::dashboard')] class extends Component
             return ;
         }
 
-        $to = strtolower($this->email);
+        $to = $email;
         $message = URL::temporarySignedRoute(
             'invitation',
             now()->addMinutes(30),
-            ['email' => strtolower($this->email)]
+            ['email' => $email]
         );
 
-        UserCreate::dispatch();
+        $this->email = '';
         Mail::to($to)->queue(new InvitationMail($message));
+        UserCreate::dispatch();
         $this->dispatch('live-notification', message: 'Invite sent successfully.');
     }
 };
