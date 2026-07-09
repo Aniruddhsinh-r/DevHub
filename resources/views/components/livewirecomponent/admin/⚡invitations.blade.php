@@ -89,6 +89,11 @@ new #[Layout('layouts::dashboard')] class extends Component
 
     public function resend($id) {
         $invitation = Invitation::findOrFail($id);
+        $exist = Invitation::where('email',$invitation->email)->first();
+        if($exist) {
+            $this->dispatch('live-notification', message: "This email is already registered.");
+            return;
+        }
 
         if ($invitation->status === 'accepted') {
             $this->dispatch('live-notification', message: "Unable to send invitation.");
