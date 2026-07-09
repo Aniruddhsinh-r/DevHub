@@ -41,12 +41,12 @@
                         <div x-data="{ hours: '{{ old('scheduled_hours') ?? null }}',minutes: '{{ old('scheduled_minutes') ?? null }}' }" class="flex items-end space-x-2">
                             <div class="w-20">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Hours</label>
-                                <input type="text" name="scheduled_hours" wire:model="scheduled_hours" placeholder="HH" @input="hours = hours.replace(/\D/g, '').slice(0, 2); if(parseInt(hours) > 48) hours = '48'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-50tline-none">
+                                <input type="text" name="scheduled_hours" wire:model.live="scheduled_hours" placeholder="HH" maxlength="2" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g,''); if (+this.value > 48) this.value = '48';" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-50tline-none">
                             </div>
                             <span class="text-gray-400 font-bold pb-2">:</span>
                             <div class="w-20">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-700">Mins</label>
-                                <input type="text" name="scheduled_minutes" wire:model="scheduled_minutes" placeholder="MM" @input="minutes = minutes.replace(/\D/g, '').slice(0, 2); if(parseInt(minutes) > 59) minutes = '59'" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-500 outline-none">
+                                <input type="text" name="scheduled_minutes" wire:model.live="scheduled_minutes" placeholder="MM" min:0 max:59 oninput="if (this.value.length > 2) this.value = this.value.slice(0, 2); if (+this.value > 59) this.value = 59;" class="border border-gray-300 w-full p-2 text-center font-semibold text-sm rounded-md focus:border-blue-500 outline-none">
                             </div>
                         </div>
                         @error('scheduled_minutes')
