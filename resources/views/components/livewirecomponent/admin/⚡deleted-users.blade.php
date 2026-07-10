@@ -32,10 +32,18 @@ new #[Layout('layouts::dashboard')] class extends Component
         $this->resetPage();
     }
 
+    #[On('trigger-restore')]
+    public function handleGlobalRestore($id, $type) {
+        if ($type === 'adminUserRecover') {
+            $this->restore($id);
+        }
+    }
+
     public function restore(int $id): void
     {
         $user = User::onlyTrashed()->findOrFail($id);
         Gate::authorize('remove', $user);
+        $user->articles()->onlyTrashed()->where('deleted_at', $user->deleted_at)->restore();
         $user->restore();
         UserCreate::dispatch();
         $this->dispatch('live-notification', message: 'User restored successfully.');

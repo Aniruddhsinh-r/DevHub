@@ -47,6 +47,7 @@ new #[Layout('layouts::dashboard')] class extends Component
     public function remove($userId) {
         $user = User::findOrFail($userId);
         Gate::authorize('remove', $user);
+        DB::table('sessions')->where('user_id', $user->id)->delete();
 
         DB::transaction(function () use ($user) {
             $user->views()->delete();
@@ -56,6 +57,8 @@ new #[Layout('layouts::dashboard')] class extends Component
             $user->articles()->delete();
             $user->notifications()->delete();
             $user->delete();
+            $user->remember_token = null;
+            $user->save();
             Invitation::where('email',$user->email)->delete();
         });
         ArticleCreate::dispatch();

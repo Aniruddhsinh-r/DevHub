@@ -140,71 +140,46 @@
     <footer class="bg-white border-t border-gray-100 mt-auto">
         <div class="max-w-7xl mx-auto px-4 pt-12 sm:px-6 lg:px-8">
             <div class="flex flex-col gap-8 md:flex-row md:justify-between md:items-start">
-
                 <div class="space-y-4 md:w-1/3">
-                    <a href="{{ route('home') }}" wire:navigate class="text-xl font-black tracking-tight text-black flex items-center gap-2">
-                        <span>Dev<span class="text-indigo-600">Hub</span></span>
-                    </a>
-                    <p class="text-gray-500 text-sm max-w-sm font-medium leading-relaxed">
-                        A token-space ecosystem for developers and creators to share insights, build followings, and discover top technical content.
-                    </p>
+                    <a href="{{ route('home') }}" wire:navigate class="text-xl font-black tracking-tight text-black flex items-center gap-2"><span>Dev<span class="text-indigo-600">Hub</span></span></a>
+                    <p class="text-gray-500 text-sm max-w-sm font-medium leading-relaxed">A token-space ecosystem for developers and creators to share insights, build followings, and discover top technical content.</p>
                 </div>
 
                 <div class="md:w-1/4">
-                    <h3 class="text-xs font-semibold text-slate-400 tracking-wider uppercase">
-                        EXPLORE
-                    </h3>
+                    <h3 class="text-xs font-semibold text-slate-400 tracking-wider uppercase">EXPLORE</h3>
                     <ul role="list" class="mt-4 space-y-3">
                         <li>
-                            <a href="{{ route('articles.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                Latest articles
-                            </a>
+                            <a href="{{ route('articles.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">Latest articles</a>
                         </li>
                         @auth
                             <li>
-                                <a href="{{ route('followings',auth()->user()) }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                    Following list
-                                </a>
+                                <a href="{{ route('followings',auth()->user()) }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">Following list</a>
                             </li>
                             <li>
-                                <a href="{{ route('profile.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                    Your profile
-                                </a>
+                                <a href="{{ route('profile.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">Your profile</a>
                             </li>
                             @else
                             <li>
-                                <a href="{{ route('login') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                    Sign In
-                                </a>
+                                <a href="{{ route('login') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">Sign In</a>
                             </li>
                             <li>
-                                <a href="{{ route('register.create') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">
-                                    Create account
-                                </a>
+                                <a href="{{ route('register.create') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">Create account</a>
                             </li>
                         @endauth
                     </ul>
                 </div>
 
                 <div class="md:w-1/4">
-                    <h3 class="text-xs font-semibold text-slate-400 tracking-wider uppercase">
-                        PLATFORM INFO
-                    </h3>
-                    <p class="mt-4 text-sm font-medium text-slate-400 leading-relaxed">
-                        Built with Laravel, Eloquent & TailwindCSS.
-                    </p>
+                    <h3 class="text-xs font-semibold text-slate-400 tracking-wider uppercase">PLATFORM INFO</h3>
+                    <p class="mt-4 text-sm font-medium text-slate-400 leading-relaxed">Built with Laravel, Eloquent & TailwindCSS.</p>
                 </div>
-
             </div>
 
             <div class="w-full mt-4 mx-auto py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <p class="text-xs font-medium text-gray-400 order-2 sm:order-1">
-                    &copy; {{ date('Y') }} DevHub Platform. All rights reserved.
-                </p>
+                <p class="text-xs font-medium text-gray-400 order-2 sm:order-1">&copy; {{ date('Y') }} DevHub Platform. All rights reserved.</p>
             </div>
         </div>
     </footer>
-
 
     <div x-data="{ show: false, message: ''}"
         x-on:live-notification.window="show = true; message = $event.detail.message; setTimeout(() => show = false, 5000)"

@@ -48,6 +48,7 @@
         </div>
 
         @if($users->count())
+        <div class="overflow-x-auto">
             <table class="w-full">
                 <thead class="bg-[#fafafa] border-b border-gray-100">
                 <tr>
@@ -82,7 +83,7 @@
 
                         <td class="px-6 py-4 text-right">
                             <div class="flex justify-end gap-2">
-                                <button wire:click="restore({{ $user->id }})" data-test="RestoreUser"
+                                <button x-on:click="$dispatch('open-restore', { id: {{ $user->id }}, username: '{{ addslashes($user->name) }}', type: 'adminUserRecover' })"
                                     class="h-8 px-4 rounded-xl cursor-pointer bg-green-100 hover:bg-green-600 text-green-700 hover:text-white text-xs font-bold">
                                     Restore
                                 </button>
@@ -98,6 +99,7 @@
                 </tbody>
             </table>
             <div class="p-5">{{ $users->links() }}</div>
+        </div>
         @else
             <div class="p-16 text-center">
                 <h2 class="text-xl font-black">Trash is Empty</h2>

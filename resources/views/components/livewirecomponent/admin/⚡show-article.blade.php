@@ -9,8 +9,9 @@ new #[Layout('layouts::dashboard')] class extends Component
     public $comments = '';
     public $likes = '';
     public Article $article;
+
     public function mount() {
-        $this->comments = $this->article->comments()->whereNull('parent_id')->with('user', 'replies.user')->get();
+        $this->comments = $this->article->comments()->whereNull('parent_id')->with(['user', 'replies.user', 'replies.replies.user', 'replies.replies.replies.user'])->get();
         $this->likes = $this->article->likes()->get();
     }
 };
@@ -103,7 +104,7 @@ new #[Layout('layouts::dashboard')] class extends Component
 
                         <div class="space-y-6">
                             @forelse ($comments as $comment)
-                            <div class="flex gap-4">
+                            <div class="flex gap-4" x-data="{ showReplies: false }">
                                 <a href="{{ route('admin.show.user',$comment->user) }}" wire:navigate class="w-11 h-11 mt-1 rounded-full border border-gray-200 bg-[#0f0f0f] text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-xs uppercase select-none shrink-0">
                                     @if ($comment->user->avatar)
                                         <img src="{{ asset('storage/' . $comment->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
@@ -115,56 +116,73 @@ new #[Layout('layouts::dashboard')] class extends Component
                                 <div class="flex-1">
                                     <div class="bg-[#f0f0f0] rounded-2xl px-5 py-3">
                                         <div class="flex items-center justify-between mb-1">
-                                            <h4 class="font-black text-gray-900 text-sm">
-                                                {{ $comment->user->name }}
-                                            </h4>
-                                            <p class="text-xs font-extrabold text-gray-500">
-                                                {{ $comment->created_at->diffForHumans() }}
-                                            </p>
+                                            <h4 class="font-black text-gray-900 text-sm">{{ $comment->user->name }}</h4>
+                                            <p class="text-xs font-extrabold text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
                                         </div>
-                                        <p class="text-sm text-gray-700 leading-7">
-                                            {{ $comment->body }}
-                                        </p>
+                                        <p class="text-sm text-gray-700 leading-7">{{ $comment->body }}</p>
                                     </div>
 
-                                    <div x-data="{ showReplies: false }">
-                                        @if ($comment->replies->count() > 0)
-                                            <div class="flex items-center gap-5 mt-2 ml-2 text-xs font-bold text-gray-500">
-                                                <button @click="showReplies = !showReplies" class="hover:text-black transition flex items-center gap-1">
-                                                    <span x-text="showReplies ? 'Hide' : 'View'"></span> {{ $comment->replies->count() }} nested reply
-                                                </button>
-                                            </div>
-                                        @endif
-
-                                        <div x-show="showReplies" class="mt-2 pl-4 border-l-2 border-gray-200 space-y-3" x-cloak>
-                                            @foreach ($comment->replies as $reply)
-                                            <div class="flex gap-4">
-                                                <a href="{{ route('admin.show.user',$reply->user) }}" wire:navigate class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
-                                                    @if ($reply->user->avatar)
-                                                        <img src="{{ asset('storage/' . $reply->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
-                                                    @else
-                                                        <span>{{ Str::upper(Str::substr($reply->user->name, 0, 2)) }}</span>
-                                                    @endif
-                                                </a>
-
-                                                <div class="flex-1">
-                                                    <div class="bg-[#f0f0f0] rounded-2xl px-4 py-2.5">
-                                                        <div class="flex items-center justify-between mb-1">
-                                                            <h4 class="font-black text-gray-900 text-xs">
-                                                                {{ $reply->user->name }}
-                                                            </h4>
-                                                            <p class="text-[10px] font-extrabold text-gray-500">
-                                                                {{ $reply->created_at->diffForHumans() }}
-                                                            </p>
-                                                        </div>
-                                                        <p class="text-sm text-gray-700 leading-6">
-                                                            {{ $reply->body }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @endforeach
+                                    @if ($comment->replies->count() > 0)
+                                        <div class="flex items-center gap-5 mt-2 ml-2 text-xs font-bold text-gray-500">
+                                            <button @click="showReplies = !showReplies" class="hover:text-black transition flex items-center gap-1">
+                                                <span x-text="showReplies ? 'Hide' : 'View'"></span> {{ $comment->replies->count() }} nested reply
+                                            </button>
                                         </div>
+                                    @endif
+
+                                    <div x-show="showReplies" class="mt-2 pl-4 border-l-2 border-gray-200 space-y-4" x-cloak>
+                                        @foreach ($comment->replies as $replyL2)
+                                        <div class="flex gap-4">
+                                            <a href="{{ route('admin.show.user',$replyL2->user) }}" wire:navigate class="w-9 h-9 mt-1 rounded-full object-cover border border-gray-200 bg-gray-800 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[10px] uppercase tracking-wider shrink-0">
+                                                @if ($replyL2->user->avatar)
+                                                    <img src="{{ asset('storage/' . $replyL2->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
+                                                @else
+                                                    <span>{{ Str::upper(Str::substr($replyL2->user->name, 0, 2)) }}</span>
+                                                @endif
+                                            </a>
+
+                                            <div class="flex-1">
+                                                <div class="bg-[#f0f0f0] rounded-2xl px-4 py-2.5">
+                                                    <div class="flex items-center justify-between mb-1">
+                                                        <h4 class="font-black text-gray-900 text-xs">{{ $replyL2->user->name }}</h4>
+                                                        <p class="text-[10px] font-extrabold text-gray-500">{{ $replyL2->created_at->diffForHumans() }}</p>
+                                                    </div>
+                                                    <p class="text-sm text-gray-700 leading-6">{{ $replyL2->body }}</p>
+                                                </div>
+
+                                                @if ($replyL2->replies->count() > 0)
+                                                <div class="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
+                                                    @foreach ($replyL2->replies as $replyL3)
+                                                    <div class="flex gap-4">
+                                                        <a href="{{ route('admin.show.user',$replyL3->user) }}" wire:navigate class="w-8 h-8 mt-1 rounded-full object-cover border border-gray-200 bg-gray-700 text-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-[9px] uppercase tracking-wider shrink-0">
+                                                            @if ($replyL3->user->avatar)
+                                                                <img src="{{ asset('storage/' . $replyL3->user->avatar) }}" alt="user_image" class="w-full h-full object-cover">
+                                                            @else
+                                                                <span>{{ Str::upper(Str::substr($replyL3->user->name, 0, 2)) }}</span>
+                                                            @endif
+                                                        </a>
+
+                                                        <div class="flex-1">
+                                                            <div class="bg-[#f0f0f0] rounded-2xl px-4 py-2.5">
+                                                                <div class="flex items-center gap-2 mb-1">
+                                                                    <h4 class="font-black text-gray-900 text-xs">{{ $replyL3->user->name }}</h4>
+                                                                    @if($replyL3->parent_id !== $replyL2->id && $replyL3->parent)
+                                                                        <span class="text-[10px] text-gray-400 font-bold flex items-center gap-1">
+                                                                            ↳ <span class="text-blue-600">@ {{ $replyL3->parent->user->name }}</span>
+                                                                        </span>
+                                                                    @endif
+                                                                    <p class="text-[10px] font-extrabold text-gray-500 ml-auto">{{ $replyL3->created_at->diffForHumans() }}</p>
+                                                                </div>
+                                                                <p class="text-sm text-gray-700 leading-6">{{ $replyL3->body }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>

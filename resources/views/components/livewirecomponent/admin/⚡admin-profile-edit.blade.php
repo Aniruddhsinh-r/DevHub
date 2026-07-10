@@ -58,7 +58,7 @@ new #[Layout('layouts::dashboard')] class extends Component
             return;
         }
 
-        $this->validate();
+        $values = $this->validate();
         $values['delete_avatar'] = $this->delete_avatar;
 
         $data = [

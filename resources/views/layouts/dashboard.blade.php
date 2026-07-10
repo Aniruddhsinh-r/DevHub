@@ -146,6 +146,7 @@
 
         <livewire:livewirecomponent.home.delete-popup/>
         <livewire:livewirecomponent.home.recovery-popup/>
+        <livewire:livewirecomponent.home.recover-popup/>
 
         @if (session()->has('success'))
             <div data-test="success-message" class="hidden">{{ session('success') }}</div>
