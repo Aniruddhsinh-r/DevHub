@@ -60,7 +60,8 @@ test('Admin can restore user', function () {
 
     visit('/admin/recover-users')
     ->assertSee($user->name)
-    ->click('Restore');
+    ->press('@RestoreUser')
+    ->assertSee('User restored successfully.');
 
     $this->assertDatabaseHas('users', ['id' => $user->id,'deleted_at' => null]);
 });
@@ -99,7 +100,7 @@ test('Guest cant access or search on user detail page', function () {
 });
 
 test('Admin can view author profile pages', function () {
-    $user = User::factory()->create(); 
+    $user = User::factory()->create();
     AdminLogin();
 
     visit('/admin/users')
@@ -110,7 +111,7 @@ test('Admin can view author profile pages', function () {
 });
 
 test('Admin can visite author profile edit page', function () {
-    $user = User::factory()->create(); 
+    $user = User::factory()->create();
     AdminLogin();
 
     visit('/admin/users')

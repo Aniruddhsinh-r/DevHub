@@ -17,7 +17,7 @@ test('Admin search and see article', function () {
 
     visit('/admin/articles?search=example+article')
     ->assertSee('example Article')
-    ->click('example Article')
+    ->press('example Article')
     ->assertRoute('admin.article.show',['article' => $article]);
 });
 
