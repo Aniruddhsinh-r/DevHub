@@ -58,9 +58,11 @@ test('Admin can restore user', function () {
     $user = User::factory()->create(['deleted_at'=>	"2026-07-09 12:25:56"]);
     AdminLogin();
 
-    visit('/admin/recover-users')
+    $page = visit('/admin/recover-users')
     ->assertSee($user->name)
-    ->press('@RestoreUser')
+    ->press('Restore');
+
+    $page->click('[dusk="RestoreUserBTN"]')
     ->assertSee('User restored successfully.');
 
     $this->assertDatabaseHas('users', ['id' => $user->id,'deleted_at' => null]);

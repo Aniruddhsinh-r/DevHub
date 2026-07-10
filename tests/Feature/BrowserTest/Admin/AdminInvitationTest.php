@@ -36,9 +36,11 @@ test('Admin restore soft deleted users.', function () {
     $user = User::factory()->create(['deleted_at'=>	"2026-07-09 12:25:56"]);
     AdminLogin();
 
-    visit('/admin/recover-users')
+    $page = visit('/admin/recover-users')
         ->assertSee($user->name)
-        ->click('Restore')
+        ->click('Restore');
+
+    $page->click('[dusk="RestoreUserBTN"]')
         ->assertSee('User restored successfully.');
 
     $this->assertDatabaseHas('users', ['id' => $user->id,'deleted_at' => null]);
