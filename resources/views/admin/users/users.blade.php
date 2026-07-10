@@ -19,44 +19,41 @@
             </div>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-[2rem] shadow-sm overflow-hidden">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-5 py-5 border-b border-gray-100">
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-6 py-5 border-b border-slate-100">
                 <div>
-                    <h2 class="text-lg font-black text-[#111827] tracking-tight">All Registered Users</h2>
-                    <p class="text-sm text-gray-500 mt-1">Manage your community members and user accounts.</p>
+                    <h2 class="text-base font-bold text-slate-900 tracking-tight">All Registered Users</h2>
+                    <p class="text-sm text-slate-500 mt-0.5">Manage your community members and user accounts.</p>
                 </div>
-                <div class="relative w-full lg:w-64">
+                <div class="relative w-full lg:w-72">
                     <form wire:submit.prevent="">
                         <div class="relative">
-                            <input type="text" wire:model.live="search" value="{{ request('search') }}" placeholder="Search users..." class="w-full h-11 rounded-2xl border border-gray-200 bg-[#fafafa] pl-4 pr-4 text-sm font-medium text-gray-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition">
-
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            <input type="text" wire:model.live="search" value="{{ request('search') }}" placeholder="Search users..." class="w-full h-10 rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-9 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 focus:bg-white transition">
+ 
                             @if ($search)
-                                <button type="button" wire:click="$set('search', '')" class="absolute right-11 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
+                                <button type="button" wire:click="$set('search', '')" class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
                                 </button>
                             @endif
-                            
-                            <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                </svg>
-                            </button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
+             <div class="overflow-x-auto">
                 @if($users->count() > 0)
                 <table class="w-full min-w-full">
-                    <thead class="bg-[#fafafa] border-b border-gray-100">
+                    <thead class="bg-slate-50/60 border-b border-slate-100">
                         <tr>
-                            <th class="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">User</th>
-                            <th class="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">Role</th>
-                            <th class="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">Joined</th>
-                            <th class="px-6 py-4 text-right text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">Action</th>
+                            <th class="px-6 py-3.5 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">User</th>
+                            <th class="px-6 py-3.5 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Role</th>
+                            <th class="px-6 py-3.5 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Joined</th>
+                            <th class="px-6 py-3.5 text-right text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Action</th>
                         </tr>
                     </thead>
 

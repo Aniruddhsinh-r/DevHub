@@ -35,12 +35,13 @@ new class extends Component
 ?>
 
 <div>
+    <!-- Header Section (Dark Minimalist Sanctuary) -->
     <header class="w-full bg-[#3b3f44] flex items-center justify-center px-4 md:px-10 py-12 border-b border-white/5">
         <div class="max-w-5xl w-full flex flex-col-reverse md:flex-row items-center justify-between gap-8">
 
             <div class="w-full md:w-[55%] text-center md:text-left">
                 <div class="inline-block px-3 py-1 mb-6 text-[9px] font-bold tracking-[0.2em] uppercase bg-white/10 text-gray-300 border border-white/10 rounded backdrop-blur-sm">
-                    Editorial Collection 2026
+                    Open Knowledge Platform
                 </div>
 
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter"> WRITE. READ.<br>
@@ -76,6 +77,58 @@ new class extends Component
         </div>
     </header>
 
+    <section class="m-10">
+        <div class="w-full bg-[#e7e8ea] border border-[#e8e8e3] rounded-[2rem] p-6 md:p-10 shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <div class="space-y-2 md:pr-6 md:border-r border-[#e8e8e3]">
+                    <span class="text-[9px] font-bold tracking-[0.2em] text-gray-500 uppercase font-mono">// Platform Hub</span>
+                    <h2 class="text-2xl font-black text-gray-800 tracking-tight">The Ecosystem</h2>
+                    <p class="text-sm text-gray-600 font-light leading-relaxed">
+                        Welcome to your collaborative workspace. Discover the core actions making this space a productive community-driven sanctuary.
+                    </p>
+                </div>
+
+                <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-white text-gray-700 rounded-xl shrink-0 shadow-sm border border-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-800">Publish & Read Articles</h4>
+                            <p class="text-xs text-gray-600 font-light mt-0.5 leading-relaxed">Broadcast your own insights to the network or dive deep into stories published across the entire ecosystem.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-white text-gray-700 rounded-xl shrink-0 shadow-sm border border-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-800">Profiles & Following</h4>
+                            <p class="text-xs text-gray-600 font-light mt-0.5 leading-relaxed">Explore structured developer profiles, view custom dashboards, and follow creators to build your clean home feed.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 sm:col-span-2">
+                        <div class="p-3 bg-white text-gray-700 rounded-xl shrink-0 shadow-sm border border-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-800">Like & Bookmark Content</h4>
+                            <p class="text-xs text-gray-600 font-light mt-0.5 leading-relaxed">Show appreciation by dropping likes on high-value resources, and save critical code references directly into your persistent bookmarks pool.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     @if($this->articles->count() > 0)
         <div class="grid grid-cols-1 mx-4 md:grid-cols-2 xl:grid-cols-3 gap-8 my-10">
             @foreach($this->articles as $article)
@@ -89,7 +142,6 @@ new class extends Component
             </svg>
 
             <h3 class="text-md font-black text-gray-700">No Articles Yet</h3>
-
             <p class="text-sm text-gray-500 mt-1 max-w-xs">We have not published any articles yet. Please create one!</p>
 
             <div class="mt-5">
@@ -105,4 +157,3 @@ new class extends Component
         </div>
     @endif
 </div>
-

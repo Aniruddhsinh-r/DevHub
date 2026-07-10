@@ -5,7 +5,7 @@
                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Editor Workspace</p>
             </div>
 
-            <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="bg-[#c6caca] rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+            <div x-data="{ status: '{{ old('status', $article->status ?? 'draft') }}' }" class="bg-[#e0e1e2] rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 <form wire:submit.prevent="{{ $article->exists ? 'update' : 'store' }}" class="p-8 md:p-10 space-y-6"
                     enctype="multipart/form-data">
                     @csrf
@@ -61,16 +61,13 @@
 
                     <x-form.field name="body" type="textarea" label="Story Body" :value="$article->body" placeholder="Start your story..."></x-form.field>
 
-                    <div x-data="{
-                        imagePreview: '{{ $article->cover_path ? asset('storage/' . $article->cover_path) : '' }}',
-                        fileChosen(event) {
+                    <div x-data="{ imagePreview: '{{ $article->cover_path ? asset('storage/' . $article->cover_path) : '' }}', fileChosen(event) {
                             const file = event.target.files[0];
                             if (file) {
                                 this.imagePreview = URL.createObjectURL(file);
                             }
                         }
                     }" class="space-y-4">
-
                         @if ($article->exists)
                             <template x-if="imagePreview">
                                 <div class="mb-2">
