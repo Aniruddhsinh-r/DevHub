@@ -49,7 +49,6 @@ new class extends Component
     <div class="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8" style="min-height: calc(100vh - 65px);">
         <div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-5 rounded-3xl overflow-hidden shadow-xl shadow-gray-300/40 bg-white ring-1 ring-gray-900/5">
 
-            {{-- Left: decorative panel describing real site capabilities --}}
             <div class="hidden lg:flex lg:col-span-2 flex-col justify-between bg-gray-900 px-10 py-12 relative overflow-hidden">
                 <div class="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-gray-700/30 blur-3xl"></div>
                 <div class="absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-gray-700/20 blur-3xl"></div>
