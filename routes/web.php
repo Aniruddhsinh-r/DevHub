@@ -41,22 +41,22 @@ Route::middleware(['auth','author'])->group(function () {
     Route::livewire('/profile/followings/{user}', 'livewirecomponent.profile.followings')->name('followings');
 });
 
-Route::middleware(['auth','admin'])->group(function () {
-    Route::livewire('/admin/dashboard', 'livewirecomponent.admin.dashboard')->name('admin.dashboard');
-    Route::livewire('/admin/users', 'livewirecomponent.admin.users')->name('admin.users');
-    Route::livewire('/admin/users/{user}', 'livewirecomponent.admin.users-profile')->name('admin.show.user');
-    Route::livewire('/admin/user/{user}/followers', 'livewirecomponent.admin.admin-followers')->name('user.followers');
-    Route::livewire('/admin/user/create', 'livewirecomponent.admin.create-user')->name('admin.users.create');
-    Route::livewire('/admin/recover-users', 'livewirecomponent.admin.deleted-users')->name('admin.deleted.users');
-    Route::livewire('/admin/users/edit/{user}', 'livewirecomponent.admin.user-edit')->name('admin.edit.user');
-    Route::livewire('/admin/invitations', 'livewirecomponent.admin.invitations')->name('admin.invitations');
-    Route::livewire('/admin/categories', 'livewirecomponent.admin.category-list')->name('admin.categories');
-    Route::livewire('/admin/articles/create', 'livewirecomponent.admin.create-articles')->name('admin.articles.create');
-    Route::livewire('/admin/articles', 'livewirecomponent.admin.article-list')->name('admin.articles');
-    Route::livewire('/admin/articles/drafts', 'livewirecomponent.admin.admin-drafts')->name('admin.drafts');
-    Route::livewire('/admin/article/{article}/update', 'livewirecomponent.admin.admin-article-update')->name('admin.articles.edit');
-    Route::livewire('/admin/articles/{article}', 'livewirecomponent.admin.show-article')->name('admin.article.show');
-    Route::livewire('/admin/articles/{user}/published', 'livewirecomponent.admin.user-articles')->name('admin.user.published');
-    Route::livewire('/admin/profile', 'livewirecomponent.admin.admin-profile')->name('admin.profile');
-    Route::livewire('/admin/profile/edit', 'livewirecomponent.admin.admin-profile-edit')->name('admin-profile.edit');
-});
+// Route::middleware(['auth','admin'])->group(function () {
+//     Route::livewire('/admin/dashboard', 'livewirecomponent.admin.dashboard')->name('admin.dashboard');
+//     Route::livewire('/admin/users', 'livewirecomponent.admin.users')->name('admin.users');
+//     Route::livewire('/admin/users/{user}', 'livewirecomponent.admin.users-profile')->name('admin.show.user');
+//     Route::livewire('/admin/user/{user}/followers', 'livewirecomponent.admin.admin-followers')->name('user.followers');
+//     Route::livewire('/admin/user/create', 'livewirecomponent.admin.create-user')->name('admin.users.create');
+//     Route::livewire('/admin/recover-users', 'livewirecomponent.admin.deleted-users')->name('admin.deleted.users');
+//     Route::livewire('/admin/users/edit/{user}', 'livewirecomponent.admin.user-edit')->name('admin.edit.user');
+//     Route::livewire('/admin/invitations', 'livewirecomponent.admin.invitations')->name('admin.invitations');
+//     Route::livewire('/admin/categories', 'livewirecomponent.admin.category-list')->name('admin.categories');
+//     Route::livewire('/admin/articles/create', 'livewirecomponent.admin.create-articles')->name('admin.articles.create');
+//     Route::livewire('/admin/articles', 'livewirecomponent.admin.article-list')->name('admin.articles');
+//     Route::livewire('/admin/articles/drafts', 'livewirecomponent.admin.admin-drafts')->name('admin.drafts');
+//     Route::livewire('/admin/article/{article}/update', 'livewirecomponent.admin.admin-article-update')->name('admin.articles.edit');
+//     Route::livewire('/admin/articles/{article}', 'livewirecomponent.admin.show-article')->name('admin.article.show');
+//     Route::livewire('/admin/articles/{user}/published', 'livewirecomponent.admin.user-articles')->name('admin.user.published');
+//     Route::livewire('/admin/profile', 'livewirecomponent.admin.admin-profile')->name('admin.profile');
+//     Route::livewire('/admin/profile/edit', 'livewirecomponent.admin.admin-profile-edit')->name('admin-profile.edit');
+// });

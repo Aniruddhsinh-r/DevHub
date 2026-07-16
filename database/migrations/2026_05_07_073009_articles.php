@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->unique(['slug', 'deleted_at']);
-            $table->string('excerpt'); 
+            $table->string('excerpt');
             $table->longText('body');
             $table->enum('status', ['draft', 'scheduled', 'published'])->default('draft');
             $table->timestamp('duration')->nullable();
