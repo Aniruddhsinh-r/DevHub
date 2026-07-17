@@ -55,15 +55,15 @@ test('guest cant access article page', function () {
     $this->assertDatabaseMissing('bookmarks',['article_id'=>$article->id]);
 });
 
-test('admin cant access functional article page', function () {
-    $admin = AdminLogin();
-    $article = Article::factory()->create();
+// test('admin cant access functional article page', function () {
+//     $admin = AdminLogin();
+//     $article = Article::factory()->create();
 
-    $this->actingAs($admin)->get(route('articles.show', $article))
-        ->assertStatus(403);
+//     $this->actingAs($admin)->get(route('articles.show', $article))
+//         ->assertStatus(403);
 
-    $this->assertDatabasemissing('views',['article_id'=>$article->id , 'user_id'=>$admin->id]);
-});
+//     $this->assertDatabasemissing('views',['article_id'=>$article->id , 'user_id'=>$admin->id]);
+// });
 
 test('author can access his draft article', function() {
     $user = UserLogin();

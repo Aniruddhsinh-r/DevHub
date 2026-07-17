@@ -1,49 +1,61 @@
 <?php
 
-namespace App\Filament\Resources\Articles\Tables;
+namespace App\Filament\Resources\Articles\RelationManagers;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
-use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ArticlesTable
+class CommentsRelationManager extends RelationManager
 {
-    public static function configure(Table $table): Table
+    protected static string $relationship = 'comments';
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->required(),
+                Select::make('parent_id')
+                    ->relationship('parent', 'id')
+                    ->default(null),
+                Textarea::make('body')
+                    ->required()
+                    ->columnSpanFull(),
+                DateTimePicker::make('edited_at'),
+            ]);
+    }
+
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('body')
             ->columns([
                 TextColumn::make('user.name')
                     ->searchable(),
-                TextColumn::make('category_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('title')
+                TextColumn::make('parent.id')
                     ->searchable(),
-                TextColumn::make('slug')
+                TextColumn::make('body')
                     ->searchable(),
-                TextColumn::make('excerpt')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('status')
-                    ->badge(),
-                TextColumn::make('duration')
+                TextColumn::make('edited_at')
                     ->dateTime()
-                    ->sortable(),
-                TextColumn::make('published_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('view_count')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('cover_path')
-                    ->searchable()
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -62,9 +74,10 @@ class ArticlesTable
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
+                ForceDeleteAction::make(),
+                RestoreAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -72,6 +85,10 @@ class ArticlesTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(fn (Builder $query) => $query
+                ->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ]));
     }
 }

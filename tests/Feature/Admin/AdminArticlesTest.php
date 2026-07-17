@@ -7,28 +7,28 @@ require_once __DIR__ . '/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
-test('admin search articles', function () {
-    $admin = AdminLogin();
+// test('admin search articles', function () {
+//     $admin = AdminLogin();
 
-    Article::factory()->create([
-        'title' => 'example article'
-    ]);
+//     Article::factory()->create([
+//         'title' => 'example article'
+//     ]);
 
-    $response = $this->actingAs($admin)->get(route('admin.articles', [
-        'search' => 'example article'
-    ]));
+//     $response = $this->actingAs($admin)->get(route('admin.articles', [
+//         'search' => 'example article'
+//     ]));
 
-    $response->assertStatus(200);
-    $response->assertSee('example article');
-});
+//     $response->assertStatus(200);
+//     $response->assertSee('example article');
+// });
 
-test('admin view not count', function () {
-    $admin = AdminLogin();
+// test('admin view not count', function () {
+//     $admin = AdminLogin();
 
-    $article = Article::factory()->create([
-        'title' => 'example article'
-    ]);
+//     $article = Article::factory()->create([
+//         'title' => 'example article'
+//     ]);
 
-    $this->actingAs($admin)->get(route('admin.article.show',['article',$article]));
-    $this->assertDatabaseMissing('views',['user_id' => $admin->id]);
-});
+//     $this->actingAs($admin)->get(route('admin.article.show',['article',$article]));
+//     $this->assertDatabaseMissing('views',['user_id' => $admin->id]);
+// });

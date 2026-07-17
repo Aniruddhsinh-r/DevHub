@@ -47,7 +47,7 @@ class ArticleForm
                 DateTimePicker::make('duration')
                     ->visible(fn ($get) => $get('status') === ArticleStatus::SCHEDULED)
                     ->required(fn ($get) => $get('status') === ArticleStatus::SCHEDULED),
-                DateTimePicker::make('published_at')    
+                DateTimePicker::make('published_at')
                     ->visible(fn ($get) => $get('status') === ArticleStatus::PUBLISHED)
                     ->disabled()
                     ->dehydrated(),
@@ -57,7 +57,7 @@ class ArticleForm
                     ->default(0),
                 FileUpload::make('cover_path')
                     ->disk('s3')
-                    ->directory('form-attachments')
+                    ->directory('articleCovers')
                     ->visibility('public')
             ]);
     }

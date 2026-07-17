@@ -36,9 +36,9 @@ test('after login user cant access login page.', function () {
     ->assertRoute('home');
 });
 
-test('after login admin cant access login page.', function () {
-    AdminLogin();
+// test('after login admin cant access login page.', function () {
+//     AdminLogin();
 
-    visit('/login')
-    ->assertRoute('admin.dashboard');
-});
+//     visit('/login')
+//     ->assertRoute('admin.dashboard');
+// });

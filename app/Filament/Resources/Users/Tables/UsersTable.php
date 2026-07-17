@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Users\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
@@ -29,13 +30,6 @@ class UsersTable
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
-                TextColumn::make('two_factor_secret')
-                    ->searchable(),
-                TextColumn::make('last_seen_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('avatar')
-                    ->searchable(),
                 TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -55,6 +49,7 @@ class UsersTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

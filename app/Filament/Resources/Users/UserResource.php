@@ -11,6 +11,9 @@ use App\Filament\Resources\Users\Schemas\UserInfolist;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
 use BackedEnum;
+use Filament\Resources\RelationManagers\RelationGroup;
+use App\Filament\Resources\Articles\RelationManagers\CommentsRelationManager;
+use App\Filament\Resources\Users\RelationManagers\ArticlesRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,17 +21,31 @@ use Filament\Tables\Table;
 use Filament\Resources\Pages\Page;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Pages\Enums\SubNavigationPosition;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
-    
+
     protected static ?string $model = User::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'user';
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'User' => $record->name,
+            'Email' => $record->email,
+        ];
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -48,7 +65,12 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationGroup::make('Articles', [
+                ArticlesRelationManager::class,
+            ]),
+            RelationGroup::make('Comments', [
+                CommentsRelationManager::class,
+            ]),
         ];
     }
 

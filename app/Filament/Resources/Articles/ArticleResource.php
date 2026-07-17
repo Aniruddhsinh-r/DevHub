@@ -11,6 +11,7 @@ use App\Filament\Resources\Articles\Schemas\ArticleInfolist;
 use App\Filament\Resources\Articles\Tables\ArticlesTable;
 use App\Models\Article;
 use BackedEnum;
+use App\Filament\Resources\Articles\RelationManagers\CommentsRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -44,7 +45,7 @@ class ArticleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CommentsRelationManager::class,
         ];
     }
 
