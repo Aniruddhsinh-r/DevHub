@@ -11,6 +11,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
+use App\Enums\ArticleStatus;
 use Filament\Tables\Table;
 
 class ArticlesTable
@@ -32,7 +33,12 @@ class ArticlesTable
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('status')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn (ArticleStatus $state): string => match ($state) {
+                        ArticleStatus::DRAFT => 'warning',
+                        ArticleStatus::PUBLISHED => 'success',
+                        ArticleStatus::SCHEDULED => 'gray',
+                    }),
                 TextColumn::make('duration')
                     ->dateTime()
                     ->sortable(),

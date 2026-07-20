@@ -1,0 +1,154 @@
+<?php
+
+namespace App\Filament\Resources\Invitations;
+
+use App\Filament\Resources\Invitations\Pages\ManageInvitations;
+use App\Models\Invitation;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Notifications\Notification;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Actions\Action;
+use App\Models\User;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvitationMail;
+use App\Events\UserCreate;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+class InvitationResource extends Resource
+{
+    protected static ?string $model = Invitation::class;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'email';
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextInput::make('email')
+                    ->label('Email address')
+                    ->email()
+                    ->required(),
+            ]);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextEntry::make('email')
+                    ->label('Email address'),
+                TextEntry::make('status')
+                    ->badge(),
+                TextEntry::make('expires_at')
+                    ->dateTime()
+                    ->placeholder('-'),
+                TextEntry::make('created_at')
+                    ->dateTime()
+                    ->placeholder('-'),
+                TextEntry::make('updated_at')
+                    ->dateTime()
+                    ->placeholder('-'),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->recordTitleAttribute('email')
+            ->columns([
+                TextColumn::make('email')
+                    ->label('Email address')
+                    ->searchable(),
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'accepted' => 'success',
+                        'expired' => 'danger',
+                        default => 'gray',
+                    }),
+                TextColumn::make('expires_at')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                ViewAction::make(),
+                Action::make('resend')
+                    ->label('Resend')
+                    ->icon('heroicon-o-paper-airplane')
+                    ->color('warning')
+                    ->visible(fn (Invitation $record) => $record->status !== 'accepted')
+                    ->action(function ($record) {
+                        $invitation = Invitation::findOrFail($record->id);
+
+                        $exist = User::where('email',$invitation->email)->first();
+                      
+                        if($exist) {
+                            Notification::make()->title("This email is already registered.")->warning()->send();
+                            return;
+                        }
+                        if ($invitation->status === 'accepted') {
+                            Notification::make()->title("Unable to send invitation.")->success()->send();
+                            return;
+                        }
+                        if ($invitation->expires_at >= now()) {
+                            $remaining = $invitation->expires_at->diffForHumans(null, true);
+                            Notification::make()->title("Please wait {$remaining} before resending.")->danger()->send();
+                            return;
+                        }
+
+                        $invitation->update([
+                            'status' => 'pending',
+                            'expires_at' => now()->addMinutes(30)
+                        ]);
+
+                        $message = URL::temporarySignedRoute('invitation',
+                            now()->addMinutes(30),
+                            ['email' => strtolower($invitation->email)]
+                        );
+
+                        Mail::to($invitation->email)->queue(new InvitationMail($message));
+                        UserCreate::dispatch();
+                        Notification::make()->title('Invitation resent successfully.')->success()->persistent()->send();
+                }),
+                DeleteAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ManageInvitations::route('/'),
+        ];
+    }
+}

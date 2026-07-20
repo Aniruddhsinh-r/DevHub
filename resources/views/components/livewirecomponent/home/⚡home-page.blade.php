@@ -8,6 +8,7 @@ use App\Enums\ArticleStatus;
 use App\Events\ArticleCreate;
 use Livewire\Attributes\Reactive;
 use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Notification;
 
 new class extends Component
 {
@@ -15,7 +16,8 @@ new class extends Component
     public function loadArticles()
     {
         if (Auth::user()?->hasRole([UserRole::SUPERADMIN,UserRole::ADMIN])) {
-            return to_route('admin.dashboard');
+            Notification::make()->title('You are already signed in.')->body('This invitation link is only available to guests.')->warning()->send();
+            return redirect('/admin');
         }
         $this->articles = Article::with(['user','category'])->where('status',ArticleStatus::PUBLISHED)->latest()->take(3)->get();
     }

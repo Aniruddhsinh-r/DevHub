@@ -13,7 +13,7 @@ use Livewire\Attributes\Sensitive;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 
-new #[Layout('layouts::dashboard')] class extends Component
+new #[Layout('filament-panels::components.layout.index')] class extends Component
 {
     #[Validate]
     public $email = '';

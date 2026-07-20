@@ -49,9 +49,9 @@ new #[Layout('layouts::dashboard')] class extends Component
         $deleted = User::onlyTrashed()->where('email',$email)->first();
         if($deleted) {
             $this->addError('email', 'This email is blocked.');
-            $this->dispatch('open-recovery', 
-                id: $deleted->id, 
-                email: $deleted->email, 
+            $this->dispatch('open-recovery',
+                id: $deleted->id,
+                email: $deleted->email,
                 type: 'User'
             );
             return;
@@ -176,7 +176,7 @@ new #[Layout('layouts::dashboard')] class extends Component
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                             <input type="text" wire:model.live="search" value="{{ request('search') }}" placeholder="Search users..." class="w-full h-10 rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-9 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 focus:bg-white transition">
- 
+
                             @if ($search)
                                 <button type="button" wire:click="$set('search', '')" class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-black hover:text-white text-gray-600 flex items-center justify-center transition-all duration-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
