@@ -9,6 +9,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Actions\ForceDeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use App\Enums\ArticleStatus;
@@ -69,13 +70,14 @@ class ArticlesTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->successNotificationTitle('Article edited successfully.'),
+                DeleteAction::make()->successNotificationTitle('Article deleted successfully.'),
+                ForceDeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
+                    DeleteBulkAction::make()->successNotificationTitle('Articles deleted successfully.'),
+                    ForceDeleteBulkAction::make()->successNotificationTitle('Articles permanently deleted.'),
                     RestoreBulkAction::make(),
                 ]),
             ]);

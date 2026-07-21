@@ -27,6 +27,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+
     protected function casts(): array
     {
         return [
@@ -39,6 +40,24 @@ class User extends Authenticatable
 
     protected static function booted()
     {
+        static::deleting(function (User $user) {
+            if ($user->isForceDeleting()) {
+                $user->articles()->withTrashed()->forceDelete();
+                $user->likes()->forceDelete();
+            } else {
+                $user->invitations()->delete();
+                $user->views()->delete();
+                $user->comments()->delete();
+                $user->bookmarks()->delete();
+                $user->articles()->delete();
+                $user->likes()->delete();
+            }
+        });
+
+        static::restored(function (User $user) {
+            $user->articles()->onlyTrashed()->restore();
+        });
+
         static::creating(function ($user) {
             $user->uuid = Str::uuid();
         });
@@ -58,13 +77,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
     }
+    
     public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
     }
+
     public function views(): HasMany
     {
-        return $this->hasMany(View::class); // Make sure you have a View model
+        return $this->hasMany(View::class);
     }
 
     // 2. Comments Relationship
@@ -83,6 +104,11 @@ class User extends Authenticatable
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class, 'email','emailc');
     }
 
     public function bookmarkedArticles(): BelongsToMany

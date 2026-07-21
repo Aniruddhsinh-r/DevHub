@@ -22,7 +22,7 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -33,7 +33,8 @@ class CategoryResource extends Resource
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('slug')
-                    ->required(),
+                    ->required()
+                    ->unique(Category::class, 'slug', ignoreRecord: true),
             ]);
     }
 
@@ -75,12 +76,12 @@ class CategoryResource extends Resource
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->successNotificationTitle('Category edited successfully.'),
+                DeleteAction::make()->successNotificationTitle('Category deleted successfully.'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->successNotificationTitle('Categorys permanently deleted.'),
                 ]),
             ]);
     }

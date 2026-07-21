@@ -29,9 +29,21 @@ class Article extends Model
         'published_at'
     ];
 
-    /**
-     * Relationship: An article belongs to a User (Author)
-     */
+    protected static function booted()
+    {
+        static::deleting(function (Article $article) {
+            if ($article->isForceDeleting()) {
+                $article->likes()->delete();
+                $article->views()->delete();
+                $article->comments()->delete();
+                $article->bookmarks()->detach();
+            } else {
+                $article->comments()->delete();
+                $article->bookmarks()->detach();
+            }
+        });
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';

@@ -17,8 +17,8 @@ class EditUser extends EditRecord
     {
         return [
             ViewAction::make(),
-            DeleteAction::make(),
-            ForceDeleteAction::make(),
+            DeleteAction::make()->successNotificationTitle('user deleted successfully.'),
+            ForceDeleteAction::make()->successNotificationTitle('users permanently deleted.'),
             RestoreAction::make(),
         ];
     }

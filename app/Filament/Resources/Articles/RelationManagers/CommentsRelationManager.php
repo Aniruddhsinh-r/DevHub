@@ -40,7 +40,7 @@ class CommentsRelationManager extends RelationManager
                     ->columnSpanFull(),
                 DateTimePicker::make('edited_at'),
             ]);
-    }
+    } 
 
     public function table(Table $table): Table
     {
@@ -75,8 +75,8 @@ class CommentsRelationManager extends RelationManager
             ])
             ->recordActions([
                 EditAction::make(),
-                DeleteAction::make(),
-                ForceDeleteAction::make(),
+                DeleteAction::make()->successNotificationTitle('Comment deleted successfully.'),
+                ForceDeleteAction::make()->successNotificationTitle('Comment permanently deleted.'),
                 RestoreAction::make(),
             ])
             ->toolbarActions([

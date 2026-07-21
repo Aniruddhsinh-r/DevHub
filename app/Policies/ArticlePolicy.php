@@ -49,10 +49,12 @@ class ArticlePolicy
     {
         return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED;
     }
+
     public function view(User $user, Article $article): bool
     {
-        return $article->status === ArticleStatus::PUBLISHED || $article->user_id === $user->id;
+        return $user->hasRole(UserRole::ADMIN) || $article->status === ArticleStatus::PUBLISHED || $article->user_id === $user->id;
     }
+    
     public function bookmark(User $user, Article $article): bool
     {
         return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED;

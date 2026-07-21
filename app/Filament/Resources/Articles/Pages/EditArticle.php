@@ -19,8 +19,8 @@ class EditArticle extends EditRecord
     {
         return [
             ViewAction::make(),
-            DeleteAction::make(),
-            ForceDeleteAction::make(),
+            DeleteAction::make()->successNotificationTitle('Article deleted successfully.'),
+            ForceDeleteAction::make()->successNotificationTitle('Article permanently deleted.'),
             RestoreAction::make(),
         ];
     }

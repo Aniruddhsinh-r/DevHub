@@ -13,6 +13,8 @@ use App\Models\User;
 use BackedEnum;
 use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\Articles\RelationManagers\CommentsRelationManager;
+use App\Filament\Resources\Users\RelationManagers\FollowersRelationManager;
+use App\Filament\Resources\Users\RelationManagers\FollowingRelationManager;
 use App\Filament\Resources\Users\RelationManagers\ArticlesRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -30,7 +32,12 @@ class UserResource extends Resource
 
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -70,6 +77,12 @@ class UserResource extends Resource
             ]),
             RelationGroup::make('Comments', [
                 CommentsRelationManager::class,
+            ]),
+            RelationGroup::make('Followers', [
+                FollowersRelationManager::class,
+            ]),
+            RelationGroup::make('Followers', [
+                FollowingRelationManager::class,
             ]),
         ];
     }

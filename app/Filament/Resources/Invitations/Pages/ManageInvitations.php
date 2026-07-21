@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\Invitation;
 use App\Events\UserCreate;
 use App\Mail\InvitationMail;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -69,6 +68,9 @@ class ManageInvitations extends ManageRecords
                     
                     $action->halt();
                     return;
+                } else {
+                    $exist->update(['status'=>'pending', 'expires_at' => now()->addMinutes(30)]);
+                    Notification::make()->title("Invitation resend successfully.")->success()->send();
                 }
             })
             ->after(function(array $data) {
@@ -80,7 +82,6 @@ class ManageInvitations extends ManageRecords
 
                 Mail::to($email)->queue(new InvitationMail($message));
                 UserCreate::dispatch();
-                Notification::make()->title('Invite sent successfully.')->success()->send();
             }),
         ];
     }

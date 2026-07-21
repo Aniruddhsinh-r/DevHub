@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -48,14 +49,15 @@ class UsersTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->successNotificationTitle('user edited successfully.'),
+                DeleteAction::make()->successNotificationTitle('user deleted delete.'),
+                ForceDeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
+                    DeleteBulkAction::make()->successNotificationTitle('user deleted successfully.'),
+                    ForceDeleteBulkAction::make()->successNotificationTitle('users permanently deleted.'),
+                    RestoreBulkAction::make()->successNotificationTitle('user restore successfully.'),
                 ]),
             ]);
     }

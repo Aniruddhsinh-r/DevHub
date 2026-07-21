@@ -27,6 +27,7 @@ class ListArticles extends ListRecords
             'all' => Tab::make('all')->badge(Article::count()),
             'published' => Tab::make('published')->badge(Article::query()->where('status', ArticleStatus::PUBLISHED)->count())->modifyQueryUsing(fn (Builder $query) => $query->where('status', ArticleStatus::PUBLISHED)),
             'draft' => Tab::make('drafts')->badge(Article::query()->where('status', ArticleStatus::DRAFT)->count())->modifyQueryUsing(fn (Builder $query) => $query->where('status', ArticleStatus::DRAFT)),
+            'scheduled' => Tab::make('scheduled')->badge(Article::query()->where('status', ArticleStatus::SCHEDULED)->count())->modifyQueryUsing(fn (Builder $query) => $query->where('status', ArticleStatus::SCHEDULED)),
         ];
     }
 }

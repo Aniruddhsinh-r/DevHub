@@ -24,15 +24,18 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\InvitationMail;
 use App\Events\UserCreate;
 use Filament\Tables\Columns\TextColumn;
+use UnitEnum;
 use Filament\Tables\Table;
 
 class InvitationResource extends Resource
 {
     protected static ?string $model = Invitation::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelopeOpen;
 
     protected static ?string $recordTitleAttribute = 'email';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Invites';
 
     public static function form(Schema $schema): Schema
     {
@@ -95,7 +98,7 @@ class InvitationResource extends Resource
             ])
             ->filters([
                 //
-            ])
+            ]) 
             ->recordActions([
                 ViewAction::make(),
                 Action::make('resend')
@@ -136,11 +139,11 @@ class InvitationResource extends Resource
                         UserCreate::dispatch();
                         Notification::make()->title('Invitation resent successfully.')->success()->persistent()->send();
                 }),
-                DeleteAction::make(),
+                DeleteAction::make()->successNotificationTitle('Invitation deleted successfully.'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->successNotificationTitle('Invitation deleted successfully.'),
                 ]),
             ]);
     }

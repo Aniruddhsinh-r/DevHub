@@ -11,6 +11,7 @@ use App\Filament\Resources\Articles\Schemas\ArticleInfolist;
 use App\Filament\Resources\Articles\Tables\ArticlesTable;
 use App\Models\Article;
 use BackedEnum;
+use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\Articles\RelationManagers\CommentsRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -23,15 +24,25 @@ class ArticleResource extends Resource
 {
     protected static ?string $model = Article::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'The number of articles';
+    }
 
     public static function form(Schema $schema): Schema
     {
         return ArticleForm::configure($schema);
     }
-
+    
     public static function infolist(Schema $schema): Schema
     {
         return ArticleInfolist::configure($schema);
