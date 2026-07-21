@@ -50,7 +50,7 @@ class UsersTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make()->successNotificationTitle('user edited successfully.'),
-                DeleteAction::make()->successNotificationTitle('user deleted delete.'),
+                DeleteAction::make()->successNotificationTitle('user deleted.'),
                 ForceDeleteAction::make(),
             ])
             ->toolbarActions([

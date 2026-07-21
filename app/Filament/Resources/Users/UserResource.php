@@ -81,7 +81,7 @@ class UserResource extends Resource
             RelationGroup::make('Followers', [
                 FollowersRelationManager::class,
             ]),
-            RelationGroup::make('Followers', [
+            RelationGroup::make('Followings', [
                 FollowingRelationManager::class,
             ]),
         ];

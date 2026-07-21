@@ -15,9 +15,9 @@ class Like extends Model
         'article_id',
     ];
 
-    public function likes()
+    public function likes(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function article(): BelongsTo
     {

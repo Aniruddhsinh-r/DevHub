@@ -13,6 +13,7 @@ use App\Models\Article;
 use BackedEnum;
 use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\Articles\RelationManagers\CommentsRelationManager;
+use App\Filament\Resources\Articles\RelationManagers\LikesRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -42,7 +43,7 @@ class ArticleResource extends Resource
     {
         return ArticleForm::configure($schema);
     }
-    
+
     public static function infolist(Schema $schema): Schema
     {
         return ArticleInfolist::configure($schema);
@@ -56,7 +57,12 @@ class ArticleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CommentsRelationManager::class,
+            RelationGroup::make('Comments', [
+                CommentsRelationManager::class,
+            ]),
+            RelationGroup::make('Likes', [
+                LikesRelationManager::class,
+            ])
         ];
     }
 
