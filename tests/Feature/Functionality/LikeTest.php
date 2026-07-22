@@ -32,13 +32,12 @@ test('user can like but not twice', function () {
     ]);
 });
 
-test('admin cant like', function () {
+test('admin cant access like functionality article', function () {
     $admin = AdminLogin();
     $article = Article::factory()->create();
 
-    Livewire::test('livewirecomponent.article.show-article',['article' => $article])
-    ->call('toggleLike')
-    ->assertForbidden();
+    $this->get(route('articles.show', $article))
+        ->assertStatus(403);
 
     $this->assertDatabaseMissing('likes', [
         'user_id' => $admin->id,

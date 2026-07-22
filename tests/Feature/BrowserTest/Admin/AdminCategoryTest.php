@@ -8,43 +8,46 @@ require_once __DIR__.'/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
-// test('Create category by admin', function () {
-//     AdminLogin();
-
-//     visit('/admin/categories')
-//     ->fill('name','Verdie Littel III')
-//     ->click('Create Category')
-//     ->assertRoute('admin.categories')
-//     ->assertSee('Verdie Littel III');
-// });
-
-// test('delete category', function () {
-//     AdminLogin();
-
-//     $category = Category::factory()->create([
-//         'name' => 'Verdie Littel III'
-//     ]);
-
-//     $page = visit('/admin/categories');
-//     $page->script('window.confirm = () => true;');
-//     $page->click('[dusk="delete-category"]');
-//     $page->click('[dusk="DeleteBTN"]')
-//     ->assertDontSee('Verdie Littel III');
-
-//     $this->assertDatabaseMissing('categories', [
-//         'name' => 'Verdie Littel III',
-//     ]);
-// });
-
-// test('guest cant access admin category page', function () {
-//     visit('/admin/categories')
-//     ->assertRoute('login');
-// });
-
-// test('Author cant access admin category page', function () {
-//     UserLogin();
-
-//     visit('/admin/categories')
-//     ->assertSee('403')
-//     ->assertSee('Forbidden');
-// });
+test('Create category by admin', function () {
+    AdminLogin();
+ 
+    visit('/admin/categories')
+        ->click('New category')
+        ->fill('#mountedActionSchema0\\.name', 'Verdie Littel III')
+        ->fill('#mountedActionSchema0\\.slug', 'verdie-littel-iii')
+        ->click('Create')
+        ->assertSee('Verdie Littel III');
+ 
+    $this->assertDatabaseHas('categories', [
+        'name' => 'Verdie Littel III',
+    ]);
+});
+ 
+test('delete category', function () {
+    AdminLogin();
+ 
+    $category = Category::factory()->create();
+ 
+    visit('/admin/categories')
+        ->assertSee($category->name)
+        ->click('Delete')
+        ->click('button[wire\:target="callMountedAction"]')
+        ->assertDontSee($category->name);
+ 
+    $this->assertDatabaseMissing('categories', [
+        'name' => $category->name,
+    ]);
+});
+ 
+test('guest cant access admin category page', function () {
+    visit('/admin/categories')
+        ->assertPathIs('/admin/login');
+});
+ 
+test('Author cant access admin category page', function () {
+    UserLogin();
+ 
+    visit('/admin/categories')
+        ->assertSee('403')
+        ->assertSee('Forbidden');
+});

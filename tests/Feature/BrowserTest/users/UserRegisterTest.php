@@ -19,10 +19,10 @@ test('Register a user.', function () {
     $email = 'roman'.time().'@gmail.com';
 
     visit(route('register.create'))
-        ->fill('name', 'Romanreigns+')
+        ->fill('name', 'Romanreigns')
         ->fill('email', $email)
         ->fill('password', 'Roman123')
-        ->click('Register')
+        ->click('Create account')
         ->assertRoute('home');
 
     $this->assertDatabaseHas('users', [
@@ -30,16 +30,16 @@ test('Register a user.', function () {
     ]);
 });
 
-// test('after login user cant access login page.', function () {
-//     UserLogin();
+test('after login user cant access login page.', function () {
+    UserLogin();
 
-//     visit('/register')
-//     ->assertRoute('home');
-// });
+    visit('/register')
+    ->assertRoute('home');
+});
 
 test('after login admin cant access login page.', function () {
     AdminLogin();
 
     visit('/login')
-    ->assertRoute('admin.dashboard');
+    ->assertPathIs('/admin');
 });

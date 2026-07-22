@@ -8,16 +8,19 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
+use App\Enums\UserRole;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password', 'two_factor_secret', 'last_seen_at', 'bio', 'avatar'])]
 #[Hidden(['password', 'remember_token', 'two_factor_secret'])]
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes, HasRoles;
@@ -27,6 +30,11 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasAnyRole([UserRole::ADMIN->value, UserRole::SUPERADMIN->value]);
+    }
 
     protected function casts(): array
     {
@@ -43,6 +51,7 @@ class User extends Authenticatable
         static::deleting(function (User $user) {
             if ($user->isForceDeleting()) {
                 $user->articles()->withTrashed()->forceDelete();
+                $user->comments()->withTrashed()->forceDelete();
                 $user->likes()->forceDelete();
             } else {
                 $user->invitations()->delete();
@@ -50,12 +59,15 @@ class User extends Authenticatable
                 $user->comments()->delete();
                 $user->bookmarks()->delete();
                 $user->articles()->delete();
+                $user->followers()->detach();
+                $user->following()->detach();
                 $user->likes()->delete();
             }
         });
 
         static::restored(function (User $user) {
             $user->articles()->onlyTrashed()->restore();
+            $user->comments()->onlyTrashed()->restore();
         });
 
         static::creating(function ($user) {
@@ -77,7 +89,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
     }
-    
+
     public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
@@ -91,7 +103,7 @@ class User extends Authenticatable
     // 2. Comments Relationship
     public function comments(): HasMany
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'user_id');
     }
 
     // 3. Bookmarks Relationship

@@ -13,6 +13,7 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use App\Enums\ArticleStatus;
+use Filament\Actions\RestoreAction;
 use Filament\Tables\Table;
 
 class ArticlesTable
@@ -73,6 +74,7 @@ class ArticlesTable
                 EditAction::make()->successNotificationTitle('Article edited successfully.'),
                 DeleteAction::make()->successNotificationTitle('Article deleted successfully.'),
                 ForceDeleteAction::make(),
+                RestoreAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

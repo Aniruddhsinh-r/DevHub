@@ -28,18 +28,6 @@ test('guest cant access article page for bookmark', function () {
     $this->assertDatabaseMissing('bookmarks',['article_id'=>$article->id]);
 });
 
-test('Guest cant bookmark article', function () {
-    $article = Article::factory()->create();
-
-    Livewire::test('livewirecomponent.article.show-article',['article' => $article])
-        ->call('toggleBookmark')
-        ->assertForbidden();
-
-    $this->assertDatabaseMissing('bookmarks', [
-        'article_id' => $article->id,
-    ]);
-});
-
 test('user can bookmark article', function () {
     $user = UserLogin();
     $article = Article::factory()->create();

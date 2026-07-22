@@ -16,55 +16,52 @@ beforeEach(function () {
     Role::firstOrCreate(['name' => UserRole::ADMIN, 'guard_name' => 'web']);
 });
 
-// test('Admin fetch soft deleted users details', function () {
-//     $user = User::factory()->create(['deleted_at'=>	"2026-07-09 12:25:56"]);
-//     AdminLogin();
-
-//     visit('/admin/recover-users')
-//         ->assertSee($user->name);
-// });
-
-// test('User cant visite soft deleted users details page', function () {
-//     UserLogin();
-
-//     visit('/admin/recover-users')
-//         ->assertSee('403')
-//         ->assertSee('Forbidden');
-// });
-
-// test('Admin restore soft deleted users.', function () {
-//     $user = User::factory()->create(['deleted_at'=>	"2026-07-09 12:25:56"]);
-//     AdminLogin();
-
-//     $page = visit('/admin/recover-users')
-//         ->assertSee($user->name)
-//         ->click('Restore');
-
-//     $page->click('[dusk="RestoreUserBTN"]')
-//         ->assertSee('User restored successfully.');
-
-//     $this->assertDatabaseHas('users', ['id' => $user->id,'deleted_at' => null]);
-// });
-
-// test('Admin send invitation to email.', function () {
-//     AdminLogin();
-
-//     visit('/admin/user/create')
-//     ->fill('email','testemail@gmail.com')
-//     ->click('Issue Invitation Link')
-//     ->assertSee('Invite sent successfully.');
-
-//     $this->assertDatabaseHas('invitations', ['email' => 'testemail@gmail.com']);
-// });
-
-// test('Admin resend invitation to email when it expire.', function () {
-//     $invite = Invitation::factory()->create(['expires_at'=>'2026-07-09 14:20:45']);
-//     AdminLogin();
-
-//     visit('/admin/invitations')
-//     ->press('Resend')
-//     ->assertSee('Invitation resent successfully.');
-
-//     $this->assertDatabaseHas('invitations', ['email' => $invite->email]);
-//     $this->assertDatabaseMissing('invitations', ['email' => $invite->email,'expires_at' => $invite->expires_at]);
-// });
+test('Admin send invitation to email.', function () {
+    AdminLogin();
+ 
+    visit('/admin/invitations')
+        ->click('New invitation')
+        ->fill('#mountedActionSchema0\\.email', 'testemail@gmail.com')
+        ->click('Create')
+        ->assertSee('testemail@gmail.com');
+ 
+    $this->assertDatabaseHas('invitations', ['email' => 'testemail@gmail.com']);
+});
+ 
+test('Admin cant send duplicate invitation for an active user', function () {
+    $user = User::factory()->create(['email' => 'testemail@gmail.com']);
+    AdminLogin();
+ 
+    visit('/admin/invitations')
+        ->click('New invitation')
+        ->fill('#mountedActionSchema0\\.email', 'testemail@gmail.com')
+        ->click('Create')
+        ->assertSee('This email is already registered to an active account.');
+});
+ 
+test('Admin resend invitation to email when it expire.', function () {
+    $invite = Invitation::factory()->create([
+        'status' => 'expired',
+        'expires_at' => now()->subMinutes(5),
+    ]);
+    AdminLogin();
+ 
+    visit('/admin/invitations')
+        ->click('Resend')
+        ->assertSee('Invitation resent successfully.');
+ 
+    $this->assertDatabaseHas('invitations', ['email' => $invite->email, 'status' => 'pending']);
+});
+ 
+test('guest cant access admin invitations page', function () {
+    visit('/admin/invitations')
+        ->assertPathIs('/admin/login');
+});
+ 
+test('Author cant access admin invitations page', function () {
+    UserLogin();
+ 
+    visit('/admin/invitations')
+        ->assertSee('403')
+        ->assertSee('Forbidden');
+});

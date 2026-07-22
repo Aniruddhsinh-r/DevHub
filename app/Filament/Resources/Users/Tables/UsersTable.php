@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreBulkAction;
@@ -49,8 +50,9 @@ class UsersTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make()->successNotificationTitle('user edited successfully.'),
+                EditAction::make()->successNotificationTitle('user edited successfully.')->hidden(fn ($record) => $record->trashed()),
                 DeleteAction::make()->successNotificationTitle('user deleted.'),
+                RestoreAction::make()->color('warning'),
                 ForceDeleteAction::make(),
             ])
             ->toolbarActions([
