@@ -7,6 +7,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Hash;
 
 class UserForm
 {
@@ -33,7 +34,17 @@ class UserForm
                     ->columnSpanFull(),
                 TextInput::make('password')
                     ->password()
-                    ->required(),
+                    ->revealable()
+                    ->minLength(8)
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->confirmed()
+                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state)),
+                TextInput::make('password_confirmation')
+                    ->password()
+                    ->revealable()
+                    ->dehydrated(false)
+                    ->required(fn (string $operation): bool => $operation === 'create'),
             ]);
     }
 }

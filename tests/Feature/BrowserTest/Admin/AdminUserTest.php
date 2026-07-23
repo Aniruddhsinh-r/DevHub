@@ -106,7 +106,7 @@ test('Admin can view author profile pages', function () {
 
     visit('/admin/users')
         ->assertSee($user->name)
-        ->press('View')
+        ->click('View')
         ->assertPathIs('/admin/users/'.$user->uuid)
     ;
 });
@@ -117,6 +117,6 @@ test('Admin can visite author profile edit page', function () {
 
     visit('/admin/users')
         ->assertSee($user->name)
-        ->press('Edit')
+        ->click('Edit')
         ->assertPathIs('/admin/users/'.$user->uuid.'/edit');
 });
