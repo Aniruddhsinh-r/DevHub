@@ -25,7 +25,7 @@ class UserForm
                     ->required(),
                 DateTimePicker::make('email_verified_at'),
                 FileUpload::make('avatar')
-                    ->disk('s3')
+                    ->disk('public')
                     ->directory('articleCovers')
                     ->visibility('public'),
                 Textarea::make('bio')

@@ -56,9 +56,10 @@ class ArticleForm
                     ->numeric()
                     ->default(0),
                 FileUpload::make('cover_path')
-                    ->disk('s3')
+                    ->disk('public')
                     ->directory('articleCovers')
                     ->visibility('public')
+                    ->image(),
             ]);
     }
 }
