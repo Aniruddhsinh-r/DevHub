@@ -20,7 +20,7 @@ class ArticleForm
     {
         return $schema
             ->components([
-                Placeholder::make('user_id')
+                Placeholder::make('Author')
                     ->content(fn ($record) => $record?->user?->name ?? auth()->user()->name)
                     ->disabled()
                     ->dehydrated(),
