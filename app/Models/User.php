@@ -120,7 +120,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function invitations()
     {
-        return $this->hasMany(Invitation::class, 'email','emailc');
+        return $this->hasMany(Invitation::class, 'email','email');
     }
 
     public function bookmarkedArticles(): BelongsToMany

@@ -16,7 +16,9 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\Hidden;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
@@ -31,10 +33,12 @@ class CategoryResource extends Resource
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->required(),
-                TextInput::make('slug')
-                    ->required()
-                    ->unique(Category::class, 'slug', ignoreRecord: true),
+                ->required()
+                ->minLength(4)
+                ->maxLength(20)
+                ->unique(ignoreRecord: true),
+                Hidden::make('slug')
+            ->dehydrateStateUsing(fn ($get) => Str::slug($get('name'))),
             ]);
     }
 
@@ -83,7 +87,7 @@ class CategoryResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make()->successNotificationTitle('Categorys permanently deleted.'),
                 ]),
-            ]);
+            ])->searchPlaceholder('Search categorys');
     }
 
     public static function getPages(): array

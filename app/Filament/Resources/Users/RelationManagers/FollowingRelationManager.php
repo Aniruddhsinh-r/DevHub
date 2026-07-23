@@ -32,6 +32,6 @@ class FollowingRelationManager extends RelationManager
                 BulkActionGroup::make([
                     DetachBulkAction::make(),
                 ]),
-            ]);
+            ])->emptyStateHeading('This author is not following anyone.');;
     }
 }

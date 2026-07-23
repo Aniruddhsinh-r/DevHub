@@ -19,10 +19,13 @@ class UserForm
                     ->label('UUID')
                     ->required(),
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->minLength(5)
+                    ->maxLength(50),
                 TextInput::make('email')
                     ->label('Email address')
                     ->email()
+                    ->maxLength(255)
                     ->required(),
                 DateTimePicker::make('email_verified_at'),
                 FileUpload::make('avatar')
@@ -36,6 +39,7 @@ class UserForm
                     ->password()
                     ->revealable()
                     ->minLength(8)
+                    ->maxLength(255)
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->confirmed()

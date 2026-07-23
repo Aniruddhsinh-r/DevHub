@@ -11,7 +11,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
 use App\Models\Article;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ArticleForm
@@ -30,15 +29,21 @@ class ArticleForm
                 TextInput::make('title')
                     ->required()
                     ->live()
+                    ->minLength(6)
+                    ->maxLength(50)
                     ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
                     ->required()
                     ->unique(Article::class, 'slug', ignoreRecord: true),
                 TextInput::make('excerpt')
-                    ->required(),
+                    ->required()
+                    ->minLength(20)
+                    ->maxLength(255),
                 Textarea::make('body')
                     ->required()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->minLength(30)
+                    ->maxLength(50000),
                 Select::make('status')
                     ->options(ArticleStatus::class)
                     ->default(ArticleStatus::DRAFT)
@@ -54,6 +59,7 @@ class ArticleForm
                 TextInput::make('view_count')
                     ->required()
                     ->numeric()
+                    ->maxValue(999)
                     ->default(0),
                 FileUpload::make('cover_path')
                     ->disk('public')

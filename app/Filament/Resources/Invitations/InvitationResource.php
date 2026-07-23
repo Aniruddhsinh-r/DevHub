@@ -145,7 +145,14 @@ class InvitationResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make()->successNotificationTitle('Invitation deleted successfully.'),
                 ]),
-            ]);
+            ])->emptyStateHeading(fn ($livewire) => match ($livewire->activeTab ?? $livewire->activityTab ?? 'all') {
+                'all'      => 'No invitations have been sent yet.',
+                'pending'  => 'No pending invitations found.',
+                'accepted' => 'No accepted invitations found.',
+                'expired'  => 'No expired invitations found.',
+                default    => 'No invitations found.',
+            })
+                ->searchPlaceholder('Search invitation');
     }
 
     public static function getPages(): array

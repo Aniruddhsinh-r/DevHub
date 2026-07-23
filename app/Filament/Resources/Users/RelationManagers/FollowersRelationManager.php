@@ -33,6 +33,6 @@ class FollowersRelationManager extends RelationManager
                 BulkActionGroup::make([
                     DetachBulkAction::make(),
                 ]),
-            ]);
+            ])->emptyStateHeading('This author has no followers yet.');
     }
 }

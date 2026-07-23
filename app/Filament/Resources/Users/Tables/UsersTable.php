@@ -12,6 +12,7 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -21,9 +22,12 @@ class UsersTable
     {
         return $table
             ->columns([
-                TextColumn::make('uuid')
-                    ->label('UUID')
-                    ->searchable(),
+                ImageColumn::make('avatar')
+                    ->label('Image')
+                    ->disk('public')
+                    ->circular()
+                    ->imageWidth(40)
+                    ->defaultImageUrl('https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png'),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('email')
@@ -61,6 +65,6 @@ class UsersTable
                     ForceDeleteBulkAction::make()->successNotificationTitle('users permanently deleted.'),
                     RestoreBulkAction::make()->successNotificationTitle('user restore successfully.'),
                 ]),
-            ]);
+            ])->searchPlaceholder('Search Users');;
     }
 }

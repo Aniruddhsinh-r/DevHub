@@ -11,6 +11,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use App\Enums\ArticleStatus;
 use Filament\Actions\RestoreAction;
@@ -22,17 +23,17 @@ class ArticlesTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->searchable(),
-                TextColumn::make('category_id')
-                    ->numeric()
-                    ->sortable(),
+                ImageColumn::make('cover_path')
+                    ->label('Image')
+                    ->disk('public')
+                    ->imageWidth(80),
                 TextColumn::make('title')
                     ->searchable(),
-                TextColumn::make('slug')
+                TextColumn::make('user.name')
                     ->searchable(),
-                TextColumn::make('excerpt')
-                    ->searchable()
+                TextColumn::make('category.name')
+                    ->numeric()
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('status')
                     ->badge()
@@ -41,18 +42,6 @@ class ArticlesTable
                         ArticleStatus::PUBLISHED => 'success',
                         ArticleStatus::SCHEDULED => 'gray',
                     }),
-                TextColumn::make('duration')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('published_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('view_count')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('cover_path')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -82,6 +71,15 @@ class ArticlesTable
                     ForceDeleteBulkAction::make()->successNotificationTitle('Articles permanently deleted.'),
                     RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])->emptyStateHeading(function ($livewire) { $activityTab = $livewire->activeTab ?? $livewire->activityTab ?? 'all';
+                    return match ($activityTab) {
+                        'all'       => 'No articles have been created yet.',
+                        'published' => 'No published articles found.',
+                        'draft'     => 'No draft articles found.',
+                        'scheduled' => 'No scheduled articles found.',
+                        default     => 'No articles found.',
+                    };
+                })
+                ->searchPlaceholder('Search articles');
     }
 }

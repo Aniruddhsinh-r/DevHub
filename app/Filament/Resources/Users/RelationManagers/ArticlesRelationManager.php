@@ -18,6 +18,6 @@ class ArticlesRelationManager extends RelationManager
         return $table
             ->headerActions([
                 CreateAction::make(),
-            ]);
+            ])->emptyStateHeading('No article has been posted by this user yet.');
     }
 }

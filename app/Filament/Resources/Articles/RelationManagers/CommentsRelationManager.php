@@ -89,6 +89,7 @@ class CommentsRelationManager extends RelationManager
             ->modifyQueryUsing(fn (Builder $query) => $query
                 ->withoutGlobalScopes([
                     SoftDeletingScope::class,
-                ]));
+                ])
+            )->emptyStateHeading('No comments to display.');
     }
 }

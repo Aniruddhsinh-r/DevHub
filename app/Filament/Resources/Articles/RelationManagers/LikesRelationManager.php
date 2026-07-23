@@ -26,6 +26,6 @@ class LikesRelationManager extends RelationManager
             ])
             ->recordActions([
                 DeleteAction::make(),
-            ]);
+            ])->emptyStateHeading('No likes to display.');
     }
 }
