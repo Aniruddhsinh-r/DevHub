@@ -29,13 +29,19 @@ class UserResource extends Resource
 {
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('id', '!=', auth()->id());
+    }
+
     protected static ?string $model = User::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getEloquentQuery()->count();
     }
 
     protected static ?string $recordTitleAttribute = 'name';
