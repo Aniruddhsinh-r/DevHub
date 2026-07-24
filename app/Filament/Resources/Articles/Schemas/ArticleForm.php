@@ -54,7 +54,7 @@ class ArticleForm
                     ->required(fn ($get) => $get('status') === ArticleStatus::SCHEDULED),
                 DateTimePicker::make('published_at')
                     ->visible(fn ($get) => $get('status') === ArticleStatus::PUBLISHED)
-                    ->disabled()
+                    ->default(now())
                     ->dehydrated(),
                 TextInput::make('view_count')
                     ->required()

@@ -24,8 +24,8 @@ class ArticleCreate implements ShouldBroadcastNow
         ];
     }
 
-    // public function broadcastAs(): string
-    // {
-    //     return 'ArticleCreate';
-    // }
+    public function broadcastAs(): string
+    {
+        return 'ArticleCreate';
+    }
 }

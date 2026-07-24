@@ -11,20 +11,19 @@ use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 use Filament\Notifications\Notification;
-use App\Events\ArticleCreate;
 
 class ListArticles extends ListRecords
 {
-    // #[On('echo:articles,ArticleCreate')]
-    // public function onArticleCreated(): void
-    // {
-    //     Notification::make()
-    //         ->title('New Article Created!')
-    //         ->success()
-    //         ->send();
+    #[On('echo:articles,ArticleCreate')]
+    public function onArticleCreated(): void
+    {
+        Notification::make()
+            ->title('New Article Created!')
+            ->success()
+            ->send();
 
-    //     $this->resetTable();
-    // }
+        $this->resetTable();
+    }
     
     protected static string $resource = ArticleResource::class;
 

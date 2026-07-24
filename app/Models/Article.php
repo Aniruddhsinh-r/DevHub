@@ -26,6 +26,7 @@ class Article extends Model
         'status',
         'cover_path',
         'duration',
+        'view_count',
         'published_at'
     ];
 
