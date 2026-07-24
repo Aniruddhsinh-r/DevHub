@@ -60,13 +60,13 @@ test('admin can edit an article', function () {
 
     $article = Article::factory()->create([
         'title' => 'old title',
-        'excerpt' => 'old excerpt',
+        'excerpt' => 'old excerpt rwgenjbk',
     ]);
 
     Livewire::test(EditArticle::class, ['record' => $article->getRouteKey()])
         ->fillForm([
             'title' => 'updated title',
-            'excerpt' => 'updated excerpt',
+            'excerpt' => 'updated excerpt erwofrnjwrf',
         ])
         ->call('save')
         ->assertHasNoFormErrors();
@@ -74,7 +74,7 @@ test('admin can edit an article', function () {
     $this->assertDatabaseHas('articles', [
         'id' => $article->id,
         'title' => 'updated title',
-        'excerpt' => 'updated excerpt',
+        'excerpt' => 'updated excerpt erwofrnjwrf',
     ]);
 });
 

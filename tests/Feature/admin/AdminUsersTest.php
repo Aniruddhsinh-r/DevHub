@@ -84,7 +84,8 @@ test('admin can edit a user', function () {
     Livewire::test(EditUser::class, ['record' => $user->getRouteKey()])
         ->fillForm([
             'name' => 'updated name',
-            'password' => 'newpassword'
+            'password' => 'newpassword',
+            'password_confirmation' => 'newpassword'
         ])
         ->call('save')
         ->assertHasNoFormErrors();

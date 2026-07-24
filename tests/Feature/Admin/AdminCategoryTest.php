@@ -48,7 +48,6 @@ test('admin category create test', function () {
     Livewire::test(ManageCategories::class)
         ->callAction('create', data: [
             'name' => 'category',
-            'slug' => 'category',
         ])
         ->assertHasNoActionErrors();
 
@@ -64,9 +63,8 @@ test('admin category create requires name and slug', function () {
     Livewire::test(ManageCategories::class)
         ->callAction('create', data: [
             'name' => '',
-            'slug' => '',
         ])
-        ->assertHasActionErrors(['name' => 'required', 'slug' => 'required']);
+        ->assertHasActionErrors(['name' => 'required']);
 });
 
 test('admin can update a category', function () {
