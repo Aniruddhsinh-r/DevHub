@@ -17,11 +17,11 @@
             <div class="mx-auto px-4 sm:px-18">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center">
-                        <a href="{{ route('home') }}" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
+                        <a href="{{ route('filament.app.pages.home') }}" class="text-2xl font-bold tracking-tighter italic">DevHub</a>
                     </div>
                     <div class="flex items-center gap-4 md:gap-8">
-                        <a href="{{ route('home') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Home</a>
-                        <a href="{{ route('articles.index') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Articles</a>
+                        <a href="{{ route('filament.app.pages.home') }}" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Home</a>
+                        <a href="/app/article" wire:navigate class="hidden md:block text-sm font-medium hover:text-gray-500 transition">Articles</a>
 
                         @auth
                             @role('author')
@@ -96,8 +96,8 @@
                 x-transition:enter="transition ease-out duration-200"
                 class="md:hidden border-b border-gray-200 bg-white/95 backdrop-blur-lg absolute left-0 right-0 top-16 shadow-lg py-4 px-6 flex flex-col gap-4 z-40"
                 style="display: none;">
-                <a href="{{ route('home') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Home</a>
-                <a href="{{ route('articles.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Articles</a>
+                <a href="{{ route('filament.app.pages.home') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Home</a>
+                <a href="/app/articles" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Articles</a>
                 @role('author')
                     <a href="{{ route('profile.index') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Profile</a>
                     <a href="{{ route('articles.create') }}" wire:navigate class="text-base font-semibold hover:text-gray-500 transition py-2 border-b border-gray-50">Create article</a>
@@ -141,7 +141,7 @@
         <div class="max-w-7xl mx-auto px-4 pt-12 sm:px-6 lg:px-8">
             <div class="flex flex-col gap-8 md:flex-row md:justify-between md:items-start">
                 <div class="space-y-4 md:w-1/3">
-                    <a href="{{ route('home') }}" wire:navigate class="text-xl font-black tracking-tight text-black flex items-center gap-2"><span>Dev<span class="text-indigo-600">Hub</span></span></a>
+                    <a href="{{ route('filament.app.pages.home') }}" wire:navigate class="text-xl font-black tracking-tight text-black flex items-center gap-2"><span>Dev<span class="text-indigo-600">Hub</span></span></a>
                     <p class="text-gray-500 text-sm max-w-sm font-medium leading-relaxed">A token-space ecosystem for developers and creators to share insights, build followings, and discover top technical content.</p>
                 </div>
 
@@ -149,7 +149,7 @@
                     <h3 class="text-xs font-semibold text-slate-400 tracking-wider uppercase">EXPLORE</h3>
                     <ul role="list" class="mt-4 space-y-3">
                         <li>
-                            <a href="{{ route('articles.index') }}" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">Latest articles</a>
+                            <a href="/app/articles" wire:navigate class="text-sm font-bold text-slate-700 hover:text-black transition-colors duration-150">Latest articles</a>
                         </li>
                         @auth
                             <li>

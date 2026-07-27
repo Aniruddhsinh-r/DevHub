@@ -18,7 +18,7 @@ new class extends Component
 
         if ($this->user->hasRole(UserRole::SUPERADMIN)) {
             session()->flash('error', 'This author does not exist.');
-            return $this->redirectRoute('home', navigate: true);
+            return $this->redirect('/app/home', navigate: true);
         }
 
         if ($this->user->id === Auth::id()) {

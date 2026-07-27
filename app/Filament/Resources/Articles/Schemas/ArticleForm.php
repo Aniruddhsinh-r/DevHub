@@ -19,12 +19,19 @@ class ArticleForm
     {
         return $schema
             ->components([
-                Placeholder::make('Author')
-                    ->content(fn ($record) => $record?->user?->name ?? auth()->user()->name)
-                    ->disabled()
-                    ->dehydrated(),
+                Select::make('user_id')
+                    ->label('Author')
+                    ->default(auth()->id())
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->disabledOn('edit')
+                    ->dehydrated()
+                    ->required(),
                 Select::make('category_id')
                     ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload()
                     ->required(),
                 TextInput::make('title')
                     ->required()
@@ -56,11 +63,6 @@ class ArticleForm
                     ->visible(fn ($get) => $get('status') === ArticleStatus::PUBLISHED)
                     ->default(now())
                     ->dehydrated(),
-                TextInput::make('view_count')
-                    ->required()
-                    ->numeric()
-                    ->maxValue(999)
-                    ->default(0),
                 FileUpload::make('cover_path')
                     ->disk('public')
                     ->directory('articleCovers')

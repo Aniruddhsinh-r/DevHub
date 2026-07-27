@@ -31,7 +31,7 @@ test('user registration test', function () {
         ->set('avatar', $file)
         ->call('register')
         ->assertHasNoErrors()
-        ->assertRedirect(route('home'));
+        ->assertRedirect(route('filament.app.pages.home'));
 
     $this->assertDatabaseHas('users', [
         'name' => 'khabibji',

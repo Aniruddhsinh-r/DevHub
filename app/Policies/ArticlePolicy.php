@@ -27,9 +27,10 @@ class ArticlePolicy
     }
 
     public function update(User $user, Article $article): bool {
-        if ($user->hasRole('superadmin') || $user->hasRole('admin')) {
+        if ($user->hasRole('superadmin') || $user->hasRole('admin') || $user->hasRole('author')) {
             return true;
         }
+
         return $user->can('article.edit') && $user->id === $article->user_id;
     }
 
@@ -54,7 +55,7 @@ class ArticlePolicy
     {
         return $user->hasRole(UserRole::ADMIN) || $article->status === ArticleStatus::PUBLISHED || $article->user_id === $user->id;
     }
-    
+
     public function bookmark(User $user, Article $article): bool
     {
         return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED;

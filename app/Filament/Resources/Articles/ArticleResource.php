@@ -20,22 +20,9 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Livewire\Attributes\On;
-use Filament\Notifications\Notification;
 
 class ArticleResource extends Resource
 {
-    #[On('echo:articles,ArticleCreate')]
-    public function onArticleCreated(): void
-    {
-        Notification::make()
-            ->title('New Article Created!')
-            ->success()
-            ->send();
-
-        $this->resetTable();
-    }
-
     protected static ?string $model = Article::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;

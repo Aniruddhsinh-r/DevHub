@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return redirect('/home');})->name('/');
-Route::livewire('/home', 'livewirecomponent.home.home-page')->name('home');
-Route::livewire('/articles', 'livewirecomponent.article.article-card')->name('articles.index');
+// Route::livewire('/home', 'livewirecomponent.home.home-page')->name('home');
+// Route::livewire('/articles', 'livewirecomponent.article.article-card')->name('articles.index');
 Route::livewire('/invitation/expire', 'livewirecomponent.pages.already-exist')->name('invite.exist');
 Route::livewire('/invitation/{email}', 'livewirecomponent.invitation')->name('invitation');
 
@@ -33,8 +33,8 @@ Route::middleware(['auth','author'])->group(function () {
     Route::livewire('/profile', 'livewirecomponent.profile.my-profile')->name('profile.index');
     Route::livewire('/profile/{user}', 'livewirecomponent.profile.profile')->name('profile.show');
     Route::livewire('/articles/myarticle', 'livewirecomponent.article.my-articles')->name('publishedarticle');
-    Route::livewire('/articles/create', 'livewirecomponent.article.create-article')->name('articles.create');
-    Route::livewire('/articles/edit/{article}', 'livewirecomponent.article.edit-article')->name('articles.edit');
+    // Route::livewire('/app/articles/create', 'livewirecomponent.article.create-article')->name('articles.create');
+    Route::livewire('/app/articles/{record}/edit', 'livewirecomponent.article.edit-article')->name('articles.edit');
     Route::livewire('/articles/{article}', 'livewirecomponent.article.show-article')->name('articles.show');
     Route::livewire('/bookmarks', 'livewirecomponent.bookmark.bookmarks')->name('show.bookmarks');
     Route::livewire('/profile/followers/{user}', 'livewirecomponent.profile.followers')->name('followers');

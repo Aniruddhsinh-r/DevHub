@@ -15,9 +15,6 @@ class UserForm
     {
         return $schema
             ->components([
-                TextInput::make('uuid')
-                    ->label('UUID')
-                    ->required(),
                 TextInput::make('name')
                     ->required()
                     ->minLength(5)
@@ -27,7 +24,6 @@ class UserForm
                     ->email()
                     ->maxLength(255)
                     ->required(),
-                DateTimePicker::make('email_verified_at'),
                 FileUpload::make('avatar')
                     ->disk('public')
                     ->directory('articleCovers')

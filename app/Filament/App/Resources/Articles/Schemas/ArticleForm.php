@@ -1,45 +1,24 @@
 <?php
 
-namespace App\Filament\Resources\Users\RelationManagers;
-
-use App\Filament\Resources\Articles\ArticleResource;
-use App\Models\Article;
+namespace App\Filament\App\Resources\Articles\Schemas;
+ 
 use App\Enums\ArticleStatus;
-use Filament\Actions\CreateAction;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
+use App\Models\Article;
 
-class ArticlesRelationManager extends RelationManager
+class ArticleForm
 {
-    protected static string $relationship = 'articles';
-
-    public function isReadOnly(): bool
+    public static function configure(Schema $schema): Schema
     {
-        return false;
-    }
-
-    protected static ?string $relatedResource = ArticleResource::class;
-
-    public function table(Table $table): Table
-    {
-        return $table
-            ->headerActions([
-                CreateAction::make()
-                    ->modalWidth('5xl')
-                    ->url('')
-                    ->mutateFormDataUsing(function (array $data): array {
-                        $data['user_id'] = $this->getOwnerRecord()->getKey();
-
-                        return $data;
-                    })
-                    ->form([
-                        Section::make('Article Details')
+        return $schema
+            ->components([
+                Section::make('Article Details')
                             ->columns(2)
                             ->schema([
                                 Select::make('category_id')
@@ -72,15 +51,13 @@ class ArticlesRelationManager extends RelationManager
                                     ->visible(fn ($get) => $get('status') === ArticleStatus::SCHEDULED)
                                     ->required(fn ($get) => $get('status') === ArticleStatus::SCHEDULED),
                             ]),
-                        Section::make('Content')
+                            Section::make('Content')
                             ->schema([
                                 Textarea::make('body')
                                     ->required()
                                     ->rows(12)
                                     ->maxLength(50000),
                             ]),
-                    ]),
-            ])
-            ->emptyStateHeading('No article has been posted by this user yet.');
+            ]);
     }
 }

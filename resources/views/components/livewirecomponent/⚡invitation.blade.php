@@ -32,7 +32,7 @@ new class extends Component
     {
         if (Auth::check()) {
             session()->flash('error', 'You are already loged in our system.');
-            return $this->redirectRoute('home', navigate: true);
+            return $this->redirect('/app/home', navigate: true);
         }
         $this->email = $request->route('email');
         $this->originalEmail = $request->route('email');
@@ -76,7 +76,7 @@ new class extends Component
 
         UserCreate::dispatch();
         session()->flash('success', 'Account created successfully.');
-        return $this->redirectRoute('home', navigate: true);
+        return $this->redirect('/app/home', navigate: true);
     }
 };
 ?>

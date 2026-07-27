@@ -77,7 +77,6 @@ class UserInfolist
                             ->prose()
                             ->columnSpanFull(),
 
-                        // BOTTOM: timestamps — full width
                         Grid::make([
                             'default' => 1,
                             'sm' => 2,

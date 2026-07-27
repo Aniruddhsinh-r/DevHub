@@ -1,4 +1,4 @@
-<x-filament-panels::page>
+<x-filament-widgets::widget>
     <x-filament::section heading="Latest Articles">
 
         @if($this->articles->isNotEmpty())
@@ -61,11 +61,8 @@
                     </div>
                 @endforeach
             </div>
-            <div class="mt-6">
-                <x-filament::pagination :paginator="$this->articles" />
-            </div>
         @else
             <x-filament::empty-state heading="No articles found" description="There are no published articles yet."/>
         @endif
     </x-filament::section>
-</x-filament-panels::page>
+</x-filament-widgets::widget>

@@ -18,7 +18,7 @@ test('User Login and logout test', function () {
     $response = $this->post(route('logout'));
     $this->assertGuest();
 
-    $response->assertRedirect(route('home'));
+    $response->assertRedirect(route('filament.app.pages.home'));
 });
 
 test('Logged in user cannot visit login form', function () {
@@ -26,7 +26,7 @@ test('Logged in user cannot visit login form', function () {
 
     $response = $this->actingAs($user)->get(route('login'));
 
-    $response->assertRedirect(route('home'));
+    $response->assertRedirect(route('filament.app.pages.home'));
 });
 
 test('Logged in user cannot visit register form', function () {
@@ -34,7 +34,7 @@ test('Logged in user cannot visit register form', function () {
 
     $response = $this->actingAs($user)->get(route('register.create'));
 
-    $response->assertRedirect(route('home'));
+    $response->assertRedirect(route('filament.app.pages.home'));
 });
 
 test('Login user cant login again', function () {
@@ -45,7 +45,7 @@ test('Login user cant login again', function () {
         'password' => '1290'
     ]);
 
-    $response->assertRedirect(route('home'));
+    $response->assertRedirect(route('filament.app.pages.home'));
 
     $this->assertAuthenticatedAs($user);
 });

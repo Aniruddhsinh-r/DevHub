@@ -22,5 +22,12 @@ class AdminSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $user->assignRole(UserRole::ADMIN);
+        $user2 = User::updateOrCreate(
+            ['email' => 'adanirudda@gmail.com'],
+            ['uuid' => Str::uuid(),
+            'name' => 'Aniruddhsinh rathod',
+            'password' => Hash::make('password'),
+        ]);
+        $user2->assignRole(UserRole::ADMIN);
     }
 }

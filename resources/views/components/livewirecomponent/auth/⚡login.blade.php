@@ -29,7 +29,7 @@ new class extends Component
 
             if ($admin) {
                 session()->flash('success', 'Welcome back, admin!');
-                return to_route('admin.dashboard');
+                return to_route('/admin');
             } else {
                 $to = $this->email;
                 $message = User::where('email',$this->email)->value('name');
@@ -37,7 +37,7 @@ new class extends Component
 
                 // Mail::to($to)->queue(new WelcomeBackMail($message, $subject));
                 session()->flash('success', 'You have logged in successfully.');
-                return $this->redirectRoute('home', navigate: true);
+                return $this->redirect('/app/home', navigate: true);
             }
         }
         $this->dispatch('live-notification', message: 'The provided credentials do not match our records.');

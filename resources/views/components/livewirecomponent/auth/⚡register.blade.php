@@ -34,7 +34,7 @@ new class extends Component
         $action->handle($values);
 
         session()->flash('success', 'Account created successfully.');
-        return $this->redirectRoute('home', navigate: true);
+        return $this->redirect('/app/home', navigate: true);
     }
 };
 ?>

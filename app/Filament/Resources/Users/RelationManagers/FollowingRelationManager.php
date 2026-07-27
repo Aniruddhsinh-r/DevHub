@@ -22,9 +22,6 @@ class FollowingRelationManager extends RelationManager
                 TextColumn::make('following.name')
                     ->searchable(),
             ])
-            ->headerActions([
-                AttachAction::make(),
-            ])
             ->recordActions([
                 DetachAction::make(),
             ])

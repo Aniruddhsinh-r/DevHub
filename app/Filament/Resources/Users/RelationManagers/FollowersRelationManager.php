@@ -23,9 +23,6 @@ class FollowersRelationManager extends RelationManager
                     ->label('User')
                     ->searchable(),
             ])
-            ->headerActions([
-                AttachAction::make(),
-            ])
             ->recordActions([
                 DetachAction::make(),
             ])

@@ -17,7 +17,7 @@ test('it login a user', function () {
         ->fill('email', 'adanirudda@gmail.com')
         ->fill('password', 'rathod1290')
         ->press('@login-btn')
-        ->assertRoute('home');
+        ->assertRoute('filament.app.pages.home');
 });
 
 test('it logout a user.', function () {
@@ -26,14 +26,15 @@ test('it logout a user.', function () {
     visit('/home')
     ->click('[data-test="Authbutton"]')
     ->click('[data-test="logout"]')
-    ->assertRoute('home');
+    ->assertRoute('filament.app.pages.home');
+    // /app/home
 });
 
 test('after login user cant access login page.', function () {
     UserLogin();
 
     visit('/login')
-    ->assertRoute('home');
+    ->assertRoute('filament.app.pages.home');
 });
 
 // test('after login admin cant access login page.', function () {

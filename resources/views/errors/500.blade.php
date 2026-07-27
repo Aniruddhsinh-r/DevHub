@@ -28,7 +28,7 @@
             Something went wrong on our server.
         </p>
 
-        <a href="{{ route('home') }}"  wire:navigate
+        <a href="{{ route('filament.app.pages.home') }}"  wire:navigate
            class="inline-flex items-center px-6 py-3 rounded-2xl bg-yellow-400 text-black font-bold hover:scale-105 transition">
             Return Home
         </a>

@@ -23,7 +23,7 @@ test('Register a user.', function () {
         ->fill('email', $email)
         ->fill('password', 'Roman123')
         ->click('Create account')
-        ->assertRoute('home');
+        ->assertRoute('filament.app.pages.home');
 
     $this->assertDatabaseHas('users', [
         'email' => $email,
@@ -34,7 +34,7 @@ test('after login user cant access login page.', function () {
     UserLogin();
 
     visit('/register')
-    ->assertRoute('home');
+    ->assertRoute('filament.app.pages.home');
 });
 
 test('after login admin cant access login page.', function () {
