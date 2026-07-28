@@ -37,6 +37,10 @@ class AppPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->brandName('DevHub')
+            ->sidebarWidth('280px')
+            ->font(family: 'source sans 2')
+            // ->topbar(false)
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\Filament\App\Widgets')
             ->widgets([
                 AccountWidget::class,

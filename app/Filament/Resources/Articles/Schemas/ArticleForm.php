@@ -10,8 +10,6 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
-use App\Models\Article;
-use Illuminate\Support\Str;
 
 class ArticleForm
 {
@@ -35,13 +33,8 @@ class ArticleForm
                     ->required(),
                 TextInput::make('title')
                     ->required()
-                    ->live()
                     ->minLength(6)
-                    ->maxLength(50)
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
-                TextInput::make('slug')
-                    ->required()
-                    ->unique(Article::class, 'slug', ignoreRecord: true),
+                    ->maxLength(50),
                 TextInput::make('excerpt')
                     ->required()
                     ->minLength(20)
@@ -58,7 +51,10 @@ class ArticleForm
                     ->required(),
                 DateTimePicker::make('duration')
                     ->visible(fn ($get) => $get('status') === ArticleStatus::SCHEDULED)
-                    ->required(fn ($get) => $get('status') === ArticleStatus::SCHEDULED),
+                    ->required(fn ($get) => $get('status') === ArticleStatus::SCHEDULED)
+                    ->minDate(now())
+                    ->maxDate(now()->addHours(48))
+                    ->rules(['after_or_equal:now', 'before_or_equal:+48 hours']),
                 DateTimePicker::make('published_at')
                     ->visible(fn ($get) => $get('status') === ArticleStatus::PUBLISHED)
                     ->default(now())

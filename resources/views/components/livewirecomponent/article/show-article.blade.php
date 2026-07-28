@@ -31,7 +31,6 @@ new class extends Component
         }
         $this->article->refresh();
         ArticleCreate::dispatch();
-        return;
     }
 
     public function toggleLike() {
@@ -42,12 +41,11 @@ new class extends Component
             $like->delete();
             ArticleCreate::dispatch();
             $this->dispatch('live-notification', message: 'article unlike');
-            return;
+        } else {
+            Like::create(['user_id' => auth()->id(),'article_id' => $this->article->id,]);
+            ArticleCreate::dispatch();
+            $this->dispatch('live-notification', message: 'article like');
         }
-
-        Like::create(['user_id' => auth()->id(),'article_id' => $this->article->id,]);
-        ArticleCreate::dispatch();
-        $this->dispatch('live-notification', message: 'article like');
     }
 
     public function toggleBookmark()

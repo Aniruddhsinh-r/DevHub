@@ -4,14 +4,15 @@ namespace App\Filament\App\Resources\Articles;
 
 use App\Filament\App\Resources\Articles\Pages\CreateArticle;
 use App\Filament\App\Resources\Articles\Pages\EditArticle;
+use App\Filament\App\Resources\Articles\Pages\ViewArticle;
 use App\Filament\App\Resources\Articles\Pages\ListArticles;
 use App\Filament\App\Resources\Articles\Schemas\ArticleForm;
+// use App\Filament\App\Resources\Articles\Schemas\ArticleInfolist;
 use App\Models\Article;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -22,11 +23,21 @@ class ArticleResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'title';
-
+        
+    protected function getRedirectUrl(): string
+    {
+        return static::getResource()::getUrl('index');
+    }
+ 
     public static function form(Schema $schema): Schema
     {
         return ArticleForm::configure($schema);
     }
+        
+    // public static function infolist(Schema $schema): Schema
+    // {
+    //     return ArticleInfolist::configure($schema);
+    // }
 
     public static function getRelations(): array
     {
@@ -40,6 +51,7 @@ class ArticleResource extends Resource
         return [
             'index' => ListArticles::route('/'),
             'create' => CreateArticle::route('/create'),
+            'view'   => ViewArticle::route('/{record}'),
             'edit' => EditArticle::route('/{record}/edit'),
         ];
     }

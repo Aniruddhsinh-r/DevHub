@@ -34,8 +34,8 @@ Route::middleware(['auth','author'])->group(function () {
     Route::livewire('/profile/{user}', 'livewirecomponent.profile.profile')->name('profile.show');
     Route::livewire('/articles/myarticle', 'livewirecomponent.article.my-articles')->name('publishedarticle');
     // Route::livewire('/app/articles/create', 'livewirecomponent.article.create-article')->name('articles.create');
-    Route::livewire('/app/articles/{record}/edit', 'livewirecomponent.article.edit-article')->name('articles.edit');
-    Route::livewire('/articles/{article}', 'livewirecomponent.article.show-article')->name('articles.show');
+    // Route::livewire('/app/articles/{record}/edit', 'livewirecomponent.article.edit-article')->name('articles.edit');
+    // Route::livewire('/articles/{article}', 'livewirecomponent.article.show-article')->name('articles.show');
     Route::livewire('/bookmarks', 'livewirecomponent.bookmark.bookmarks')->name('show.bookmarks');
     Route::livewire('/profile/followers/{user}', 'livewirecomponent.profile.followers')->name('followers');
     Route::livewire('/profile/followings/{user}', 'livewirecomponent.profile.followings')->name('followings');

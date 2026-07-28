@@ -70,7 +70,10 @@ class ArticlesRelationManager extends RelationManager
                                     ->columnSpanFull(),
                                 DateTimePicker::make('duration')
                                     ->visible(fn ($get) => $get('status') === ArticleStatus::SCHEDULED)
-                                    ->required(fn ($get) => $get('status') === ArticleStatus::SCHEDULED),
+                                    ->required(fn ($get) => $get('status') === ArticleStatus::SCHEDULED)
+                                    ->minDate(now())
+                                    ->maxDate(now()->addHours(48))
+                                    ->rules(['after_or_equal:now', 'before_or_equal:+48 hours']),
                             ]),
                         Section::make('Content')
                             ->schema([

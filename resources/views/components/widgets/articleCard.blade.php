@@ -5,7 +5,7 @@
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 @foreach ($this->articles as $article)
                     <div class="group relative bg-white dark:bg-gray-900 rounded-xl border border-gray-200/80 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-all duration-200 flex flex-col sm:flex-row overflow-hidden">
-                        <a href="{{ route('articles.show', $article) }}" wire:navigate class="absolute inset-0 z-10" aria-label="{{ $article->title }}"></a>
+                        <a href="/app/articles/{{ $article->slug }}/edit" wire:navigate class="absolute inset-0 z-10" aria-label="{{ $article->title }}"></a>
                         <div class="sm:w-2/5 shrink-0 relative overflow-hidden bg-gray-100 dark:bg-gray-800 min-h-[160px]">
                             @if ($article->cover_path)
                                 <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out">

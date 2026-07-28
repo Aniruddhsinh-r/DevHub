@@ -87,9 +87,7 @@ new class extends Component
                                             Delete
                                         </button>
 
-                                        <a href="{{ route('articles.edit',$article) }}" wire:navigate dusk="edit-article-{{ $article->id }}" class="text-xs font-bold text-gray-900 hover:text-black uppercase tracking-wider">
-                                            Edit
-                                        </a>
+                                        <a href="{{ route('articles.edit',$article) }}" wire:navigate dusk="edit-article-{{ $article->id }}" class="text-xs font-bold text-gray-900 hover:text-black uppercase tracking-wider">Edit</a>
                                     </div>
                                 </div>
                             </div>
