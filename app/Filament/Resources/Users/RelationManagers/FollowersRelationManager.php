@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Users\RelationManagers;
 
-use Filament\Actions\AttachAction;
+use App\Filament\Resources\Users\UserResource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DetachAction;
 use Filament\Actions\DetachBulkAction;
@@ -19,8 +19,11 @@ class FollowersRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('user')
             ->columns([
-                TextColumn::make('followers.name')
+                TextColumn::make('name')
                     ->label('User')
+                    ->searchable(),
+                TextColumn::make('email')
+                    ->label('Email')
                     ->searchable(),
             ])
             ->recordActions([
@@ -30,6 +33,9 @@ class FollowersRelationManager extends RelationManager
                 BulkActionGroup::make([
                     DetachBulkAction::make(),
                 ]),
-            ])->emptyStateHeading('This author has no followers yet.');
+            ])->emptyStateHeading('This author has no followers yet.')
+            ->recordUrl(fn ($record) => UserResource::getUrl('view', [
+                'record' => $record,
+            ]));
     }
 }

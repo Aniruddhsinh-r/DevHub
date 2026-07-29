@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Filament\Resources\Users\Schemas;
+namespace App\Filament\App\Resources\Users\Schemas;
 
+use App\Enums\ArticleStatus;
 use App\Models\User;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Actions;
+use Filament\Actions\Action;
 use Filament\Schemas\Schema;
 
 class UserInfolist
@@ -21,18 +24,15 @@ class UserInfolist
                 Section::make()
                     ->columnSpanFull()
                     ->schema([
-
-                        // TOP: round avatar + name/email/uuid
                         Grid::make([
                             'default' => 1,
                             'lg' => 4,
                         ])
                         ->schema([
-                            // Avatar — round profile picture
                             ImageEntry::make('avatar')
                                 ->hiddenLabel()
                                 ->circular()
-                                ->height('100px')
+                                ->height('120px')
                                 ->extraImgAttributes([
                                     'class' => 'object-cover',
                                 ])
@@ -41,41 +41,50 @@ class UserInfolist
                                     'default' => 1,
                                     'lg' => 1,
                                 ]),
-
-                            // Name / email / uuid
                             Group::make([
                                 TextEntry::make('name')
                                     ->size('lg')
                                     ->weight('bold')
                                     ->columnSpanFull(),
+                                Actions::make([
+                                    Action::make('follow')
+                                        ->label(fn (User $record) => auth()->user()->following()->whereKey($record)->exists()
+                                            ? 'Unfollow'
+                                            : 'Follow')
+                                        ->icon(fn (User $record) => auth()->user()->following()->whereKey($record)->exists()
+                                            ? 'heroicon-o-user-minus'
+                                            : 'heroicon-o-user-plus')
+                                        ->color(fn (User $record) => auth()->user()->following()->whereKey($record)->exists()
+                                            ? 'gray'
+                                            : 'primary')
+                                        ->hidden(fn (User $record) => auth()->id() === $record->id)
+                                        ->action(function (User $record) {
+                                            $user = auth()->user();
 
-                                TextEntry::make('email')
-                                    ->icon('heroicon-o-envelope')
-                                    ->color('gray')
-                                    ->copyable()
-                                    ->copyMessage('Email copied')
-                                    ->columnSpanFull(),
+                                            if ($user->following()->whereKey($record)->exists()) {
+                                                $user->following()->detach($record);
+                                            } else {
+                                                $user->following()->attach($record);
+                                            }
+                                        }),
+                                ]),
                             ])
                             ->columnSpan([
                                 'default' => 1,
                                 'lg' => 3,
                             ]),
                         ]),
-
-                        TextEntry::make('uuid')
-                                    ->label('UUID')
-                                    ->icon('heroicon-o-identification')
-                                    ->color('gray')
-                                    ->copyable()
-                                    ->copyMessage('UUID copied')
-                                    ->columnSpanFull(),
-
+                        TextEntry::make('email')
+                            ->icon('heroicon-o-envelope')
+                            ->color('gray')
+                            ->copyable()
+                            ->copyMessage('Email copied')
+                            ->columnSpanFull(),
                         TextEntry::make('bio')
                             ->label('Bio')
                             ->placeholder('No bio added')
                             ->prose()
                             ->columnSpanFull(),
-
                         Grid::make([
                             'default' => 1,
                             'sm' => 2,
@@ -83,24 +92,13 @@ class UserInfolist
                         ])
                         ->schema([
                             TextEntry::make('created_at')
-                                ->label('Created At')
+                                ->label('Member since')
                                 ->dateTime('d M Y, H:i')
                                 ->placeholder('-'),
-
-                            TextEntry::make('updated_at')
-                                ->label('Updated At')
-                                ->dateTime('d M Y, H:i')
-                                ->placeholder('-'),
-
-                            TextEntry::make('email_verified_at')
-                                ->label('Email Verified')
-                                ->badge()
-                                ->dateTime('d M Y, H:i')
-                                ->color(fn ($state) => $state ? 'success' : 'danger')
-                                ->formatStateUsing(fn ($state) => $state ? \Illuminate\Support\Carbon::parse($state)->format('d M Y, H:i') : 'Not verified')
-                                ->icon(fn ($state) => $state ? 'heroicon-o-check-badge' : 'heroicon-o-x-circle')
-                                ->placeholder('Not verified'),
-                            
+                            TextEntry::make('article_count')
+                                ->state(fn ($record) => $record->articles()->where('status', ArticleStatus::PUBLISHED)->count())
+                                ->label('Articles')
+                                ->badge(),
                             TextEntry::make('deleted_at')
                                 ->label('Deleted At')
                                 ->dateTime('d M Y, H:i')

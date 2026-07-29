@@ -40,6 +40,8 @@ class RolePermissionSeeder extends Seeder
             'article.publish',
             'category.delete',
             'user.manage',
+            'user.delete',
+            'user.update',
         ]);
 
         $superAdmin->givePermissionTo($admin->permissions);
