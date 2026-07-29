@@ -132,7 +132,7 @@ new class extends Component
 
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
                     @if ($article->user->hasRole(UserRole::AUTHOR))
-                        <a href="{{ route('profile.show',$article->user) }}" wire:navigate class="flex items-center gap-3 hover:text-white transition">
+                        <a href="/app/users/{{ $article->user->uuid }}" wire:navigate class="flex items-center gap-3 hover:text-white transition">
                             <div class="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
                                 @if ($article->user->avatar)
                                     <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="{{ $article->user->name }}" class="w-9 h-9 object-cover">
@@ -186,10 +186,9 @@ new class extends Component
                             </div>
                         </div>
                     </article>
-
-                    {{-- AUTHOR CARD --}}
+                    
                     @if ($article->user->hasRole(UserRole::AUTHOR))
-                        <a href="{{ route('profile.show',$article->user) }}" wire:navigate class="block mt-10 bg-stone-50 dark:bg-gray-900 rounded-[20px] border border-stone-200/80 dark:border-gray-800 shadow-lg shadow-stone-200/40 dark:shadow-none p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-stone-300 dark:hover:border-gray-700 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
+                        <a href="/app/users/{{ $article->user->uuid }}" wire:navigate class="block mt-10 bg-stone-50 dark:bg-gray-900 rounded-[20px] border border-stone-200/80 dark:border-gray-800 shadow-lg shadow-stone-200/40 dark:shadow-none p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-stone-300 dark:hover:border-gray-700 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                             <div class="flex flex-col md:flex-row md:items-center gap-6">
                                 <div class="w-24 h-24 rounded-full bg-stone-900 dark:bg-gray-800 text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-stone-200 dark:border-gray-700">
                                     @if ($article->user->avatar)

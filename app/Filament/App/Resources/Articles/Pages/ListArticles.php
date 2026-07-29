@@ -14,6 +14,8 @@ class ListArticles extends ListRecords
 
     protected string $view = 'components.articleLayout';
 
+    public string $search = '';
+
     protected function getHeaderActions(): array
     {
         return [
@@ -30,6 +32,13 @@ class ListArticles extends ListRecords
         return Article::with(['user', 'category'])
             ->latest()
             ->where('status', ArticleStatus::PUBLISHED)
+            ->when($this->search, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('excerpt', 'like', "%{$search}%")
+                        ->orWhere('body', 'like', "%{$search}%");
+                });
+            })
             ->paginate(12);
     }
 }

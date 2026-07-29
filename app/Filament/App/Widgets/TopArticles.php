@@ -20,7 +20,7 @@ class TopArticles extends Widget
             ->with(['user', 'category'])
             ->withCount('likes')
             ->where('status', ArticleStatus::PUBLISHED)
-            ->orderByDesc('likes_count')
+            ->orderByDesc('view_count')
             ->take(6)
             ->get();
     }

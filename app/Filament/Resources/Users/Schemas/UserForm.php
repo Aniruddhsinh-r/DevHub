@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -34,7 +33,7 @@ class UserForm
                 TextInput::make('password')
                     ->password()
                     ->revealable()
-                    ->minLength(8)
+                    ->minLength(8) 
                     ->maxLength(255)
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $operation): bool => $operation === 'create')

@@ -13,20 +13,25 @@ class HomeStats extends StatsOverviewWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Total Users', User::count())
-                ->description('Registered accounts')
-                ->icon('heroicon-o-users')
+            Stat::make('Total Views', number_format(auth()->user()->views()->count()))
+                ->description('Views across all your articles')
+                ->icon('heroicon-o-eye')
                 ->color('primary'),
-                
-            Stat::make('Total Articles', Article::count())
-                ->description('Published content')
+
+            Stat::make('Total Articles', number_format(auth()->user()->articles()->count()))
+                ->description('Articles you have created')
                 ->icon('heroicon-o-document-text')
                 ->color('info'),
 
-            Stat::make('Total Likes', Like::count())
-                ->description('Community engagement')
+            Stat::make('Total Likes', number_format(auth()->user()->likes()->count()))
+                ->description('Likes received from readers')
                 ->icon('heroicon-o-heart')
                 ->color('danger'),
+
+            Stat::make('Followers', number_format(auth()->user()->followers()->count()))
+                ->description('People following you')
+                ->icon('heroicon-o-users')
+                ->color('success'),
         ];
     }
 }

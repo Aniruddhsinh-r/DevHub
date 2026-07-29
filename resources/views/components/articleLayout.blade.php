@@ -1,6 +1,12 @@
 <x-filament-panels::page>
-    <x-filament::section heading="Latest Articles">
+    <x-filament::section heading="Latest Articles" >
+    <div class="relative w-full md:w-80">
+        <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"/>
 
+        <input type="search" wire:model.live.debounce.300ms="search" placeholder="Search articles..."
+            class="block w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 pl-10 pr-4 py-2.5 text-sm mb-5 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20">
+    </div>
+    
         @if($this->articles->isNotEmpty())
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 @foreach ($this->articles as $article)

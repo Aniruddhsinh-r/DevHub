@@ -134,7 +134,7 @@ new class extends Component {
         @foreach ($this->comments as $comment)
             <div class="flex gap-4 mt-2" wire:key="node-l1-{{ $comment->id }}" x-data="{ activeReplyId: null, showReplies: true }">
                 <!-- User Avatar -->
-                <a href="{{ route('profile.show', $comment->user) }}" wire:navigate class="w-11 h-11 mt-1 rounded-full border border-zinc-700/80 bg-zinc-800 text-zinc-200 flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
+                <a href="/app/users/{{ $comment->user->uuid }}" wire:navigate class="w-11 h-11 mt-1 rounded-full border border-zinc-700/80 bg-zinc-800 text-zinc-200 flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
                     @if ($comment->user->avatar) <img src="{{ asset('storage/' . $comment->user->avatar) }}" class="w-full h-full object-cover"> @else <span>{{ Str::upper(Str::substr($comment->user->name, 0, 2)) }}</span> @endif
                 </a>
                 
@@ -168,7 +168,7 @@ new class extends Component {
                     <div x-show="showReplies" class="pl-6 border-l-2 border-zinc-800 mt-4 space-y-4" x-cloak>
                         @foreach ($comment->replies as $replyL2)
                             <div class="flex gap-4 mt-3" wire:key="node-l2-{{ $replyL2->id }}">
-                                <a href="{{ route('profile.show', $replyL2->user) }}" class="w-9 h-9 rounded-full border border-zinc-700/80 bg-zinc-800 text-zinc-200 flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
+                                <a href="/app/users/{{ $replyL2->user->uuid }}" class="w-9 h-9 rounded-full border border-zinc-700/80 bg-zinc-800 text-zinc-200 flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
                                     @if ($replyL2->user->avatar) <img src="{{ asset('storage/' . $replyL2->user->avatar) }}" class="w-full h-full object-cover"> @else <span>{{ Str::upper(Str::substr($replyL2->user->name, 0, 2)) }}</span> @endif
                                 </a>
 
@@ -197,7 +197,7 @@ new class extends Component {
                                     <div class="pl-6 border-l-2 border-zinc-800 mt-4 space-y-4">
                                         @foreach ($replyL2->replies as $replyL3)
                                             <div class="flex gap-4 mt-3 pt-2 border-t border-dashed border-zinc-800 first:border-0 first:pt-0" wire:key="node-l3-{{ $replyL3->id }}">
-                                                <a href="{{ route('profile.show', $replyL3->user) }}" class="w-9 h-9 rounded-full border border-zinc-700/80 bg-zinc-800 text-zinc-200 flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
+                                                <a href="/app/users/{{ $replyL3->user->uuid }}" class="w-9 h-9 rounded-full border border-zinc-700/80 bg-zinc-800 text-zinc-200 flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
                                                     @if ($replyL3->user->avatar) <img src="{{ asset('storage/' . $replyL3->user->avatar) }}" class="w-full h-full object-cover"> @else <span>{{ Str::upper(Str::substr($replyL3->user->name, 0, 2)) }}</span> @endif
                                                 </a>
 

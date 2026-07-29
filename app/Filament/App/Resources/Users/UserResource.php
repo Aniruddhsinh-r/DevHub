@@ -7,14 +7,13 @@ use App\Filament\App\Resources\Users\Pages\ViewUser;
 use App\Filament\App\Resources\Users\Schemas\UserInfolist;
 use App\Filament\App\Resources\Users\Tables\UsersTable;
 use App\Models\User;
-use BackedEnum;
 use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\Users\RelationManagers\FollowersRelationManager;
 use App\Filament\Resources\Users\RelationManagers\FollowingRelationManager;
 use App\Filament\App\Resources\Users\RelationManagers\ArticlesRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
+use App\Filament\App\Resources\Users\Schemas\UserForm;
 use Filament\Tables\Table;
 use Filament\Resources\Pages\Page;
 use App\Enums\UserRole;
@@ -33,13 +32,6 @@ class UserResource extends Resource
     }
 
     protected static ?string $model = User::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getEloquentQuery()->count();
-    }
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -79,6 +71,11 @@ class UserResource extends Resource
                 FollowingRelationManager::class,
             ]),
         ];
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return UserForm::configure($schema);
     }
 
     public static function getPages(): array

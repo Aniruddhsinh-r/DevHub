@@ -4,6 +4,7 @@ namespace App\Filament\App\Resources\Articles\Schemas;
 
 use App\Enums\ArticleStatus;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -11,7 +12,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Hidden;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
-use App\Models\Article;
 
 class ArticleForm
 {
@@ -47,6 +47,11 @@ class ArticleForm
                             ->minLength(20)
                             ->maxLength(255)
                             ->columnSpanFull(),
+                        FileUpload::make('cover_path')
+                            ->disk('public')
+                            ->directory('articleCovers')
+                            ->visibility('public')
+                            ->image(),
                         DateTimePicker::make('duration')
                             ->visible(fn ($get) => $get('status') === ArticleStatus::SCHEDULED)
                             ->required(fn ($get) => $get('status') === ArticleStatus::SCHEDULED)

@@ -7,7 +7,6 @@ use App\Filament\App\Resources\Articles\Pages\EditArticle;
 use App\Filament\App\Resources\Articles\Pages\ViewArticle;
 use App\Filament\App\Resources\Articles\Pages\ListArticles;
 use App\Filament\App\Resources\Articles\Schemas\ArticleForm;
-// use App\Filament\App\Resources\Articles\Schemas\ArticleInfolist;
 use App\Models\Article;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -18,9 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ArticleResource extends Resource
 {
+    protected static ?string $navigationLabel = 'Articles';
+    
     protected static ?string $model = Article::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'title';
         
@@ -33,11 +32,6 @@ class ArticleResource extends Resource
     {
         return ArticleForm::configure($schema);
     }
-        
-    // public static function infolist(Schema $schema): Schema
-    // {
-    //     return ArticleInfolist::configure($schema);
-    // }
 
     public static function getRelations(): array
     {
