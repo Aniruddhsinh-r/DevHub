@@ -9,7 +9,7 @@ use Filament\Widgets\Widget;
 
 class TopArticles extends Widget
 {
-    protected string $view = 'components.widgets.articleCard';
+    protected string $view = 'components.articleCard';
     
     protected int|string|array $columnSpan = 'full';
 

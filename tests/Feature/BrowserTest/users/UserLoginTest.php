@@ -27,7 +27,6 @@ test('it logout a user.', function () {
     ->click('[data-test="Authbutton"]')
     ->click('[data-test="logout"]')
     ->assertRoute('filament.app.pages.home');
-    // /app/home
 });
 
 test('after login user cant access login page.', function () {

@@ -134,7 +134,7 @@ new class extends Component {
         @foreach ($this->comments as $comment)
             <div class="flex gap-4 mt-2" wire:key="node-l1-{{ $comment->id }}" x-data="{ activeReplyId: null, showReplies: true }">
                 <!-- User Avatar -->
-                <a href="/app/users/{{ $comment->user->uuid }}" wire:navigate class="w-11 h-11 mt-1 rounded-full border border-zinc-700/80 bg-zinc-800 text-zinc-200 flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
+                <a href="/app/users/{{ $comment->user->uuid }}" class="w-11 h-11 mt-1 rounded-full border border-zinc-700/80 bg-zinc-800 text-zinc-200 flex items-center justify-center font-bold text-xs uppercase overflow-hidden shrink-0">
                     @if ($comment->user->avatar) <img src="{{ asset('storage/' . $comment->user->avatar) }}" class="w-full h-full object-cover"> @else <span>{{ Str::upper(Str::substr($comment->user->name, 0, 2)) }}</span> @endif
                 </a>
                 

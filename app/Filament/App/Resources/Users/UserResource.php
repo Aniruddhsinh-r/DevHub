@@ -25,10 +25,13 @@ class UserResource extends Resource
 {
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
 
+    protected static ?int $navigationSort = 3;
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->role(UserRole::AUTHOR);
+            ->where('id', '!=', auth()->id())
+            ->role(UserRole::AUTHOR); 
     }
 
     protected static ?string $model = User::class;
@@ -84,12 +87,5 @@ class UserResource extends Resource
             'index' => ListUsers::route('/'),
             'view' => ViewUser::route('/{record}'),
         ];
-    }
-
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        return $page->generateNavigationItems([
-            Pages\ViewUser::class
-        ]);
     }
 }

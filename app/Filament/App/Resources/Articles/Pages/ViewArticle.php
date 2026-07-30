@@ -6,12 +6,20 @@ use App\Filament\App\Resources\Articles\ArticleResource;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\View;
 
 class ViewArticle extends ViewRecord
 {
     protected static string $resource = ArticleResource::class;
     
-    protected string $view = 'components.filament.view-article';
+    public function content(Schema $schema): Schema
+    {
+        return $schema->components([
+            View::make('components.filament.view-article'),
+            $this->getRelationManagersContentComponent(),
+        ]);
+    }
 
     protected function getHeaderActions(): array
     {

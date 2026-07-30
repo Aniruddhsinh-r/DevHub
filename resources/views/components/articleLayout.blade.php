@@ -8,10 +8,10 @@
     </div>
     
         @if($this->articles->isNotEmpty())
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach ($this->articles as $article)
                     <div class="group relative bg-white dark:bg-gray-900 rounded-xl border border-gray-200/80 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-all duration-200 flex flex-col sm:flex-row overflow-hidden">
-                        <a href="/app/articles/{{ $article->slug }}" wire:navigate class="absolute inset-0 z-10" aria-label="{{ $article->title }}"></a>
+                        <a href="/articles/{{ $article->slug }}" class="absolute inset-0 z-10" aria-label="{{ $article->title }}"></a>
                         <div class="sm:w-2/5 shrink-0 relative overflow-hidden bg-gray-100 dark:bg-gray-800 min-h-[160px]">
                             @if ($article->cover_path)
                                 <img src="{{ asset('storage/' . $article->cover_path) }}" alt="{{ $article->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out">
@@ -56,7 +56,7 @@
 
                                 <div>
                                     @if(auth()->id() === $article->user_id)
-                                        <a href="/app/articles/{{ $article->slug }}/edit" wire:navigate
+                                        <a href="/articles/{{ $article->slug }}/edit"
                                            class="relative z-20 inline-flex items-center text-xs font-semibold text-emerald-500 dark:text-emerald-400 border border-emerald-500/40 bg-emerald-400/10 hover:bg-emerald-400 hover:text-white dark:hover:text-black px-2.5 py-1 rounded-lg transition-all">Edit</a>
                                     @else
                                         <span>{{ $article->created_at->format('M d, Y') }}</span>
@@ -71,7 +71,27 @@
                 <x-filament::pagination :paginator="$this->articles" />
             </div>
         @else
-            <x-filament::empty-state heading="No articles found" description="There are no published articles yet."/>
+            @if ($this->articles->isEmpty())
+                @if (filled($search))
+                    <x-filament::section>
+                        <div class="py-8 text-center">
+                            <h3 class="text-lg font-semibold">No articles found</h3>
+                            <p class="text-sm text-gray-500 mt-2">
+                                No published articles match "<strong>{{ $search }}</strong>".
+                            </p>
+                        </div>
+                    </x-filament::section>
+                @else
+                    <x-filament::section>
+                        <div class="py-8 text-center">
+                            <h3 class="text-lg font-semibold">There are no published articles yet.</h3>
+                            <p class="text-sm text-gray-500 mt-2">
+                                Check back later for new articles.
+                            </p>
+                        </div>
+                    </x-filament::section>
+                @endif
+            @endif
         @endif
     </x-filament::section>
 </x-filament-panels::page>

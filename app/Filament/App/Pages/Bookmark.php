@@ -1,19 +1,16 @@
 <?php
 
-namespace App\Filament\App\Resources\Articles\Pages;
+namespace App\Filament\App\Pages;
 
-use App\Filament\App\Resources\Articles\ArticleResource;
-use App\Enums\ArticleStatus;
+use Filament\Pages\Page;
 use Filament\Actions\Action;
-use App\Models\Article;
-use Filament\Resources\Pages\ListRecords;
 
-class ListArticles extends ListRecords
+class Bookmark extends Page
 {
-    protected static string $resource = ArticleResource::class;
-
     protected string $view = 'components.articleLayout';
 
+    protected static bool $shouldRegisterNavigation = false; 
+    
     public string $search = '';
 
     protected function getHeaderActions(): array
@@ -25,13 +22,12 @@ class ListArticles extends ListRecords
                 ->url('/articles/create')
                 ->color('primary'),
         ];
-    }
+    } 
 
     public function getArticlesProperty()
     {
-        return Article::with(['user', 'category'])
-            ->latest()
-            ->where('status', ArticleStatus::PUBLISHED)
+        return auth()->user()
+            ->bookmarkedArticles()
             ->when($this->search, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('title', 'like', "%{$search}%")
@@ -39,6 +35,8 @@ class ListArticles extends ListRecords
                         ->orWhere('body', 'like', "%{$search}%");
                 });
             })
+            ->with(['user', 'category'])
+            ->latest()
             ->paginate(12);
     }
 }

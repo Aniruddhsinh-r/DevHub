@@ -20,7 +20,7 @@ new class extends Component
     public function mount() {
         if ($this->article->status !== ArticleStatus::PUBLISHED && $this->article->user_id !== auth()->id()) {
             Notification::make()->title("The article you are looking for is not available.")->warning()->send();
-            return $this->redirect('/app/articles', navigate: true);
+            return $this->redirect('/articles', navigate: true);
         }
 
         $this->viewed = Auth::check() && Auth::user()->views()->where('article_id', $this->article->id)->exists();
@@ -132,7 +132,7 @@ new class extends Component
 
                 <div class="mt-7 flex flex-wrap items-center gap-5 text-white/80 text-sm font-semibold">
                     @if ($article->user->hasRole(UserRole::AUTHOR))
-                        <a href="/app/users/{{ $article->user->uuid }}" wire:navigate class="flex items-center gap-3 hover:text-white transition">
+                        <a href="/users/{{ $article->user->uuid }}" class="flex items-center gap-3 hover:text-white transition">
                             <div class="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-sm font-black uppercase overflow-hidden">
                                 @if ($article->user->avatar)
                                     <img src="{{ asset('storage/' . $article->user->avatar) }}" alt="{{ $article->user->name }}" class="w-9 h-9 object-cover">
@@ -187,8 +187,8 @@ new class extends Component
                         </div>
                     </article>
                     
-                    @if ($article->user->hasRole(UserRole::AUTHOR))
-                        <a href="/app/users/{{ $article->user->uuid }}" wire:navigate class="block mt-10 bg-stone-50 dark:bg-gray-900 rounded-[20px] border border-stone-200/80 dark:border-gray-800 shadow-lg shadow-stone-200/40 dark:shadow-none p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-stone-300 dark:hover:border-gray-700 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
+                    @if ($article->user->hasRole(UserRole::AUTHOR) && $article->user_id !== auth()->id())
+                        <a href="/users/{{ $article->user->uuid }}" class="block mt-10 bg-stone-50 dark:bg-gray-900 rounded-[20px] border border-stone-200/80 dark:border-gray-800 shadow-lg shadow-stone-200/40 dark:shadow-none p-8 md:p-10 transition-all duration-300 ease-out hover:shadow-2xl hover:border-stone-300 dark:hover:border-gray-700 hover:-translate-y-1 active:scale-[0.98] active:shadow-md active:translate-y-0 group">
                             <div class="flex flex-col md:flex-row md:items-center gap-6">
                                 <div class="w-24 h-24 rounded-full bg-stone-900 dark:bg-gray-800 text-white shrink-0 group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center font-black text-xl uppercase tracking-wider select-none border border-stone-200 dark:border-gray-700">
                                     @if ($article->user->avatar)
@@ -208,12 +208,11 @@ new class extends Component
 
                     @role('author')
                         @if ($article->status === ArticleStatus::PUBLISHED)
-                            <livewire:livewirecomponent.post-comment :article="$article" />
+                            <livewire:post-comment :article="$article" />
                         @endif
                     @endrole
                 </div>
 
-                {{-- SIDEBAR --}}
                 <aside class="lg:col-span-4 space-y-8">
                     <div class="bg-stone-50 dark:bg-gray-900 rounded-[2rem] border border-stone-200/80 dark:border-gray-800 shadow-lg shadow-stone-200/40 dark:shadow-none p-8 sticky top-20 transition-colors duration-200">
                         <div class="border-l-4 border-gray-900 dark:border-white pl-4 mb-5">
@@ -262,7 +261,7 @@ new class extends Component
                             </div>
 
                             <div class="pt-4 border-t border-stone-200/70 dark:border-gray-800">
-                                <a href="/app/articles" wire:navigate class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-150">
+                                <a href="/articles" class="group inline-flex items-center gap-2 text-sm font-extrabold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-150">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white group-hover:-translate-x-1 transition-transform duration-150">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                                     </svg>

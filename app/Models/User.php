@@ -119,7 +119,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Bookmark::class);
     }
-    
+
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);

@@ -19,6 +19,8 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use App\Filament\App\Pages\Bookmark;
+use Filament\Actions\Action;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AppPanelProvider extends PanelProvider
@@ -27,10 +29,17 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->id('app')
-            ->path('app')
             ->login()
+            ->registration()
+            ->path('')
+            ->homeUrl('/home')
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->userMenuItems([
+                Action::make('bookmarks')
+                    ->url(fn (): string => Bookmark::getUrl())
+                    ->icon('heroicon-s-bookmark'),
             ])
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\Filament\App\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\Filament\App\Pages')

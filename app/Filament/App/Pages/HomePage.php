@@ -14,6 +14,10 @@ class HomePage extends Page implements HasTable
 
     protected static ?string $slug = 'home';
 
+    protected static ?int $navigationSort = 1;
+    
+    protected static ?string $navigationLabel = 'Home';
+
     protected function getHeaderWidgets(): array
     {
         return [
