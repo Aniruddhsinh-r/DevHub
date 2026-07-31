@@ -9,12 +9,10 @@ use App\Models\Article;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
-use Livewire\Attributes\On;
 use Filament\Notifications\Notification;
 
 class ListArticles extends ListRecords
 {
-    #[On('echo:articles,ArticleCreate')]
     public function onArticleCreated(): void
     {
         Notification::make()

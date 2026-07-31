@@ -6,7 +6,6 @@ use App\Models\View;
 use App\Models\Like;
 use App\Enums\UserRole;
 use App\Enums\ArticleStatus;
-use App\Events\ArticleCreate;
 use Illuminate\Support\Facades\Gate;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +30,6 @@ new class extends Component
             View::create(['user_id' => Auth::id(), 'article_id' => $this->article->id]);
         }
         $this->article->refresh();
-        ArticleCreate::dispatch();
     }
 
     public function toggleLike() {
@@ -40,12 +38,10 @@ new class extends Component
         $like = $this->article->likes()->where('user_id', auth()->id())->first();
         if ($like) {
             $like->delete();
-            ArticleCreate::dispatch();
             Notification::make()->title("article unlike.")->success()->send();
             
         } else {
             Like::create(['user_id' => auth()->id(),'article_id' => $this->article->id,]);
-            ArticleCreate::dispatch();
             Notification::make()->title("article like.")->success()->send();
         }
     }
@@ -56,8 +52,6 @@ new class extends Component
         Auth::user()->bookmarkedArticles()->toggle($this->article->id);
 
         $message = $this->article->isBookmarkedByMe() ? 'article bookmark' : 'remove from bookmark';
-        ArticleCreate::dispatch();
-        // $this->dispatch('live-notification', message: $message);
         Notification::make()->title($message)->success()->send();
     }
 };

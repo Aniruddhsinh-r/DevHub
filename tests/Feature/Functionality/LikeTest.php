@@ -12,45 +12,47 @@ uses(RefreshDatabase::class);
 test('user can like but not twice', function () {
     $article = Article::factory()->create();
     $user = UserLogin();
-
-    Livewire::test('livewirecomponent.article.show-article',['article' => $article])
-        ->call('toggleLike')
-        ->assertDispatched('live-notification', message: 'article like');
-
+ 
+    Livewire::actingAs($user)
+        ->test('article.show-article', ['article' => $article])
+        ->call('toggleLike');
+ 
     $this->assertDatabaseHas('likes', [
         'article_id' => $article->id,
         'user_id' => $user->id,
     ]);
-
-    Livewire::test('livewirecomponent.article.show-article',['article' => $article])
-        ->call('toggleLike')
-        ->assertDispatched('live-notification', message: 'article unlike');
-
+ 
+    Livewire::actingAs($user)
+        ->test('article.show-article', ['article' => $article])
+        ->call('toggleLike');
+ 
     $this->assertDatabaseMissing('likes', [
         'user_id' => $user->id,
         'article_id' => $article->id,
     ]);
 });
-
+ 
 test('admin cant access like functionality article', function () {
     $admin = AdminLogin();
     $article = Article::factory()->create();
-
-    $this->get(route('articles.show', $article))
-        ->assertStatus(403);
-
+ 
+    $this->actingAs($admin)
+        ->get(route('filament.app.resources.articles.view', ['record' => $article]))
+        ->assertForbidden();
+ 
     $this->assertDatabaseMissing('likes', [
         'user_id' => $admin->id,
     ]);
 });
-
+ 
 test('user cant like draft article', function () {
     $user = UserLogin();
-    $article = Article::factory()->create(['status' => ArticleStatus::DRAFT,'user_id' => $user->id]);
-
-    Livewire::test('livewirecomponent.article.show-article',['article' => $article])
+    $article = Article::factory()->create(['status' => ArticleStatus::DRAFT, 'user_id' => $user->id]);
+ 
+    Livewire::actingAs($user)
+        ->test('article.show-article', ['article' => $article])
         ->call('toggleLike')
         ->assertForbidden();
-        
-    $this->assertDatabaseMissing('likes',['article_id'=>$article->id , 'user_id'=>$user->id]);
+ 
+    $this->assertDatabaseMissing('likes', ['article_id' => $article->id, 'user_id' => $user->id]);
 });

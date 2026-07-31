@@ -81,7 +81,7 @@ class User extends Authenticatable implements FilamentUser
         });
 
         static::creating(function ($user) {
-            $user->uuid = Str::uuid();
+            $user->uuid = (string) Str::uuid();
         });
     }
 

@@ -13,6 +13,7 @@ beforeEach(function () {
     Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
     Role::firstOrCreate(['name' => UserRole::ADMIN, 'guard_name' => 'web']);
 });
+
 test('Author follow other authers.', function () {
     $user = User::factory()->create();
     $user->assignRole(UserRole::AUTHOR);

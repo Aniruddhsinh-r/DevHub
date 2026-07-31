@@ -3,6 +3,8 @@
 use Spatie\Permission\Models\Role;
 use Livewire\Livewire;
 use App\Enums\UserRole;
+use App\Models\User;
+use Filament\Auth\Pages\Register;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,22 +21,65 @@ beforeEach(function () {
 });
 
 test('user registration test', function () {
-    Storage::fake('public');
-    $file = UploadedFile::fake()->image('avatar.jpg');
-    $email = 'khabib'.time().'@gmail.com';
-
-    Livewire::test('livewirecomponent.auth.register')
-        ->set('name', 'khabibji')
-        ->set('email', $email)
-        ->set('password', 'password123')
-        ->set('bio', 'Hello, this is my bio.')
-        ->set('avatar', $file)
+    Livewire::test(Register::class)
+        ->fillForm([
+            'name' => 'khabibji',
+            'email' => 'khabib@example.com',
+            'password' => 'khabibji',
+            'passwordConfirmation' => 'khabibji',
+        ])
         ->call('register')
-        ->assertHasNoErrors()
-        ->assertRedirect(route('filament.app.pages.home'));
+        ->assertHasNoFormErrors();
+ 
+    $this->assertAuthenticated();
 
     $this->assertDatabaseHas('users', [
         'name' => 'khabibji',
-        'email' => $email,
+        'email' => 'khabib@example.com',
     ]);
 });
+
+test('guest can view the registration page', function () {
+    $this->get(route('filament.app.auth.register'))
+        ->assertSuccessful();
+});
+ 
+test('authenticated user not access registration page', function () {
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
+ 
+    $this->actingAs($user)
+        ->get(route('filament.app.auth.register'))
+        ->assertRedirect();
+});
+
+test('registration fails when email already taken', function () {
+    $existing = User::factory()->create(['email' => 'taken@example.com']);
+ 
+    Livewire::test(Register::class)
+        ->fillForm([
+            'name' => 'Someone Else',
+            'email' => 'taken@example.com',
+            'password' => 'password123',
+            'passwordConfirmation' => 'password123',
+        ])
+        ->call('register')
+        ->assertHasFormErrors(['email' => 'unique']);
+});
+ 
+test('registration fails when passwords do not match', function () {
+    Livewire::test(Register::class)
+        ->fillForm([
+            'name' => 'Someone',
+            'email' => 'someone@example.com',
+            'password' => 'password123',
+            'passwordConfirmation' => 'password456',
+        ])
+        ->call('register')
+        ->assertHasFormErrors(['password']);
+ 
+    $this->assertDatabaseMissing('users', [
+        'email' => 'someone@example.com',
+    ]);
+});
+

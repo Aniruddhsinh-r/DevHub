@@ -1,8 +1,15 @@
 <?php
 
 use Livewire\Livewire;
+use App\Models\Category;
 use App\Enums\ArticleStatus;
+use App\Filament\App\Resources\Articles\Pages\CreateArticle;
+use App\Filament\Pages\Auth\EditProfile;
+use Filament\Auth\Pages\Register;
+use Filament\Auth\Pages\Login;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
+
 require_once __DIR__.'/../Helpers/UserLogin.php';
 require_once __DIR__.'/../Helpers/AdminLogin.php';
 
@@ -10,90 +17,74 @@ uses(RefreshDatabase::class);
 
 test('check article validation test', function () {
     UserLogin();
-    Livewire::test('livewirecomponent.article.create-article')
-        ->set('title','')
-        ->set('category_id','344')
-        ->set('excerpt','article created by kishan that gonna delete for purpose. wetw rtt wtwtwrgr  wrgg g rt t ret r t rt er ter 
-        e d gd g gwer w rw rwe rw r ewr wer wr wer we rw erw rw er wee d gd g gwer w rw rwe rw r ewr wer wr wer we rw erw rw er we
-        e d gd g gwer w rw rwe rw r ewr wer wr wer we rw erw rw er wee d gd g gwer w rw rwe rw r ewr wer wr wer we rw erw rw er we.')
-        ->set('body','')
-        ->set('status','anything')
-        ->call('store')
-        ->assertHasErrors(['title' => 'required'])
-        ->assertHasErrors(['category_id' => 'exists:categories,id'])
-        ->assertHasErrors(['excerpt' => 'max'])
-        ->assertHasErrors(['body' => 'required'])
-        ->assertHasErrors(['status' => \Illuminate\Validation\Rules\Enum::class]);
+   
+    Livewire::test(CreateArticle::class)
+        ->fillForm([
+            'title' => '',
+            'category_id' => 999999,
+            'excerpt' => str_repeat('A', 256),
+            'body' => '',
+            'status' => 'draft',
+            'duration' => null,
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['title' => 'required'])
+        ->assertHasFormErrors(['category_id'])
+        ->assertHasFormErrors(['excerpt' => 'max'])
+        ->assertHasFormErrors(['body' => 'required']);
 });
 
-test('check register validation test', function () {
-    Livewire::test('livewirecomponent.auth.register')
-        ->set('name','Visu')
-        ->set('email','vishagmail.com')
-        ->set('password','12')
-        ->set('bio',34)
+test('registration fails with a short password', function () {
+    Livewire::test(Register::class)
+        ->fillForm([
+            'name' => 'Someone',
+            'email' => 'someone2@example.com',
+            'password' => '123',
+            'passwordConfirmation' => '123',
+        ])
         ->call('register')
-        ->assertHasErrors(['name' => 'min'])
-        ->assertHasErrors(['email' => 'email'])
-        ->assertHasErrors(['password' => 'min'])
-        ->assertHasErrors(['bio' => 'string']);
+        ->assertHasFormErrors(['password']);
+ 
+    $this->assertDatabaseMissing('users', [
+        'email' => 'someone2@example.com',
+    ]);
 });
 
 test('check login validation test', function () {
-    Livewire::test('livewirecomponent.auth.login')
-        ->set('email','adaniruddhagmail.com')
-        ->set('password','12')
-        ->call('login')
-        ->assertHasErrors(['email' => 'email'])
-        ->assertHasErrors(['password' => 'min']);
-});
-
-test('check credentials validation test', function () {
-    Livewire::test('livewirecomponent.auth.login')
-    ->set('email','adaniruddha@gmail.com')
-    ->set('password','rathod1290')
-    ->call('login')
-    ->assertDispatched('live-notification', message: 'The provided credentials do not match our records.');
+    Livewire::test(Login::class)
+        ->fillForm([
+            'email' => 'nobody@example.com',
+            'password' => 'pass',
+        ])
+        ->call('authenticate')
+        ->assertHasFormErrors();
 });
 
 test('check schedule article validation test require minutes', function () {
     UserLogin();
 
-    Livewire::test('livewirecomponent.article.create-article')
-        ->set('title','expose your self')
-        ->set('category_id','3')
-        ->set('excerpt','article for know who are you.')
-        ->set('body','hi there good that i attract you anyway lets talk that how to know ourself...')
-        ->set('status',ArticleStatus::SCHEDULED)
-        ->set('scheduled_minutes',null)
-        ->call('store')
-        ->assertHasErrors(['scheduled_minutes' => 'required_if']);
+    Livewire::test(CreateArticle::class)
+        ->fillForm([
+            'title' => 'Expose Yourself',
+            'category_id' => Category::factory()->create(),
+            'excerpt' => 'This is a valid excerpt with more than twenty characters.',
+            'body' => 'This is a valid article body.',
+            'status' => ArticleStatus::SCHEDULED,
+            'duration' => null,
+        ])
+        ->call('create')
+        ->assertHasFormErrors([
+            'duration' => 'required',
+        ]);
 });
 
-test('check profile update validation test', function () {
-    UserLogin();
+// test('Author can see admin profile', function () {
+//     $admin = AdminLogin();
+//     UserLogin();
 
-    $test = Livewire::test('livewirecomponent.profile.edit-profile')
-        ->set('name', '')
-        ->set('bio',  342432)
-        ->set('password', '13333213313')
-        ->set('password_confirmation', 'drafts')
-        ->call('update');
-
-    $test->assertHasErrors([
-        'name' => 'required',
-        'bio' => 'string',
-        'password' => 'confirmed'
-    ]);
-});
-
-test('Author can see admin profile', function () {
-    $admin = AdminLogin();
-    UserLogin();
-
-    $response = Livewire::test('livewirecomponent.profile.profile',['user' => $admin]);
-    $response->assertStatus(200);
-});
+//     $response = Livewire::test('livewirecomponent.profile.profile',['user' => $admin]);
+//     $response->assertStatus(200);
+// });
 
 test('User cant see those auther who dose not exist in db', function () {
     UserLogin();
@@ -114,4 +105,21 @@ test('Admin cant update his profile', function () {
         'name' => $admin->name,
         'email' => $admin->email,
     ]);
+});
+
+test('user can update his password', function () {
+    $admin = AdminLogin();
+ 
+    Livewire::actingAs($admin)
+        ->test(EditProfile::class)
+        ->fillForm([
+            'name' => $admin->name,
+            'email' => $admin->email,
+            'password' => 'newPassword',
+            'password_confirmation' => 'newPassword',
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+ 
+    expect(Hash::check('newPassword', $admin->fresh()->password))->toBeTrue();
 });

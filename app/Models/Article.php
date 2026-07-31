@@ -35,12 +35,12 @@ class Article extends Model
         static::deleting(function (Article $article) {
             if ($article->isForceDeleting()) {
                 $article->likes()->delete();
-                $article->views()->delete();
                 $article->comments()->delete();
                 $article->bookmarks()->detach();
             } else {
                 $article->comments()->delete();
                 $article->bookmarks()->detach();
+                $article->views()->delete();
             }
         });
     }

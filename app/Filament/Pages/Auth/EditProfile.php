@@ -18,15 +18,16 @@ class EditProfile extends PagesEditProfile
                     ->image()
                     ->disk('public')
                     ->directory('avatars')
-                    ->avatar()
-                    ->imageEditor(),
+                    ->avatar(),
                 TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(50),
                 TextInput::make('email')
                     ->email()
                     ->required()
                     ->unique(ignoreRecord: true)
+                    ->maxLength(255),
+                TextInput::make('bio')
                     ->maxLength(255),
                 TextInput::make('password')
                     ->label('New Password')
@@ -37,14 +38,13 @@ class EditProfile extends PagesEditProfile
                     ->dehydrateStateUsing(
                         fn (string $state): string => Hash::make($state)
                     ),
-
                 TextInput::make('password_confirmation')
                     ->label('Confirm Password')
                     ->password()
                     ->revealable()
                     ->dehydrated(false),
             ]);
-    } 
+    }
 
     protected function getRedirectUrl(): ?string
     {
