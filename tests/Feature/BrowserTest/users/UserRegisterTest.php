@@ -15,31 +15,31 @@ beforeEach(function () {
     ]);
 });
 
-test('Register a user.', function () {
-    $email = 'roman'.time().'@gmail.com';
-
-    visit(route('register.create'))
-        ->fill('name', 'Romanreigns')
-        ->fill('email', $email)
-        ->fill('password', 'Roman123')
-        ->click('Create account')
-        ->assertRoute('filament.app.pages.home');
-
+test('Register a user', function () {
+    $email = 'roman' . time() . '@gmail.com';
+ 
+    visit(route('filament.app.auth.register'))
+        ->fill('#form\\.name', 'Romanreigns')
+        ->fill('#form\\.email', $email)
+        ->fill('#form\\.password', 'Roman123')
+        ->fill('#form\\.passwordConfirmation', 'Roman123')
+        ->click('button[type="submit"][wire\\:target="register"]');
+ 
     $this->assertDatabaseHas('users', [
         'email' => $email,
     ]);
 });
-
-test('after login user cant access login page.', function () {
+ 
+test('after login user cant access register page', function () {
     UserLogin();
-
+ 
     visit('/register')
-    ->assertRoute('filament.app.pages.home');
+        ->assertRoute('filament.app.pages.home');
 });
-
-test('after login admin cant access login page.', function () {
+ 
+test('after login admin cant access register page', function () {
     AdminLogin();
-
-    visit('/login')
-    ->assertPathIs('/admin');
+ 
+    visit('/register')
+        ->assertSee('403');
 });

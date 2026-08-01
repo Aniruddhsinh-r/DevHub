@@ -20,7 +20,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvitationMail;
-use App\Events\UserCreate;
 use Filament\Tables\Columns\TextColumn;
 use UnitEnum;
 use Filament\Tables\Table;
@@ -129,12 +128,11 @@ class InvitationResource extends Resource
                         ]);
 
                         $message = URL::temporarySignedRoute('invitation',
-                            now()->addMinutes(30),
+                            now()->addMinutes(60),
                             ['email' => strtolower($invitation->email)]
                         );
 
                         Mail::to($invitation->email)->queue(new InvitationMail($message));
-                        UserCreate::dispatch();
                         Notification::make()->title('Invitation resent successfully.')->success()->persistent()->send();
                 }),
                 DeleteAction::make()->successNotificationTitle('Invitation deleted successfully.'),

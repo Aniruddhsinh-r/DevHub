@@ -6,7 +6,6 @@ use App\Filament\Resources\Invitations\InvitationResource;
 use Filament\Actions\CreateAction;
 use App\Models\User;
 use App\Models\Invitation;
-use App\Events\UserCreate;
 use App\Mail\InvitationMail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
@@ -81,7 +80,7 @@ class ManageInvitations extends ManageRecords
                 );
 
                 Mail::to($email)->queue(new InvitationMail($message));
-                UserCreate::dispatch();
+                Notification::make()->title('Invite sent successfully.')->success()->send();
             }),
         ];
     }

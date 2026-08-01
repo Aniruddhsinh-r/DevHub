@@ -3,13 +3,11 @@
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
-use App\Events\UserCreate;
 use App\Filament\Resources\Users\RelationManagers\FollowersRelationManager;
 use App\Filament\Resources\Users\RelationManagers\FollowingRelationManager;
 new class extends Component
 {
     public $user;
-    #[On('echo:users,UserCreate')]
     public function refresUsersList()
     {
         $this->user = Auth::user();

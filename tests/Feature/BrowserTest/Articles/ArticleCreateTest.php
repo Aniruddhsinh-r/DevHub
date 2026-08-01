@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Enums\ArticleStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 require_once __DIR__ . '/../../Helpers/UserLogin.php';
+require_once __DIR__ . '/../../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -17,57 +18,55 @@ test('it belongs to a user', function () {
 test('article create', function () {
     UserLogin();
     $category = Category::factory()->create();
-
+ 
     visit('/articles/create')
-    ->fill('title', 'hither aniruddhsinh')
-    ->select('category_id', $category->id)
-    ->select('status', ArticleStatus::PUBLISHED->value)
-    ->fill('excerpt', 'this is test case for checking hope this work.')
-    ->fill('body', 'Test case new Article body testing for Amazing article creating and test dummy body data.')
-    ->press('@submitBTN')
-    ->assertRoute('articles.index');
-
+        ->fill('#form\\.title', 'hither aniruddhsinh')
+        ->click('.fi-select-input-btn')
+        ->click($category->name)
+        ->select('#form\\.status', ArticleStatus::PUBLISHED->value)
+        ->fill('#form\\.excerpt', 'this is test case for checking hope this work perfectly.')
+        ->fill('#form\\.body', 'Test case new Article body testing for Amazing article creating and test dummy body data.')
+        ->click('#key-bindings-1')
+        ->assertUrlIs(route('filament.app.resources.articles.index'));
+ 
     $this->assertDatabaseHas('articles', [
         'title' => 'hither aniruddhsinh',
         'status' => 'published',
     ]);
 });
-
+ 
 test('article update', function () {
     UserLogin();
     $article = Article::factory()->create([
         'user_id' => auth()->id(),
     ]);
-
-    visit('/articles/edit/'.$article->slug)
-    ->fill('title', 'hither aniruddhsinh')
-    ->select('status', ArticleStatus::PUBLISHED->value)
-    ->fill('excerpt', 'this article is update by browser test case.')
-    ->press('@submitBTN')
-    ->assertRoute('publishedarticle')
-    ->assertSee('Article updated successfully.');
-
+ 
+    visit(route('filament.app.resources.articles.edit', ['record' => $article]))
+        ->fill('#form\\.title', 'hither aniruddhsinh')
+        ->select('#form\\.status', ArticleStatus::PUBLISHED->value)
+        ->fill('#form\\.excerpt', 'this article is updated by browser test case.')
+        ->click('Save changes')
+        ->assertSee('Saved');
+ 
     $this->assertDatabaseHas('articles', [
+        'id' => $article->id,
         'title' => 'hither aniruddhsinh',
         'status' => 'published',
     ]);
 });
-
+ 
 test('article delete', function () {
     UserLogin();
     $article = Article::factory()->create([
         'title' => 'article create for delete browser test checking',
-        'user_id' => auth()->id()
+        'user_id' => auth()->id(),
     ]);
-
-    $page = visit('/articles/myarticle');
-    $page->script('window.confirm = () => true;');
-    $page->click('[dusk="delete-article-' . $article->id . '"]');
-    $page->click('[dusk="DeleteBTN"]')
-        ->assertDontSee('article create for delete browser test checking');
-
-    sleep(1);
-
+ 
+    visit(route('filament.app.resources.articles.edit', ['record' => $article]))
+        ->click('Delete')
+        ->click('button[type="submit"][wire\\:target="callMountedAction"]')
+        ->assertSee('Deleted');
+ 
     $this->assertSoftDeleted('articles', [
         'id' => $article->id,
     ]);

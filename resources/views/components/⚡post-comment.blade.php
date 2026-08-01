@@ -3,6 +3,7 @@
 use App\Models\Article;
 use App\Models\Comment;
 use App\Notifications\CommentNotification;
+use Filament\Notifications\Notification;
 use Livewire\Attributes\Computed;
 use App\Enums\ArticleStatus;
 use Livewire\Attributes\Validate;
@@ -27,12 +28,12 @@ new class extends Component {
         ]);
 
         if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
-            session()->flash('error', 'Only Author can post comment on article.');
-            return $this->redirectRoute('/', navigate: true);
+            Notification::make()->title("Only Author can post comment on article.")->warning()->send();
+            return $this->redirect(url()->previous(), navigate: true);
         }
 
         if ($this->article->status !== ArticleStatus::PUBLISHED) {
-            $this->dispatch('live-notification', message: 'Comments are only allowed on published articles.');
+            Notification::make()->title("Comments are only allowed on published articles.")->warning()->send();
             return;
         }
 
@@ -47,7 +48,7 @@ new class extends Component {
             $this->article->user->notify(new CommentNotification($comment));
         }
         $this->body = '';
-        $this->dispatch('live-notification', message: 'Comment successfully posted.');
+        Notification::make()->title("Comment successfully posted.")->success()->send();
     }
 
     public function postReply($parentId) {
@@ -58,15 +59,15 @@ new class extends Component {
         ]);
 
         if (!auth()->user()?->hasRole(UserRole::AUTHOR)) {
-            session()->flash('error', 'Only Author can reply on comments.');
-            return $this->redirectRoute('/', navigate: true);
+            Notification::make()->title("Only Author can reply on comments.")->warning()->send();
+            return $this->redirect(url()->previous(), navigate: true);
         }
 
         $parent = Comment::with('user')->where('article_id', $this->article->id)->find($parentId);
 
         if (!$parent) {
             unset($this->replybody[$parentId]);
-            $this->dispatch('live-notification', message: 'This comment no longer exists.');
+            Notification::make()->title("This comment no longer exists.")->warning()->send();
             return;
         }
 
@@ -83,7 +84,7 @@ new class extends Component {
         }
 
         unset($this->replybody[$parentId]);
-        $this->dispatch('live-notification', message: 'Reply successfully posted.');
+        Notification::make()->title("Reply successfully posted.")->warning()->send();
     }
 };
 ?>

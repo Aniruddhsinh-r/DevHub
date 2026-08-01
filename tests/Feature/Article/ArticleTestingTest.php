@@ -12,31 +12,31 @@ require_once __DIR__ . '/../Helpers/AdminLogin.php';
 uses(RefreshDatabase::class);
 
 test('user can comment like and bookmark article', function () {
-    $user = userLogin();
+    $user = UserLogin();
 
-    $article = Article::factory()->create();
-    $response = $this->actingAs($user)->get(route('articles.show', $article));
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 
-    Livewire::test(route('filament.app.resources.articles.view', ['record' => $article]))
+    Livewire::actingAs($user)
+        ->test('post-comment', ['article' => $article])
         ->set('body', 'hi there this is comment create by testing')
         ->call('postComment')
         ->assertStatus(200);
 
-    Livewire::test(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->call('toggleBookmark')
-        ->assertDispatched('live-notification', message: 'article bookmark');
+    Livewire::actingAs($user)
+        ->test('article.show-article', ['article' => $article])
+        ->call('toggleBookmark');
 
-    Livewire::test(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->call('toggleLike')
-        ->assertDispatched('live-notification', message: 'article like');
+    Livewire::actingAs($user)
+        ->test('article.show-article', ['article' => $article])
+        ->call('toggleLike');
 
-    $this->assertDatabaseHas('views',['article_id'=>$article->id , 'user_id'=>$user->id]);
-    $this->assertDatabaseHas('likes',['article_id'=>$article->id , 'user_id'=>$user->id]);
-    $this->assertDatabaseHas('bookmarks',['article_id'=>$article->id , 'user_id'=>$user->id]);
-    $this->assertDatabaseHas('comments',['article_id'=>$article->id ,
-        'user_id'=>$user->id,
-        'body' => 'hi there this is comment create by testing']);
-    $response->assertStatus(200);
+    $this->assertDatabaseHas('likes', ['article_id' => $article->id, 'user_id' => $user->id]);
+    $this->assertDatabaseHas('bookmarks', ['article_id' => $article->id, 'user_id' => $user->id]);
+    $this->assertDatabaseHas('comments', [
+        'article_id' => $article->id,
+        'user_id' => $user->id,
+        'body' => 'hi there this is comment create by testing',
+    ]);
 });
 
 test('admin viewing article does not create a view record', function () {

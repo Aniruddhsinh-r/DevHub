@@ -8,17 +8,6 @@ require_once __DIR__ . '/../Helpers/UserLogin.php';
 require_once __DIR__ . '/../Helpers/AdminLogin.php';
 uses(RefreshDatabase::class);
 
-// test('admin cant bookmark article', function () {
-//     $admin = AdminLogin();
-//     $article = Article::factory()->create();
-
-//     Livewire::test('livewirecomponent.article.show-article',['article' => $article])
-//         ->call('toggleBookmark')
-//         ->assertForbidden();
-
-//     $this->assertDatabaseMissing('bookmarks',['article_id'=>$article->id, 'user_id'=>$admin->id]);
-// });
-
 test('guest cant access article page for bookmark', function () {
     $article = Article::factory()->create();
  

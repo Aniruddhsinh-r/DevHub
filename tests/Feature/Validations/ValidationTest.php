@@ -78,36 +78,13 @@ test('check schedule article validation test require minutes', function () {
         ]);
 });
 
-// test('Author can see admin profile', function () {
-//     $admin = AdminLogin();
-//     UserLogin();
-
-//     $response = Livewire::test('livewirecomponent.profile.profile',['user' => $admin]);
-//     $response->assertStatus(200);
-// });
-
 test('User cant see those auther who dose not exist in db', function () {
     UserLogin();
 
     $this->get('/profile/4343223')->assertStatus(404);
 });
 
-test('Admin cant update his profile', function () {
-    $admin = AdminLogin();
-
-    $response = $this->actingAs($admin)->get(route('profile.edit'),[
-        'name' => 'Admin Name change',
-        'email' => 'admin@example.com',
-    ]);
-    $response->assertStatus(403);
-
-    $this->assertDatabaseHas('users', [
-        'name' => $admin->name,
-        'email' => $admin->email,
-    ]);
-});
-
-test('user can update his password', function () {
+test('Admin can update his profile', function () {
     $admin = AdminLogin();
  
     Livewire::actingAs($admin)
@@ -122,4 +99,37 @@ test('user can update his password', function () {
         ->assertHasNoFormErrors();
  
     expect(Hash::check('newPassword', $admin->fresh()->password))->toBeTrue();
+});
+
+test('user can update his password', function () {
+    $user = UserLogin();
+ 
+    Livewire::actingAs($user)
+        ->test(EditProfile::class)
+        ->fillForm([
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => 'newPassword',
+            'password_confirmation' => 'newPassword',
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+ 
+    expect(Hash::check('newPassword', $user->fresh()->password))->toBeTrue();
+});
+
+test('check profile update validation test', function () {
+    UserLogin();
+ 
+    Livewire::test(EditProfile::class)
+        ->fillForm([
+            'name' => '',
+            'password' => '13333213313',
+            'password_confirmation' => 'drafts',
+        ])
+        ->call('save')
+        ->assertHasFormErrors([
+            'name' => 'required',
+            'password' => 'confirmed',
+        ]);
 });

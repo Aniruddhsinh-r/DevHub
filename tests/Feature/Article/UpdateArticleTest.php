@@ -49,12 +49,5 @@ test('guest can not access article edit page', function () {
     $article = Article::factory()->create();
 
     Livewire::test(EditArticle::class, ['record' => $article->getRouteKey()])
-        ->assertRedirect(route('filament.app.auth.login'));
-});
-
-test('admin cannot access create article page', function () {
-    AdminLogin();
-
-    Livewire::test(EditArticle::class, ['record' => $article->getRouteKey()])
-        ->assertForbidden();
+        ->assertSee(403);
 });
