@@ -25,7 +25,6 @@
             </p>
             <p class="mt-3 text-zinc-500">Please contact your administrator to request a new invitation.</p>
             <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <a href="{{ route('filament.app.pages.home') }}" class="inline-flex items-center rounded-2xl bg-white px-6 py-3 font-bold text-black transition hover:scale-105">Go Home</a>
                 <a href="/login" class="inline-flex items-center rounded-2xl border border-zinc-700 px-6 py-3 font-bold text-white transition hover:border-zinc-500 hover:bg-zinc-900">Login</a>
             </div>
         </div>

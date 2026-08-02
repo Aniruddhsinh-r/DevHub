@@ -27,7 +27,6 @@
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-6 py-3 rounded-2xl bg-white text-black font-bold hover:scale-105 transition">Go to Login</a>
-            <a href="{{ route('filament.app.pages.home') }}" class="inline-flex items-center justify-center px-6 py-3 rounded-2xl border border-zinc-700 text-white font-bold hover:bg-zinc-900 transition">Go Home</a>
         </div>
     </div>
 </div>

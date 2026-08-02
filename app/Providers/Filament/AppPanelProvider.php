@@ -5,6 +5,8 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Auth\EditProfile as AuthEditProfile;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
+use App\Filament\Pages\Auth\Register as AuthRegister;
+use App\Filament\Pages\Auth\Login as AuthLogin;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
@@ -29,8 +31,8 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->id('app')
-            ->login()
-            ->registration()
+            ->login(AuthLogin::class)
+            ->registration(AuthRegister::class)
             ->path('')
             ->homeUrl('/home')
             ->colors([

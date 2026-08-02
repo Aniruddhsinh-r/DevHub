@@ -22,8 +22,8 @@ test('Register a user', function () {
         ->fill('#form\\.name', 'Romanreigns')
         ->fill('#form\\.email', $email)
         ->fill('#form\\.password', 'Roman123')
-        ->fill('#form\\.passwordConfirmation', 'Roman123')
-        ->click('button[type="submit"][wire\\:target="register"]');
+        ->click('button[type="submit"][wire\\:target="register"]')
+        ->assertRoute('filament.app.pages.home');
  
     $this->assertDatabaseHas('users', [
         'email' => $email,

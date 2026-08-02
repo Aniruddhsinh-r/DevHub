@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 use App\Models\User;
 use App\Enums\UserRole;
 use App\Models\Invitation;
@@ -10,6 +11,7 @@ use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Notification;
 
 new class extends Component
 {
@@ -29,8 +31,8 @@ new class extends Component
     public function mount(Request $request)
     {
         if (Auth::check()) {
-            session()->flash('error', 'You are already loged in our system.');
-            return $this->redirect('/app/home', navigate: true);
+            Notification::make()->title("You are already loged in our system.")->warning()->send();
+            return $this->redirect('/home', navigate: true);
         }
         $this->email = $request->route('email');
         $this->originalEmail = $request->route('email');
@@ -72,8 +74,8 @@ new class extends Component
         $user->assignRole(UserRole::AUTHOR);
         Auth::login($user, $remember = true);
 
-        session()->flash('success', 'Account created successfully.');
-        return $this->redirect('/app/home', navigate: true);
+        Notification::make()->title("Account created successfully.")->success()->send();
+        return $this->redirect('/home', navigate: true);
     }
 };
 ?>

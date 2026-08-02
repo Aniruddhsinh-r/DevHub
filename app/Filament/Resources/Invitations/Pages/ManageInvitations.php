@@ -32,7 +32,7 @@ class ManageInvitations extends ManageRecords
             'accepted' => Tab::make('accepted')->badge(Invitation::query()->where('status', 'accepted')->count())->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'accepted')),
             'expired' => Tab::make('expired')->badge(Invitation::query()->where('status', 'expired')->count())->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'expired')),
         ];
-    } 
+    }
     protected function getHeaderActions(): array
     {
         return [
@@ -42,7 +42,7 @@ class ManageInvitations extends ManageRecords
                 $deleted = User::onlyTrashed()->where('email',$email)->first();
 
                 if ($deleted) {
-                    Notification::make()->title('This email is blocked.')->danger()->send();      
+                    Notification::make()->title('This email is blocked.')->danger()->send();
                     $action->halt();
                 }
 
@@ -64,7 +64,7 @@ class ManageInvitations extends ManageRecords
                 } elseif ($exist?->expires_at > now()) {
                     $remaining = $exist->expires_at->diffForHumans(null, true);
                     Notification::make()->title("Please wait {$remaining} before resending.")->danger()->send();
-                    
+
                     $action->halt();
                     return;
                 } else {
@@ -80,8 +80,7 @@ class ManageInvitations extends ManageRecords
                 );
 
                 Mail::to($email)->queue(new InvitationMail($message));
-                Notification::make()->title('Invite sent successfully.')->success()->send();
-            }),
+            })->successNotificationTitle('Invite sent successfully.'),
         ];
     }
 }

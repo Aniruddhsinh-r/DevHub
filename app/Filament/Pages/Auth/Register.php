@@ -2,13 +2,16 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Auth\Pages\EditProfile as PagesEditProfile;
+use Filament\Auth\Pages\Register as PagesRegister;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Hash;
+use App\Enums\UserRole;
 
-class EditProfile extends PagesEditProfile
+use Filament\Pages\Page;
+
+class Register extends PagesRegister
 {
     public function form(Schema $schema): Schema
     {
@@ -26,29 +29,21 @@ class EditProfile extends PagesEditProfile
                 TextInput::make('email')
                     ->email()
                     ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255),
-                TextInput::make('bio')
+                    ->unique(table: 'users', column: 'email')
                     ->maxLength(255),
                 TextInput::make('password')
-                    ->label('New Password')
+                    ->label('Password')
                     ->password()
                     ->revealable()
-                    ->confirmed()
-                    ->dehydrated(fn (?string $state): bool => filled($state))
-                    ->dehydrateStateUsing(
-                        fn (string $state): string => Hash::make($state)
-                    ),
-                TextInput::make('password_confirmation')
-                    ->label('Confirm Password')
-                    ->password()
-                    ->revealable()
-                    ->dehydrated(false),
+                    ->required(),
             ]);
     }
 
-    protected function getRedirectUrl(): ?string
+    protected function handleRegistration(array $data): Model
     {
-        return filament()->getUrl();
+        $user = parent::handleRegistration($data);
+        $user->assignRole(UserRole::AUTHOR);
+
+        return $user;
     }
 }
