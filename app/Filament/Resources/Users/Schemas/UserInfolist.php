@@ -17,18 +17,14 @@ class UserInfolist
         return $schema
             ->columns(1)
             ->components([
-
                 Section::make()
                     ->columnSpanFull()
                     ->schema([
-
-                        // TOP: round avatar + name/email/uuid
                         Grid::make([
                             'default' => 1,
                             'lg' => 4,
                         ])
                         ->schema([
-                            // Avatar — round profile picture
                             ImageEntry::make('avatar')
                                 ->hiddenLabel()
                                 ->circular()
@@ -42,7 +38,6 @@ class UserInfolist
                                     'lg' => 1,
                                 ]),
 
-                            // Name / email / uuid
                             Group::make([
                                 TextEntry::make('name')
                                     ->size('lg')
@@ -61,15 +56,6 @@ class UserInfolist
                                 'lg' => 3,
                             ]),
                         ]),
-
-                        TextEntry::make('uuid')
-                                    ->label('UUID')
-                                    ->icon('heroicon-o-identification')
-                                    ->color('gray')
-                                    ->copyable()
-                                    ->copyMessage('UUID copied')
-                                    ->columnSpanFull(),
-
                         TextEntry::make('bio')
                             ->label('Bio')
                             ->placeholder('No bio added')
@@ -86,12 +72,10 @@ class UserInfolist
                                 ->label('Created At')
                                 ->dateTime('d M Y, H:i')
                                 ->placeholder('-'),
-
                             TextEntry::make('updated_at')
                                 ->label('Updated At')
                                 ->dateTime('d M Y, H:i')
                                 ->placeholder('-'),
-
                             TextEntry::make('email_verified_at')
                                 ->label('Email Verified')
                                 ->badge()
@@ -100,7 +84,6 @@ class UserInfolist
                                 ->formatStateUsing(fn ($state) => $state ? \Illuminate\Support\Carbon::parse($state)->format('d M Y, H:i') : 'Not verified')
                                 ->icon(fn ($state) => $state ? 'heroicon-o-check-badge' : 'heroicon-o-x-circle')
                                 ->placeholder('Not verified'),
-                            
                             TextEntry::make('deleted_at')
                                 ->label('Deleted At')
                                 ->dateTime('d M Y, H:i')

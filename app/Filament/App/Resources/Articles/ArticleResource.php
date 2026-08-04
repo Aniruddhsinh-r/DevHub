@@ -6,11 +6,11 @@ use App\Filament\App\Resources\Articles\Pages\CreateArticle;
 use App\Filament\App\Resources\Articles\Pages\EditArticle;
 use App\Filament\App\Resources\Articles\Pages\ViewArticle;
 use App\Filament\App\Resources\Articles\Pages\ListArticles;
+use App\Filament\App\Resources\Articles\Pages\MyArticles;
+use App\Filament\App\Resources\Articles\Pages\Bookmark;
 use App\Filament\App\Resources\Articles\Schemas\ArticleForm;
+use App\Filament\App\Resources\Articles\Schemas\ArticleInfolist;
 use App\Models\Article;
-use Filament\Resources\RelationManagers\RelationGroup;
-use App\Filament\Resources\Articles\RelationManagers\CommentsRelationManager;
-use App\Filament\Resources\Articles\RelationManagers\LikesRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,11 +36,18 @@ class ArticleResource extends Resource
         return ArticleForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return ArticleInfolist::configure($schema);
+    }
+
     public static function getPages(): array
     {
         return [
             'index' => ListArticles::route('/'),
             'create' => CreateArticle::route('/create'),
+            'bookmarks' => Bookmark::route('/bookmarks'),
+            'my-articles' => MyArticles::route('/my-articles'),
             'view'   => ViewArticle::route('/{record}'),
             'edit' => EditArticle::route('/{record}/edit'),
         ];
@@ -52,14 +59,5 @@ class ArticleResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            RelationGroup::make('Likes', [
-                LikesRelationManager::class,
-            ])
-        ];
     }
 }

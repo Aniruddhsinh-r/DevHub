@@ -3,6 +3,7 @@
 namespace App\Filament\App\Resources\Users;
 
 use App\Filament\App\Resources\Users\Pages\ListUsers;
+use App\Filament\App\Resources\Users\Pages\Profile;
 use App\Filament\App\Resources\Users\Pages\ViewUser;
 use App\Filament\App\Resources\Users\Schemas\UserInfolist;
 use App\Filament\App\Resources\Users\Tables\UsersTable;
@@ -31,7 +32,7 @@ class UserResource extends Resource
     {
         return parent::getEloquentQuery()
             ->where('id', '!=', auth()->id())
-            ->role(UserRole::AUTHOR); 
+            ->role(UserRole::AUTHOR);
     }
 
     protected static ?string $model = User::class;
@@ -85,6 +86,7 @@ class UserResource extends Resource
     {
         return [
             'index' => ListUsers::route('/'),
+            'profile' => Profile::route('/profile'),
             'view' => ViewUser::route('/{record}'),
         ];
     }

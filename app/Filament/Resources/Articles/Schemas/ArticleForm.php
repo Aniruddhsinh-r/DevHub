@@ -54,10 +54,6 @@ class ArticleForm
                     ->minDate(now())
                     ->maxDate(now()->addHours(48))
                     ->rules(['after_or_equal:now', 'before_or_equal:+48 hours']),
-                DateTimePicker::make('published_at')
-                    ->visible(fn ($get) => $get('status') === ArticleStatus::PUBLISHED)
-                    ->default(now())
-                    ->dehydrated(),
                 FileUpload::make('cover_path')
                     ->disk('public')
                     ->directory('articleCovers')

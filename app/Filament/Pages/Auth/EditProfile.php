@@ -26,7 +26,7 @@ class EditProfile extends PagesEditProfile
                 TextInput::make('email')
                     ->email()
                     ->required()
-                    ->unique(ignoreRecord: true)
+                    ->unique(table: 'users', column: 'email')
                     ->maxLength(255),
                 TextInput::make('bio')
                     ->maxLength(255),

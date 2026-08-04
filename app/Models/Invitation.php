@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['email','expires_at','status'])]
-#[Hidden(['token'])]
+#[Fillable(['email','expires_at','status','token'])]
+// #[Hidden(['token'])]
 class Invitation extends Model
 {
     use HasFactory;
@@ -17,6 +17,6 @@ class Invitation extends Model
         return [
             'expires_at' => 'datetime',
         ];
-        
+
     }
 }

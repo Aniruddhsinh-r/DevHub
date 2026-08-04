@@ -43,6 +43,20 @@ class Article extends Model
                 $article->views()->delete();
             }
         });
+
+        static::updated(function (Article $article) {
+            if (
+                $article->wasChanged('status') &&
+                $article->getOriginal('status') === ArticleStatus::PUBLISHED &&
+                in_array($article->status, [
+                    ArticleStatus::DRAFT,
+                    ArticleStatus::SCHEDULED,
+                ])
+            ) {
+                $article->likes()->delete();
+                $article->bookmarks()->detach();
+            }
+        });
     }
 
     public function getRouteKeyName()
@@ -79,10 +93,20 @@ class Article extends Model
     {
         return $this->belongsToMany(User::class, 'bookmarks');
     }
+
     public function isLikedByUser(): bool
     {
         return $this->likes()->where('user_id', auth()->id())->exists();
     }
+
+    public function topLevelComments(): HasMany
+    {
+        return $this->comments()
+            ->whereNull('parent_id')
+            ->with(['user', 'replies.user', 'replies.replies.user', 'replies.replies.parent.user'])
+            ->latest();
+    }
+
     protected function casts(): array
     {
         return [

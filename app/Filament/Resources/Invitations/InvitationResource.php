@@ -20,6 +20,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvitationMail;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\TextColumn;
 use UnitEnum;
 use Filament\Tables\Table;
@@ -33,6 +34,11 @@ class InvitationResource extends Resource
     protected static ?string $recordTitleAttribute = 'email';
 
     protected static string | UnitEnum | null $navigationGroup = 'Invites';
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->latest();
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -95,7 +101,7 @@ class InvitationResource extends Resource
             ])
             ->filters([
                 //
-            ]) 
+            ])
             ->recordActions([
                 ViewAction::make(),
                 Action::make('resend')
@@ -105,9 +111,9 @@ class InvitationResource extends Resource
                     ->visible(fn (Invitation $record) => $record->status !== 'accepted')
                     ->action(function ($record) {
                         $invitation = Invitation::findOrFail($record->id);
+                        $token = substr(md5(rand(0, 9) . $invitation['email'] . time()), 0, 32);
+                        $exist = User::where('email', $invitation->email)->first();
 
-                        $exist = User::where('email',$invitation->email)->first();
-                      
                         if($exist) {
                             Notification::make()->title("This email is already registered.")->warning()->send();
                             return;
@@ -124,12 +130,13 @@ class InvitationResource extends Resource
 
                         $invitation->update([
                             'status' => 'pending',
+                            'token' => $token,
                             'expires_at' => now()->addMinutes(30)
                         ]);
 
                         $message = URL::temporarySignedRoute('invitation',
-                            now()->addMinutes(60),
-                            ['email' => strtolower($invitation->email)]
+                            now()->addMinutes(180),
+                            ['token' => ($token)]
                         );
 
                         Mail::to($invitation->email)->queue(new InvitationMail($message));

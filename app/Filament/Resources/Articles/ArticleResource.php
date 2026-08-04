@@ -29,6 +29,11 @@ class ArticleResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->latest();
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();

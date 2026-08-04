@@ -3,9 +3,11 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\EditProfile as AuthEditProfile;
+use App\Filament\App\Resources\Users\Pages\Profile;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Pages\Auth\Register as AuthRegister;
+use App\Resources\Articles\Pages\MyArticles;
 use App\Filament\Pages\Auth\Login as AuthLogin;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -21,7 +23,6 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use App\Filament\App\Pages\Bookmark;
 use Filament\Actions\Action;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
@@ -34,14 +35,26 @@ class AppPanelProvider extends PanelProvider
             ->login(AuthLogin::class)
             ->registration(AuthRegister::class)
             ->path('')
+            ->pages([
+                \App\Filament\App\Pages\InvitationRegister::class,
+            ])
             ->homeUrl('/home')
             ->colors([
                 'primary' => Color::Amber,
             ])
             ->userMenuItems([
                 Action::make('bookmarks')
-                    ->url(fn (): string => Bookmark::getUrl())
+                    ->url('/articles/bookmarks')
                     ->icon('heroicon-s-bookmark'),
+            ])
+            ->userMenuItems([
+                Action::make('my articles')
+                    ->url('/articles/my-articles')
+                    ->icon('heroicon-o-document-text'),
+            ])
+            ->userMenuItems([
+                Action::make('profile')
+                    ->url('/users/profile'),
             ])
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\Filament\App\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\Filament\App\Pages')

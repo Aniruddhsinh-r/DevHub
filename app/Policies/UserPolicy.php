@@ -4,6 +4,8 @@ namespace App\Policies;
 
 use App\Enums\UserRole;
 use App\Models\User;
+use App\Enums\ArticleStatus;
+use App\Models\Article;
 
 class UserPolicy
 {

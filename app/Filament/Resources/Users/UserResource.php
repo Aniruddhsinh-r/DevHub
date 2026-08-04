@@ -36,7 +36,7 @@ class UserResource extends Resource
             ->where('id', '!=', auth()->id())
             ->whereDoesntHave('roles', function (Builder $query) {
                 $query->where('name', UserRole::SUPERADMIN);
-            });
+            })->latest();
     }
 
     protected static ?string $model = User::class;

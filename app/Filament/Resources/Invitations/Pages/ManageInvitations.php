@@ -37,25 +37,26 @@ class ManageInvitations extends ManageRecords
     {
         return [
             CreateAction::make()
-            ->before(function(array $data, CreateAction $action) {
+            ->action(function(array $data, CreateAction $action) {
                 $email = strtolower($data['email']);
                 $deleted = User::onlyTrashed()->where('email',$email)->first();
 
                 if ($deleted) {
                     Notification::make()->title('This email is blocked.')->danger()->send();
                     $action->halt();
+                    return ;
                 }
 
                 $activeUser = User::where('email', $email)->first();
                 if ($activeUser) {
                     Notification::make()->title('This email is already registered to an active account.')->warning()->send();
                     $action->halt();
+                    return ;
                 }
-            })
-            ->action(function (array $data, CreateAction $action) {
-                $email = strtolower($data['email']);
 
+                $token = substr(md5(rand(0, 9) . $data['email'] . time()), 0, 32);
                 $exist = Invitation::where('email',$email)->first();
+
                 if(!$exist) {
                     Invitation::create([
                         'email' => $email,
@@ -71,12 +72,10 @@ class ManageInvitations extends ManageRecords
                     $exist->update(['status'=>'pending', 'expires_at' => now()->addMinutes(30)]);
                     Notification::make()->title("Invitation resend successfully.")->success()->send();
                 }
-            })
-            ->after(function(array $data) {
-                $email = strtolower($data['email']);
+
                 $message = URL::temporarySignedRoute('invitation',
-                    now()->addMinutes(30),
-                    ['email' => $email]
+                    now()->addMinutes(180),
+                    ['token' => $token]
                 );
 
                 Mail::to($email)->queue(new InvitationMail($message));

@@ -14,6 +14,12 @@ class UserForm
     {
         return $schema
             ->components([
+                FileUpload::make('avatar')
+                    ->label('Profile Photo')
+                    ->image()
+                    ->disk('public')
+                    ->directory('avatars')
+                    ->avatar(),
                 TextInput::make('name')
                     ->required()
                     ->minLength(5)
@@ -23,27 +29,9 @@ class UserForm
                     ->email()
                     ->maxLength(255)
                     ->required(),
-                FileUpload::make('avatar')
-                    ->disk('public')
-                    ->directory('articleCovers')
-                    ->visibility('public'),
                 Textarea::make('bio')
                     ->default(null)
                     ->columnSpanFull(),
-                TextInput::make('password')
-                    ->password()
-                    ->revealable()
-                    ->minLength(8) 
-                    ->maxLength(255)
-                    ->dehydrated(fn (?string $state): bool => filled($state))
-                    ->required(fn (string $operation): bool => $operation === 'create')
-                    ->confirmed()
-                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state)),
-                TextInput::make('password_confirmation')
-                    ->password()
-                    ->revealable()
-                    ->dehydrated(false)
-                    ->required(fn (string $operation): bool => $operation === 'create'),
             ]);
     }
 }

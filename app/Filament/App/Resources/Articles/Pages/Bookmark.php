@@ -1,43 +1,51 @@
 <?php
 
-namespace App\Filament\App\Widgets;
+namespace App\Filament\App\Resources\Articles\Pages;
 
+use Filament\Resources\Pages\ListRecords;
+
+use Filament\Actions\Action;
 use App\Models\Article;
-use App\Enums\ArticleStatus;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\Layout\Split;
+use App\Filament\App\Resources\Articles\ArticleResource;
 
-class TopArticles extends BaseWidget
+class Bookmark extends ListRecords
 {
-    protected int|string|array $columnSpan = 'full';
+    protected static string $resource = ArticleResource::class;
+
+    protected static ?string $title = 'Bookmark Articles';
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('create')
+                ->label('Create Article')
+                ->icon('heroicon-o-plus')
+                ->url('/articles/create')
+                ->color('primary'),
+        ];
+    }
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
                 Article::query()
-                    ->with(['user', 'category'])
-                    ->withCount('likes')
-                    ->where('status', ArticleStatus::PUBLISHED)
-                    ->orderByDesc('view_count')
-                    ->take(6)
+                    ->whereHas('bookmarks', fn ($q) => $q->where('user_id', auth()->id()))
             )
-            ->paginated(false)
-            ->contentGrid([
-                'default' => 1,
-                'md' => 2,
-            ])
+            ->defaultSort('published_at', 'desc')
+            ->contentGrid(['md' => 2])
             ->columns([
                 Stack::make([
                     Stack::make([
                         ImageColumn::make('cover_path')
                             ->disk('public')
                             ->height('160px')
-                            ->extraImgAttributes(['class' => 'w-full object-cover rounded-xl'])
+                            ->extraImgAttributes(['class' => 'w-full object-cover rounded-l-xl'])
                             ->defaultImageUrl('https://media.licdn.com/dms/image/v2/C5112AQHyTivjkijUAg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1533804257780?e=2147483647&v=beta&t=iHBq7iyRl4h07KSszls8TpCujE45XPFMkyqgt5Z-FA8'),
                         TextColumn::make('view_count')
                             ->formatStateUsing(fn ($state) => number_format($state) . ' views')
@@ -50,7 +58,7 @@ class TopArticles extends BaseWidget
                             ->circular()
                             ->height(28)
                             ->defaultImageUrl(
-                                fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->user->name ?? 'User')
+                                fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->user->name)
                             ),
                         TextColumn::make('user.name')
                             ->weight('semibold')
@@ -79,6 +87,8 @@ class TopArticles extends BaseWidget
                     ]),
                 ])->space(3),
             ])
-            ->recordUrl(fn ($record) => "/articles/{$record->slug}");
+            ->recordUrl(fn ($record) => "/articles/{$record->slug}")
+            ->searchable()
+            ->paginated([12, 24, 48]);
     }
 }

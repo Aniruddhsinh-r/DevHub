@@ -18,10 +18,10 @@
 
         <div style="margin-bottom: 32px; text-align: left;">
             <a href="{{ $msg }}" style="background-color: #0f172a; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; display: inline-block;">
-                Accept Invitation & Setup Account
+                Accept Invitation & Seup Account
             </a>
         </div>
-        
+
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin-top: 32px; margin-bottom: 20px;">
         <p style="font-size: 12px; color: #94a3b8; margin-top: 0; margin-bottom: 8px;">If you are having trouble clicking the button above, copy and paste the raw URL configuration below directly into your web browser:</p>
         <p style="font-size: 12px; color: #0284c7; word-break: break-all; margin: 0; font-family: monospace;">

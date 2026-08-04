@@ -28,7 +28,7 @@ class InvitationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitation Mail',
+            subject: 'Invitation to Join ' . config('app.name') . ' Portal',
         );
     }
     /**

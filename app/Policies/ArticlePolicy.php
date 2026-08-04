@@ -48,7 +48,7 @@ class ArticlePolicy
 
     public function like(User $user, Article $article): bool
     {
-        return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED;
+        return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED && $article->user_id !== $user->id;
     }
 
     public function view(User $user, Article $article): bool
@@ -58,6 +58,6 @@ class ArticlePolicy
 
     public function bookmark(User $user, Article $article): bool
     {
-        return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED;
+        return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED && $article->user_id !== $user->id;
     }
 }
