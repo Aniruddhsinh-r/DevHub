@@ -138,6 +138,10 @@ class ArticleInfolist
     {
         return Section::make('Comments')
             ->columnSpanFull()
+            ->visible(fn (?Article $record) =>
+                auth()->user()?->hasRole(UserRole::AUTHOR)
+                && $record->status === ArticleStatus::PUBLISHED
+            )
             ->description(fn (Article $record) => $record->comments()->count() . ' comments')
             ->headerActions([
                 Action::make('postComment')

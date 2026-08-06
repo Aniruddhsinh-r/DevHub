@@ -26,7 +26,7 @@
         <p class="text-zinc-500 mb-10">If this is your account, sign in to continue. Otherwise, contact your administrator for assistance.</p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-6 py-3 rounded-2xl bg-white text-black font-bold hover:scale-105 transition">Go to Login</a>
+            <a href="/login" class="inline-flex items-center justify-center px-6 py-3 rounded-2xl bg-white text-black font-bold hover:scale-105 transition">Go to Login</a>
         </div>
     </div>
 </div>

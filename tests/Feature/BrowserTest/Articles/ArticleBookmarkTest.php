@@ -10,30 +10,29 @@ uses(RefreshDatabase::class);
 
 test('User can bookmark article', function () {
     $user = UserLogin();
- 
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
- 
+
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->click('[data-test="bookmark-button"]')
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="bookmark"]')
         ->assertSee('Saved');
- 
+
     $this->assertDatabaseHas('bookmarks', [
         'user_id' => $user->id,
         'article_id' => $article->id,
     ]);
 });
- 
+
 test('User can remove articles from bookmark', function () {
     $user = UserLogin();
  
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
  
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->click('[data-test="bookmark-button"]')
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="bookmark"]')
         ->assertSee('Saved');
  
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->click('[data-test="bookmark-button"]')
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="bookmark"]')
         ->assertSee('Bookmark');
  
     $this->assertDatabaseMissing('bookmarks', [
@@ -47,9 +46,9 @@ test('bookmarked article shows up on the bookmark page', function () {
     $article = Article::factory()->create(['excerpt' => 'hi this is excerpt wer.', 'title' => 'A bookmarked article']);
  
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->click('[data-test="bookmark-button"]');
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="bookmark"]');
  
-    visit(route('filament.app.pages.bookmark'))
+    visit('/articles/bookmarks')
         ->assertSee($article->title)
         ->assertSee($article->excerpt)
         ;

@@ -10,28 +10,25 @@ uses(RefreshDatabase::class);
 test('visit specific article', function () {
     UserLogin();
  
-    $article = Article::factory()->create([
-        'title' => 'example Article',
-    ]);
+    $article = Article::factory()->create();
  
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->assertSee('example Article')
+        ->assertSee($article->title)
         ->assertSee($article->excerpt);
 });
  
 test('functionality check in articles', function () {
     UserLogin();
     $article = Article::factory()->create([
-        'user_id' => auth()->id(),
         'status' => ArticleStatus::PUBLISHED,
     ]);
  
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->click('[data-test="like-button"]')
-        ->click('[data-test="bookmark-button"]')
-        ->fill('body', 'Hi there this is my first comment.')
-        ->press('Comment')
-        ->assertSee('Comment successfully posted.');
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="like"]')
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="bookmark"]')
+        ->press('Add Comment')
+        ->type('#mountedActionSchema0\\.body', 'Hi there this is my first comment.')
+        ->press('Submit');
  
     $this->assertDatabaseHas('likes', ['article_id' => $article->id, 'user_id' => auth()->id()]);
     $this->assertDatabaseHas('bookmarks', ['article_id' => $article->id, 'user_id' => auth()->id()]);

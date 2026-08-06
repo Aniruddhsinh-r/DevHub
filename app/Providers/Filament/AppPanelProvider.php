@@ -3,15 +3,13 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\EditProfile as AuthEditProfile;
-use App\Filament\App\Resources\Users\Pages\Profile;
+use App\Filament\App\Pages\InvitationRegister;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Pages\Auth\Register as AuthRegister;
-use App\Resources\Articles\Pages\MyArticles;
 use App\Filament\Pages\Auth\Login as AuthLogin;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Illuminate\Support\Facades\Vite;
@@ -35,9 +33,6 @@ class AppPanelProvider extends PanelProvider
             ->login(AuthLogin::class)
             ->registration(AuthRegister::class)
             ->path('')
-            ->pages([
-                \App\Filament\App\Pages\InvitationRegister::class,
-            ])
             ->homeUrl('/home')
             ->colors([
                 'primary' => Color::Amber,

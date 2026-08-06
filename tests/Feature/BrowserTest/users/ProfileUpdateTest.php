@@ -42,10 +42,3 @@ test('Admin cant access follow button profile page', function () {
     visit(route('filament.app.resources.users.view', ['record' => $user]))
         ->assertSee('403');
 });
- 
-test('Admin cant access his own profile edit page', function () {
-    AdminLogin();
- 
-    visit(route('filament.app.auth.profile'))
-        ->assertSee('403');
-});

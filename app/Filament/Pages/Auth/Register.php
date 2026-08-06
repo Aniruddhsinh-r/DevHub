@@ -34,6 +34,8 @@ class Register extends PagesRegister
                 TextInput::make('password')
                     ->label('Password')
                     ->password()
+                    ->minLength(8)
+                    ->maxLength(255)
                     ->revealable()
                     ->required(),
             ]);

@@ -60,4 +60,9 @@ class ArticlePolicy
     {
         return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED && $article->user_id !== $user->id;
     }
+
+    public function comment(User $user, Article $article): bool
+    {
+        return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED;
+    }
 }

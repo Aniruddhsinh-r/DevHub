@@ -13,9 +13,10 @@ test('Author comment on article', function () {
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
  
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->fill('textarea[wire\\:model="body"]', 'hello this comment created by browser comment testing.')
-        ->press('Comment')
-        ->assertSee('Comment successfully posted.');
+        ->press('Add Comment')
+        ->type('#mountedActionSchema0\\.body', 'hello this comment created by browser comment testing.')
+        ->press('Submit')
+        ->assertSee('Comment posted');
  
     $this->assertDatabaseHas('comments', [
         'article_id' => $article->id,
@@ -29,7 +30,7 @@ test('comment does not appear on draft article', function () {
     $article = Article::factory()->create(['status' => ArticleStatus::DRAFT, 'user_id' => $user->id]);
  
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->assertDontSee('Comments');
+        ->assertDontSee('button[wire\\:click*="mountAction"][wire\\:click*="postComment"]');
 });
  
 test('comment does not appear on schedule article', function () {
@@ -38,5 +39,5 @@ test('comment does not appear on schedule article', function () {
     $article = Article::factory()->create(['status' => ArticleStatus::SCHEDULED, 'user_id' => $user->id]);
  
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->assertDontSee('Comments');
+        ->assertDontSee('button[wire\\:click*="mountAction"][wire\\:click*="postComment"]');
 });

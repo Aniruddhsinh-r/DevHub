@@ -131,10 +131,10 @@ class InvitationResource extends Resource
                         $invitation->update([
                             'status' => 'pending',
                             'token' => $token,
-                            'expires_at' => now()->addMinutes(30)
+                            'expires_at' => now()->addMinutes(180)
                         ]);
 
-                        $message = URL::temporarySignedRoute('invitation',
+                        $message = URL::temporarySignedRoute('invitation-register',
                             now()->addMinutes(180),
                             ['token' => ($token)]
                         );

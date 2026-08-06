@@ -51,7 +51,7 @@ test('guest cant access user detail page', function () {
     ->assertPathIs('/admin/login');
 });
 
-test('Author cant access or search on user detail page', function () {
+test('Author cant access or search on admin user detail page', function () {
     $user = User::factory()->create();
     UserLogin();
 

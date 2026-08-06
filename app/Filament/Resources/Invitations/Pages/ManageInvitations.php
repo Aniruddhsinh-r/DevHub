@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\Invitations\Pages;
 
 use App\Filament\Resources\Invitations\InvitationResource;
+use Illuminate\Support\Facades\URL;
 use Filament\Actions\CreateAction;
 use App\Models\User;
 use App\Models\Invitation;
 use App\Mail\InvitationMail;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
@@ -60,6 +60,7 @@ class ManageInvitations extends ManageRecords
                 if(!$exist) {
                     Invitation::create([
                         'email' => $email,
+                        'token' => $token,
                         'expires_at' => now()->addMinutes(30)
                     ]);
                 } elseif ($exist?->expires_at > now()) {
@@ -69,13 +70,13 @@ class ManageInvitations extends ManageRecords
                     $action->halt();
                     return;
                 } else {
-                    $exist->update(['status'=>'pending', 'expires_at' => now()->addMinutes(30)]);
+                    $exist->update(['status' => 'pending', 'token' => $token, 'expires_at' => now()->addMinutes(30)]);
                     Notification::make()->title("Invitation resend successfully.")->success()->send();
                 }
 
-                $message = URL::temporarySignedRoute('invitation',
+                $message = URL::temporarySignedRoute('invitation-register',
                     now()->addMinutes(180),
-                    ['token' => $token]
+                    ['token' => ($token)]
                 );
 
                 Mail::to($email)->queue(new InvitationMail($message));

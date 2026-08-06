@@ -33,6 +33,8 @@ class EditProfile extends PagesEditProfile
                 TextInput::make('password')
                     ->label('New Password')
                     ->password()
+                    ->minLength(8)
+                    ->maxLength(255)
                     ->revealable()
                     ->confirmed()
                     ->dehydrated(fn (?string $state): bool => filled($state))
