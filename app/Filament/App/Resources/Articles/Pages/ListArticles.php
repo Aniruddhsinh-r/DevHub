@@ -42,10 +42,11 @@ class ListArticles extends ListRecords
                         ImageColumn::make('cover_path')
                             ->disk('public')
                             ->height('160px')
-                            ->extraImgAttributes(['class' => 'w-full object-cover rounded-l-xl'])
+                            ->extraImgAttributes(['class' => 'w-full object-cover rounded-xl'])
                             ->defaultImageUrl('https://media.licdn.com/dms/image/v2/C5112AQHyTivjkijUAg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1533804257780?e=2147483647&v=beta&t=iHBq7iyRl4h07KSszls8TpCujE45XPFMkyqgt5Z-FA8'),
-                        TextColumn::make('view_count')
-                            ->formatStateUsing(fn ($state) => number_format($state) . ' views')
+                        TextColumn::make('views')
+                            // ->state(fn ($record) => $record->views()->count())
+                            ->formatStateUsing(fn ($record) => $record->views()->count() . ' views')
                             ->badge()
                             ->color('gray')
                             ->extraAttributes(['class' => 'absolute top-2 left-2 z-10']),

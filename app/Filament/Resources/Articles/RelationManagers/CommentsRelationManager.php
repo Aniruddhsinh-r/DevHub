@@ -29,16 +29,9 @@ class CommentsRelationManager extends RelationManager
     {
         return $schema
             ->components([
-                Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
-                Select::make('parent_id')
-                    ->relationship('parent', 'id')
-                    ->default(null),
                 Textarea::make('body')
                     ->required()
                     ->columnSpanFull(),
-                DateTimePicker::make('edited_at'),
             ]);
     } 
 

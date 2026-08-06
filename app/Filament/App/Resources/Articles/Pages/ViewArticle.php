@@ -8,6 +8,7 @@ use App\Models\View;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
+use App\Enums\ArticleStatus;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewArticle extends ViewRecord
@@ -17,13 +18,17 @@ class ViewArticle extends ViewRecord
     public function mount(int|string $record): void {
         parent::mount($record);
 
-        $view = View::firstOrCreate([
-            'user_id' => auth()->id(),
-            'article_id' => $this->record->id,
-        ]);
+        $published = $this->record->status === ArticleStatus::PUBLISHED;
 
-        if ($view->wasRecentlyCreated) {
-            $this->record->increment('view_count');
+        if($published) {
+            $view = View::firstOrCreate([
+                'user_id' => auth()->id(),
+                'article_id' => $this->record->id,
+            ]);
+
+            if ($view->wasRecentlyCreated) {
+                $this->record->increment('view_count');
+            }
         }
     }
 

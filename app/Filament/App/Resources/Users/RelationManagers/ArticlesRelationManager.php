@@ -24,7 +24,9 @@ class ArticlesRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('title'),
                 TextColumn::make('excerpt'),
-                TextColumn::make('view_count'),
+                TextColumn::make('views_count')
+                    ->counts('views')
+                    ->label('views'),
                 TextColumn::make('likes_count')
                     ->counts('likes')
                     ->label('Likes'),

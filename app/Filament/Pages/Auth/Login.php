@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Auth\Http\Responses\Contracts\LoginResponse;
+use Filament\Forms\Components\Checkbox;
 use Filament\Auth\Pages\Login as PagesLogin;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -27,6 +27,8 @@ class Login extends PagesLogin
                     ->revealable()
                     ->required()
                     ->autocomplete('current-password'),
+                Checkbox::make('remember')
+                    ->label('Remember me')
             ]);
     }
 

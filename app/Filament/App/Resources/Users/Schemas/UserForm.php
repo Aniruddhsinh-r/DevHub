@@ -19,7 +19,9 @@ class UserForm
                 TextInput::make('email')
                     ->label('Email address')
                     ->email()
-                    ->required(),
+                    ->unique(table: 'users', column: 'email')
+                    ->required()
+                    ->maxLength(255),
                 FileUpload::make('avatar')
                     ->disk('public')
                     ->directory('articleCovers')

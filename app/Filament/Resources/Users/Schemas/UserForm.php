@@ -27,8 +27,9 @@ class UserForm
                 TextInput::make('email')
                     ->label('Email address')
                     ->email()
-                    ->maxLength(255)
-                    ->required(),
+                    ->unique(table: 'users', column: 'email')
+                    ->required()
+                    ->maxLength(255),
                 Textarea::make('bio')
                     ->default(null)
                     ->columnSpanFull(),

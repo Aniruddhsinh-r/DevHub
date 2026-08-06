@@ -14,7 +14,6 @@ use App\Filament\Resources\Users\RelationManagers\FollowingRelationManager;
 use App\Filament\App\Resources\Users\RelationManagers\ArticlesRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use App\Filament\App\Resources\Users\Schemas\UserForm;
 use Filament\Tables\Table;
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Builder;
@@ -74,11 +73,6 @@ class UserResource extends Resource
                 FollowingRelationManager::class,
             ]),
         ];
-    }
-
-    public static function form(Schema $schema): Schema
-    {
-        return UserForm::configure($schema);
     }
 
     public static function getPages(): array
