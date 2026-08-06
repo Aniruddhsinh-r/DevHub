@@ -34,8 +34,8 @@ class FollowingRelationManager extends RelationManager
                     DetachBulkAction::make(),
                 ]),
             ])->emptyStateHeading('This author is not following anyone.')
-            ->recordUrl(fn ($record) => UserResource::getUrl('view', [
-                'record' => $record,
-            ]));
+            ->recordUrl(fn ($record) => (string) $record->id === (string) auth()->id()
+                ? UserResource::getUrl('profile')
+                : UserResource::getUrl('view', ['record' => $record]));;
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Filament\App\Resources\Users\Tables;
 
 use App\Enums\ArticleStatus;
+use App\Filament\App\Resources\Users\Pages\Profile;
+use App\Filament\App\Resources\Users\UserResource;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;

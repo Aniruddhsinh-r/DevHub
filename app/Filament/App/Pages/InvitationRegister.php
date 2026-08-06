@@ -10,15 +10,14 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
-use Filament\Pages\Page;
-use Filament\Schemas\Components\Grid;
+use Filament\Pages\SimplePage;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Form;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class InvitationRegister extends Page implements HasForms
+class InvitationRegister extends SimplePage implements HasForms
 {
     use InteractsWithForms;
 
@@ -54,6 +53,7 @@ class InvitationRegister extends Page implements HasForms
             }
 
             $this->invitation = $invitation;
+            $this->data['email'] = $invitation->email;
         }
     }
 
@@ -79,11 +79,8 @@ class InvitationRegister extends Page implements HasForms
                 Form::make([
                     TextInput::make('email')
                         ->label('Email address')
-                        ->afterStateHydrated(function ($component) {
-                            $component->state($this->invitation?->email);
-                        })
+                        ->dehydrated()
                         ->disabled(),
-
                     TextInput::make('name')
                         ->label('Full name')
                         ->placeholder('e.g. John Doe')
@@ -92,7 +89,6 @@ class InvitationRegister extends Page implements HasForms
                         ->trim()
                         ->maxLength(50)
                         ->columnSpanFull(),
-
                     TextInput::make('password')
                         ->password()
                         ->revealable()
@@ -124,9 +120,9 @@ class InvitationRegister extends Page implements HasForms
             abort(409);
         }
 
-        if ($this->email !== $this->originalEmail) {
-            $this->email = $this->originalEmail;
-            $this->addError('email', 'This invitation is no longer valid.');
+        if ($this->invitation->email !== $data['email']) {
+            $this->data['email'] = $this->invitation->email;
+            Notification::make()->title('This Invitation email is not valid.')->danger()->send();
             return;
         }
 

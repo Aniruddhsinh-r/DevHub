@@ -8,6 +8,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Pages\Auth\Register as AuthRegister;
 use App\Filament\Pages\Auth\Login as AuthLogin;
+use Illuminate\Support\Facades\Route;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Support\Assets\Css;
@@ -53,6 +54,11 @@ class AppPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\Filament\App\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\Filament\App\Pages')
+            ->routes(function (Panel $panel) {
+                Route::get('/invitation/{token}', InvitationRegister::class)
+                    ->name('invitation-register')
+                    ->middleware('signed');
+            })
             ->topNavigation()
             ->brandName('DevHub')
             ->profile(AuthEditProfile::class)

@@ -28,7 +28,8 @@ test('functionality check in articles', function () {
         ->click('button[wire\\:click*="mountAction"][wire\\:click*="bookmark"]')
         ->press('Add Comment')
         ->type('#mountedActionSchema0\\.body', 'Hi there this is my first comment.')
-        ->press('Submit');
+        ->press('Submit')
+        ->assertSee('Comment posted');
  
     $this->assertDatabaseHas('likes', ['article_id' => $article->id, 'user_id' => auth()->id()]);
     $this->assertDatabaseHas('bookmarks', ['article_id' => $article->id, 'user_id' => auth()->id()]);
