@@ -13,10 +13,10 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;;
 use Illuminate\Notifications\Notifiable;
 use App\Enums\UserRole;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password', 'two_factor_secret', 'last_seen_at', 'bio', 'avatar'])]
@@ -63,6 +63,7 @@ class User extends Authenticatable implements FilamentUser
                 $user->articles()->withTrashed()->forceDelete();
                 $user->comments()->withTrashed()->forceDelete();
                 $user->likes()->forceDelete();
+                Storage::disk('public')->delete($user->avatar);
             } else {
                 $user->invitations()->delete();
                 $user->views()->delete();

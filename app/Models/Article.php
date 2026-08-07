@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Article extends Model
 {
@@ -37,6 +38,7 @@ class Article extends Model
                 $article->likes()->delete();
                 $article->comments()->delete();
                 $article->bookmarks()->detach();
+                Storage::disk('public')->delete($article->cover_path);
             } else {
                 $article->comments()->delete();
                 $article->bookmarks()->detach();

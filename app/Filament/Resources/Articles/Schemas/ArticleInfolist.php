@@ -64,6 +64,7 @@ class ArticleInfolist
                                 'lg' => 2,
                             ]),
                             ImageEntry::make('cover_path')
+                                ->disk('public')
                                 ->hiddenLabel()
                                 ->maxWidth('300px')
                                 ->height('180px')

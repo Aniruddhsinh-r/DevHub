@@ -31,16 +31,17 @@ class UserInfolist
                         ->schema([
                             ImageEntry::make('avatar')
                                 ->hiddenLabel()
-                                ->circular()
-                                ->height('120px')
-                                ->extraImgAttributes([
-                                    'class' => 'object-cover',
-                                ])
-                                ->placeholder('No avatar')
-                                ->columnSpan([
-                                    'default' => 1,
-                                    'lg' => 1,
-                                ]),
+    ->disk('public')
+    ->circular()
+    ->imageWidth(120)
+    ->defaultImageUrl('https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png')
+    ->extraImgAttributes([
+        'class' => 'object-cover',
+    ])
+    ->columnSpan([
+        'default' => 1,
+        'lg' => 1,
+    ]),
                             Group::make([
                                 TextEntry::make('name')
                                     ->size('lg')

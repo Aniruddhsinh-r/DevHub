@@ -24,7 +24,7 @@ class UserForm
                     ->maxLength(255),
                 FileUpload::make('avatar')
                     ->disk('public')
-                    ->directory('articleCovers')
+                    ->directory('avatars')
                     ->visibility('public'),
                 Textarea::make('bio')
                     ->default(null)
