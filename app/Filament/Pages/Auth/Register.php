@@ -3,13 +3,10 @@
 namespace App\Filament\Pages\Auth;
 
 use Filament\Auth\Pages\Register as PagesRegister;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Schemas\Schema;
 use App\Enums\UserRole;
-
-use Filament\Pages\Page;
 
 class Register extends PagesRegister
 {
@@ -17,12 +14,6 @@ class Register extends PagesRegister
     {
         return $schema
             ->components([
-                FileUpload::make('avatar')
-                    ->label('Profile Photo')
-                    ->image()
-                    ->disk('public')
-                    ->directory('avatars')
-                    ->avatar(),
                 TextInput::make('name')
                     ->required()
                     ->maxLength(50),

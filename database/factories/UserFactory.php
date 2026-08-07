@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\User;
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
@@ -32,7 +31,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => 'Password',
+            'password' => 'password',
             'remember_token' => Str::random(10),
         ];
     }

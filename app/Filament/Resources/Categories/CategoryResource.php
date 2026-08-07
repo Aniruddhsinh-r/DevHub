@@ -18,6 +18,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Hidden;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Closure;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
@@ -33,18 +35,34 @@ class CategoryResource extends Resource
     {
         return parent::getEloquentQuery()->latest();
     }
-    
+
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
                 TextInput::make('name')
-                ->required()
-                ->minLength(4)
-                ->maxLength(20)
-                ->unique(ignoreRecord: true),
+                    ->required()
+                    ->minLength(4)
+                    ->maxLength(20)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state)))
+                    ->unique(ignoreRecord: true)
+                    ->rules([
+                        fn (?Model $record) => function (string $attribute, $value, Closure $fail) use ($record) {
+                            $slug = Str::slug($value);
+
+                            $exists = Category::where('slug', $slug)
+                                ->when($record, fn ($query) => $query->whereKeyNot($record->getKey()))
+                                ->exists();
+
+                            if ($exists) {
+                                $fail("A category with a similar name already exists (slug: \"{$slug}\").");
+                            }
+                        },
+                    ]),
+
                 Hidden::make('slug')
-            ->dehydrateStateUsing(fn ($get) => Str::slug($get('name'))),
+                    ->dehydrateStateUsing(fn ($get) => Str::slug($get('name'))),
             ]);
     }
 
