@@ -63,7 +63,9 @@ class User extends Authenticatable implements FilamentUser
                 $user->articles()->withTrashed()->forceDelete();
                 $user->comments()->withTrashed()->forceDelete();
                 $user->likes()->forceDelete();
-                Storage::disk('public')->delete($user->avatar);
+                if ($user->avatar) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
             } else {
                 $user->invitations()->delete();
                 $user->views()->delete();
