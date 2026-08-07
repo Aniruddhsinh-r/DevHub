@@ -14,7 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use App\Enums\ArticleStatus;
-use Filament\Actions\RestoreAction; 
+use Filament\Actions\RestoreAction;
 use Filament\Tables\Table;
 
 class ArticlesTable

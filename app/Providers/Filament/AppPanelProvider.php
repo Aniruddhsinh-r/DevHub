@@ -54,11 +54,6 @@ class AppPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\Filament\App\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\Filament\App\Pages')
-            ->routes(function (Panel $panel) {
-                Route::get('/invitation/{token}', InvitationRegister::class)
-                    ->name('invitation-register')
-                    ->middleware('signed');
-            })
             ->topNavigation()
             ->brandName('DevHub')
             ->profile(AuthEditProfile::class)

@@ -13,7 +13,7 @@ class HomeStats extends StatsOverviewWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Total Views', number_format(auth()->user()->views()->count()))
+            Stat::make('Total Views', number_format(auth()->user()->articles()->withCount('views')->get()->sum('views_count')))
                 ->description('Views across all your articles')
                 ->icon('heroicon-o-eye')
                 ->color('primary'),
@@ -23,7 +23,7 @@ class HomeStats extends StatsOverviewWidget
                 ->icon('heroicon-o-document-text')
                 ->color('info'),
 
-            Stat::make('Total Likes', number_format(auth()->user()->likes()->count()))
+            Stat::make('Total Likes', number_format(auth()->user()->articles()->withCount('likes')->get()->sum('likes_count')))
                 ->description('Likes received from readers')
                 ->icon('heroicon-o-heart')
                 ->color('danger'),

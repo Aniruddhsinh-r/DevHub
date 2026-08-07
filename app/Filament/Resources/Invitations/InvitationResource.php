@@ -58,7 +58,13 @@ class InvitationResource extends Resource
                 TextEntry::make('email')
                     ->label('Email address'),
                 TextEntry::make('status')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'accepted' => 'success',
+                        'expired' => 'danger',
+                        default => 'gray',
+                    }),
                 TextEntry::make('expires_at')
                     ->dateTime()
                     ->placeholder('-'),

@@ -19,6 +19,10 @@ class ListArticles extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('myarticle')
+                ->label('My Articles')
+                ->url('/articles/my-articles')
+                ->color('primary'),
             Action::make('create')
                 ->label('Create Article')
                 ->icon('heroicon-o-plus')
@@ -45,8 +49,7 @@ class ListArticles extends ListRecords
                             ->extraImgAttributes(['class' => 'w-full object-cover rounded-xl'])
                             ->defaultImageUrl('https://media.licdn.com/dms/image/v2/C5112AQHyTivjkijUAg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1533804257780?e=2147483647&v=beta&t=iHBq7iyRl4h07KSszls8TpCujE45XPFMkyqgt5Z-FA8'),
                         TextColumn::make('views')
-                            // ->state(fn ($record) => $record->views()->count())
-                            ->formatStateUsing(fn ($record) => $record->views()->count() . ' views')
+                            ->state(fn ($record) => $record->views()->count() . 'views')
                             ->badge()
                             ->color('gray')
                             ->extraAttributes(['class' => 'absolute top-2 left-2 z-10']),
@@ -60,7 +63,8 @@ class ListArticles extends ListRecords
                             ),
                         TextColumn::make('user.name')
                             ->weight('semibold')
-                            ->grow(),
+                            ->grow()
+                            ->searchable(),
                         TextColumn::make('category.name')
                             ->badge()
                             ->color('gray'),
@@ -68,10 +72,12 @@ class ListArticles extends ListRecords
                     TextColumn::make('title')
                         ->weight('bold')
                         ->size('lg')
-                        ->limit(50),
+                        ->limit(50)
+                        ->searchable(),
                     TextColumn::make('excerpt')
                         ->color('gray')
-                        ->limit(100),
+                        ->limit(100)
+                        ->searchable(),
                     Split::make([
                         TextColumn::make('created_at')
                             ->since()
