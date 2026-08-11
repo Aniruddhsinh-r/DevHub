@@ -77,9 +77,8 @@ class ArticleInfolist
                                             ->size('lg')
                                             ->badge()
                                             ->color('info'),
-                                        TextEntry::make('views')
+                                        TextEntry::make('view_count')
                                             ->label('Views')
-                                            ->state(fn ($record) => $record->views()->count())
                                             ->numeric()
                                             ->icon('heroicon-m-eye'),
                                     ])
@@ -154,14 +153,6 @@ class ArticleInfolist
                         Textarea::make('body')->label('Your comment')->required()->maxLength(5000)->rows(3),
                     ])
                     ->action(function (array $data, Article $record) {
-                        if (! Auth::user()?->hasRole(UserRole::AUTHOR)) {
-                            Notification::make()->title('Only authors can comment.')->warning()->send();
-                            return;
-                        }
-                        if ($record->status !== ArticleStatus::PUBLISHED) {
-                            Notification::make()->title('Comments are only allowed on published articles.')->warning()->send();
-                            return;
-                        }
                         $comment = Comment::create([
                             'user_id' => Auth::id(),
                             'article_id' => $record->id,
@@ -226,10 +217,6 @@ class ArticleInfolist
                             Textarea::make('body')->label('Your reply')->required()->maxLength(5000)->rows(3),
                         ])
                         ->action(function (Comment $record, array $data, \Livewire\Component $livewire) use ($level): void {
-                            if (! Auth::user()?->hasRole(UserRole::AUTHOR)) {
-                                Notification::make()->title('Only authors can reply.')->warning()->send();
-                                return;
-                            }
                             $body = $data['body'];
 
                             if ($level >= 3) {
@@ -251,7 +238,6 @@ class ArticleInfolist
                             }
 
                             Notification::make()->title('Reply posted')->success()->send();
-                            $livewire->dispatch('$refresh');
                         }),
                 ])->extraAttributes(['class' => '!mt-0 !pt-0']),
             ])

@@ -17,17 +17,12 @@ class ArticlePolicy
         //
     }
 
-    public function workWith(User $user, Article $article)
-    {
-        return $article->user->is($user);
-    }
-
     public function create(User $user): bool {
         return $user->can('article.create');
     }
 
     public function update(User $user, Article $article): bool {
-        if ($user->hasRole('superadmin') || $user->hasRole('admin')) {
+        if ($user->hasRole(UserRole::SUPERADMIN) || $user->hasRole(UserRole::ADMIN)) {
             return true;
         }
 
@@ -35,7 +30,7 @@ class ArticlePolicy
     }
 
     public function delete(User $user, Article $article): bool {
-        if ($user->hasRole('superadmin') || $user->hasRole('admin')) {
+        if ($user->hasRole(UserRole::SUPERADMIN) || $user->hasRole(UserRole::ADMIN)) {
             return true;
         }
         return $user->can('article.delete') && $user->id === $article->user_id;

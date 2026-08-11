@@ -65,6 +65,6 @@ class UsersTable
                     ForceDeleteBulkAction::make()->successNotificationTitle('users permanently deleted.'),
                     RestoreBulkAction::make()->successNotificationTitle('user restore successfully.'),
                 ]),
-            ])->searchPlaceholder('Search Users');;
+            ])->searchPlaceholder('Search Users');
     }
 }

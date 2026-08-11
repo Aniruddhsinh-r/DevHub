@@ -51,9 +51,8 @@ class ArticleInfolist
                                             ->size('lg')
                                             ->badge()
                                             ->color('info'),
-                                        TextEntry::make('views')
+                                        TextEntry::make('view_count')
                                             ->label('Views')
-                                            ->state(fn ($record) => $record->views()->count())
                                             ->numeric()
                                             ->icon('heroicon-m-eye'),
                                     ])

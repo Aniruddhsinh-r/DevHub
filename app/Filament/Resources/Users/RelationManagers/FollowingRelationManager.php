@@ -36,6 +36,6 @@ class FollowingRelationManager extends RelationManager
             ])->emptyStateHeading('This author is not following anyone.')
             ->recordUrl(fn ($record) => (string) $record->id === (string) auth()->id()
                 ? UserResource::getUrl('profile')
-                : UserResource::getUrl('view', ['record' => $record]));;
+                : UserResource::getUrl('view', ['record' => $record]));
     }
 }

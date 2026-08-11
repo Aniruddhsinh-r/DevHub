@@ -1,37 +1,22 @@
 <?php
 
-namespace App\Filament\App\Widgets;
+namespace App\Filament\App\Resources\Articles\Tables;
 
-use App\Models\Article;
 use App\Filament\App\Resources\Articles\ArticleResource;
-use App\Enums\ArticleStatus;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
-use Filament\Tables\Columns\TextColumn;
+
 use Filament\Tables\Table;
-use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\Layout\Stack;
 
-class TopArticles extends BaseWidget
+class ArticleTable
 {
-    protected int|string|array $columnSpan = 'full';
-
-    public function table(Table $table): Table
-    {
-        return $table
-            ->query(
-                Article::query()
-    ->with(['user', 'category'])
-    ->withCount(['likes', 'views'])
-    ->where('status', ArticleStatus::PUBLISHED)
-    ->orderByDesc('views_count')
-    ->take(6)
-            )
-            ->paginated(false)
-            ->contentGrid([
-                'default' => 1,
-                'md' => 2,
-            ])
+    public static function configure(Table $table): Table
+        {
+            return $table
+            ->defaultSort('published_at', 'desc')
+            ->contentGrid(['md' => 2])
             ->columns([
                 Stack::make([
                     Stack::make([
@@ -52,11 +37,12 @@ class TopArticles extends BaseWidget
                             ->circular()
                             ->height(28)
                             ->defaultImageUrl(
-                                fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->user->name ?? 'User')
+                                fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->user->name)
                             ),
                         TextColumn::make('user.name')
                             ->weight('semibold')
-                            ->grow(),
+                            ->grow()
+                            ->searchable(),
                         TextColumn::make('category.name')
                             ->badge()
                             ->color('gray'),
@@ -64,10 +50,12 @@ class TopArticles extends BaseWidget
                     TextColumn::make('title')
                         ->weight('bold')
                         ->size('lg')
-                        ->limit(50),
+                        ->limit(50)
+                        ->searchable(),
                     TextColumn::make('excerpt')
                         ->color('gray')
-                        ->limit(100),
+                        ->limit(100)
+                        ->searchable(),
                     Split::make([
                         TextColumn::make('created_at')
                             ->since()
@@ -83,6 +71,8 @@ class TopArticles extends BaseWidget
             ])
             ->recordUrl(fn ($record) => ArticleResource::getUrl('view', [
                 'record' => $record,
-            ]));
-    }
+            ]))
+            ->searchable()
+            ->paginated([12, 24, 48]);
+        }
 }

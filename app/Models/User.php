@@ -13,7 +13,7 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Str;;
+use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use App\Enums\UserRole;
 use Illuminate\Support\Facades\Storage;

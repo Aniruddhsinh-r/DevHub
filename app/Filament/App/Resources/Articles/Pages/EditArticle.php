@@ -15,7 +15,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditArticle extends EditRecord
 {
     protected static string $resource = ArticleResource::class;
-    
+
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('index');
@@ -27,13 +27,13 @@ class EditArticle extends EditRecord
             $data['published_at'] = null;
         } elseif ($data['status'] === ArticleStatus::PUBLISHED) {
             $data['duration'] = null;
-            $data['published_at'] = $data['published_at']->published_at ?? now();
+            $data['published_at'] = $record->published_at ?? now();
         } else {
             $data['duration'] = null;
             $data['published_at'] = null;
         }
 
-        
+
         if (! empty($data['title'])) {
             $base = Str::slug($data['title'], '-');
             $slug = $base;
