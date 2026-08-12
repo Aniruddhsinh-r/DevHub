@@ -29,7 +29,7 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->where('id', '!=', auth()->id())
+            ->whereKeyNot(auth()->id())
             ->role(UserRole::AUTHOR);
     }
 
@@ -39,7 +39,7 @@ class UserResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['name', 'email'];
+        return ['name'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array

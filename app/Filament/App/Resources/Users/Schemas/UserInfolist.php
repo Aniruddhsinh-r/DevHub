@@ -20,7 +20,6 @@ class UserInfolist
         return $schema
             ->columns(1)
             ->components([
-
                 Section::make()
                     ->columnSpanFull()
                     ->schema([
@@ -49,15 +48,9 @@ class UserInfolist
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('follow')
-                                        ->label(fn (User $record) => auth()->user()->following()->whereKey($record)->exists()
-                                            ? 'Unfollow'
-                                            : 'Follow')
-                                        ->icon(fn (User $record) => auth()->user()->following()->whereKey($record)->exists()
-                                            ? 'heroicon-o-user-minus'
-                                            : 'heroicon-o-user-plus')
-                                        ->color(fn (User $record) => auth()->user()->following()->whereKey($record)->exists()
-                                            ? 'gray'
-                                            : 'primary')
+                                        ->label(fn (User $record) => $record->followers->isNotEmpty() ? 'Unfollow' : 'Follow')
+                                        ->icon(fn (User $record) => $record->followers->isNotEmpty() ? 'heroicon-o-user-minus' : 'heroicon-o-user-plus')
+                                        ->color(fn (User $record) => $record->followers->isNotEmpty() ? 'gray' : 'primary')
                                         ->hidden(fn (User $record) => auth()->id() === $record->id)
                                         ->action(function (User $record) {
                                             $user = auth()->user();
@@ -67,7 +60,10 @@ class UserInfolist
                                             } else {
                                                 $user->following()->attach($record);
                                             }
-                                        }),
+                                        })
+                                        ->visible(fn (User $record) =>
+                                            auth()->user()->can('follow', $record)
+                                        ),
                                 ]),
                             ])
                             ->columnSpan([
@@ -75,12 +71,6 @@ class UserInfolist
                                 'lg' => 3,
                             ]),
                         ]),
-                        TextEntry::make('email')
-                            ->icon('heroicon-o-envelope')
-                            ->color('gray')
-                            ->copyable()
-                            ->copyMessage('Email copied')
-                            ->columnSpanFull(),
                         TextEntry::make('bio')
                             ->label('Bio')
                             ->placeholder('No bio added')
@@ -96,7 +86,7 @@ class UserInfolist
                                 ->label('Member since')
                                 ->dateTime('d M Y, H:i')
                                 ->placeholder('-'),
-                            TextEntry::make('article_count')
+                            TextEntry::make('articles_count')
                                 ->state(fn ($record) => $record->articles()->where('status', ArticleStatus::PUBLISHED)->count())
                                 ->label('Articles')
                                 ->badge(),

@@ -33,7 +33,7 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->where('id', '!=', auth()->id())
+            ->whereKeyNot(auth()->id())
             ->whereDoesntHave('roles', function (Builder $query) {
                 $query->where('name', UserRole::SUPERADMIN);
             })->latest();

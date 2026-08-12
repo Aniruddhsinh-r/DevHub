@@ -36,11 +36,6 @@ class ArticlePolicy
         return $user->can('article.delete') && $user->id === $article->user_id;
     }
 
-    public function publish(User $user): bool
-    {
-        return $user->can('article.publish');
-    }
-
     public function like(User $user, Article $article): bool
     {
         return $user->hasRole(UserRole::AUTHOR) && $article->status === ArticleStatus::PUBLISHED && $article->user_id !== $user->id;

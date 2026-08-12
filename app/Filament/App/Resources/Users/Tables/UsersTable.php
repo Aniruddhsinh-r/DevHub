@@ -25,9 +25,6 @@ class UsersTable
                     ->defaultImageUrl('https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png'),
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
                 TextColumn::make('articles_count')
                     ->counts(['articles' => fn ($query) => $query->where('status', ArticleStatus::PUBLISHED),])
                     ->label('Articles')
@@ -37,9 +34,6 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),

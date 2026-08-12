@@ -36,6 +36,13 @@ class UserPolicy
         return $user->hasAnyRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
+    public function follow(User $user, User $target): bool
+    {
+        return $user->hasRole(UserRole::AUTHOR)
+            && $target->hasRole(UserRole::AUTHOR)
+            && ! $user->is($target);
+    }
+
     public function update(User $user, User $target): bool
     {
         if ($user->hasRole(UserRole::SUPERADMIN)) {

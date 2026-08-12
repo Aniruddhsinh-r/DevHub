@@ -58,6 +58,7 @@ class ArticlesTable
             ->filters([
                 TrashedFilter::make(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make()->successNotificationTitle('Article edited successfully.'),

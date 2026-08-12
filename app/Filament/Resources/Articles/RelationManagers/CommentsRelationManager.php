@@ -33,7 +33,7 @@ class CommentsRelationManager extends RelationManager
                     ->required()
                     ->columnSpanFull(),
             ]);
-    } 
+    }
 
     public function table(Table $table): Table
     {
@@ -42,7 +42,7 @@ class CommentsRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('user.name')
                     ->searchable(),
-                TextColumn::make('parent.id')
+                TextColumn::make('parent.name')
                     ->searchable(),
                 TextColumn::make('body')
                     ->searchable(),

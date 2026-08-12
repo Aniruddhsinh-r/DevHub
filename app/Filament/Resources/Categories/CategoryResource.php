@@ -31,11 +31,6 @@ class CategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->latest();
-    }
-
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -99,9 +94,7 @@ class CategoryResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make()->successNotificationTitle('Category edited successfully.'),

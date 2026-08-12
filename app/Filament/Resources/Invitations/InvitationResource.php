@@ -35,11 +35,6 @@ class InvitationResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Invites';
 
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->latest();
-    }
-
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -105,6 +100,7 @@ class InvitationResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

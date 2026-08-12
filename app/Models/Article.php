@@ -36,8 +36,6 @@ class Article extends Model
         static::deleting(function (Article $article) {
             if ($article->isForceDeleting()) {
                 $article->likes()->delete();
-                $article->comments()->delete();
-                $article->bookmarks()->detach();
                 Storage::disk('public')->delete($article->cover_path);
             } else {
                 $article->comments()->delete();
