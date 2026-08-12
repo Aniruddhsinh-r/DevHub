@@ -2,17 +2,15 @@
 
 namespace App\Filament\Resources\Invitations\Pages;
 
+use App\Actions\SendInvitation;
 use App\Filament\Resources\Invitations\InvitationResource;
-use Illuminate\Support\Facades\URL;
 use Filament\Actions\CreateAction;
-use App\Models\User;
 use App\Models\Invitation;
-use App\Mail\InvitationMail;
-use Illuminate\Support\Facades\Mail;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
+use RuntimeException;
 
 class ManageInvitations extends ManageRecords
 {
@@ -37,50 +35,24 @@ class ManageInvitations extends ManageRecords
     {
         return [
             CreateAction::make()
-            ->action(function(array $data, CreateAction $action) {
-                $email = strtolower($data['email']);
-                $deleted = User::onlyTrashed()->where('email',$email)->first();
+            ->action(function (array $data, CreateAction $action) {
+                try {
+                    app(SendInvitation::class)->handle($data['email']);
 
-                if ($deleted) {
-                    Notification::make()->title('This email is blocked.')->danger()->send();
-                    $action->halt();
-                    return ;
-                }
+                    Notification::make()
+                        ->title('Invitation sent successfully.')
+                        ->success()
+                        ->send();
 
-                $activeUser = User::where('email', $email)->first();
-                if ($activeUser) {
-                    Notification::make()->title('This email is already registered to an active account.')->warning()->send();
-                    $action->halt();
-                    return ;
-                }
-
-                $token = substr(md5(rand(0, 9) . $data['email'] . time()), 0, 32);
-                $exist = Invitation::where('email',$email)->first();
-
-                if(!$exist) {
-                    Invitation::create([
-                        'email' => $email,
-                        'token' => $token,
-                        'expires_at' => now()->addMinutes(30)
-                    ]);
-                } elseif ($exist?->expires_at > now()) {
-                    $remaining = $exist->expires_at->diffForHumans(null, true);
-                    Notification::make()->title("Please wait {$remaining} before resending.")->danger()->send();
+                } catch (RuntimeException $e) {
+                    Notification::make()
+                        ->title($e->getMessage())
+                        ->danger()
+                        ->send();
 
                     $action->halt();
-                    return;
-                } else {
-                    $exist->update(['status' => 'pending', 'token' => $token, 'expires_at' => now()->addMinutes(30)]);
-                    Notification::make()->title("Invitation resend successfully.")->success()->send();
                 }
-
-                $message = URL::temporarySignedRoute('invitation-register',
-                    now()->addMinutes(180),
-                    ['token' => ($token)]
-                );
-
-                Mail::to($email)->queue(new InvitationMail($message));
-            })->successNotificationTitle('Invite sent successfully.'),
+            }),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Invitations;
 
 use App\Filament\Resources\Invitations\Pages\ManageInvitations;
+use App\Actions\SendInvitation;
 use App\Models\Invitation;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -16,11 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Actions\Action;
-use App\Models\User;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\InvitationMail;
-use Illuminate\Database\Eloquent\Builder;
+use RuntimeException;
 use Filament\Tables\Columns\TextColumn;
 use UnitEnum;
 use Filament\Tables\Table;
@@ -112,38 +109,21 @@ class InvitationResource extends Resource
                     ->color('warning')
                     ->visible(fn (Invitation $record) => $record->status !== 'accepted')
                     ->action(function ($record) {
-                        $invitation = Invitation::findOrFail($record->id);
-                        $token = substr(md5(rand(0, 9) . $invitation['email'] . time()), 0, 32);
-                        $exist = User::where('email', $invitation->email)->first();
+                        try {
+                            app(SendInvitation::class)->handle($record['email']);
 
-                        if($exist) {
-                            Notification::make()->title("This email is already registered.")->warning()->send();
-                            return;
+                            Notification::make()
+                                ->title('Invitation resent successfully.')
+                                ->success()
+                                ->send();
+
+                        } catch (RuntimeException $e) {
+                            Notification::make()
+                                ->title($e->getMessage())
+                                ->danger()
+                                ->send();
                         }
-                        if ($invitation->status === 'accepted') {
-                            Notification::make()->title("Unable to send invitation.")->success()->send();
-                            return;
-                        }
-                        if ($invitation->expires_at >= now()) {
-                            $remaining = $invitation->expires_at->diffForHumans(null, true);
-                            Notification::make()->title("Please wait {$remaining} before resending.")->danger()->send();
-                            return;
-                        }
-
-                        $invitation->update([
-                            'status' => 'pending',
-                            'token' => $token,
-                            'expires_at' => now()->addMinutes(180)
-                        ]);
-
-                        $message = URL::temporarySignedRoute('invitation-register',
-                            now()->addMinutes(180),
-                            ['token' => ($token)]
-                        );
-
-                        Mail::to($invitation->email)->queue(new InvitationMail($message));
-                        Notification::make()->title('Invitation resent successfully.')->success()->persistent()->send();
-                }),
+                    }),
                 DeleteAction::make()->successNotificationTitle('Invitation deleted successfully.'),
             ])
             ->toolbarActions([

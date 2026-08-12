@@ -22,10 +22,21 @@ class DashboardStats extends StatsOverviewWidget
         $diff = $articlesThisMonth - $articlesLastMonth;
         $increaseText = ($diff >= 0 ? "+{$diff}" : "{$diff}") . ' from last month';
 
-        // 3. Generate dynamic chart data for the last 7 days
-        $chartData = collect(range(6, 0))->map(function ($daysAgo) {
-            return Article::whereDate('created_at', Carbon::today()->subDays($daysAgo))->count();
-        })->toArray();
+        $start = now()->subDays(6)->startOfDay();
+
+        $counts = Article::query()
+            ->where('created_at', '>=', $start)
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as aggregate')
+            ->groupBy('date')
+            ->pluck('aggregate', 'date');
+
+        $chartData = collect(range(6, 0))
+            ->map(fn (int $daysAgo) =>
+                $counts->get(
+                    Carbon::today()->subDays($daysAgo)->toDateString(),0
+                )
+            )
+            ->all();
 
         return [
             Stat::make('Total Articles', $totalArticles)

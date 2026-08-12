@@ -102,9 +102,9 @@ class CategoryResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()->successNotificationTitle('Categorys permanently deleted.'),
+                    DeleteBulkAction::make()->successNotificationTitle('Categories permanently deleted.'),
                 ]),
-            ])->searchPlaceholder('Search categorys');
+            ])->searchPlaceholder('Search Categories');
     }
 
     public static function getPages(): array

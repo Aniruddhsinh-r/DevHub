@@ -66,6 +66,10 @@ class UserPolicy
             return false;
         }
 
+        if ($target->hasRole(UserRole::SUPERADMIN)) {
+            return false;
+        }
+        
         if ($user->hasRole(UserRole::SUPERADMIN)) {
             return ! $target->hasRole(UserRole::SUPERADMIN);
         }
@@ -87,6 +91,11 @@ class UserPolicy
         if ($user->is($target)) {
             return false;
         }
+
+        if ($target->hasRole(UserRole::SUPERADMIN)) {
+            return false;
+        }
+    
         return $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
