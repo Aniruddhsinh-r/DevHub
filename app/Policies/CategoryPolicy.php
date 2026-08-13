@@ -3,16 +3,14 @@
 namespace App\Policies;
 
 use App\Enums\UserRole;
+use App\Models\Category;
 use App\Models\User;
 
-class AdminPolicy
+class CategoryPolicy
 {
-    /**
-     * Create a new policy instance.
-     */
-    public function __construct()
+    public function viewAny(User $user): bool
     {
-        //
+        return $user->hasAnyRole([UserRole::ADMIN,UserRole::SUPERADMIN,]);
     }
 
     public function create(User $user): bool {
@@ -33,7 +31,13 @@ class AdminPolicy
         return $user->can('user.manage') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
-    public function roleChange(User $user): bool {
-        return $user->can('user.manage') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]); 
+    public function view(User $user, Category $category): bool
+    {
+        return $user->hasAnyRole([UserRole::ADMIN,UserRole::SUPERADMIN,]);
+    }
+
+    public function update(User $user, Category $category): bool
+    {
+        return $user->can('category.create') && $user->hasAnyRole([UserRole::ADMIN,UserRole::SUPERADMIN,]);
     }
 }

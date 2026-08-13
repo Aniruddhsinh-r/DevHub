@@ -4,8 +4,6 @@ namespace App\Policies;
 
 use App\Enums\UserRole;
 use App\Models\User;
-use App\Enums\ArticleStatus;
-use App\Models\Article;
 
 class UserPolicy
 {
@@ -38,9 +36,17 @@ class UserPolicy
 
     public function follow(User $user, User $target): bool
     {
-        return $user->hasRole(UserRole::AUTHOR)
-            && $target->hasRole(UserRole::AUTHOR)
-            && ! $user->is($target);
+        return $user->hasRole(UserRole::AUTHOR) && $target->hasRole(UserRole::AUTHOR) && ! $user->is($target);
+    }
+
+    public function remove(User $user, User $target): bool {
+        if ($user->is($target)) {
+            return false;
+        }
+        if ($target->hasRole(UserRole::SUPERADMIN)) {
+            return false;
+        }
+        return $user->can('user.manage') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
     public function update(User $user, User $target): bool
@@ -69,7 +75,7 @@ class UserPolicy
         if ($target->hasRole(UserRole::SUPERADMIN)) {
             return false;
         }
-        
+
         if ($user->hasRole(UserRole::SUPERADMIN)) {
             return ! $target->hasRole(UserRole::SUPERADMIN);
         }
@@ -95,7 +101,7 @@ class UserPolicy
         if ($target->hasRole(UserRole::SUPERADMIN)) {
             return false;
         }
-    
+
         return $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
