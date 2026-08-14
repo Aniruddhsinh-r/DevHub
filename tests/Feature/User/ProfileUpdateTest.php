@@ -5,23 +5,22 @@ use Livewire\Livewire;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use App\Filament\Pages\Auth\EditProfile;
-use App\Enums\UserRole;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\UploadedFile;
-require_once __DIR__.'/../Helpers/UserLogin.php';
 
+require_once __DIR__.'/../Helpers/UserLogin.php';
 uses(RefreshDatabase::class);
 
 test('guest is redirected to login when visiting the profile page', function () {
     $this->get(route('filament.app.auth.profile'))
         ->assertRedirect(route('filament.app.auth.login'));
 });
- 
+
 test('user can update his profile', function () {
     Storage::fake('public');
     $user = UserLogin();
     $newAvatar = UploadedFile::fake()->image('avatar.jpg');
- 
+
     Livewire::actingAs($user)
         ->test(EditProfile::class)
         ->fillForm([
@@ -31,17 +30,17 @@ test('user can update his profile', function () {
         ])
         ->call('save')
         ->assertHasNoFormErrors();
- 
+
     $this->assertDatabaseHas('users', [
         'id' => $user->id,
         'name' => 'Aniruddhsinh Rathod',
         'email' => 'adniruddha@gmail.com',
     ]);
 });
- 
+
 test('user can update his password', function () {
     $user = UserLogin();
- 
+
     Livewire::actingAs($user)
         ->test(EditProfile::class)
         ->fillForm([
@@ -52,13 +51,13 @@ test('user can update his password', function () {
         ])
         ->call('save')
         ->assertHasNoFormErrors();
- 
+
     expect(Hash::check('password123', $user->fresh()->password))->toBeTrue();
 });
- 
+
 test('profile update fails when passwords do not match', function () {
     $user = UserLogin();
- 
+
     Livewire::actingAs($user)
         ->test(EditProfile::class)
         ->fillForm([
@@ -70,11 +69,11 @@ test('profile update fails when passwords do not match', function () {
         ->call('save')
         ->assertHasFormErrors(['password' => 'confirmed']);
 });
- 
+
 test('profile update fails when email already taken', function () {
     $user = UserLogin();
     $other = User::factory()->create();
- 
+
     Livewire::actingAs($user)
         ->test(EditProfile::class)
         ->fillForm([

@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\Article;
-use App\Models\Category;
-use App\Enums\ArticleStatus;
 use App\Filament\Resources\Articles\Pages\ListArticles;
 use App\Filament\Resources\Articles\Pages\ViewArticle;
 use App\Filament\Resources\Articles\Pages\EditArticle;

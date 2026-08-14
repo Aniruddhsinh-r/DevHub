@@ -6,7 +6,6 @@ use Filament\Auth\Pages\Login;
 use Filament\Facades\Filament;
 use Livewire\Livewire;
 use App\Enums\UserRole;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 require_once __DIR__ . '/../Helpers/UserLogin.php';
@@ -57,12 +56,12 @@ test('guest can view the login page', function () {
     $this->get(route('filament.app.auth.login'))
         ->assertSuccessful();
 });
- 
+
 test('login fails with wrong password', function () {
     $user = User::factory()->create([
         'password' => 'password123',
     ]);
- 
+
     Livewire::test(Login::class)
         ->fillForm([
             'email' => $user->email,
@@ -70,10 +69,10 @@ test('login fails with wrong password', function () {
         ])
         ->call('authenticate')
         ->assertHasFormErrors();
- 
+
     $this->assertGuest();
 });
- 
+
 test('login fails with unregister email', function () {
     Livewire::test(Login::class)
         ->fillForm([
@@ -82,7 +81,7 @@ test('login fails with unregister email', function () {
         ])
         ->call('authenticate')
         ->assertHasFormErrors();
- 
+
     $this->assertGuest();
 });
 
@@ -90,7 +89,7 @@ test('admin cannot log into the app panel', function () {
     $admin = User::factory()->create([
         'password' => 'password123',
     ]);
- 
+
     Livewire::test(Login::class)
         ->fillForm([
             'email' => $admin->email,
@@ -98,15 +97,15 @@ test('admin cannot log into the app panel', function () {
         ])
         ->call('authenticate')
         ->assertHasFormErrors();
- 
+
     $this->assertGuest();
 });
 
 test('user can logout', function () {
     UserLogin();
- 
+
     $this->assertAuthenticated();
     $this->post(route('filament.app.auth.logout'));
- 
+
     $this->assertGuest();
 });

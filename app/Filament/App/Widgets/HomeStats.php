@@ -2,9 +2,6 @@
 
 namespace App\Filament\App\Widgets;
 
-use App\Models\Article;
-use App\Models\Like;
-use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 

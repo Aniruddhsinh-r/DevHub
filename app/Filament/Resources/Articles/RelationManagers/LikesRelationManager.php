@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Articles\RelationManagers;
 
-use App\Filament\Resources\Articles\ArticleResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;

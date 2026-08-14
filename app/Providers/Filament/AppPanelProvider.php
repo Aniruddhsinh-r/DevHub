@@ -3,12 +3,10 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\EditProfile as AuthEditProfile;
-use App\Filament\App\Pages\InvitationRegister;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Pages\Auth\Register as AuthRegister;
 use App\Filament\Pages\Auth\Login as AuthLogin;
-use Illuminate\Support\Facades\Route;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Support\Assets\Css;

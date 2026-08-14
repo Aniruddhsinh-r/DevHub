@@ -3,8 +3,6 @@
 use App\Models\Article;
 use Livewire\Livewire;
 use App\Enums\ArticleStatus;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\CommentNotification;
 use App\Filament\Resources\Articles\Pages\ViewArticle;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -43,7 +41,7 @@ test('author can access his draft article', function() {
     $user = UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT,'user_id'=>$user->id]);
-    
+
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertSuccessful()
         ->assertSee($article->title)
@@ -54,7 +52,7 @@ test('author can access his scheduled article', function() {
     $user = UserLogin();
 
     $article = Article::factory()->create(['status'=>ArticleStatus::SCHEDULED,'user_id'=>$user->id]);
-    
+
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertSuccessful()
         ->assertSee($article->title)

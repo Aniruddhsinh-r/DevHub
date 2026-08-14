@@ -3,7 +3,6 @@
 use App\Models\Article;
 use Livewire\Livewire;
 use App\Enums\ArticleStatus;
-use Filament\Actions\Testing\TestAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Filament\App\Resources\Articles\Pages\ViewArticle;
 
@@ -52,7 +51,7 @@ test('author cant see the bookmark action on their own article', function () {
         'status' => ArticleStatus::PUBLISHED,
         'user_id' => $user->id,
     ]);
- 
+
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertActionHidden('bookmark');
 });
