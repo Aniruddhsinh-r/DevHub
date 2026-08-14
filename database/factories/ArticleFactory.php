@@ -29,7 +29,7 @@ class ArticleFactory extends Factory
             'category_id' => Category::factory(),
             'title' => ($title),
             'slug' => Str::slug($title),
-            'excerpt' => fake()->paragraph(1),
+            'excerpt' => 'hi this is custome paragraph for factory.',
             'body' => fake()->paragraphs(6, true),
             'status' => $status,
             'duration' => $status === ArticleStatus::PUBLISHED ? fake()->dateTimeBetween('-1 month', 'now') : null,

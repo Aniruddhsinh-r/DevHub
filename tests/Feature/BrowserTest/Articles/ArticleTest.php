@@ -109,3 +109,83 @@ test('viewing an article does not increment the view count for the author', func
         'view_count' => 0,
     ]);
 });
+
+test('article update scheduled to draft clears published_at and duration', function () {
+    UserLogin();
+
+    $article = Article::factory()->create([
+        'user_id' => auth()->id(),
+        'status' => ArticleStatus::SCHEDULED,
+        'published_at' => null,
+        'duration' => now()->addHours(2),
+    ]);
+
+    visit(route('filament.app.resources.articles.edit', ['record' => $article]))
+        ->select('#form\\.status', ArticleStatus::DRAFT->value)
+        ->click('Save changes')
+        ->assertSee('Saved');
+
+    $this->assertDatabaseHas('articles', [
+        'id' => $article->id,
+        'status' => ArticleStatus::DRAFT,
+        'published_at' => null,
+        'duration' => null,
+    ]);
+});
+
+test('article update draft to published sets published_at and clears duration', function () {
+    UserLogin();
+
+    $article = Article::factory()->create([
+        'user_id' => auth()->id(),
+        'status' => ArticleStatus::DRAFT,
+        'published_at' => null,
+        'duration' => null,
+    ]);
+
+    visit(route('filament.app.resources.articles.edit', ['record' => $article]))
+        ->select('#form\\.status', ArticleStatus::PUBLISHED->value)
+        ->click('Save changes')
+        ->assertSee('Saved');
+
+    $article->refresh();
+
+    $this->assertDatabaseHas('articles', [
+        'id' => $article->id,
+        'status' => ArticleStatus::PUBLISHED,
+        'published_at' => $article->published_at,
+        'duration' => null,
+    ]);
+});
+
+test('article update published to scheduled clears published_at and keeps duration', function () {
+    UserLogin();
+
+    $article = Article::factory()->create([
+        'user_id' => auth()->id(),
+        'status' => ArticleStatus::PUBLISHED,
+        'published_at' => now()->subHour(),
+        'duration' => null,
+    ]);
+
+    $duration = now()->addHours(2);
+
+    visit(route('filament.app.resources.articles.edit', [
+        'record' => $article,
+    ]))
+        ->select('#form\\.status', ArticleStatus::SCHEDULED->value)
+        ->fill('#form\\.duration', $duration->format('Y-m-d\TH:i'))
+        ->click('Save changes')
+        ->assertSee('Saved');
+
+    $article->refresh();
+
+    expect($article->status)
+        ->toBe(ArticleStatus::SCHEDULED);
+
+    expect($article->published_at)
+        ->toBeNull();
+
+    expect($article->duration)
+        ->not->toBeNull();
+});

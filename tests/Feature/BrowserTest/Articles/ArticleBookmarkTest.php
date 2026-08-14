@@ -43,7 +43,7 @@ test('User can remove articles from bookmark', function () {
 });
 
 test('bookmarked article shows up on the bookmark page', function () {
-    $user = UserLogin();
+    UserLogin();
     $article = Article::factory()->create(['excerpt' => 'hi this is excerpt wer.', 'title' => 'A bookmarked article']);
 
     visit(route('filament.app.resources.articles.view', ['record' => $article]))

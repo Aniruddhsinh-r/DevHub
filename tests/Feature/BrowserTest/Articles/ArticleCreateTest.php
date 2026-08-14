@@ -72,3 +72,22 @@ test('article delete', function () {
         'id' => $article->id,
     ]);
 });
+
+test('article validation test', function () {
+    UserLogin();
+    $category = Category::factory()->create();
+
+    visit('/articles/create')
+        ->fill('#form\\.title', 'hello')
+        ->click('.fi-select-input-btn')
+        ->click($category->name)
+        ->select('#form\\.status', ArticleStatus::PUBLISHED->value)
+        ->fill('#form\\.excerpt', 'less then 20')
+        ->fill('#form\\.body', 'less then 30')
+        ->click('#key-bindings-1');
+
+    $this->assertDatabaseMissing('articles', [
+        'user_id' => auth()->id(),
+        'title' => 'hello'
+    ]);
+});
