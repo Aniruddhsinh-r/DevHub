@@ -2,9 +2,9 @@
 
 namespace App\Filament\App\Widgets;
 
-use App\Models\Article;
-use App\Filament\App\Resources\Articles\ArticleResource;
 use App\Enums\ArticleStatus;
+use App\Filament\App\Resources\Articles\ArticleResource;
+use App\Models\Article;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
@@ -21,11 +21,11 @@ class TopArticles extends BaseWidget
         return $table
             ->query(
                 Article::query()
-                ->with(['user', 'category'])
-                ->withCount(['likes', 'views'])
-                ->where('status', ArticleStatus::PUBLISHED)
-                ->orderByDesc('views_count')
-                ->take(6)
+                    ->with(['user', 'category'])
+                    ->withCount(['likes', 'views'])
+                    ->where('status', ArticleStatus::PUBLISHED)
+                    ->orderByDesc('views_count')
+                    ->take(6)
             )
             ->paginated(false)
             ->contentGrid([
@@ -52,7 +52,7 @@ class TopArticles extends BaseWidget
                             ->circular()
                             ->height(28)
                             ->defaultImageUrl(
-                                fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->user->name ?? 'User')
+                                fn ($record) => 'https://ui-avatars.com/api/?name='.urlencode($record->user->name ?? 'User')
                             ),
                         TextColumn::make('user.name')
                             ->weight('semibold')

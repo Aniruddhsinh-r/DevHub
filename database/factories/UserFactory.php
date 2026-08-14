@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use App\Enums\UserRole;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
-
 
 /**
  * @extends Factory<User>
@@ -45,6 +44,7 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
     public function author(): static
     {
         return $this->afterCreating(function (User $user) {

@@ -1,15 +1,15 @@
 <?php
 
-use App\Models\User;
 use App\Enums\UserRole;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
-if (!function_exists('AdminLogin')) {
-    function AdminLogin(array $permissions = ['user.manage','category.create','category.delete'])
+if (! function_exists('AdminLogin')) {
+    function AdminLogin(array $permissions = ['user.manage', 'category.create', 'category.delete'])
     {
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         foreach ($permissions as $permissionName) {

@@ -39,13 +39,15 @@ class UserPolicy
         return $user->hasRole(UserRole::AUTHOR) && $target->hasRole(UserRole::AUTHOR) && ! $user->is($target);
     }
 
-    public function remove(User $user, User $target): bool {
+    public function remove(User $user, User $target): bool
+    {
         if ($user->is($target)) {
             return false;
         }
         if ($target->hasRole(UserRole::SUPERADMIN)) {
             return false;
         }
+
         return $user->can('user.manage') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 

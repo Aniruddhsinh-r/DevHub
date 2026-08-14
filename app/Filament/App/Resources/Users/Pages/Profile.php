@@ -3,10 +3,10 @@
 namespace App\Filament\App\Resources\Users\Pages;
 
 use App\Filament\App\Resources\Users\UserResource;
-use Filament\Resources\Pages\ViewRecord;
-use Illuminate\Database\Eloquent\Model;
 use App\Filament\Pages\Auth\EditProfile as AuthEditProfile;
 use Filament\Actions\Action;
+use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class Profile extends ViewRecord
 {
@@ -14,7 +14,7 @@ class Profile extends ViewRecord
 
     protected static ?string $title = 'My Profile';
 
-    public function mount(int|string $record = null): void
+    public function mount(int|string|null $record = null): void
     {
         $this->record = auth()->user();
     }

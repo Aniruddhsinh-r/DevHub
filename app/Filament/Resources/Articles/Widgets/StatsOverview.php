@@ -3,32 +3,36 @@
 namespace App\Filament\Resources\Articles\Widgets;
 
 use App\Models\Article;
-use App\Models\User;
 use App\Models\Like;
-use Illuminate\Support\Carbon;
+use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Carbon;
 
 class StatsOverview extends StatsOverviewWidget
 {
     protected static ?int $sort = 1;
+
     protected ?string $heading = 'System Performance';
+
     protected ?string $description = 'Real-time overview of system stats.';
-    protected static bool $isLazy = false; 
+
+    protected static bool $isLazy = false;
+
     protected ?string $pollingInterval = '10s';
 
     protected function getStats(): array
     {
         $totalArticles = Article::count();
-        
+
         $articlesThisMonth = Article::where('created_at', '>=', now()->startOfMonth())->count();
         $articlesLastMonth = Article::whereBetween('created_at', [
             now()->subMonth()->startOfMonth(),
-            now()->subMonth()->endOfMonth()
+            now()->subMonth()->endOfMonth(),
         ])->count();
 
         $diff = $articlesThisMonth - $articlesLastMonth;
-        $increaseText = ($diff >= 0 ? "+{$diff}" : "{$diff}") . ' from last month';
+        $increaseText = ($diff >= 0 ? "+{$diff}" : "{$diff}").' from last month';
 
         $start = now()->subDays(6)->startOfDay();
 
@@ -39,11 +43,10 @@ class StatsOverview extends StatsOverviewWidget
             ->pluck('aggregate', 'date');
 
         $chartData = collect(range(6, 0))
-            ->map(fn (int $daysAgo) =>
-                $counts->get(
-                    Carbon::today()->subDays($daysAgo)->toDateString(),
-                    0
-                )
+            ->map(fn (int $daysAgo) => $counts->get(
+                Carbon::today()->subDays($daysAgo)->toDateString(),
+                0
+            )
             )
             ->all();
 
@@ -87,7 +90,7 @@ class StatsOverview extends StatsOverviewWidget
                 ->description(
                     $isIncrease
                         ? "{$percent}% increase (+{$difference} users) today"
-                        : abs($percent) . "% decrease (" . $difference . " users) today"
+                        : abs($percent).'% decrease ('.$difference.' users) today'
                 )
                 ->descriptionIcon(
                     $isIncrease
@@ -100,7 +103,7 @@ class StatsOverview extends StatsOverviewWidget
                 ->description(
                     $likeIncrease
                         ? "{$likePercent}% increase (+{$likeDifference} likes) this month"
-                        : abs($likePercent) . "% decrease ({$likeDifference} likes) this month"
+                        : abs($likePercent)."% decrease ({$likeDifference} likes) this month"
                 )
                 ->descriptionIcon(
                     $likeIncrease
@@ -108,7 +111,7 @@ class StatsOverview extends StatsOverviewWidget
                         : 'heroicon-m-arrow-trending-down'
                 )
                 ->chart($likeChart)
-                ->color($likeIncrease ? 'success' : 'danger')
+                ->color($likeIncrease ? 'success' : 'danger'),
         ];
     }
 }

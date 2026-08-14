@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Enums\UserRole;
 
 class AdminSeeder extends Seeder
 {
@@ -18,9 +18,9 @@ class AdminSeeder extends Seeder
         $user = User::updateOrCreate(
             ['email' => 'haribhai@gmail.com'],
             ['uuid' => Str::uuid(),
-            'name' => 'Hari bhai',
-            'password' => Hash::make('password'),
-        ]);
+                'name' => 'Hari bhai',
+                'password' => Hash::make('password'),
+            ]);
         $user->assignRole(UserRole::ADMIN);
     }
 }

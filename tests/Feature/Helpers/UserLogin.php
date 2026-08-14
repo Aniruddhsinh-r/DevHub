@@ -1,15 +1,15 @@
 <?php
 
-use App\Models\User;
 use App\Enums\UserRole;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
-if (!function_exists('UserLogin')) {
-    function UserLogin(array $permissions = ['article.create','article.edit','article.delete','article.publish'])
+if (! function_exists('UserLogin')) {
+    function UserLogin(array $permissions = ['article.create', 'article.edit', 'article.delete', 'article.publish'])
     {
         $authorRole = Role::firstOrCreate(['name' => UserRole::AUTHOR]);
         foreach ($permissions as $permissionName) {
@@ -18,7 +18,7 @@ if (!function_exists('UserLogin')) {
         }
         $user = User::factory()->create([
             'email' => 'adanirudda@gmail.com',
-            'password' => 'rathod1290'
+            'password' => 'rathod1290',
         ]);
         $user->assignRole(UserRole::AUTHOR);
 

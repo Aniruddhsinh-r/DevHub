@@ -1,14 +1,14 @@
 <?php
 
-use Livewire\Livewire;
-use App\Models\Category;
 use App\Enums\ArticleStatus;
 use App\Filament\App\Resources\Articles\Pages\CreateArticle;
 use App\Filament\Pages\Auth\EditProfile;
-use Filament\Auth\Pages\Register;
+use App\Models\Category;
 use Filament\Auth\Pages\Login;
+use Filament\Auth\Pages\Register;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Livewire;
 
 require_once __DIR__.'/../Helpers/UserLogin.php';
 require_once __DIR__.'/../Helpers/AdminLogin.php';
@@ -17,7 +17,7 @@ uses(RefreshDatabase::class);
 
 test('check article validation test', function () {
     UserLogin();
-   
+
     Livewire::test(CreateArticle::class)
         ->fillForm([
             'title' => '',
@@ -44,7 +44,7 @@ test('registration fails with a short password', function () {
         ])
         ->call('register')
         ->assertHasFormErrors(['password']);
- 
+
     $this->assertDatabaseMissing('users', [
         'email' => 'someone2@example.com',
     ]);
@@ -86,7 +86,7 @@ test('User cant see those auther who dose not exist in db', function () {
 
 test('Admin can update his profile', function () {
     $admin = AdminLogin();
- 
+
     Livewire::actingAs($admin)
         ->test(EditProfile::class)
         ->fillForm([
@@ -97,13 +97,13 @@ test('Admin can update his profile', function () {
         ])
         ->call('save')
         ->assertHasNoFormErrors();
- 
+
     expect(Hash::check('newPassword', $admin->fresh()->password))->toBeTrue();
 });
 
 test('user can update his password', function () {
     $user = UserLogin();
- 
+
     Livewire::actingAs($user)
         ->test(EditProfile::class)
         ->fillForm([
@@ -114,13 +114,13 @@ test('user can update his password', function () {
         ])
         ->call('save')
         ->assertHasNoFormErrors();
- 
+
     expect(Hash::check('newPassword', $user->fresh()->password))->toBeTrue();
 });
 
 test('check profile update validation test', function () {
     UserLogin();
- 
+
     Livewire::test(EditProfile::class)
         ->fillForm([
             'name' => '',

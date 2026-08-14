@@ -2,14 +2,14 @@
 
 namespace App\Filament\Resources\Articles\Pages;
 
-use App\Filament\Resources\Articles\ArticleResource;
-use Filament\Actions\CreateAction;
 use App\Enums\ArticleStatus;
+use App\Filament\Resources\Articles\ArticleResource;
 use App\Models\Article;
+use Filament\Actions\CreateAction;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Notifications\Notification;
 
 class ListArticles extends ListRecords
 {
@@ -22,7 +22,7 @@ class ListArticles extends ListRecords
 
         $this->resetTable();
     }
-    
+
     protected static string $resource = ArticleResource::class;
 
     protected function getHeaderActions(): array

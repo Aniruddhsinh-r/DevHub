@@ -1,11 +1,12 @@
 <?php
 
-use App\Models\Category;
 use App\Filament\Resources\Categories\Pages\ManageCategories;
-use Livewire\Livewire;
+use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/AdminLogin.php';
-require_once __DIR__ . '/../Helpers/UserLogin.php';
+use Livewire\Livewire;
+
+require_once __DIR__.'/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -104,4 +105,19 @@ test('author cannot access categories page', function () {
 
     $this->get('/admin/categories')
         ->assertForbidden();
+});
+
+test('prevents categories with the same normalized slug', function () {
+    AdminLogin();
+
+    Category::factory()->create([
+        'name' => 'Web Dev',
+        'slug' => 'web-dev',
+    ]);
+
+    Livewire::test(ManageCategories::class)
+        ->callAction('create', data: [
+            'name' => 'Web-Dev',
+        ])
+        ->assertHasFormErrors(['name']);
 });

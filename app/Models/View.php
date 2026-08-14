@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class View extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'article_id',

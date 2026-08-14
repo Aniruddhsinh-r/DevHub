@@ -2,16 +2,16 @@
 
 namespace App\Filament\Resources\Users\RelationManagers;
 
+use App\Enums\ArticleStatus;
 use App\Filament\Resources\Articles\ArticleResource;
 use App\Models\Article;
-use App\Enums\ArticleStatus;
 use Filament\Actions\CreateAction;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 

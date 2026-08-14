@@ -2,8 +2,8 @@
 
 namespace App\Filament\App\Resources\Articles\Pages;
 
-use App\Filament\App\Resources\Articles\ArticleResource;
 use App\Enums\ArticleStatus;
+use App\Filament\App\Resources\Articles\ArticleResource;
 use App\Filament\App\Resources\Articles\Tables\ArticleTable;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\ListRecords;

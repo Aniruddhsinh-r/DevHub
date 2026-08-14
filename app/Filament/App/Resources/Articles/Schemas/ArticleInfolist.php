@@ -2,24 +2,25 @@
 
 namespace App\Filament\App\Resources\Articles\Schemas;
 
-use App\Models\Article;
-use App\Models\Comment;
 use App\Enums\ArticleStatus;
 use App\Enums\UserRole;
+use App\Filament\App\Resources\Users\UserResource;
+use App\Models\Article;
+use App\Models\Comment;
 use App\Notifications\CommentNotification;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\ImageEntry;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\RepeatableEntry;
-use App\Filament\App\Resources\Users\UserResource;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Forms\Components\Textarea;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class ArticleInfolist
 {
@@ -36,70 +37,70 @@ class ArticleInfolist
                             'default' => 1,
                             'lg' => 3,
                         ])
-                        ->schema([
-                            Group::make([
-                                TextEntry::make('title')
-                                    ->size('lg')
-                                    ->weight('bold'),
-                                TextEntry::make('excerpt')
-                                    ->color('gray')
-                                    ->size('lg')
-                                    ->extraAttributes(['class' => 'italic border-l-4 border-primary-400 pl-4'])
-                                    ->columnSpanFull(),
-                                Grid::make(4)
-                                    ->schema([
-                                        TextEntry::make('user.name')
-                                            ->badge()
-                                            ->size('lg')
-                                            ->url(fn ($record) => $record->user_id === auth()->id()
-                                                ? null : (
-                                                    $record->user->hasAnyRole([
-                                                        UserRole::ADMIN->value,
-                                                        UserRole::SUPERADMIN->value,
-                                                    ])
-                                                        ? null
-                                                        : UserResource::getUrl('view', [
-                                                            'record' => $record->user->uuid,
+                            ->schema([
+                                Group::make([
+                                    TextEntry::make('title')
+                                        ->size('lg')
+                                        ->weight('bold'),
+                                    TextEntry::make('excerpt')
+                                        ->color('gray')
+                                        ->size('lg')
+                                        ->extraAttributes(['class' => 'italic border-l-4 border-primary-400 pl-4'])
+                                        ->columnSpanFull(),
+                                    Grid::make(4)
+                                        ->schema([
+                                            TextEntry::make('user.name')
+                                                ->badge()
+                                                ->size('lg')
+                                                ->url(fn ($record) => $record->user_id === auth()->id()
+                                                    ? null : (
+                                                        $record->user->hasAnyRole([
+                                                            UserRole::ADMIN->value,
+                                                            UserRole::SUPERADMIN->value,
                                                         ])
+                                                            ? null
+                                                            : UserResource::getUrl('view', [
+                                                                'record' => $record->user->uuid,
+                                                            ])
+                                                    )
                                                 )
-                                            )
-                                            ->openUrlInNewTab(false),
-                                        TextEntry::make('status')
-                                            ->size('lg')
-                                            ->badge()
-                                            ->color(fn (ArticleStatus $state): string => match ($state) {
-                                                ArticleStatus::DRAFT => 'warning',
-                                                ArticleStatus::PUBLISHED => 'success',
-                                                ArticleStatus::SCHEDULED => 'gray',
-                                            }),
-                                        TextEntry::make('category.name')
-                                            ->label('Category')
-                                            ->size('lg')
-                                            ->badge()
-                                            ->color('info'),
-                                        TextEntry::make('view_count')
-                                            ->label('Views')
-                                            ->numeric()
-                                            ->icon('heroicon-m-eye'),
-                                    ])
-                                    ->columnSpanFull(),
-                            ])
-                            ->columnSpan([
-                                'default' => 1,
-                                'lg' => 2,
+                                                ->openUrlInNewTab(false),
+                                            TextEntry::make('status')
+                                                ->size('lg')
+                                                ->badge()
+                                                ->color(fn (ArticleStatus $state): string => match ($state) {
+                                                    ArticleStatus::DRAFT => 'warning',
+                                                    ArticleStatus::PUBLISHED => 'success',
+                                                    ArticleStatus::SCHEDULED => 'gray',
+                                                }),
+                                            TextEntry::make('category.name')
+                                                ->label('Category')
+                                                ->size('lg')
+                                                ->badge()
+                                                ->color('info'),
+                                            TextEntry::make('view_count')
+                                                ->label('Views')
+                                                ->numeric()
+                                                ->icon('heroicon-m-eye'),
+                                        ])
+                                        ->columnSpanFull(),
+                                ])
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'lg' => 2,
+                                    ]),
+                                ImageEntry::make('cover_path')
+                                    ->disk('public')
+                                    ->hiddenLabel()
+                                    ->maxWidth('300px')
+                                    ->height('200px')
+                                    ->extraImgAttributes(['class' => 'w-full h-full object-cover rounded-lg'])
+                                    ->placeholder('No cover image')
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'lg' => 1,
+                                    ]),
                             ]),
-                            ImageEntry::make('cover_path')
-                                ->disk('public')
-                                ->hiddenLabel()
-                                ->maxWidth('300px')
-                                ->height('200px')
-                                ->extraImgAttributes(['class' => 'w-full h-full object-cover rounded-lg'])
-                                ->placeholder('No cover image')
-                                ->columnSpan([
-                                    'default' => 1,
-                                    'lg' => 1,
-                                ]),
-                        ]),
                         TextEntry::make('body')
                             ->label('Content')
                             ->size('lg'),
@@ -108,29 +109,29 @@ class ArticleInfolist
                             'sm' => 2,
                             'lg' => 4,
                         ])
-                        ->schema([
-                            TextEntry::make('created_at')
-                                ->label('Created At')
-                                ->dateTime('d M Y, H:i')
-                                ->placeholder('-'),
+                            ->schema([
+                                TextEntry::make('created_at')
+                                    ->label('Created At')
+                                    ->dateTime('d M Y, H:i')
+                                    ->placeholder('-'),
 
-                            TextEntry::make('updated_at')
-                                ->label('Updated At')
-                                ->dateTime('d M Y, H:i')
-                                ->placeholder('-'),
+                                TextEntry::make('updated_at')
+                                    ->label('Updated At')
+                                    ->dateTime('d M Y, H:i')
+                                    ->placeholder('-'),
 
-                            TextEntry::make('published_at')
-                                ->label('Published At')
-                                ->dateTime('d M Y, H:i')
-                                ->placeholder('Not published yet'),
+                                TextEntry::make('published_at')
+                                    ->label('Published At')
+                                    ->dateTime('d M Y, H:i')
+                                    ->placeholder('Not published yet'),
 
-                            TextEntry::make('deleted_at')
-                                ->label('Deleted At')
-                                ->dateTime('d M Y, H:i')
-                                ->color('danger')
-                                ->visible(fn (Article $record): bool => $record->trashed()),
-                        ])
-                        ->columnSpanFull(),
+                                TextEntry::make('deleted_at')
+                                    ->label('Deleted At')
+                                    ->dateTime('d M Y, H:i')
+                                    ->color('danger')
+                                    ->visible(fn (Article $record): bool => $record->trashed()),
+                            ])
+                            ->columnSpanFull(),
                     ]),
                 static::commentsSection(),
             ]);
@@ -140,11 +141,10 @@ class ArticleInfolist
     {
         return Section::make('Comments')
             ->columnSpanFull()
-            ->visible(fn (?Article $record) =>
-                auth()->user()?->hasRole(UserRole::AUTHOR)
+            ->visible(fn (?Article $record) => auth()->user()?->hasRole(UserRole::AUTHOR)
                 && $record->status === ArticleStatus::PUBLISHED
             )
-            ->description(fn (Article $record) => $record->comments()->count() . ' comments')
+            ->description(fn (Article $record) => $record->comments()->count().' comments')
             ->headerActions([
                 Action::make('postComment')
                     ->label('Add Comment')
@@ -206,7 +206,7 @@ class ArticleInfolist
                     ->extraAttributes(['class' => 'text-sm text-gray-200 !mt-0 !pt-0']),
 
                 Actions::make([
-                    Action::make('reply_' . $level)
+                    Action::make('reply_'.$level)
                         ->label('Reply')
                         ->link()
                         ->size('xs')
@@ -216,7 +216,7 @@ class ArticleInfolist
                         ->form([
                             Textarea::make('body')->label('Your reply')->required()->maxLength(5000)->rows(3),
                         ])
-                        ->action(function (Comment $record, array $data, \Livewire\Component $livewire) use ($level): void {
+                        ->action(function (Comment $record, array $data, Component $livewire) use ($level): void {
                             $body = $data['body'];
 
                             if ($level >= 3) {
@@ -254,5 +254,4 @@ class ArticleInfolist
             ] : []),
         ];
     }
-
 }

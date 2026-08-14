@@ -2,13 +2,12 @@
 
 namespace App\Filament\App\Resources\Articles\Pages;
 
-use Filament\Resources\Pages\ListRecords;
-
-use Filament\Actions\Action;
-use App\Models\Article;
-use Filament\Tables\Table;
-use App\Filament\App\Resources\Articles\Tables\ArticleTable;
 use App\Filament\App\Resources\Articles\ArticleResource;
+use App\Filament\App\Resources\Articles\Tables\ArticleTable;
+use App\Models\Article;
+use Filament\Actions\Action;
+use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Table;
 
 class Bookmark extends ListRecords
 {

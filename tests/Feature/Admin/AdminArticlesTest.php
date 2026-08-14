@@ -1,13 +1,14 @@
 <?php
 
-use App\Models\Article;
+use App\Filament\Resources\Articles\Pages\EditArticle;
 use App\Filament\Resources\Articles\Pages\ListArticles;
 use App\Filament\Resources\Articles\Pages\ViewArticle;
-use App\Filament\Resources\Articles\Pages\EditArticle;
-use Livewire\Livewire;
+use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-require_once __DIR__ . '/../Helpers/AdminLogin.php';
-require_once __DIR__ . '/../Helpers/UserLogin.php';
+use Livewire\Livewire;
+
+require_once __DIR__.'/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 

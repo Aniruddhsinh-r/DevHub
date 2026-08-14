@@ -5,11 +5,11 @@ namespace App\Filament\App\Resources\Articles\Schemas;
 use App\Enums\ArticleStatus;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
@@ -59,7 +59,7 @@ class ArticleForm
                             ->maxDate(now()->addHours(48))
                             ->rules(['after_or_equal:now', 'before_or_equal:+48 hours']),
                     ]),
-                    Section::make('Content')
+                Section::make('Content')
                     ->schema([
                         Textarea::make('body')
                             ->required()

@@ -1,11 +1,11 @@
 <?php
 
-use Spatie\Permission\Models\Role;
-use Livewire\Livewire;
 use App\Enums\UserRole;
 use App\Models\User;
 use Filament\Auth\Pages\Register;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
+use Spatie\Permission\Models\Role;
 
 require_once __DIR__.'/../Helpers/UserLogin.php';
 
@@ -14,7 +14,7 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     Role::firstOrCreate([
         'name' => UserRole::AUTHOR,
-        'guard_name' => 'web'
+        'guard_name' => 'web',
     ]);
 });
 
@@ -80,4 +80,3 @@ test('registration fails when passwords do not match', function () {
         'email' => 'someone@example.com',
     ]);
 });
-

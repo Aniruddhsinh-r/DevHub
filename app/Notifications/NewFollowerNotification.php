@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class NewFollowerNotification extends Notification  implements ShouldQueue
+class NewFollowerNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -37,9 +37,9 @@ class NewFollowerNotification extends Notification  implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        return ([
+        return [
             'message' => "you have a new follower {$this->follower->name}",
             'user_id' => $this->follower->id,
-        ]);
+        ];
     }
 }

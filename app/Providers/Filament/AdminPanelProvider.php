@@ -3,19 +3,19 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\EditProfile as AuthEditProfile;
-use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Pages\Dashboard;
+use App\Filament\Resources\Articles\Widgets\StatsOverview;
+use App\Filament\Widgets\LatestArticles;
+use App\Filament\Widgets\TopAuthors;
+use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use App\Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use App\Filament\Resources\Articles\Widgets\StatsOverview;
-use App\Filament\Widgets\LatestArticles;
-use App\Filament\Widgets\TopAuthors;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;

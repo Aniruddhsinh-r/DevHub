@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\Article;
-use Livewire\Livewire;
 use App\Enums\ArticleStatus;
 use App\Filament\Resources\Articles\Pages\ViewArticle;
+use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
-require_once __DIR__ . '/../Helpers/UserLogin.php';
-require_once __DIR__ . '/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/UserLogin.php';
+require_once __DIR__.'/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 
@@ -37,10 +37,10 @@ test('guest cant access article page', function () {
     $this->assertDatabaseMissing('bookmarks', ['article_id' => $article->id]);
 });
 
-test('author can access his draft article', function() {
+test('author can access his draft article', function () {
     $user = UserLogin();
 
-    $article = Article::factory()->create(['status'=>ArticleStatus::DRAFT,'user_id'=>$user->id]);
+    $article = Article::factory()->create(['status' => ArticleStatus::DRAFT, 'user_id' => $user->id]);
 
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertSuccessful()
@@ -48,10 +48,10 @@ test('author can access his draft article', function() {
         ->assertSee($article->excerpt);
 });
 
-test('author can access his scheduled article', function() {
+test('author can access his scheduled article', function () {
     $user = UserLogin();
 
-    $article = Article::factory()->create(['status'=>ArticleStatus::SCHEDULED,'user_id'=>$user->id]);
+    $article = Article::factory()->create(['status' => ArticleStatus::SCHEDULED, 'user_id' => $user->id]);
 
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertSuccessful()

@@ -1,10 +1,10 @@
 <?php
 
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
-use App\Enums\ArticleStatus;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());

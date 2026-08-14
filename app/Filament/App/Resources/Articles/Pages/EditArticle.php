@@ -2,15 +2,15 @@
 
 namespace App\Filament\App\Resources\Articles\Pages;
 
-use App\Filament\App\Resources\Articles\ArticleResource;
-use Filament\Actions\DeleteAction;
-use Illuminate\Support\Str;
-use App\Models\Article;
-use Illuminate\Database\Eloquent\Model;
 use App\Enums\ArticleStatus;
+use App\Filament\App\Resources\Articles\ArticleResource;
+use App\Models\Article;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class EditArticle extends EditRecord
 {
@@ -18,7 +18,7 @@ class EditArticle extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return static::getResource()::getUrl('index');
+        return $this->getResource()::getUrl('view', ['record' => $this->record]) ?? $this->getResource()::getUrl('index');
     }
 
     protected function handleRecordUpdate(Model $record, array $data): Model
@@ -33,14 +33,13 @@ class EditArticle extends EditRecord
             $data['published_at'] = null;
         }
 
-
         if (! empty($data['title'])) {
             $base = Str::slug($data['title'], '-');
             $slug = $base;
             $count = 2;
 
             while (Article::where('slug', $slug)->where('id', '!=', $record->id)->withoutTrashed()->exists()) {
-                $slug = $base . '-' . $count;
+                $slug = $base.'-'.$count;
                 $count++;
             }
 
@@ -48,6 +47,7 @@ class EditArticle extends EditRecord
         }
 
         $record->update($data);
+
         return $record;
     }
 

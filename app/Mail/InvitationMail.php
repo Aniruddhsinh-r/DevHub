@@ -13,7 +13,9 @@ use Illuminate\Queue\SerializesModels;
 class InvitationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
     public string $msg;
+
     /**
      * Create a new message instance.
      */
@@ -28,9 +30,10 @@ class InvitationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitation to Join ' . config('app.name') . ' Portal',
+            subject: 'Invitation to Join '.config('app.name').' Portal',
         );
     }
+
     /**
      * Get the message content definition.
      */

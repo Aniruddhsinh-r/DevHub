@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Articles\RelationManagers;
 
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class LikesRelationManager extends RelationManager
 {

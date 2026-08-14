@@ -2,19 +2,19 @@
 
 namespace App\Filament\Resources\Articles\Tables;
 
+use App\Enums\ArticleStatus;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Actions\ForceDeleteAction;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
-use App\Enums\ArticleStatus;
-use Filament\Actions\RestoreAction;
 use Filament\Tables\Table;
 
 class ArticlesTable
@@ -72,15 +72,17 @@ class ArticlesTable
                     ForceDeleteBulkAction::make()->successNotificationTitle('Articles permanently deleted.'),
                     RestoreBulkAction::make(),
                 ]),
-            ])->emptyStateHeading(function ($livewire) { $activityTab = $livewire->activeTab ?? $livewire->activityTab ?? 'all';
-                    return match ($activityTab) {
-                        'all'       => 'No articles have been created yet.',
-                        'published' => 'No published articles found.',
-                        'draft'     => 'No draft articles found.',
-                        'scheduled' => 'No scheduled articles found.',
-                        default     => 'No articles found.',
-                    };
-                })
-                ->searchPlaceholder('Search articles');
+            ])->emptyStateHeading(function ($livewire) {
+                $activityTab = $livewire->activeTab ?? $livewire->activityTab ?? 'all';
+
+                return match ($activityTab) {
+                    'all' => 'No articles have been created yet.',
+                    'published' => 'No published articles found.',
+                    'draft' => 'No draft articles found.',
+                    'scheduled' => 'No scheduled articles found.',
+                    default => 'No articles found.',
+                };
+            })
+            ->searchPlaceholder('Search articles');
     }
 }

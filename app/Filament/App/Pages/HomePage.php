@@ -2,12 +2,12 @@
 
 namespace App\Filament\App\Pages;
 
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Pages\Page;
-use Filament\Actions\Action;
 use App\Filament\App\Widgets\HomeStats;
 use App\Filament\App\Widgets\TopArticles;
+use Filament\Actions\Action;
+use Filament\Pages\Page;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
 
 class HomePage extends Page implements HasTable
 {

@@ -2,26 +2,25 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Article;
-use Filament\Tables\Table;
 use App\Filament\Resources\Articles\ArticleResource;
-use Filament\Widgets\TableWidget;
+use App\Models\Article;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Filament\Widgets\TableWidget;
 
 class LatestArticles extends TableWidget
 {
     protected static ?string $heading = 'Latest Articles';
 
     protected int|string|array $columnSpan = 2;
-    
+
     protected static ?int $sort = 2;
-    
+
     protected function isTablePaginationEnabled(): bool
     {
         return false;
     }
 
-    
     public function table(Table $table): Table
     {
         return $table

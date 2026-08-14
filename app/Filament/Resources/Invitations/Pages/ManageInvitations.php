@@ -4,12 +4,12 @@ namespace App\Filament\Resources\Invitations\Pages;
 
 use App\Actions\SendInvitation;
 use App\Filament\Resources\Invitations\InvitationResource;
-use Filament\Actions\CreateAction;
 use App\Models\Invitation;
-use Filament\Schemas\Components\Tabs\Tab;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\CreateAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
+use Filament\Schemas\Components\Tabs\Tab;
+use Illuminate\Database\Eloquent\Builder;
 use RuntimeException;
 
 class ManageInvitations extends ManageRecords
@@ -31,28 +31,29 @@ class ManageInvitations extends ManageRecords
             'expired' => Tab::make('expired')->badge(Invitation::query()->where('status', 'expired')->count())->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'expired')),
         ];
     }
+
     protected function getHeaderActions(): array
     {
         return [
             CreateAction::make()
-            ->action(function (array $data, CreateAction $action) {
-                try {
-                    app(SendInvitation::class)->handle($data['email']);
+                ->action(function (array $data, CreateAction $action) {
+                    try {
+                        app(SendInvitation::class)->handle($data['email']);
 
-                    Notification::make()
-                        ->title('Invitation sent successfully.')
-                        ->success()
-                        ->send();
+                        Notification::make()
+                            ->title('Invitation sent successfully.')
+                            ->success()
+                            ->send();
 
-                } catch (RuntimeException $e) {
-                    Notification::make()
-                        ->title($e->getMessage())
-                        ->danger()
-                        ->send();
+                    } catch (RuntimeException $e) {
+                        Notification::make()
+                            ->title($e->getMessage())
+                            ->danger()
+                            ->send();
 
-                    $action->halt();
-                }
-            }),
+                        $action->halt();
+                    }
+                }),
         ];
     }
 }

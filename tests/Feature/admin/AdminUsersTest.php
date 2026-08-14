@@ -1,19 +1,19 @@
 <?php
 
-use App\Models\User;
+use App\Enums\UserRole;
+use App\Filament\Resources\Users\Pages\EditUser;
+use App\Filament\Resources\Users\Pages\ListUsers;
+use App\Filament\Resources\Users\Pages\ViewUser;
 use App\Models\Article;
-use Livewire\Livewire;
 use App\Models\Comment;
 use App\Models\Like;
-use App\Enums\UserRole;
-use App\Filament\Resources\Users\Pages\ListUsers;
-use App\Filament\Resources\Users\Pages\EditUser;
-use App\Filament\Resources\Users\Pages\ViewUser;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 
-require_once __DIR__ . '/../Helpers/AdminLogin.php';
-require_once __DIR__ . '/../Helpers/UserLogin.php';
+require_once __DIR__.'/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/UserLogin.php';
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
@@ -85,7 +85,7 @@ test('admin can edit a user', function () {
         ->fillForm([
             'name' => 'updated name',
             'password' => 'newpassword',
-            'password_confirmation' => 'newpassword'
+            'password_confirmation' => 'newpassword',
         ])
         ->call('save')
         ->assertHasNoFormErrors();

@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\Article;
-use Livewire\Livewire;
 use App\Enums\ArticleStatus;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Filament\App\Resources\Articles\Pages\ViewArticle;
+use App\Models\Article;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
-require_once __DIR__ . '/../Helpers/UserLogin.php';
-require_once __DIR__ . '/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/UserLogin.php';
+require_once __DIR__.'/../Helpers/AdminLogin.php';
 uses(RefreshDatabase::class);
 
 test('guest cant access article page for bookmark', function () {

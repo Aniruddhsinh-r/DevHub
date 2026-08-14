@@ -2,25 +2,26 @@
 
 namespace App\Filament\App\Resources\Articles\Pages;
 
+use App\Enums\ArticleStatus;
 use App\Filament\App\Resources\Articles\ArticleResource;
 use App\Models\Article;
 use App\Models\View;
 use Filament\Actions\Action;
-use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
-use App\Enums\ArticleStatus;
+use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewArticle extends ViewRecord
 {
     protected static string $resource = ArticleResource::class;
 
-    public function mount(int|string $record): void {
+    public function mount(int|string $record): void
+    {
         parent::mount($record);
 
         $published = $this->record->status === ArticleStatus::PUBLISHED;
 
-        if($published) {
+        if ($published) {
             $view = View::firstOrCreate([
                 'user_id' => auth()->id(),
                 'article_id' => $this->record->id,
@@ -44,8 +45,8 @@ class ViewArticle extends ViewRecord
                         ->exists();
 
                     return $liked
-                        ? 'Unlike ' . $record->likes()->count()
-                        : 'Like ' . $record->likes()->count();
+                        ? 'Unlike '.$record->likes()->count()
+                        : 'Like '.$record->likes()->count();
                 })
                 ->icon(function (Article $record) {
                     return $record->likes()
@@ -80,18 +81,15 @@ class ViewArticle extends ViewRecord
                 ]),
 
             Action::make('bookmark')
-                ->label(fn (Article $record) =>
-                    $record->isBookmarkedByMe()
+                ->label(fn (Article $record) => $record->isBookmarkedByMe()
                         ? 'Saved'
                         : 'Bookmark'
                 )
-                ->icon(fn (Article $record) =>
-                    $record->isBookmarkedByMe()
+                ->icon(fn (Article $record) => $record->isBookmarkedByMe()
                         ? 'heroicon-s-bookmark'
                         : 'heroicon-o-bookmark'
                 )
-                ->color(fn (Article $record) =>
-                    $record->isBookmarkedByMe()
+                ->color(fn (Article $record) => $record->isBookmarkedByMe()
                         ? 'warning'
                         : 'gray'
                 )

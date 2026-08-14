@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
+use App\Enums\ArticleStatus;
+use App\Enums\UserRole;
 use App\Models\Article;
 use App\Models\User;
-use App\Enums\UserRole;
-use App\Enums\ArticleStatus;
 
 class ArticlePolicy
 {
@@ -17,11 +17,13 @@ class ArticlePolicy
         //
     }
 
-    public function create(User $user): bool {
+    public function create(User $user): bool
+    {
         return $user->can('article.create');
     }
 
-    public function update(User $user, Article $article): bool {
+    public function update(User $user, Article $article): bool
+    {
         if ($user->hasRole(UserRole::SUPERADMIN) || $user->hasRole(UserRole::ADMIN)) {
             return true;
         }
@@ -29,10 +31,12 @@ class ArticlePolicy
         return $user->can('article.edit') && $user->id === $article->user_id;
     }
 
-    public function delete(User $user, Article $article): bool {
+    public function delete(User $user, Article $article): bool
+    {
         if ($user->hasRole(UserRole::SUPERADMIN) || $user->hasRole(UserRole::ADMIN)) {
             return true;
         }
+
         return $user->can('article.delete') && $user->id === $article->user_id;
     }
 

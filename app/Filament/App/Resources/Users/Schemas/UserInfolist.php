@@ -4,13 +4,13 @@ namespace App\Filament\App\Resources\Users\Schemas;
 
 use App\Enums\ArticleStatus;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Group;
-use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Actions;
-use Filament\Actions\Action;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class UserInfolist
@@ -27,50 +27,49 @@ class UserInfolist
                             'default' => 1,
                             'lg' => 4,
                         ])
-                        ->schema([
-                            ImageEntry::make('avatar')
-                                ->hiddenLabel()
-                                ->disk('public')
-                                ->circular()
-                                ->imageWidth(120)
-                                ->defaultImageUrl('https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png')
-                                ->extraImgAttributes([
-                                    'class' => 'object-cover',
-                                ])
-                                ->columnSpan([
-                                    'default' => 1,
-                                    'lg' => 1,
-                                ]),
-                            Group::make([
-                                TextEntry::make('name')
-                                    ->size('lg')
-                                    ->weight('bold')
-                                    ->columnSpanFull(),
-                                Actions::make([
-                                    Action::make('follow')
-                                        ->label(fn (User $record) => $record->followers->isNotEmpty() ? 'Unfollow' : 'Follow')
-                                        ->icon(fn (User $record) => $record->followers->isNotEmpty() ? 'heroicon-o-user-minus' : 'heroicon-o-user-plus')
-                                        ->color(fn (User $record) => $record->followers->isNotEmpty() ? 'gray' : 'primary')
-                                        ->hidden(fn (User $record) => auth()->id() === $record->id)
-                                        ->action(function (User $record) {
-                                            $user = auth()->user();
+                            ->schema([
+                                ImageEntry::make('avatar')
+                                    ->hiddenLabel()
+                                    ->disk('public')
+                                    ->circular()
+                                    ->imageWidth(120)
+                                    ->defaultImageUrl('https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png')
+                                    ->extraImgAttributes([
+                                        'class' => 'object-cover',
+                                    ])
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'lg' => 1,
+                                    ]),
+                                Group::make([
+                                    TextEntry::make('name')
+                                        ->size('lg')
+                                        ->weight('bold')
+                                        ->columnSpanFull(),
+                                    Actions::make([
+                                        Action::make('follow')
+                                            ->label(fn (User $record) => $record->followers->isNotEmpty() ? 'Unfollow' : 'Follow')
+                                            ->icon(fn (User $record) => $record->followers->isNotEmpty() ? 'heroicon-o-user-minus' : 'heroicon-o-user-plus')
+                                            ->color(fn (User $record) => $record->followers->isNotEmpty() ? 'gray' : 'primary')
+                                            ->hidden(fn (User $record) => auth()->id() === $record->id)
+                                            ->action(function (User $record) {
+                                                $user = auth()->user();
 
-                                            if ($user->following()->whereKey($record)->exists()) {
-                                                $user->following()->detach($record);
-                                            } else {
-                                                $user->following()->attach($record);
-                                            }
-                                        })
-                                        ->visible(fn (User $record) =>
-                                            auth()->user()->can('follow', $record)
-                                        ),
-                                ]),
-                            ])
-                            ->columnSpan([
-                                'default' => 1,
-                                'lg' => 3,
+                                                if ($user->following()->whereKey($record)->exists()) {
+                                                    $user->following()->detach($record);
+                                                } else {
+                                                    $user->following()->attach($record);
+                                                }
+                                            })
+                                            ->visible(fn (User $record) => auth()->user()->can('follow', $record)
+                                            ),
+                                    ]),
+                                ])
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'lg' => 3,
+                                    ]),
                             ]),
-                        ]),
                         TextEntry::make('bio')
                             ->label('Bio')
                             ->placeholder('No bio added')
@@ -81,22 +80,22 @@ class UserInfolist
                             'sm' => 2,
                             'lg' => 4,
                         ])
-                        ->schema([
-                            TextEntry::make('created_at')
-                                ->label('Member since')
-                                ->dateTime('d M Y, H:i')
-                                ->placeholder('-'),
-                            TextEntry::make('articles_count')
-                                ->state(fn ($record) => $record->articles()->where('status', ArticleStatus::PUBLISHED)->count())
-                                ->label('Articles')
-                                ->badge(),
-                            TextEntry::make('deleted_at')
-                                ->label('Deleted At')
-                                ->dateTime('d M Y, H:i')
-                                ->color('danger')
-                                ->visible(fn (User $record): bool => $record->trashed()),
-                        ])
-                        ->columnSpanFull(),
+                            ->schema([
+                                TextEntry::make('created_at')
+                                    ->label('Member since')
+                                    ->dateTime('d M Y, H:i')
+                                    ->placeholder('-'),
+                                TextEntry::make('articles_count')
+                                    ->state(fn ($record) => $record->articles()->where('status', ArticleStatus::PUBLISHED)->count())
+                                    ->label('Articles')
+                                    ->badge(),
+                                TextEntry::make('deleted_at')
+                                    ->label('Deleted At')
+                                    ->dateTime('d M Y, H:i')
+                                    ->color('danger')
+                                    ->visible(fn (User $record): bool => $record->trashed()),
+                            ])
+                            ->columnSpanFull(),
                     ]),
             ]);
     }

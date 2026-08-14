@@ -14,7 +14,7 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
-        ->defaultSort('created_at', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 ImageColumn::make('avatar')
                     ->label('Image')
@@ -25,7 +25,7 @@ class UsersTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('articles_count')
-                    ->counts(['articles' => fn ($query) => $query->where('status', ArticleStatus::PUBLISHED),])
+                    ->counts(['articles' => fn ($query) => $query->where('status', ArticleStatus::PUBLISHED)])
                     ->label('Articles')
                     ->badge()
                     ->sortable(),

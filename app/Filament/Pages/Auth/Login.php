@@ -2,13 +2,11 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Forms\Components\Checkbox;
+use App\Enums\UserRole;
 use Filament\Auth\Pages\Login as PagesLogin;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use App\Enums\UserRole;
-
-use Filament\Pages\Page;
 
 class Login extends PagesLogin
 {
@@ -28,14 +26,14 @@ class Login extends PagesLogin
                     ->required()
                     ->autocomplete('current-password'),
                 Checkbox::make('remember')
-                    ->label('Remember me')
+                    ->label('Remember me'),
             ]);
     }
 
     protected function getRedirectUrl(): string
     {
         session()->forget('url.intended');
-        
+
         if (auth()->user()->hasRole([
             UserRole::ADMIN,
             UserRole::SUPERADMIN,

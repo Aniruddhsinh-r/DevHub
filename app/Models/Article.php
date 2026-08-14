@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ArticleStatus;
+use Database\Factories\ArticleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Article extends Model
 {
-    /** @use HasFactory<\Database\Factories\ArticleFactory> */
+    /** @use HasFactory<ArticleFactory> */
     use HasFactory, SoftDeletes;
 
     // These fields must match your migration and your Action data
@@ -28,7 +29,7 @@ class Article extends Model
         'cover_path',
         'duration',
         'view_count',
-        'published_at'
+        'published_at',
     ];
 
     protected static function booted()
@@ -115,5 +116,9 @@ class Article extends Model
             'status' => ArticleStatus::class,
         ];
     }
-    public function views() { return $this->hasMany(View::class); }
+
+    public function views()
+    {
+        return $this->hasMany(View::class);
+    }
 }

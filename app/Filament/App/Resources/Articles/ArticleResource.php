@@ -2,12 +2,12 @@
 
 namespace App\Filament\App\Resources\Articles;
 
+use App\Filament\App\Resources\Articles\Pages\Bookmark;
 use App\Filament\App\Resources\Articles\Pages\CreateArticle;
 use App\Filament\App\Resources\Articles\Pages\EditArticle;
-use App\Filament\App\Resources\Articles\Pages\ViewArticle;
 use App\Filament\App\Resources\Articles\Pages\ListArticles;
 use App\Filament\App\Resources\Articles\Pages\MyArticles;
-use App\Filament\App\Resources\Articles\Pages\Bookmark;
+use App\Filament\App\Resources\Articles\Pages\ViewArticle;
 use App\Filament\App\Resources\Articles\Schemas\ArticleForm;
 use App\Filament\App\Resources\Articles\Schemas\ArticleInfolist;
 use App\Models\Article;
@@ -48,7 +48,7 @@ class ArticleResource extends Resource
             'create' => CreateArticle::route('/create'),
             'bookmarks' => Bookmark::route('/bookmarks'),
             'my-articles' => MyArticles::route('/my-articles'),
-            'view'   => ViewArticle::route('/{record}'),
+            'view' => ViewArticle::route('/{record}'),
             'edit' => EditArticle::route('/{record}/edit'),
         ];
     }

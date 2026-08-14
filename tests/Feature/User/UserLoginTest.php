@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Enums\UserRole;
 use App\Models\User;
 use Filament\Auth\Pages\Login;
 use Filament\Facades\Filament;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use App\Enums\UserRole;
 use Spatie\Permission\Models\Role;
 
-require_once __DIR__ . '/../Helpers/UserLogin.php';
-require_once __DIR__ . '/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/UserLogin.php';
+require_once __DIR__.'/../Helpers/AdminLogin.php';
 
 beforeEach(function () {
     Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);

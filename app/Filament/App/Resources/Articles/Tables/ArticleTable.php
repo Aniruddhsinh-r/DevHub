@@ -3,19 +3,18 @@
 namespace App\Filament\App\Resources\Articles\Tables;
 
 use App\Filament\App\Resources\Articles\ArticleResource;
-
-use Filament\Tables\Table;
-use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 class ArticleTable
 {
     public static function configure(Table $table): Table
-        {
-            return $table
+    {
+        return $table
             ->defaultSort('published_at', 'desc')
             ->modifyQueryUsing(fn (Builder $query) => $query->withCount(['views']))
             ->contentGrid(['md' => 2])
@@ -39,7 +38,7 @@ class ArticleTable
                             ->circular()
                             ->height(28)
                             ->defaultImageUrl(
-                                fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->user->name)
+                                fn ($record) => 'https://ui-avatars.com/api/?name='.urlencode($record->user->name)
                             ),
                         TextColumn::make('user.name')
                             ->weight('semibold')
@@ -59,22 +58,22 @@ class ArticleTable
                         ->limit(100)
                         ->searchable(),
                     Split::make([
-                        TextColumn::make('created_at')
+                            TextColumn::make('created_at')
                             ->since()
                             ->color('gray')
                             ->size('xs'),
-                        TextColumn::make('published_at')
+                            TextColumn::make('published_at')
                             ->date('M d, Y')
                             ->color('gray')
                             ->size('xs')
                             ->alignEnd(),
-                    ]),
+                        ]),
                 ])->space(3),
             ])
             ->recordUrl(fn ($record) => ArticleResource::getUrl('view', [
-                'record' => $record,
-            ]))
+                    'record' => $record,
+                ]))
             ->searchable()
             ->paginated([12, 24, 48]);
-        }
+    }
 }

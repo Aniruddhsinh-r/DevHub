@@ -2,18 +2,18 @@
 
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 require_once __DIR__.'/../../Helpers/AdminLogin.php';
 require_once __DIR__.'/../../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
-
 
 test('Admin fetch admin details', function () {
     $article = Article::factory()->create();
     AdminLogin();
 
     visit('/admin/articles')
-    ->assertSee($article->title);
+        ->assertSee($article->title);
 });
 
 test('Admin search and see article', function () {
@@ -35,24 +35,24 @@ test('Admin view not count', function () {
     ]);
 
     visit('/admin/articles')
-    ->assertSee('example Article')
-    ->press('example Article')
-    ->assertPathIs('/admin/articles/' . $article->slug)
-    ->assertSee($article->excerpt)
-    ->assertSee($article->body);
+        ->assertSee('example Article')
+        ->press('example Article')
+        ->assertPathIs('/admin/articles/'.$article->slug)
+        ->assertSee($article->excerpt)
+        ->assertSee($article->body);
 
-    $this->assertDatabaseMissing('views',['user_id' => $admin->id]);
+    $this->assertDatabaseMissing('views', ['user_id' => $admin->id]);
 });
 
 test('guest cant access admin article page', function () {
     visit('/admin/articles?search=example+article')
-    ->assertPathIs('/admin/login');
+        ->assertPathIs('/admin/login');
 });
 
 test('Author cant access admin article page', function () {
     UserLogin();
 
     visit('/admin/articles')
-    ->assertSee('403')
-    ->assertSee('Forbidden');
+        ->assertSee('403')
+        ->assertSee('Forbidden');
 });

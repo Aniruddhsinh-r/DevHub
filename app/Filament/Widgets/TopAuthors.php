@@ -3,9 +3,9 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Resources\Users\UserResource;
-use App\Models\User;
-use App\Models\Comment;
 use App\Models\Bookmark;
+use App\Models\Comment;
+use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 

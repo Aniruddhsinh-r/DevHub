@@ -2,11 +2,10 @@
 
 namespace App\Filament\App\Resources\Articles\Pages;
 
-use Filament\Resources\Pages\ListRecords;
-
-use Filament\Actions\Action;
 use App\Filament\App\Resources\Articles\ArticleResource;
 use App\Filament\App\Resources\Articles\Tables\ArticleTable;
+use Filament\Actions\Action;
+use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Table;
 
 class MyArticles extends ListRecords

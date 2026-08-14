@@ -33,7 +33,8 @@ class CommentNotification extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        $isReply = !is_null($this->comment->parent_id);
+        $isReply = ! is_null($this->comment->parent_id);
+
         return [
             'type' => $isReply ? 'reply' : 'comment',
 
@@ -41,9 +42,9 @@ class CommentNotification extends Notification implements ShouldQueue
                 ? "{$this->comment->user->name} replied to your comment"
                 : "{$this->comment->user->name} commented on your article",
 
-                'article_id' => $this->comment->article_id,
-                'comment_id' => $this->comment->id,
-                'url' => route( 'filament.app.resources.articles.view', ['record' => $this->comment->article]) . '#comment-' . $this->comment->id,
+            'article_id' => $this->comment->article_id,
+            'comment_id' => $this->comment->id,
+            'url' => route('filament.app.resources.articles.view', ['record' => $this->comment->article]).'#comment-'.$this->comment->id,
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
-use App\Enums\ArticleStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,6 +23,7 @@ class ArticleFactory extends Factory
     {
         $title = fake()->sentence(5);
         $status = ArticleStatus::PUBLISHED;
+
         return [
             'user_id' => User::factory()->author()->create(),
             'category_id' => Category::factory(),

@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
-use App\Enums\UserRole;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password', 'two_factor_secret', 'last_seen_at', 'bio', 'avatar'])]
@@ -23,14 +23,13 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasRoles;
+    use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-
     public function canAccessPanel(Panel $panel): bool
     {
         return match ($panel->getId()) {
@@ -129,7 +128,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function invitations()
     {
-        return $this->hasMany(Invitation::class, 'email','email');
+        return $this->hasMany(Invitation::class, 'email', 'email');
     }
 
     public function bookmarkedArticles(): BelongsToMany

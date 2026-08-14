@@ -2,16 +2,16 @@
 
 namespace App\Filament\App\Resources\Articles\Pages;
 
-use App\Filament\App\Resources\Articles\ArticleResource;
-use Filament\Resources\Pages\CreateRecord;
 use App\Enums\ArticleStatus;
-use Illuminate\Support\Str;
+use App\Filament\App\Resources\Articles\ArticleResource;
 use App\Models\Article;
+use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Str;
 
 class CreateArticle extends CreateRecord
 {
     protected static string $resource = ArticleResource::class;
-    
+
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('index');
@@ -25,7 +25,7 @@ class CreateArticle extends CreateRecord
         $count = 2;
 
         while (Article::where('slug', $slug)->withoutTrashed()->exists()) {
-            $slug = $base . '-' . $count;
+            $slug = $base.'-'.$count;
             $count++;
         }
         $data['slug'] = $slug;
@@ -33,6 +33,7 @@ class CreateArticle extends CreateRecord
         if (isset($data['status']) && $data['status'] === ArticleStatus::PUBLISHED) {
             $data['published_at'] = now();
         }
+
         return $data;
     }
 }

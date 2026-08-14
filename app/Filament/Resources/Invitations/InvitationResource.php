@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\Invitations;
 
-use App\Filament\Resources\Invitations\Pages\ManageInvitations;
 use App\Actions\SendInvitation;
+use App\Filament\Resources\Invitations\Pages\ManageInvitations;
 use App\Models\Invitation;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -16,11 +17,10 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Actions\Action;
-use RuntimeException;
 use Filament\Tables\Columns\TextColumn;
-use UnitEnum;
 use Filament\Tables\Table;
+use RuntimeException;
+use UnitEnum;
 
 class InvitationResource extends Resource
 {
@@ -30,7 +30,7 @@ class InvitationResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'email';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Invites';
+    protected static string|UnitEnum|null $navigationGroup = 'Invites';
 
     public static function form(Schema $schema): Schema
     {
@@ -131,13 +131,13 @@ class InvitationResource extends Resource
                     DeleteBulkAction::make()->successNotificationTitle('Invitation deleted successfully.'),
                 ]),
             ])->emptyStateHeading(fn ($livewire) => match ($livewire->activeTab ?? $livewire->activityTab ?? 'all') {
-                'all'      => 'No invitations have been sent yet.',
-                'pending'  => 'No pending invitations found.',
+                'all' => 'No invitations have been sent yet.',
+                'pending' => 'No pending invitations found.',
                 'accepted' => 'No accepted invitations found.',
-                'expired'  => 'No expired invitations found.',
-                default    => 'No invitations found.',
+                'expired' => 'No expired invitations found.',
+                default => 'No invitations found.',
             })
-                ->searchPlaceholder('Search invitation');
+            ->searchPlaceholder('Search invitation');
     }
 
     public static function getPages(): array

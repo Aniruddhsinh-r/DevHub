@@ -2,27 +2,27 @@
 
 namespace App\Filament\Resources\Users;
 
+use App\Enums\UserRole;
+use App\Filament\Resources\Articles\RelationManagers\CommentsRelationManager;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Pages\ViewUser;
+use App\Filament\Resources\Users\RelationManagers\ArticlesRelationManager;
+use App\Filament\Resources\Users\RelationManagers\FollowersRelationManager;
+use App\Filament\Resources\Users\RelationManagers\FollowingRelationManager;
 use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Schemas\UserInfolist;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
 use BackedEnum;
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Resources\Pages\Page;
 use Filament\Resources\RelationManagers\RelationGroup;
-use App\Filament\Resources\Articles\RelationManagers\CommentsRelationManager;
-use App\Filament\Resources\Users\RelationManagers\FollowersRelationManager;
-use App\Filament\Resources\Users\RelationManagers\FollowingRelationManager;
-use App\Filament\Resources\Users\RelationManagers\ArticlesRelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Filament\Resources\Pages\Page;
-use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Pages\Enums\SubNavigationPosition;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -116,8 +116,8 @@ class UserResource extends Resource
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([
-            Pages\ViewUser::class,
-            Pages\EditUser::class,
+            ViewUser::class,
+            EditUser::class,
         ]);
     }
 }

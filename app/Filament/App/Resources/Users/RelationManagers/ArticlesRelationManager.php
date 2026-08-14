@@ -2,12 +2,12 @@
 
 namespace App\Filament\App\Resources\Users\RelationManagers;
 
-use App\Filament\App\Resources\Articles\ArticleResource;
-use Filament\Tables\Columns\TextColumn;
 use App\Enums\ArticleStatus;
-use Illuminate\Database\Eloquent\Builder;
+use App\Filament\App\Resources\Articles\ArticleResource;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ArticlesRelationManager extends RelationManager
 {

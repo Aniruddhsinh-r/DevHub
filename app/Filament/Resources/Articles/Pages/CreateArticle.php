@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\Articles\Pages;
 
+use App\Enums\ArticleStatus;
 use App\Filament\Resources\Articles\ArticleResource;
+use App\Models\Article;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Str;
-use App\Models\Article;
-use App\Enums\ArticleStatus;
 
 class CreateArticle extends CreateRecord
 {
@@ -25,7 +25,7 @@ class CreateArticle extends CreateRecord
         $count = 2;
 
         while (Article::where('slug', $slug)->withoutTrashed()->exists()) {
-            $slug = $base . '-' . $count;
+            $slug = $base.'-'.$count;
             $count++;
         }
         $data['slug'] = $slug;
@@ -33,7 +33,7 @@ class CreateArticle extends CreateRecord
         if (isset($data['status']) && $data['status'] === ArticleStatus::PUBLISHED) {
             $data['published_at'] = now();
         }
+
         return $data;
     }
-
 }

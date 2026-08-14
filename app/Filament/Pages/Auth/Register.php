@@ -2,11 +2,11 @@
 
 namespace App\Filament\Pages\Auth;
 
+use App\Enums\UserRole;
 use Filament\Auth\Pages\Register as PagesRegister;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Schemas\Schema;
-use App\Enums\UserRole;
+use Illuminate\Database\Eloquent\Model;
 
 class Register extends PagesRegister
 {

@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class UserForm
@@ -28,8 +28,7 @@ class UserForm
                     ->email()
                     ->required()
                     ->maxLength(255)
-                    ->unique(ignoreRecord: true)
-                    ,
+                    ->unique(ignoreRecord: true),
                 Textarea::make('bio')
                     ->default(null)
                     ->columnSpanFull(),

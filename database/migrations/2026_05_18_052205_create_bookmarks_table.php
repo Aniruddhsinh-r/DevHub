@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unique(['user_id', 'article_id']);
         });
     }
+
     public function down(): void
     {
         Schema::dropIfExists('bookmarks');

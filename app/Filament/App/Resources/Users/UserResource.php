@@ -2,22 +2,22 @@
 
 namespace App\Filament\App\Resources\Users;
 
+use App\Enums\UserRole;
 use App\Filament\App\Resources\Users\Pages\ListUsers;
 use App\Filament\App\Resources\Users\Pages\Profile;
 use App\Filament\App\Resources\Users\Pages\ViewUser;
+use App\Filament\App\Resources\Users\RelationManagers\ArticlesRelationManager;
 use App\Filament\App\Resources\Users\Schemas\UserInfolist;
 use App\Filament\App\Resources\Users\Tables\UsersTable;
-use App\Models\User;
-use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\Users\RelationManagers\FollowersRelationManager;
 use App\Filament\Resources\Users\RelationManagers\FollowingRelationManager;
-use App\Filament\App\Resources\Users\RelationManagers\ArticlesRelationManager;
+use App\Models\User;
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Pages\Enums\SubNavigationPosition;
 use Illuminate\Database\Eloquent\Model;
 
 class UserResource extends Resource

@@ -97,17 +97,17 @@ class InvitationRegister extends SimplePage implements HasForms
                         ->maxLength(255)
                         ->required(),
                 ])
-                ->extraAttributes(['class' => 'max-w-md mx-auto w-full'])
-                ->id('invitation-register-form')
-                ->livewireSubmitHandler('register')
-                ->footer([
-                    Actions::make([
-                        Action::make('register')
-                            ->label('Create account')
-                            ->submit('register')
-                            ->color('primary'),
-                    ])->fullWidth(),
-                ]),
+                    ->extraAttributes(['class' => 'max-w-md mx-auto w-full'])
+                    ->id('invitation-register-form')
+                    ->livewireSubmitHandler('register')
+                    ->footer([
+                        Actions::make([
+                            Action::make('register')
+                                ->label('Create account')
+                                ->submit('register')
+                                ->color('primary'),
+                        ])->fullWidth(),
+                    ]),
             ])
             ->statePath('data');
     }
@@ -123,6 +123,7 @@ class InvitationRegister extends SimplePage implements HasForms
         if ($this->invitation->email !== $data['email']) {
             $this->data['email'] = $this->invitation->email;
             Notification::make()->title('This Invitation email is not valid.')->danger()->send();
+
             return;
         }
 

@@ -2,16 +2,16 @@
 
 namespace App\Filament\Resources\Articles\Pages;
 
+use App\Enums\ArticleStatus;
 use App\Filament\Resources\Articles\ArticleResource;
+use App\Models\Article;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
-use Illuminate\Database\Eloquent\Model;
-use App\Enums\ArticleStatus;
-use App\Models\Article;
-use Illuminate\Support\Str;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class EditArticle extends EditRecord
 {
@@ -19,7 +19,7 @@ class EditArticle extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return $this->previousUrl ?? $this->getResource()::getUrl('index');
+        return $this->getResource()::getUrl('view', ['record' => $this->record]) ?? $this->getResource()::getUrl('index');
     }
 
     protected function handleRecordUpdate(Model $record, array $data): Model
@@ -40,7 +40,7 @@ class EditArticle extends EditRecord
             $count = 2;
 
             while (Article::where('slug', $slug)->where('id', '!=', $record->id)->withoutTrashed()->exists()) {
-                $slug = $base . '-' . $count;
+                $slug = $base.'-'.$count;
                 $count++;
             }
 
@@ -48,6 +48,7 @@ class EditArticle extends EditRecord
         }
 
         $record->update($data);
+
         return $record;
     }
 

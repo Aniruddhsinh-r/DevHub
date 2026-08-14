@@ -28,6 +28,7 @@ class CommentFactory extends Factory
             'created_at' => fake()->dateTimeBetween('-1 week', 'now'),
         ];
     }
+
     /**
      * State modifier for generating nested replies smoothly
      */

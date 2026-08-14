@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Livewire\Livewire;
-use App\Models\User;
-use Illuminate\Support\Facades\Storage;
 use App\Filament\Pages\Auth\EditProfile;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Livewire;
 
 require_once __DIR__.'/../Helpers/UserLogin.php';
 uses(RefreshDatabase::class);

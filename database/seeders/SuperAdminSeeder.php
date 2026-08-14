@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Enums\UserRole;
-use Illuminate\Database\Seeder;
 
 class SuperAdminSeeder extends Seeder
 {
@@ -18,9 +18,9 @@ class SuperAdminSeeder extends Seeder
         $user = User::updateOrCreate(
             ['email' => 'harshrajsinh@gmail.com'],
             ['uuid' => Str::uuid(),
-            'name' => 'Harshrajsinh',
-            'password' => Hash::make('password'),
-        ]);
+                'name' => 'Harshrajsinh',
+                'password' => Hash::make('password'),
+            ]);
         $user->assignRole(UserRole::SUPERADMIN);
     }
 }
