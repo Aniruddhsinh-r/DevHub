@@ -57,24 +57,34 @@ test('admin can view a user profile', function () {
         ->assertSee($user->name);
 });
 
-// test('admin can create a user', function () {
-//     AdminLogin();
+test('admin cant view a superadmin profile', function () {
+    $superAdmin = User::factory()->create();
+    $superAdmin->assignRole('superadmin');
+    AdminLogin();
 
-//     Livewire::test(CreateUser::class)
-//         ->fillForm([
-//             'uuid' => (string) Illuminate\Support\Str::uuid(),
-//             'name' => 'new author',
-//             'email' => 'newauthor@example.com',
-//             'password' => 'password',
-//         ])
-//         ->call('create')
-//         ->assertHasNoFormErrors();
+    visit('/admin/users/'.$superAdmin->uuid)
+        ->assertSee('404');
+});
 
-//     $this->assertDatabaseHas('users', [
-//         'name' => 'new author',
-//         'email' => 'newauthor@example.com',
-//     ]);
-// });
+test('admin cant open the edit page of a superadmin', function () {
+    $superAdmin = User::factory()->create();
+    $superAdmin->assignRole('superadmin');
+    AdminLogin();
+
+    visit('/admin/users/'.$superAdmin->uuid.'/edit')
+        ->assertSee('404');
+
+    $this->assertDatabaseHas('users', ['id' => $superAdmin->id, 'deleted_at' => null]);
+});
+
+test('superadmin can still edit their own profile', function () {
+    $superAdmin = User::factory()->create();
+    $superAdmin->assignRole('superadmin');
+ 
+    $this->actingAs($superAdmin)
+        ->get('/admin/profile')
+        ->assertSuccessful();
+});
 
 test('admin can edit a user', function () {
     AdminLogin();
