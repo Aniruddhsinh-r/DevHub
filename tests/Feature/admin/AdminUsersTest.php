@@ -94,8 +94,7 @@ test('admin can edit a user', function () {
     Livewire::test(EditUser::class, ['record' => $user->getRouteKey()])
         ->fillForm([
             'name' => 'updated name',
-            'password' => 'newpassword',
-            'password_confirmation' => 'newpassword',
+            'bio' => 'hi this profile is updated',
         ])
         ->call('save')
         ->assertHasNoFormErrors();
@@ -103,6 +102,7 @@ test('admin can edit a user', function () {
     $this->assertDatabaseHas('users', [
         'id' => $user->id,
         'name' => 'updated name',
+        'bio' => 'hi this profile is updated',
     ]);
 });
 

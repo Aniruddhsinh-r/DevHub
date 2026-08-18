@@ -1,8 +1,11 @@
 <?php
 
 use App\Filament\Resources\Categories\Pages\ManageCategories;
+use App\Models\Article;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\User;
+use App\Models\View;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
@@ -100,6 +103,25 @@ test('admin category delete test', function () {
     $this->assertDatabaseMissing('categories', [
         'id' => $category->id,
     ]);
+});
+
+test('deleting a category cascades to its articles and their comments, bookmarks, and views', function () {
+    SuperAdminLogin();
+
+    $category = Category::factory()->create();
+    $article = Article::factory()->create(['category_id' => $category->id]);
+    Comment::factory()->create(['article_id' => $article->id]);
+    $bookmarker = User::factory()->create();
+    $article->bookmarks()->attach($bookmarker);
+    View::factory()->create(['article_id' => $article->id]);
+
+    Livewire::test(ManageCategories::class)
+        ->callTableAction('delete', $category);
+
+    $this->assertDatabaseMissing('articles', ['id' => $article->id]);
+    $this->assertDatabaseMissing('comments', ['article_id' => $article->id]);
+    $this->assertDatabaseMissing('bookmarks', ['article_id' => $article->id]);
+    $this->assertDatabaseMissing('views', ['article_id' => $article->id]);
 });
 
 test('author cannot access categories page', function () {

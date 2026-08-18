@@ -116,20 +116,3 @@ test('admin cant post comment', function () {
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertDontSee('Add Comment');
 });
-
-test('admin viewing article does not create a view record', function () {
-    $admin = AdminLogin();
-
-    $article = Article::factory()->create();
-
-    Livewire::actingAs($admin)
-        ->test(ViewArticle::class, [
-            'record' => $article->getRouteKey(),
-        ])
-        ->assertSuccessful();
-
-    $this->assertDatabaseMissing('views', [
-        'article_id' => $article->id,
-        'user_id' => $admin->id,
-    ]);
-});

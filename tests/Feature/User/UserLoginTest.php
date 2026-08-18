@@ -87,9 +87,12 @@ test('login fails with unregister email', function () {
 });
 
 test('admin cannot log into the app panel', function () {
+    Filament::setCurrentPanel(Filament::getPanel('app'));
+
     $admin = User::factory()->create([
         'password' => 'password123',
     ]);
+    $admin->assignRole(UserRole::ADMIN);
 
     Livewire::test(Login::class)
         ->fillForm([
@@ -97,7 +100,7 @@ test('admin cannot log into the app panel', function () {
             'password' => 'password123',
         ])
         ->call('authenticate')
-        ->assertHasFormErrors();
+        ->assertHasFormErrors(['email']);
 
     $this->assertGuest();
 });

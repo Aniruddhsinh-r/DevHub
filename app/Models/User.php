@@ -131,6 +131,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Invitation::class, 'email', 'email');
     }
 
+    public function isFollowing(User $user): bool
+    {
+        return $this->following()->whereKey($user)->exists();
+    }
+
     public function bookmarkedArticles(): BelongsToMany
     {
         return $this->belongsToMany(Article::class, 'bookmarks');

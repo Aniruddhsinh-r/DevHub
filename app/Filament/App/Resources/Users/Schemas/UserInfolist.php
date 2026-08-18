@@ -48,14 +48,14 @@ class UserInfolist
                                         ->columnSpanFull(),
                                     Actions::make([
                                         Action::make('follow')
-                                            ->label(fn (User $record) => $record->followers->isNotEmpty() ? 'Unfollow' : 'Follow')
-                                            ->icon(fn (User $record) => $record->followers->isNotEmpty() ? 'heroicon-o-user-minus' : 'heroicon-o-user-plus')
-                                            ->color(fn (User $record) => $record->followers->isNotEmpty() ? 'gray' : 'primary')
+                                            ->label(fn (User $record) => auth()->user()->isFollowing($record) ? 'Unfollow' : 'Follow')
+                                            ->icon(fn (User $record) => auth()->user()->isFollowing($record) ? 'heroicon-o-user-minus' : 'heroicon-o-user-plus')
+                                            ->color(fn (User $record) => auth()->user()->isFollowing($record) ? 'gray' : 'primary')
                                             ->hidden(fn (User $record) => auth()->id() === $record->id)
                                             ->action(function (User $record) {
                                                 $user = auth()->user();
 
-                                                if ($user->following()->whereKey($record)->exists()) {
+                                                if ($user->isFollowing($record)) {
                                                     $user->following()->detach($record);
                                                 } else {
                                                     $user->following()->attach($record);
