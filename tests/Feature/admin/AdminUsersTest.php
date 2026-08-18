@@ -146,3 +146,45 @@ test('author cannot access admin users page', function () {
     $this->get('/admin/users')
         ->assertForbidden();
 });
+
+test('admin cannot see or delete himself', function () {
+    $admin = AdminLogin();
+
+    Livewire::test(ListUsers::class)
+        ->assertCanNotSeeTableRecords(
+            User::whereKey($admin->id)->get()
+        );
+
+    expect($admin->can('delete', $admin))->toBeFalse();
+});
+
+test('admin cannot see or delete superadmin', function () {
+    AdminLogin();
+
+    $superAdmin = User::factory()->create();
+    $superAdmin->assignRole(UserRole::SUPERADMIN);
+
+    Livewire::test(ListUsers::class)
+        ->assertCanNotSeeTableRecords(
+            User::whereKey($superAdmin->id)->get()
+        );
+
+    expect(auth()->user()->can('delete', $superAdmin))->toBeFalse();
+});
+
+test('admin cannot edit user password becasue form has no password field', function () {
+    AdminLogin();
+    $user = User::factory()->create();
+    $originalPassword = $user->password;
+
+    Livewire::test(EditUser::class, ['record' => $user->getRouteKey()])
+        ->fillForm([
+            'name' => $user->name,
+            'password' => 'attemptedNewPassword',
+            'password_confirmation' => 'attemptedNewPassword',
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($user->fresh()->password)->toBe($originalPassword);
+});

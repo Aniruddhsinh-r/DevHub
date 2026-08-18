@@ -17,11 +17,6 @@ beforeEach(function () {
         'guard_name' => 'web',
     ]);
 });
-// beforeEach(function () {
-//     Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
-//     Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
-//     Role::firstOrCreate(['name' => UserRole::ADMIN, 'guard_name' => 'web']);
-// });
 
 test('user registration test', function () {
     Livewire::test(Register::class)

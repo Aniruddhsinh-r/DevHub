@@ -78,3 +78,28 @@ test('admin cant access follow functionality on profile page', function () {
 
     $this->assertDatabaseMissing('follows', ['followed_id' => $user->id]);
 });
+
+test('follow button shows even someone else already follow theme', function () {
+    Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
+
+    $target = User::factory()->create();
+    $target->assignRole(UserRole::AUTHOR);
+
+    $someoneElse = User::factory()->create();
+    $someoneElse->assignRole(UserRole::AUTHOR);
+    $someoneElse->following()->attach($target);
+
+    UserLogin();
+
+    visit(route('filament.app.resources.users.view', ['record' => $target]))
+        ->assertSee('Follow');
+});
+
+test('user cannot access his public profile to follow themselves', function () {
+    $user = UserLogin();
+
+    visit(route('filament.app.resources.users.view', ['record' => $user]))
+        ->assertSee('404');
+
+    $this->assertDatabaseMissing('follows', ['follower_id' => $user->id, 'followed_id' => $user->id]);
+});

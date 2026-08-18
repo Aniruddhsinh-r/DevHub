@@ -91,9 +91,10 @@ test('user cannot delete others article', function () {
 
 test('creating an article with existing title create unique slug', function () {
     UserLogin();
+    $category = Category::factory()->create();
 
     $formData = [
-        'category_id' => Category::factory()->create(),
+        'category_id' => $category->id,
         'status' => ArticleStatus::DRAFT,
         'title' => 'Duplicate Slug Title',
         'excerpt' => 'this excerpt is definitely long enough to pass validation.',

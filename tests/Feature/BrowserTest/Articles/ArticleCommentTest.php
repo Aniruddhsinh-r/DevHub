@@ -2,6 +2,7 @@
 
 use App\Enums\ArticleStatus;
 use App\Models\Article;
+use App\Models\Comment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 require_once __DIR__.'/../../Helpers/userLogin.php';
@@ -41,4 +42,43 @@ test('comment does not appear on schedule article', function () {
 
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
         ->assertDontSee('button[wire\\:click*="mountAction"][wire\\:click*="postComment"]');
+});
+
+test('replying to a top level comment creates a level 2 reply', function () {
+    UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create(['article_id' => $article->id, 'parent_id' => null]);
+
+    visit(route('filament.app.resources.articles.view', ['record' => $article]))
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="reply_1"]')
+        ->type('#mountedActionSchema0\\.body', 'a genuine reply')
+        ->press('Submit')
+        ->assertSee('Reply posted');
+
+    $this->assertDatabaseHas('comments', [
+        'article_id' => $article->id,
+        'parent_id' => $comment->id,
+        'body' => 'a genuine reply',
+    ]);
+});
+
+test('replying to 3 comment on article', function () {
+    UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    $level1 = Comment::factory()->create(['article_id' => $article->id, 'parent_id' => null]);
+    $level2 = Comment::factory()->create(['article_id' => $article->id, 'parent_id' => $level1->id]);
+    $level3 = Comment::factory()->create(['article_id' => $article->id, 'parent_id' => $level2->id]);
+
+    visit(route('filament.app.resources.articles.view', ['record' => $article]))
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="reply_3"]')
+        ->type('#mountedActionSchema0\\.body', 'trying to go one level deeper')
+        ->press('Submit')
+        ->assertSee('Reply posted');
+
+    $this->assertDatabaseHas('comments', [
+        'article_id' => $article->id,
+        'parent_id' => $level2->id,
+        'body' => "@{$level3->user->name} trying to go one level deeper",
+    ]);
 });
