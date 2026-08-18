@@ -8,8 +8,11 @@ use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
-if (! function_exists('AdminLogin')) {
-    function AdminLogin(array $permissions = ['article.create',
+if (! function_exists('SuperAdminLogin')) {
+    function SuperAdminLogin(array $permissions = ['category.delete',
+            'user.forceDelete',
+            'article.forceDelete',
+            'article.create',
             'article.edit',
             'article.delete',
             'article.restore',
@@ -21,21 +24,18 @@ if (! function_exists('AdminLogin')) {
             'user.restore',
             'user.update',])
     {
-        Permission::firstOrCreate(['name' => 'category.delete']);
-        Permission::firstOrCreate(['name' => 'user.forceDelete']);
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'superadmin']);
         foreach ($permissions as $permissionName) {
             $permission = Permission::firstOrCreate(['name' => $permissionName,'guard_name' => 'web',]);
-            $adminRole->givePermissionTo($permission);
+            $superAdminRole->givePermissionTo($permission);
         }
-        $admin = User::factory()->create([
-            'email' => 'yashbhai@gmail.com',
-            'password' => 'IAmYashBhai',
+        $superAdmin = User::factory()->create([
+            'email' => 'harshrajsinh@gmail.com',
+            'password' => 'IAmHarshrajsinh',
         ]);
-        $admin->assignRole(UserRole::ADMIN);
+        $superAdmin->assignRole(UserRole::SUPERADMIN);
 
-        test()->actingAs($admin);
-
-        return $admin;
+        test()->actingAs($superAdmin);
+        return $superAdmin;
     }
 }

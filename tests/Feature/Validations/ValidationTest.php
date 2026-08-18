@@ -133,3 +133,66 @@ test('check profile update validation test', function () {
             'password' => 'confirmed',
         ]);
 });
+
+test('scheduling a duration in the past fails validation', function () {
+    UserLogin();
+
+    Livewire::test(CreateArticle::class)
+        ->fillForm([
+            'category_id' => Category::factory()->create(),
+            'status' => ArticleStatus::SCHEDULED,
+            'title' => 'Past Schedule Test',
+            'excerpt' => 'this excerpt is definitely long enough to pass validation.',
+            'body' => 'valid body content that is long enough for the rule.',
+            'duration' => now()->subHour(),
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['duration']);
+});
+
+test('scheduling a duration beyond 48 hours fails validation', function () {
+    UserLogin();
+
+    Livewire::test(CreateArticle::class)
+        ->fillForm([
+            'category_id' => Category::factory()->create(),
+            'status' => ArticleStatus::SCHEDULED,
+            'title' => 'Far Future Schedule',
+            'excerpt' => 'this excerpt is definitely long enough to pass validation.',
+            'body' => 'valid body content that is long enough for the rule.',
+            'duration' => now()->addHours(50),
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['duration']);
+});
+
+test('excerpt below minimum length fails validation', function () {
+    UserLogin();
+
+    Livewire::test(CreateArticle::class)
+        ->fillForm([
+            'category_id' => Category::factory()->create(),
+            'status' => ArticleStatus::DRAFT,
+            'title' => 'Short Excerpt Test',
+            'excerpt' => 'too short',
+            'body' => 'valid body content that is long enough for the rule.',
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['excerpt' => 'min']);
+});
+
+test('non-image cover file is rejected', function () {
+    UserLogin();
+
+    Livewire::test(CreateArticle::class)
+        ->fillForm([
+            'category_id' => Category::factory()->create(),
+            'status' => ArticleStatus::DRAFT,
+            'title' => 'Bad Cover Upload',
+            'excerpt' => 'this excerpt is definitely long enough to pass validation.',
+            'body' => 'valid body content that is long enough for the rule.',
+            'cover_path' => \Illuminate\Http\UploadedFile::fake()->create('malicious.pdf', 10, 'application/pdf'),
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['cover_path']);
+});

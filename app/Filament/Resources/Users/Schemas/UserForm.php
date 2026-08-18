@@ -21,12 +21,13 @@ class UserForm
                     ->avatar(),
                 TextInput::make('name')
                     ->required()
-                    ->minLength(5)
+                    ->minLength(4)
                     ->maxLength(50),
                 TextInput::make('email')
                     ->label('Email address')
                     ->email()
                     ->required()
+                    ->minLength(10)
                     ->maxLength(255)
                     ->unique(ignoreRecord: true),
                 Textarea::make('bio')

@@ -3,6 +3,8 @@
 use App\Enums\UserRole;
 use App\Models\Invitation;
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 
@@ -65,4 +67,47 @@ test('Author cant access admin invitations page', function () {
     visit('/admin/invitations')
         ->assertSee('403')
         ->assertSee('Forbidden');
+});
+
+test('guest completes invitation registration end to end', function () {
+    $invitation = Invitation::factory()->create([
+        'email' => 'browserinvitee@example.com',
+        'token' => Str::random(32),
+    ]);
+
+    $url = URL::temporarySignedRoute('invitation-register',now()->addMinutes(30),['token' => $invitation->token]);
+
+    visit($url)
+        ->fill('#content\\.name', 'Browser Invitee')
+        ->fill('#content\\.password', 'password123')
+        ->click('Create account')
+        ->assertUrlIs(route('filament.app.pages.home'));
+
+    $this->assertDatabaseHas('users', ['email' => 'browserinvitee@example.com']);
+    $this->assertDatabaseHas('invitations', ['id' => $invitation->id, 'status' => 'accepted']);
+});
+
+test('Admin cannot resend an invitation that is still pending and not expired', function () {
+    $invite = Invitation::factory()->create(['status' => 'pending', 'expires_at' => now()->addMinutes(20)]);
+    AdminLogin();
+
+    visit('/admin/invitations')
+        ->click('Resend')
+        ->assertSee('Please wait');
+
+    $this->assertDatabaseHas('invitations', ['email' => $invite->email, 'status' => 'pending']);
+});
+
+test('Admin sending an invitation to a blocked (soft-deleted) email is rejected', function () {
+    $trashed = User::factory()->create(['email' => 'blocked@example.com']);
+    $trashed->delete();
+    AdminLogin();
+
+    visit('/admin/invitations')
+        ->click('New invitation')
+        ->fill('#mountedActionSchema0\\.email', 'blocked@example.com')
+        ->click('Create')
+        ->assertSee('This email is blocked.');
+
+    $this->assertDatabaseMissing('invitations', ['email' => 'blocked@example.com']);
 });

@@ -16,11 +16,13 @@ class Register extends PagesRegister
             ->components([
                 TextInput::make('name')
                     ->required()
+                    ->minLength(4)
                     ->maxLength(50),
                 TextInput::make('email')
                     ->email()
                     ->required()
                     ->unique(table: 'users', column: 'email')
+                    ->minLength(10)
                     ->maxLength(255),
                 TextInput::make('password')
                     ->label('Password')

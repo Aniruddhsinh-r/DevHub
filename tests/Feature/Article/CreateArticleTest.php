@@ -88,3 +88,21 @@ test('user cannot delete others article', function () {
         'deleted_at' => null,
     ]);
 });
+
+test('creating an article with existing title create unique slug', function () {
+    UserLogin();
+
+    $formData = [
+        'category_id' => Category::factory()->create(),
+        'status' => ArticleStatus::DRAFT,
+        'title' => 'Duplicate Slug Title',
+        'excerpt' => 'this excerpt is definitely long enough to pass validation.',
+        'body' => 'valid body content that is long enough for the rule to accept it easily.',
+    ];
+
+    Livewire::test(CreateArticle::class)->fillForm($formData)->call('create')->assertHasNoFormErrors();
+    Livewire::test(CreateArticle::class)->fillForm($formData)->call('create')->assertHasNoFormErrors();
+
+    $this->assertDatabaseHas('articles', ['title' => 'Duplicate Slug Title', 'slug' => 'duplicate-slug-title']);
+    $this->assertDatabaseHas('articles', ['title' => 'Duplicate Slug Title', 'slug' => 'duplicate-slug-title-2']);
+});

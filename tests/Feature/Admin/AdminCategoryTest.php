@@ -2,10 +2,12 @@
 
 use App\Filament\Resources\Categories\Pages\ManageCategories;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
 require_once __DIR__.'/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/SuperAdminLogin.php';
 require_once __DIR__.'/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
@@ -71,7 +73,7 @@ test('admin category create requires name and slug', function () {
 test('admin can update a category', function () {
     AdminLogin();
 
-    $category = Category::factory()->create(['name' => 'old name', 'slug' => 'old-name']);
+    $category = Category::factory()->create(['name' => 'old name', 'slug' => 'old-name', 'user_id' => auth()->id()]);
 
     Livewire::test(ManageCategories::class)
         ->callTableAction('edit', $category, data: [
@@ -88,7 +90,7 @@ test('admin can update a category', function () {
 });
 
 test('admin category delete test', function () {
-    AdminLogin();
+    SuperAdminLogin();
 
     $category = Category::factory()->create(['name' => 'category']);
 
@@ -120,4 +122,52 @@ test('prevents categories with the same normalized slug', function () {
             'name' => 'Web-Dev',
         ])
         ->assertHasFormErrors(['name']);
+});
+
+test('admin cannot see edit action for a category not owned by them', function () {
+    AdminLogin();
+
+    $category = Category::factory()->create();
+
+    expect(auth()->user()->can('update', $category))->toBeFalse();
+
+    Livewire::test(ManageCategories::class)
+        ->assertTableActionHidden('edit', $category);
+});
+
+test('admin cannot see delete action on a category', function () {
+    AdminLogin();
+
+    $category = Category::factory()->create();
+
+    expect(auth()->user()->can('delete', $category))->toBeFalse();
+
+    Livewire::test(ManageCategories::class)
+        ->assertTableActionHidden('delete', $category);
+});
+
+test('search input is safe against SQL-injection-style strings', function () {
+    AdminLogin();
+
+    Category::factory()->create(['name' => 'safe category']);
+
+    Livewire::test(ManageCategories::class)
+        ->searchTable("' OR '1'='1")
+        ->assertCanNotSeeTableRecords(Category::all());
+});
+
+test('hidden user_id field cannot be used to reassign category ownership during edit', function () {
+    AdminLogin();
+
+    $category = Category::factory()->create([
+        'user_id' => auth()->id(),
+        'name' => 'mine',
+        'slug' => 'mine',
+    ]);
+    $otherUser = User::factory()->create();
+
+    Livewire::test(ManageCategories::class)
+        ->callTableAction('edit', $category, data: ['name' => 'mine','user_id' => $otherUser->id,]);
+
+    expect($category->fresh()->user_id)->toBe(auth()->id());
 });

@@ -39,6 +39,8 @@ class InvitationResource extends Resource
                 TextInput::make('email')
                     ->label('Email address')
                     ->email()
+                    ->minLength(10)
+                    ->maxLength(255)
                     ->required(),
             ]);
     }

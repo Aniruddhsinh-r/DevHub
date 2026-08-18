@@ -2,7 +2,7 @@
 
 use App\Enums\UserRole;
 use App\Models\User;
-use Filament\Auth\Pages\Register;
+use App\Filament\Pages\Auth\Register;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
@@ -17,6 +17,11 @@ beforeEach(function () {
         'guard_name' => 'web',
     ]);
 });
+// beforeEach(function () {
+//     Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+//     Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
+//     Role::firstOrCreate(['name' => UserRole::ADMIN, 'guard_name' => 'web']);
+// });
 
 test('user registration test', function () {
     Livewire::test(Register::class)
@@ -24,7 +29,6 @@ test('user registration test', function () {
             'name' => 'khabibji',
             'email' => 'khabib@example.com',
             'password' => 'khabibji',
-            'passwordConfirmation' => 'khabibji',
         ])
         ->call('register')
         ->assertHasNoFormErrors();
@@ -59,24 +63,26 @@ test('registration fails when email already taken', function () {
             'name' => 'Someone Else',
             'email' => 'taken@example.com',
             'password' => 'password123',
-            'passwordConfirmation' => 'password123',
         ])
         ->call('register')
         ->assertHasFormErrors(['email' => 'unique']);
 });
 
-test('registration fails when passwords do not match', function () {
+test('registered user is automatically assigned the author role', function () {
     Livewire::test(Register::class)
-        ->fillForm([
-            'name' => 'Someone',
-            'email' => 'someone@example.com',
-            'password' => 'password123',
-            'passwordConfirmation' => 'password456',
-        ])
+        ->fillForm(['name' => 'Role Check', 'email' => 'rolecheck@example.com', 'password' => 'password123'])
         ->call('register')
-        ->assertHasFormErrors(['password']);
+        ->assertHasNoFormErrors();
 
-    $this->assertDatabaseMissing('users', [
-        'email' => 'someone@example.com',
-    ]);
+    $user = User::where('email', 'rolecheck@example.com')->first();
+    expect($user->hasRole(UserRole::AUTHOR))->toBeTrue();
+});
+
+test('registration fails when name exceeds max length', function () {
+    Livewire::test(Register::class)
+        ->fillForm(['name' => 'sk', 'email' => 'name@gmail.com', 'password' => 'password'])
+        ->call('register')
+        ->assertHasFormErrors(['name' => 'min']);
+
+    $this->assertDatabaseMissing('users', ['email' => 'toolongname@example.com']);
 });

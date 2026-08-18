@@ -8,19 +8,14 @@ use App\Models\User;
 
 class CategoryPolicy
 {
-    public function viewAny(User $user): bool
-    {
-        return $user->hasAnyRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
-    }
-
     public function create(User $user): bool
     {
-        return $user->can('category.create') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
+        return $user->hasPermissionTo('category.create');
     }
 
     public function delete(User $user): bool
     {
-        return $user->can('category.delete') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
+        return $user->hasPermissionTo('category.delete');
     }
 
     public function remove(User $user, User $target): bool
@@ -32,7 +27,7 @@ class CategoryPolicy
             return false;
         }
 
-        return $user->can('user.manage') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
+        return $user->hasPermissionTo('category.delete') && $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
     }
 
     public function view(User $user, Category $category): bool
@@ -42,6 +37,10 @@ class CategoryPolicy
 
     public function update(User $user, Category $category): bool
     {
-        return $user->can('category.create') && $user->hasAnyRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
+        if ($user->hasRole(UserRole::SUPERADMIN)) {
+            return true;
+        }
+
+        return $user->can('category.edit') && $user->id == $category->user_id;
     }
 }

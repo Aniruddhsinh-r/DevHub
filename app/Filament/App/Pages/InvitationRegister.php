@@ -87,12 +87,12 @@ class InvitationRegister extends SimplePage implements HasForms
                         ->required()
                         ->autofocus()
                         ->trim()
+                        ->minLength(4)
                         ->maxLength(50)
                         ->columnSpanFull(),
                     TextInput::make('password')
                         ->password()
                         ->revealable()
-                        ->confirmed()
                         ->minLength(8)
                         ->maxLength(255)
                         ->required(),
@@ -115,7 +115,7 @@ class InvitationRegister extends SimplePage implements HasForms
     public function register(): void
     {
         $data = $this->data;
-
+        
         if (User::where('email', $this->invitation->email)->exists()) {
             abort(409);
         }

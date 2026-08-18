@@ -2,9 +2,10 @@
 
 use App\Enums\UserRole;
 use App\Models\User;
-use Filament\Auth\Pages\Login;
+use App\Filament\Pages\Auth\Login;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 

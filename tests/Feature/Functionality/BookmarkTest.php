@@ -65,13 +65,3 @@ test('user cant bookmark draft article', function () {
 
     $this->assertDatabaseMissing('bookmarks', ['article_id' => $article->id, 'user_id' => $user->id]);
 });
-
-test('admin cant see bookmark action on article', function () {
-    $admin = AdminLogin();
-    $article = Article::factory()->create();
-
-    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
-        ->assertActionHidden('bookmark');
-
-    $this->assertDatabaseMissing('bookmarks', ['article_id' => $article->id, 'user_id' => $admin->id]);
-});

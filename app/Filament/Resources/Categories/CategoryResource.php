@@ -20,6 +20,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
@@ -54,7 +55,10 @@ class CategoryResource extends Resource
                             }
                         },
                     ]),
-
+                Hidden::make('user_id')
+                    ->default(fn () => Auth::id())
+                    ->dehydrated(fn (string $operation): bool => $operation === 'create')
+                    ->required(),
                 Hidden::make('slug')
                     ->dehydrateStateUsing(fn ($get) => Str::slug($get('name'))),
             ]);
@@ -101,7 +105,8 @@ class CategoryResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()->successNotificationTitle('Categories permanently deleted.'),
+                    DeleteBulkAction::make()->successNotificationTitle('Categories permanently deleted.')
+                    ->authorize(fn () => auth()->user()->can('category.delete')),
                 ]),
             ])->searchPlaceholder('Search Categories');
     }

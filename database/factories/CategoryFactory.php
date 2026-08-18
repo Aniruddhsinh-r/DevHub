@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -22,6 +23,7 @@ class CategoryFactory extends Factory
 
         return [
             'name' => ucfirst($name), // Capitalizes the first letter
+            'user_id' => User::factory()->author()->create(),
             'slug' => Str::slug($name), // Converts it into a clean, matching URL slug: "technology" or "programming"
         ];
     }

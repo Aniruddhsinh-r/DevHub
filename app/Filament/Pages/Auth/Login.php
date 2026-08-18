@@ -17,6 +17,7 @@ class Login extends PagesLogin
                 TextInput::make('email')
                     ->email()
                     ->required()
+                    ->minLength(10)
                     ->maxLength(255)
                     ->autocomplete('email'),
                 TextInput::make('password')

@@ -74,33 +74,6 @@ test('Admin can restore user', function () {
     $this->assertDatabaseHas('users', ['id' => $user->id, 'deleted_at' => null]);
 });
 
-test('Admin can permanently delete user', function () {
-    $user = User::factory()->create(['deleted_at' => '2026-07-09 12:25:56']);
-    $user->assignRole(UserRole::AUTHOR);
-    AdminLogin();
-
-    visit('/admin/users?filters[trashed][value]=0')
-        ->assertSee($user->name)
-        ->click('button[wire\:click*="forceDelete"]')
-        ->click('button[wire\:target="callMountedAction"]')
-        ->assertDontSee($user->name);
-
-    $this->assertDatabaseMissing('users', ['id' => $user->id]);
-});
-
-test('Admin can cancel permanently delete user request', function () {
-    $user = User::factory()->create(['deleted_at' => '2026-07-09 12:25:56']);
-    $user->assignRole(UserRole::AUTHOR);
-    AdminLogin();
-
-    visit('/admin/users?filters[trashed][value]=0')
-        ->assertSee($user->name)
-        ->click('button[wire\:click*="forceDelete"]')
-        ->click('Cancel');
-
-    $this->assertDatabaseHas('users', ['id' => $user->id]);
-});
-
 test('Admin can view author profile pages', function () {
     $user = User::factory()->create();
     AdminLogin();

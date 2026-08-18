@@ -21,7 +21,7 @@ class ArticleFactory extends Factory
      */
     public function definition(): array
     {
-        $title = fake()->sentence(5);
+        $title = fake()->sentence(3);
         $status = ArticleStatus::PUBLISHED;
 
         return [

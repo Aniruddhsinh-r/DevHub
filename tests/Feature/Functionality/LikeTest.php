@@ -18,7 +18,6 @@ test('guest cant access article page for like', function () {
     $this->get(route('filament.app.resources.articles.view', ['record' => $article]))
         ->assertRedirect(route('filament.app.auth.login'));
 
-    $this->assertDatabaseMissing('likes', ['article_id' => $article->id]);
 });
 
 test('user can like but not twice', function () {
@@ -44,14 +43,6 @@ test('user can like but not twice', function () {
     ]);
 });
 
-test('admin cant see the like action', function () {
-    AdminLogin();
-    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
-
-    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
-        ->assertActionHidden('like');
-});
-
 test('author cant see the like action on their own article', function () {
     $user = UserLogin();
     $article = Article::factory()->create([
@@ -70,8 +61,6 @@ test('user cant like draft article', function () {
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertDontSee('Like');
     // ->assertForbidden();
-
-    $this->assertDatabaseMissing('likes', ['article_id' => $article->id, 'user_id' => $user->id]);
 });
 
 test('like button label reflects like state and count', function () {

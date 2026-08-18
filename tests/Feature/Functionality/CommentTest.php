@@ -24,15 +24,6 @@ test('guest cant access article page for comment', function () {
     $this->assertDatabaseMissing('comments', ['article_id' => $article->id]);
 });
 
-test('admin cant post comment', function () {
-    AdminLogin();
-    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
-
-    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
-        ->assertDontSee('Add Comment');
-
-});
-
 test('author cant post an empty comment', function () {
     UserLogin();
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);

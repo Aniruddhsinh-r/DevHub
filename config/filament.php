@@ -18,7 +18,7 @@ return [
 
         'echo' => [
             'broadcaster' => 'reverb',
-            'key' => env('VITE_PUSHER_APP_KEY'),
+            'key' => env('VITE_REVERB_APP_KEY'),    //VITE_PUSHER_APP_KEY
             'cluster' => env('VITE_PUSHER_APP_CLUSTER'),
             'wsHost' => env('VITE_PUSHER_HOST'),
             'wsPort' => env('VITE_PUSHER_PORT'),

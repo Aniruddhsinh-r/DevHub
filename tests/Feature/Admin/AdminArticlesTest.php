@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ArticleStatus;
 use App\Filament\Resources\Articles\Pages\EditArticle;
 use App\Filament\Resources\Articles\Pages\ListArticles;
 use App\Filament\Resources\Articles\Pages\ViewArticle;
@@ -106,4 +107,29 @@ test('author cannot access admin articles page', function () {
 
     $this->get('/admin/articles')
         ->assertForbidden();
+});
+
+test('admin cant post comment', function () {
+    AdminLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
+        ->assertDontSee('Add Comment');
+});
+
+test('admin viewing article does not create a view record', function () {
+    $admin = AdminLogin();
+
+    $article = Article::factory()->create();
+
+    Livewire::actingAs($admin)
+        ->test(ViewArticle::class, [
+            'record' => $article->getRouteKey(),
+        ])
+        ->assertSuccessful();
+
+    $this->assertDatabaseMissing('views', [
+        'article_id' => $article->id,
+        'user_id' => $admin->id,
+    ]);
 });

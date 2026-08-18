@@ -1,8 +1,10 @@
 <?php
 
 use App\Enums\ArticleStatus;
-use App\Filament\Resources\Articles\Pages\ViewArticle;
+use App\Enums\UserRole;
+use App\Filament\App\Resources\Articles\Pages\ViewArticle;
 use App\Models\Article;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
@@ -10,23 +12,6 @@ require_once __DIR__.'/../Helpers/UserLogin.php';
 require_once __DIR__.'/../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
-
-test('admin viewing article does not create a view record', function () {
-    $admin = AdminLogin();
-
-    $article = Article::factory()->create();
-
-    Livewire::actingAs($admin)
-        ->test(ViewArticle::class, [
-            'record' => $article->getRouteKey(),
-        ])
-        ->assertSuccessful();
-
-    $this->assertDatabaseMissing('views', [
-        'article_id' => $article->id,
-        'user_id' => $admin->id,
-    ]);
-});
 
 test('guest cant access article page', function () {
     $article = Article::factory()->create();
@@ -77,4 +62,27 @@ test('user can not access other scheduled article', function () {
 
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertForbidden();
+});
+
+test('viewing an article twice by the same user only increments view_count once', function () {
+    UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])->assertSuccessful();
+    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])->assertSuccessful();
+
+    $this->assertDatabaseHas('articles', ['id' => $article->id, 'view_count' => 1]);
+});
+
+test('two different users viewing an article increments view_count for each', function () {
+    UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])->assertSuccessful();
+
+    $secondViewer = User::factory()->create();
+    $secondViewer->assignRole(UserRole::AUTHOR);
+    $this->actingAs($secondViewer);
+    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])->assertSuccessful();
+
+    $this->assertDatabaseHas('articles', ['id' => $article->id, 'view_count' => 2]);
 });

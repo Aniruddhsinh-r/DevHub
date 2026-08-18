@@ -29,11 +29,6 @@ class UserPolicy
         return false;
     }
 
-    public function create(User $user): bool
-    {
-        return $user->hasAnyRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
-    }
-
     public function follow(User $user, User $target): bool
     {
         return $user->hasRole(UserRole::AUTHOR) && $target->hasRole(UserRole::AUTHOR) && ! $user->is($target);
@@ -53,19 +48,15 @@ class UserPolicy
 
     public function update(User $user, User $target): bool
     {
-        if ($user->hasRole(UserRole::SUPERADMIN)) {
-            return $user->is($target) || ! $target->hasRole(UserRole::SUPERADMIN);
+        if ($target->hasRole(UserRole::SUPERADMIN) && ! $user->is($target)) {
+            return false;
         }
 
-        if ($user->hasRole(UserRole::ADMIN)) {
-            return ! $target->hasRole(UserRole::SUPERADMIN);
+        if ($user->is($target)) {
+            return true;
         }
 
-        if ($user->hasRole(UserRole::AUTHOR)) {
-            return $user->is($target);
-        }
-
-        return false;
+        return $user->hasPermissionTo('user.update');
     }
 
     public function delete(User $user, User $target): bool
@@ -77,34 +68,21 @@ class UserPolicy
         if ($target->hasRole(UserRole::SUPERADMIN)) {
             return false;
         }
-
-        if ($user->hasRole(UserRole::SUPERADMIN)) {
-            return ! $target->hasRole(UserRole::SUPERADMIN);
-        }
-
-        if ($user->hasRole(UserRole::ADMIN)) {
-            return ! $target->hasRole(UserRole::SUPERADMIN);
-        }
-
-        return false;
+        return $user->hasPermissionTo('user.delete');
     }
 
     public function restore(User $user, User $target): bool
     {
-        return $this->delete($user, $target);
+        return $this->delete($user, $target) && $user->hasPermissionTo('user.restore');
     }
 
     public function forceDelete(User $user, User $target): bool
     {
-        if ($user->is($target)) {
-            return false;
-        }
-
         if ($target->hasRole(UserRole::SUPERADMIN)) {
             return false;
         }
 
-        return $user->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
+        return $user->hasPermissionTo('user.forceDelete');
     }
 
     public function restoreAny(User $user): bool

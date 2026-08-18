@@ -36,6 +36,7 @@ class ManageInvitations extends ManageRecords
     {
         return [
             CreateAction::make()
+                ->successNotification(null)
                 ->action(function (array $data, CreateAction $action) {
                     try {
                         app(SendInvitation::class)->handle($data['email']);
