@@ -51,8 +51,6 @@ test('an admin cannot follow an author', function () {
     expect($this->policy->follow($admin, $author))->toBeFalse();
 });
 
-// ---- view ----
-
 test('a superadmin can view any user', function () {
     $superAdmin = roleUser(UserRole::SUPERADMIN);
     $anyUser = roleUser(UserRole::ADMIN);
@@ -77,8 +75,6 @@ test('an author can view another author but not an admin', function () {
     expect($this->policy->view($author, $otherAuthor))->toBeTrue();
     expect($this->policy->view($author, $admin))->toBeFalse();
 });
-
-// ---- remove / delete / restore / forceDelete guard rails ----
 
 test('a user cannot remove themself', function () {
     $admin = roleUser(UserRole::ADMIN);
@@ -122,11 +118,9 @@ test('restore requires both delete eligibility and the restore permission', func
     $admin = roleUser(UserRole::ADMIN);
     $author = roleUser(UserRole::AUTHOR);
 
-    // has delete permission but not restore -> still false
     $admin->givePermissionTo('user.delete');
     expect($this->policy->restore($admin, $author))->toBeFalse();
 
-    // has both -> true
     $admin->givePermissionTo('user.restore');
     expect($this->policy->restore($admin, $author))->toBeTrue();
 });
@@ -138,8 +132,6 @@ test('a superadmin can never be force-deleted regardless of permission', functio
 
     expect($this->policy->forceDelete($superAdmin, $targetSuperAdmin))->toBeFalse();
 });
-
-// ---- update ----
 
 test('a user can always update their own profile', function () {
     $author = roleUser(UserRole::AUTHOR);

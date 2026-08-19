@@ -28,8 +28,6 @@ beforeEach(function () {
     Role::firstOrCreate(['name' => UserRole::SUPERADMIN, 'guard_name' => 'web']);
 });
 
-// ---- create ----
-
 test('a user without the article.create permission cannot create an article', function () {
     $user = authorWithPermissions([]);
 
@@ -41,8 +39,6 @@ test('a user with the article.create permission can create an article', function
 
     expect($this->policy->create($user))->toBeTrue();
 });
-
-// ---- update ----
 
 test('the article owner with article.edit permission can update their own article', function () {
     $owner = authorWithPermissions(['article.edit']);
@@ -81,8 +77,6 @@ test('a superadmin can update any article regardless of permissions', function (
     expect($this->policy->update($superAdmin, $article))->toBeTrue();
 });
 
-// ---- delete ----
-
 test('the article owner with article.delete permission can delete their own article', function () {
     $owner = authorWithPermissions(['article.delete']);
     $article = Article::factory()->create(['user_id' => $owner->id]);
@@ -96,8 +90,6 @@ test('a user cannot delete someone elses article even with article.delete permis
 
     expect($this->policy->delete($user, $article))->toBeFalse();
 });
-
-// ---- view ----
 
 test('anyone can view a published article', function () {
     $user = authorWithPermissions([]);
@@ -128,8 +120,6 @@ test('an admin can view any draft article', function () {
     expect($this->policy->view($admin, $article))->toBeTrue();
 });
 
-// ---- like / bookmark / comment (published-only, not-own-article rules) ----
-
 test('a user with permission can like a published article that is not their own', function () {
     $user = authorWithPermissions(['article.comment']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
@@ -159,8 +149,6 @@ test('a user cannot bookmark their own published article', function () {
 });
 
 test('a user can comment on a published article that is their own', function () {
-    // comment() intentionally has no "not own article" restriction, unlike like()/bookmark() —
-    // this test locks that asymmetry in so it doesn't get "fixed" by accident later.
     $owner = authorWithPermissions(['article.comment']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED, 'user_id' => $owner->id]);
 

@@ -18,9 +18,8 @@
             <h2 class="text-3xl font-bold mb-4">Access Forbidden</h2>
 
             <p class="text-zinc-400 text-lg mb-8">You don't have permission to access this page.</p>
-            <a href="{{ auth()->user()?->hasRole('admin')
-                ? route('filament.admin.pages.dashboard')
-                : route('filament.app.pages.home') }}" class="inline-flex items-center px-6 py-3 rounded-2xl bg-white text-black font-bold hover:scale-105 transition">Go Home</a>
+        <a href="{{ auth()->user()?->hasAnyRole(['admin', 'superadmin']) ? route('filament.admin.pages.dashboard') : route('filament.app.pages.home') }}"
+                class="inline-flex items-center px-6 py-3 rounded-2xl bg-white text-black font-bold hover:scale-105 transition">Go Home</a>
         </div>
     </div>
 </body>

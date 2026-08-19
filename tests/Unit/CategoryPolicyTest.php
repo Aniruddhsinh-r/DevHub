@@ -60,8 +60,6 @@ test('an admin without category.edit permission cannot update a category', funct
     expect($this->policy->update($admin, $category))->toBeFalse();
 });
 
-// ---- remove (user removal gated by category permission set) ----
-
 test('a user cannot remove themself via the category policy either', function () {
     $admin = roleUser(UserRole::ADMIN);
     $admin->givePermissionTo('category.delete');
