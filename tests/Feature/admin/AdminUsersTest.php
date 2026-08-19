@@ -13,6 +13,7 @@ use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 
 require_once __DIR__.'/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/SuperAdminLogin.php';
 require_once __DIR__.'/../Helpers/UserLogin.php';
 uses(RefreshDatabase::class);
 
@@ -80,7 +81,7 @@ test('admin cant open the edit page of a superadmin', function () {
 test('superadmin can still edit their own profile', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('superadmin');
- 
+
     $this->actingAs($superAdmin)
         ->get('/admin/profile')
         ->assertSuccessful();
@@ -187,4 +188,24 @@ test('admin cannot edit user password becasue form has no password field', funct
         ->assertHasNoFormErrors();
 
     expect($user->fresh()->password)->toBe($originalPassword);
+});
+
+test('admin cannot edit a trashed user', function () {
+    AdminLogin();
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
+    $user->delete();
+
+    Livewire::test(EditUser::class, ['record' => $user->getRouteKey()])
+        ->assertForbidden();
+});
+
+test('superadmin cannot edit a trashed user', function () {
+    SuperAdminLogin();
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
+    $user->delete();
+
+    Livewire::test(EditUser::class, ['record' => $user->getRouteKey()])
+        ->assertForbidden();
 });

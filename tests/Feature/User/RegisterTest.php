@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\UserRole;
-use App\Models\User;
 use App\Filament\Pages\Auth\Register;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Role;

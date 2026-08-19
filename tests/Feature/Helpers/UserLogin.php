@@ -10,16 +10,16 @@ uses(RefreshDatabase::class);
 
 if (! function_exists('UserLogin')) {
     function UserLogin(array $permissions = ['article.create',
-            'article.edit',
-            'article.delete',
-            'article.publish',
-            'article.bookmark',
-            'article.like',
-            'article.comment'])
+        'article.edit',
+        'article.delete',
+        'article.publish',
+        'article.bookmark',
+        'article.like',
+        'article.comment'])
     {
         $authorRole = Role::firstOrCreate(['name' => UserRole::AUTHOR]);
         foreach ($permissions as $permissionName) {
-            $permission = Permission::firstOrCreate(['name' => $permissionName,'guard_name' => 'web',]);
+            $permission = Permission::firstOrCreate(['name' => $permissionName, 'guard_name' => 'web']);
             $authorRole->givePermissionTo($permission);
         }
         $user = User::factory()->create([

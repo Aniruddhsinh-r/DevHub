@@ -106,7 +106,7 @@ class CategoryResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()->successNotificationTitle('Categories permanently deleted.')
-                    ->authorize(fn () => auth()->user()->can('category.delete')),
+                        ->authorize(fn () => auth()->user()->can('category.delete')),
                 ]),
             ])->searchPlaceholder('Search Categories');
     }

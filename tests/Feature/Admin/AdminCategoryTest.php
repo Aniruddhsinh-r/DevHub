@@ -189,7 +189,7 @@ test('hidden user_id field cannot be used to reassign category ownership during 
     $otherUser = User::factory()->create();
 
     Livewire::test(ManageCategories::class)
-        ->callTableAction('edit', $category, data: ['name' => 'mine','user_id' => $otherUser->id,]);
+        ->callTableAction('edit', $category, data: ['name' => 'mine', 'user_id' => $otherUser->id]);
 
     expect($category->fresh()->user_id)->toBe(auth()->id());
 });

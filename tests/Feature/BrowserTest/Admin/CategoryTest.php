@@ -1,4 +1,4 @@
-<?php
+a<?php
 
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -128,7 +128,7 @@ test('admin sees empty state when no categories exist', function () {
         ->assertSee('No categories');
 });
 
-test('admin cannot see select all and bulk delete action', function () {
+test('admin cannot see select all and bulk delete action on category page', function () {
     AdminLogin();
 
     Category::factory()->count(2)->create();

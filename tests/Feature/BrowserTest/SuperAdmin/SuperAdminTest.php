@@ -2,9 +2,8 @@
 
 use App\Enums\UserRole;
 use App\Models\Article;
-use App\Models\Comment;
-use App\Models\User;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 
@@ -58,4 +57,25 @@ test('delete category', function () {
     $this->assertDatabaseMissing('categories', [
         'name' => $category->name,
     ]);
+});
+
+test('superadmin sees forbidden opening a trashed article edit URL', function () {
+    $article = Article::factory()->create();
+    $article->delete();
+    AdminLogin();
+
+    visit('/admin/articles/'.$article->slug.'/edit')
+        ->assertSee('403')
+        ->assertSee('Forbidden');
+});
+
+test('superadmin sees forbidden opening a trashed user edit URL', function () {
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
+    $user->delete();
+    SuperAdminLogin();
+
+    visit('/admin/users/'.$user->uuid.'/edit')
+        ->assertSee('403')
+        ->assertSee('Forbidden');
 });

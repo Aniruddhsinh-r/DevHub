@@ -88,6 +88,6 @@ test('article validation test', function () {
 
     $this->assertDatabaseMissing('articles', [
         'user_id' => auth()->id(),
-        'title' => 'hello'
+        'title' => 'hello',
     ]);
 });

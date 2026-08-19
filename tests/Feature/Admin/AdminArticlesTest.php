@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
 require_once __DIR__.'/../Helpers/AdminLogin.php';
+require_once __DIR__.'/../Helpers/SuperAdminLogin.php';
 require_once __DIR__.'/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
@@ -115,4 +116,22 @@ test('admin cant post comment', function () {
 
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertDontSee('Add Comment');
+});
+
+test('admin cannot edit a trashed article', function () {
+    AdminLogin();
+    $article = Article::factory()->create();
+    $article->delete();
+
+    Livewire::test(EditArticle::class, ['record' => $article->getRouteKey()])
+        ->assertForbidden();
+});
+
+test('superadmin cannot edit a trashed article', function () {
+    SuperAdminLogin();
+    $article = Article::factory()->create();
+    $article->delete();
+
+    Livewire::test(EditArticle::class, ['record' => $article->getRouteKey()])
+        ->assertForbidden();
 });

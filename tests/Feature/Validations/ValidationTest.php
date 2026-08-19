@@ -7,6 +7,7 @@ use App\Models\Category;
 use Filament\Auth\Pages\Login;
 use Filament\Auth\Pages\Register;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 
@@ -191,7 +192,7 @@ test('non-image cover file is rejected', function () {
             'title' => 'Bad Cover Upload',
             'excerpt' => 'this excerpt is definitely long enough to pass validation.',
             'body' => 'valid body content that is long enough for the rule.',
-            'cover_path' => \Illuminate\Http\UploadedFile::fake()->create('malicious.pdf', 10, 'application/pdf'),
+            'cover_path' => UploadedFile::fake()->create('malicious.pdf', 10, 'application/pdf'),
         ])
         ->call('create')
         ->assertHasFormErrors(['cover_path']);

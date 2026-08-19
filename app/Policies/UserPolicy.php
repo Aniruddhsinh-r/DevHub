@@ -48,6 +48,10 @@ class UserPolicy
 
     public function update(User $user, User $target): bool
     {
+        if ($target->trashed()) {
+            return false;
+        }
+
         if ($target->hasRole(UserRole::SUPERADMIN) && ! $user->is($target)) {
             return false;
         }
@@ -68,6 +72,7 @@ class UserPolicy
         if ($target->hasRole(UserRole::SUPERADMIN)) {
             return false;
         }
+
         return $user->hasPermissionTo('user.delete');
     }
 

@@ -14,7 +14,6 @@ require_once __DIR__.'/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);
 
-
 beforeEach(function () {
     Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
 });

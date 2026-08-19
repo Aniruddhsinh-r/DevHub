@@ -93,3 +93,26 @@ test('Admin can visite author profile edit page', function () {
         ->click('Edit')
         ->assertPathIs('/admin/users/'.$user->uuid.'/edit');
 });
+
+test('admin sees forbidden opening a trashed user edit URL', function () {
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
+    $user->delete();
+
+    AdminLogin();
+
+    visit('/admin/users/'.$user->uuid.'/edit')
+        ->assertSee('403')
+        ->assertSee('Forbidden');
+});
+
+test('admin does not see the create article button on a deleted user', function () {
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
+    $user->delete();
+    AdminLogin();
+
+    visit('/admin/users/'.$user->uuid)
+        ->click('Articles')
+        ->assertDontSee('button[wire\\\\:click*="mountAction"][wire\\\\:click*="create"]');
+});

@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\UserRole;
-use App\Models\User;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
@@ -146,4 +145,21 @@ test('nobody but the superadmin themself can update a superadmin', function () {
 
     expect($this->policy->update($admin, $superAdmin))->toBeFalse();
     expect($this->policy->update($superAdmin, $superAdmin))->toBeTrue();
+});
+
+test('an admin cannot update a trashed user even with permission', function () {
+    $admin = roleUser(UserRole::ADMIN);
+    $admin->givePermissionTo('user.update');
+    $target = roleUser(UserRole::AUTHOR);
+    $target->delete();
+
+    expect($this->policy->update($admin, $target))->toBeFalse();
+});
+
+test('a superadmin cannot update a trashed user', function () {
+    $superAdmin = roleUser(UserRole::SUPERADMIN);
+    $target = roleUser(UserRole::AUTHOR);
+    $target->delete();
+
+    expect($this->policy->update($superAdmin, $target))->toBeFalse();
 });

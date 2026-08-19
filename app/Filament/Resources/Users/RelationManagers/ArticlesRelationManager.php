@@ -31,6 +31,7 @@ class ArticlesRelationManager extends RelationManager
         return $table
             ->headerActions([
                 CreateAction::make()
+                    ->authorize(fn () => ! $this->getOwnerRecord()->trashed())
                     ->modalWidth('5xl')
                     ->url('')
                     ->mutateFormDataUsing(function (array $data): array {

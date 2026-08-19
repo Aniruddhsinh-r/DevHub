@@ -10,22 +10,22 @@ uses(RefreshDatabase::class);
 
 if (! function_exists('AdminLogin')) {
     function AdminLogin(array $permissions = ['article.create',
-            'article.edit',
-            'article.delete',
-            'article.restore',
-            'category.create',
-            'category.edit',
-            'article.publish',
-            'user.manage',
-            'user.delete',
-            'user.restore',
-            'user.update',])
+        'article.edit',
+        'article.delete',
+        'article.restore',
+        'category.create',
+        'category.edit',
+        'article.publish',
+        'user.manage',
+        'user.delete',
+        'user.restore',
+        'user.update', ])
     {
         Permission::firstOrCreate(['name' => 'category.delete']);
         Permission::firstOrCreate(['name' => 'user.forceDelete']);
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         foreach ($permissions as $permissionName) {
-            $permission = Permission::firstOrCreate(['name' => $permissionName,'guard_name' => 'web',]);
+            $permission = Permission::firstOrCreate(['name' => $permissionName, 'guard_name' => 'web']);
             $adminRole->givePermissionTo($permission);
         }
         $admin = User::factory()->create([

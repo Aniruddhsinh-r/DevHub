@@ -24,6 +24,10 @@ class ArticlePolicy
 
     public function update(User $user, Article $article): bool
     {
+        if ($article->trashed()) {
+            return false;
+        }
+
         if ($user->hasRole(UserRole::SUPERADMIN) || $user->hasRole(UserRole::ADMIN)) {
             return true;
         }

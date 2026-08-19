@@ -115,7 +115,7 @@ class InvitationRegister extends SimplePage implements HasForms
     public function register(): void
     {
         $data = $this->data;
-        
+
         if (User::where('email', $this->invitation->email)->exists()) {
             abort(409);
         }

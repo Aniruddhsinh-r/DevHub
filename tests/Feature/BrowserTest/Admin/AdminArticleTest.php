@@ -1,7 +1,9 @@
 <?php
 
+use App\Filament\Resources\Articles\Pages\EditArticle;
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
 require_once __DIR__.'/../../Helpers/AdminLogin.php';
 require_once __DIR__.'/../../Helpers/UserLogin.php';
@@ -53,6 +55,16 @@ test('Author cant access admin article page', function () {
     UserLogin();
 
     visit('/admin/articles')
+        ->assertSee('403')
+        ->assertSee('Forbidden');
+});
+
+test('admin sees forbidden opening a trashed article edit URL', function () {
+    $article = Article::factory()->create();
+    $article->delete();
+    AdminLogin();
+
+    visit('/admin/articles/'.$article->slug.'/edit')
         ->assertSee('403')
         ->assertSee('Forbidden');
 });

@@ -3,9 +3,9 @@
 use App\Enums\UserRole;
 use App\Models\Invitation;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 
 require_once __DIR__.'/../../Helpers/AdminLogin.php';
@@ -75,7 +75,7 @@ test('guest completes invitation registration end to end', function () {
         'token' => Str::random(32),
     ]);
 
-    $url = URL::temporarySignedRoute('invitation-register',now()->addMinutes(30),['token' => $invitation->token]);
+    $url = URL::temporarySignedRoute('invitation-register', now()->addMinutes(30), ['token' => $invitation->token]);
 
     visit($url)
         ->fill('#content\\.name', 'Browser Invitee')

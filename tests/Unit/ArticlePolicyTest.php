@@ -161,3 +161,21 @@ test('a user cannot comment on a draft article', function () {
 
     expect($this->policy->comment($user, $article))->toBeFalse();
 });
+
+test('an admin cannot update a trashed article', function () {
+    $admin = User::factory()->create();
+    $admin->assignRole(UserRole::ADMIN);
+    $article = Article::factory()->create();
+    $article->delete();
+
+    expect($this->policy->update($admin, $article))->toBeFalse();
+});
+
+test('a superadmin cannot update a trashed article', function () {
+    $superAdmin = User::factory()->create();
+    $superAdmin->assignRole(UserRole::SUPERADMIN);
+    $article = Article::factory()->create();
+    $article->delete();
+
+    expect($this->policy->update($superAdmin, $article))->toBeFalse();
+});
