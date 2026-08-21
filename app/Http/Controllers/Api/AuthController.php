@@ -1,0 +1,80 @@
+<?php
+namespace App\Http\Controllers\Api;
+
+use App\Enums\UserRole;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+class AuthController extends Controller
+{
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'min:5', 'max:255'],
+            'email' => ['required', 'email', 'min:10', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'min:8', 'max:255'],
+        ]);
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        return response()->json([
+            'user' => $user,
+            'token' => $user->createToken('api')->plainTextToken,
+        ], 201);
+    }
+
+    public function login(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'email', 'min:10', 'max:255'],
+            'password' => ['required', 'string', 'min:8', 'max:255'],
+        ]);
+
+        $user = User::where('email', $data['email'])->first();
+
+        if (! $user || ! Hash::check($data['password'], $user->password) || ! $user->isAuthor()) {
+            return response()->json([
+                'message' => 'The provided credentials do not match our records.',
+            ], 401);
+        }
+
+        $token = $user->createToken('api-token')->plainTextToken;
+        session(['sanctum_token' => $token]);
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ]);
+    }
+
+    public function adminlogin(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'email', 'min:10', 'max:255'],
+            'password' => ['required', 'string', 'min:8', 'max:255'],
+        ]);
+
+        $user = User::where('email', $data['email'])->first();
+
+        if (! $user || ! Hash::check($data['password'], $user->password) || ! $user->isAdmin()) {
+            return response()->json([
+                'message' => 'The provided credentials do not match our records.',
+            ], 401);
+        }
+
+        $token = $user->createToken('api-token')->plainTextToken;
+        session(['sanctum_token' => $token]);
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ]);
+    }
+}

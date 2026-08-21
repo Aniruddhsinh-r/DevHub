@@ -18,6 +18,7 @@ if (! function_exists('SuperAdminLogin')) {
         'article.restore',
         'category.create',
         'category.edit',
+        'category.list',
         'article.publish',
         'user.manage',
         'user.delete',

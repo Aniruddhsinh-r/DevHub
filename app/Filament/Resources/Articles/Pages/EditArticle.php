@@ -39,7 +39,7 @@ class EditArticle extends EditRecord
             $slug = $base;
             $count = 2;
 
-            while (Article::where('slug', $slug)->where('id', '!=', $record->id)->withoutTrashed()->exists()) {
+            while (Article::where('slug', $slug)->where('id', '!=', $record->id)->exists()) {
                 $slug = $base.'-'.$count;
                 $count++;
             }

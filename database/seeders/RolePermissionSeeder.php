@@ -17,14 +17,14 @@ class RolePermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'article.forceDelete']);
         Permission::firstOrCreate(['name' => 'article.publish']);
         Permission::firstOrCreate(['name' => 'article.restore']);
-
-        Permission::firstOrCreate(['name' => 'category.create']);
-        Permission::firstOrCreate(['name' => 'category.edit']);
-        Permission::firstOrCreate(['name' => 'category.delete']);
-
         Permission::firstOrCreate(['name' => 'article.bookmark']);
         Permission::firstOrCreate(['name' => 'article.like']);
         Permission::firstOrCreate(['name' => 'article.comment']);
+
+        Permission::firstOrCreate(['name' => 'category.create']);
+        Permission::firstOrCreate(['name' => 'category.edit']);
+        Permission::firstOrCreate(['name' => 'category.list']);
+        Permission::firstOrCreate(['name' => 'category.delete']);
 
         Permission::firstOrCreate(['name' => 'user.update']);
         Permission::firstOrCreate(['name' => 'user.delete']);
@@ -57,6 +57,7 @@ class RolePermissionSeeder extends Seeder
             'article.restore',
             'category.create',
             'category.edit',
+            'category.list',
             'article.publish',
             'user.manage',
             'user.delete',

@@ -37,7 +37,10 @@ class Article extends Model
         static::deleting(function (Article $article) {
             if ($article->isForceDeleting()) {
                 $article->likes()->delete();
-                Storage::disk('public')->delete($article->cover_path);
+                // Storage::disk('public')->delete($article->cover_path);
+                if (! empty($article->cover_path)) {
+                    Storage::disk('public')->delete($article->cover_path);
+                }
             } else {
                 $article->comments()->delete();
                 $article->bookmarks()->detach();
@@ -68,6 +71,11 @@ class Article extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function bookmark(): HasMany
+    {
+        return $this->HasMany(Bookmark::class);
     }
 
     public function likes(): HasMany

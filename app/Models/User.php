@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +24,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, SoftDeletes;
 
     /**
      * Get the attributes that should be cast.
@@ -84,6 +85,16 @@ class User extends Authenticatable implements FilamentUser
         static::creating(function ($user) {
             $user->uuid = (string) Str::uuid();
         });
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole([UserRole::ADMIN,UserRole::SUPERADMIN]);
+    }
+
+    public function isAuthor()
+    {
+        return $this->hasRole(UserRole::AUTHOR);
     }
 
     public function getRouteKeyName()

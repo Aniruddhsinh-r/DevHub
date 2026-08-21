@@ -15,6 +15,7 @@ if (! function_exists('AdminLogin')) {
         'article.restore',
         'category.create',
         'category.edit',
+        'category.list',
         'article.publish',
         'user.manage',
         'user.delete',
@@ -23,6 +24,7 @@ if (! function_exists('AdminLogin')) {
     {
         Permission::firstOrCreate(['name' => 'category.delete']);
         Permission::firstOrCreate(['name' => 'user.forceDelete']);
+        Permission::firstOrCreate(['name' => 'article.forceDelete']);
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         foreach ($permissions as $permissionName) {
             $permission = Permission::firstOrCreate(['name' => $permissionName, 'guard_name' => 'web']);

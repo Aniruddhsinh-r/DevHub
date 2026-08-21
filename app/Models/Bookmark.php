@@ -12,9 +12,9 @@ class Bookmark extends Model
         'article_id',
     ];
 
-    public function bookmarks()
+    public function bookmarks(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function article(): BelongsTo

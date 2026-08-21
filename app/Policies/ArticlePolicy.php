@@ -63,4 +63,9 @@ class ArticlePolicy
     {
         return $user->hasPermissionTo('article.comment') && $article->status === ArticleStatus::PUBLISHED;
     }
+
+    public function forceDelete(User $user, Article $article): bool
+    {
+        return $user->hasPermissionTo('article.forceDelete');
+    }
 }

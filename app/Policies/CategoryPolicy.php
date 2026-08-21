@@ -18,6 +18,11 @@ class CategoryPolicy
         return $user->hasPermissionTo('category.delete');
     }
 
+    public function viewAny(User $user): bool
+    {
+        return $user->hasPermissionTo('category.list');
+    }
+
     public function remove(User $user, User $target): bool
     {
         if ($user->is($target)) {
@@ -32,7 +37,7 @@ class CategoryPolicy
 
     public function view(User $user, Category $category): bool
     {
-        return $user->hasAnyRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
+        return $user->hasPermissionTo('category.list');
     }
 
     public function update(User $user, Category $category): bool

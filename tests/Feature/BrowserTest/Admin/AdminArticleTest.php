@@ -1,9 +1,7 @@
 <?php
 
-use App\Filament\Resources\Articles\Pages\EditArticle;
 use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Livewire\Livewire;
 
 require_once __DIR__.'/../../Helpers/AdminLogin.php';
 require_once __DIR__.'/../../Helpers/UserLogin.php';

@@ -24,7 +24,7 @@ class CreateArticle extends CreateRecord
         $slug = $base;
         $count = 2;
 
-        while (Article::where('slug', $slug)->withoutTrashed()->exists()) {
+        while (Article::where('slug', $slug)->exists()) {
             $slug = $base.'-'.$count;
             $count++;
         }
