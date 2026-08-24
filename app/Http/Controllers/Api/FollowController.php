@@ -49,7 +49,7 @@ class FollowController extends Controller
         }
         Gate::authorize('follow', $user);
 
-        $deleted = Auth::user()->following()->where('follower_id', $user->id)->detach();
+        $deleted = Auth::user()->following()->detach($user->id);
 
         if (! $deleted) {
             return response()->json(['message' => 'You are not following this user.',], 404);

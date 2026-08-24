@@ -17,6 +17,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/admin/login', [AuthController::class, 'adminlogin']);
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/category/create', [CategoryController::class, 'create']);
         Route::get('/categories', [CategoryController::class, 'index']);
         Route::put('/category/{category}/update', [CategoryController::class, 'update']);

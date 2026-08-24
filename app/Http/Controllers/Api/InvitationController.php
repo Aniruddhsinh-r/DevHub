@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\Invitation;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -51,7 +52,11 @@ class InvitationController extends Controller
             return response()->json(['message' => 'You do not have permission to send invitations.'], 403);
         }
 
-        if ($invitation->status === 'expired') {
+        if (User::onlyTrashed()->where('email', $invitation->email)->exists()) {
+            return response()->json(['message' => 'This email is blocked.'], 422);
+        }
+
+        if ($invitation->status !== 'expired') {
             return response()->json(['message' => 'Only expired invitations can be resent.'], 422);
         }
 

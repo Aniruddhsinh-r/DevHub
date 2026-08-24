@@ -42,6 +42,9 @@ class UserController extends Controller
         $data = collect($values)->only(['name', 'email', 'bio'])->toArray();
 
         if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
             $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 
@@ -144,6 +147,9 @@ class UserController extends Controller
         $data = collect($values)->only(['name', 'email', 'bio'])->toArray();
 
         if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
             $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 

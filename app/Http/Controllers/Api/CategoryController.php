@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Category;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -48,12 +49,12 @@ class CategoryController extends Controller
         }
 
         $data = $request->validate([
-            'name' => ['required', 'string', 'min:4', 'max:20', 'unique:categories,name'],
+            'name' => ['required', 'string', 'min:4', 'max:20', Rule::unique('categories', 'name')->ignore($category->id)],
         ]);
 
         $slug = Str::slug($data['name']);
 
-        if (Category::where('slug', $slug)->exists()) {
+        if (Category::where('slug', $slug)->where('id', '!=', $category->id)->exists()) {
             return response()->json([
                 'message' => "A category with a similar name already exists (slug: \"{$slug}\").",
             ], 422);
@@ -95,11 +96,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        Gate::authorize('viewAny', Category::class);
-
-        if (! Auth::user()->hasPermissionTo('user.manage')) {
-            return response()->json(['message' => 'Unauthorized action.'], 403);
-        }
+        Gate::authorize('view', $category);
 
         return response()->json($category);
     }

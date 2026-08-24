@@ -23,6 +23,8 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        
+        $user->assignRole(UserRole::AUTHOR);
 
         return response()->json([
             'user' => $user,
@@ -44,6 +46,8 @@ class AuthController extends Controller
                 'message' => 'The provided credentials do not match our records.',
             ], 401);
         }
+
+        $user->tokens()->delete();
 
         $token = $user->createToken('api-token')->plainTextToken;
         session(['sanctum_token' => $token]);
@@ -69,12 +73,23 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $user->tokens()->delete();
+        
         $token = $user->createToken('api-token')->plainTextToken;
         session(['sanctum_token' => $token]);
 
         return response()->json([
             'user' => $user,
             'token' => $token,
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully.',
         ]);
     }
 }
