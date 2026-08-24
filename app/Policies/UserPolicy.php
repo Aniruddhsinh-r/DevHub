@@ -87,6 +87,10 @@ class UserPolicy
             return false;
         }
 
+        if (! $target->trashed()) {
+            abort(422, 'The user must be soft deleted before permanent deletion.');
+        }
+
         return $user->hasPermissionTo('user.forceDelete');
     }
 

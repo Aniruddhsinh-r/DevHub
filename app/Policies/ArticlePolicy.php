@@ -66,6 +66,9 @@ class ArticlePolicy
 
     public function forceDelete(User $user, Article $article): bool
     {
+        if (! $article->trashed()) {
+            abort(422, 'The article must be soft deleted before permanent deletion.');
+        }
         return $user->hasPermissionTo('article.forceDelete');
     }
 }

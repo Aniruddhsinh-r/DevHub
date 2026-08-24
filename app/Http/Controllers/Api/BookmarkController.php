@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -12,11 +13,11 @@ class BookmarkController extends Controller
     public function store(string $slug)
     {
         $article = Article::where('slug', $slug)->first();
-        Gate::authorize('bookmark', $article);
 
         if (! $article) {
             return response()->json(['message' => 'Article not found.',], 404);
         }
+        Gate::authorize('bookmark', $article);
 
         $bookmark = $article->bookmark()->where('user_id', Auth::id())->first();
 
@@ -40,13 +41,13 @@ class BookmarkController extends Controller
     public function destroy(string $slug)
     {
         $article = Article::where('slug', $slug)->first();
-        Gate::authorize('bookmark', $article);
 
         if (! $article) {
             return response()->json([
                 'message' => 'Article not found.',
             ], 404);
         }
+        Gate::authorize('bookmark', $article);
 
         $bookmark = $article->bookmark()
             ->where('user_id', Auth::id())
@@ -62,6 +63,19 @@ class BookmarkController extends Controller
 
         return response()->json([
             'message' => 'Article bookmark removed successfully.',
+        ], 200);
+    }
+
+    public function index()
+    {
+        if(! Auth::user()){
+            return response()->json(['message' => 'This action is unauthorized.'], 403);
+        }
+
+        $bookmarks = Auth::user()->bookmarks()->latest('created_at')->paginate(12);
+
+        return response()->json([
+            'bookmarks' => $bookmarks,
         ], 200);
     }
 }

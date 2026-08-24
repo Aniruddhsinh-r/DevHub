@@ -220,9 +220,22 @@ class ArticleController extends Controller
         return response()->json($articles);
     }
 
+    public function myArticle()
+    {
+        if(! Auth::user()){
+            return response()->json(['message' => 'This action is unauthorized.'], 403);
+        }
+
+        $articles = Auth::user()->articles()->with(['category','views'])->latest()->paginate(12);
+
+        return response()->json([
+            'bookmarks' => $articles,
+        ], 200);
+    }
+
     public function show(string $slug)
     {
-        $article = Article::with(['category', 'user'])->where('slug', $slug)
+        $article = Article::with(['category', 'category', 'user', 'likes', 'views'])->where('slug', $slug)
             ->where(function ($query) {
                 $query->where('status', ArticleStatus::PUBLISHED)->orWhere('user_id', Auth::id());
             })->first();

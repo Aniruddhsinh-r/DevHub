@@ -12,11 +12,11 @@ class LikeController extends Controller
     public function store(string $slug)
     {
         $article = Article::where('slug', $slug)->first();
-        Gate::authorize('like', $article);
 
         if (! $article) {
             return response()->json(['message' => 'Article not found.',], 404);
         }
+        Gate::authorize('like', $article);
 
         $like = $article->likes()->where('user_id', Auth::id())->first();
 
@@ -40,13 +40,13 @@ class LikeController extends Controller
     public function destroy(string $slug)
     {
         $article = Article::where('slug', $slug)->first();
-        Gate::authorize('like', $article);
 
         if (! $article) {
             return response()->json([
                 'message' => 'Article not found.',
             ], 404);
         }
+        Gate::authorize('like', $article);
 
         $deleted = $article->likes()
             ->where('user_id', Auth::id())

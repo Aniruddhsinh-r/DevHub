@@ -44,9 +44,9 @@ class CategoryController extends Controller
         Gate::authorize('update', $category);
 
         if (! $category) {
-            return response()->json(['message' => 'Article not found.'], 404);
+            return response()->json(['message' => 'category not found.'], 404);
         }
-        
+
         $data = $request->validate([
             'name' => ['required', 'string', 'min:4', 'max:20', 'unique:categories,name'],
         ]);
@@ -74,19 +74,15 @@ class CategoryController extends Controller
     {
         Gate::authorize('delete', $category);
 
-        if (! $category) {
-            return response()->json(['message' => 'Article not found.'], 404);
-        }
-
         $category->delete();
 
         return response()->json([
-            'message' => 'Article deleted successfully.',
+            'message' => 'category deleted successfully.',
         ], 200);
     }
-    
-    public function show(Request $request)
-    {   
+
+    public function index(Request $request)
+    {
         Gate::authorize('viewAny', Category::class);
 
         $categories = Category::query()
@@ -95,5 +91,16 @@ class CategoryController extends Controller
             ->paginate($request->get('per_page', 10));
 
         return response()->json($categories);
+    }
+
+    public function show(Category $category)
+    {
+        Gate::authorize('viewAny', Category::class);
+
+        if (! Auth::user()->hasPermissionTo('user.manage')) {
+            return response()->json(['message' => 'Unauthorized action.'], 403);
+        }
+
+        return response()->json($category);
     }
 }
