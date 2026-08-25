@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookmarkController;
 use App\Http\Controllers\Api\CategoryController;
@@ -10,6 +9,7 @@ use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\InvitationController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);

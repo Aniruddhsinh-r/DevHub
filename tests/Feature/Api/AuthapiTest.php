@@ -165,77 +165,76 @@ test('admin login fails with a wrong password', function () {
 
 test('a guest cannot logout', function () {
     $response = $this->postJson('/api/v1/logout');
- 
+
     $response->assertStatus(401);
 });
- 
+
 test('an authenticated user can logout and their token is revoked', function () {
     $user = apiAuthorForLogin('password123');
- 
+
     $token = $this->postJson('/api/v1/login', [
         'email' => $user->email,
         'password' => 'password123',
     ])->assertOk()->json('token');
- 
+
     $response = $this->withHeader('Authorization', "Bearer {$token}")
         ->postJson('/api/v1/logout');
- 
+
     $response->assertOk()->assertJson(['message' => 'Logged out successfully.']);
- 
+
     $this->assertDatabaseCount('personal_access_tokens', 0);
 });
- 
+
 test('a revoked token can no longer access protected routes after logout', function () {
     $user = apiAuthorForLogin('password123');
- 
+
     $token = $this->postJson('/api/v1/login', [
         'email' => $user->email,
         'password' => 'password123',
     ])->assertOk()->json('token');
- 
+
     $this->withHeader('Authorization', "Bearer {$token}")
         ->postJson('/api/v1/logout')
         ->assertOk();
-        
+
     Auth::forgetGuards();
- 
+
     $this->withHeader('Authorization', "Bearer {$token}")
         ->getJson('/api/v1/profile')
         ->assertStatus(401);
 });
- 
+
 test('logout with a garbage or missing token returns unauthenticated', function () {
     $response = $this->withHeader('Authorization', 'Bearer this-token-does-not-exist')
         ->postJson('/api/v1/logout');
- 
+
     $response->assertStatus(401);
 });
- 
+
 test('logout only revokes the token used for that request, not the user\'s other tokens', function () {
     $user = apiAuthorForLogin('password123');
- 
+
     $tokenA = $user->createToken('device-a')->plainTextToken;
     $tokenB = $user->createToken('device-b')->plainTextToken;
- 
+
     $this->withHeader('Authorization', "Bearer {$tokenA}")
         ->postJson('/api/v1/logout')
         ->assertOk();
- 
+
     Auth::forgetGuards();
- 
+
     // token A is dead
     $this->withHeader('Authorization', "Bearer {$tokenA}")
         ->getJson('/api/v1/profile')
         ->assertStatus(401);
- 
+
     Auth::forgetGuards();
- 
+
     // token B is still valid
     $this->withHeader('Authorization', "Bearer {$tokenB}")
         ->getJson('/api/v1/profile')
         ->assertOk();
 });
-
 
 if (! function_exists('apiAuthorForLogin')) {
     function apiAuthorForLogin(string $password): User

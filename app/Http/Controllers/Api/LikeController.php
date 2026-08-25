@@ -14,7 +14,7 @@ class LikeController extends Controller
         $article = Article::where('slug', $slug)->first();
 
         if (! $article) {
-            return response()->json(['message' => 'Article not found.',], 404);
+            return response()->json(['message' => 'Article not found.'], 404);
         }
         Gate::authorize('like', $article);
 

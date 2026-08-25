@@ -8,7 +8,6 @@ require_once __DIR__.'/../Helpers/ApiHelpers.php';
 
 uses(RefreshDatabase::class);
 
-
 test('a guest cannot like an article', function () {
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 

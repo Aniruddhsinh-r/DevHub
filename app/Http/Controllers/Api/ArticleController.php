@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ArticleStatus;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Article;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class ArticleController extends Controller
@@ -20,13 +20,13 @@ class ArticleController extends Controller
         Gate::authorize('create', Article::class);
 
         $values = $request->validate([
-            'title' => ['required','string','min:6','max:50',],
-            'excerpt' => ['required','string','min:10','max:255',],
-            'body' => ['required','string','min:30','max:50000',],
-            'category_id' => ['required','exists:categories,id',],
-            'status' => ['required',Rule::enum(ArticleStatus::class),],
-            'duration' => ['required_if:status,' . ArticleStatus::SCHEDULED->value,'nullable','date','after_or_equal:now','before_or_equal:' . now()->addHours(48)->toDateTimeString(),],
-            'cover_path' => ['nullable','image','mimes:jpeg,png,jpg,webp','max:2048',],
+            'title' => ['required', 'string', 'min:6', 'max:50'],
+            'excerpt' => ['required', 'string', 'min:10', 'max:255'],
+            'body' => ['required', 'string', 'min:30', 'max:50000'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'status' => ['required', Rule::enum(ArticleStatus::class)],
+            'duration' => ['required_if:status,'.ArticleStatus::SCHEDULED->value, 'nullable', 'date', 'after_or_equal:now', 'before_or_equal:'.now()->addHours(48)->toDateTimeString()],
+            'cover_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ]);
 
         $title = $values['title'];
@@ -40,7 +40,7 @@ class ArticleController extends Controller
         $count = 2;
 
         while (Article::where('slug', $slug)->exists()) {
-            $slug = $base . '-' . $count;
+            $slug = $base.'-'.$count;
             $count++;
         }
 
@@ -77,17 +77,17 @@ class ArticleController extends Controller
         Gate::authorize('update', $article);
 
         $values = $request->validate([
-            'title' => ['required','string','min:6','max:50',],
-            'excerpt' => ['required','string','min:10','max:255',],
-            'body' => ['required','string','min:30','max:50000',],
-            'category_id' => ['required','exists:categories,id',],
-            'status' => ['required',Rule::enum(ArticleStatus::class),],
-            'duration' => ['required_if:status,' . ArticleStatus::SCHEDULED->value,'nullable','date','after_or_equal:now','before_or_equal:' . now()->addHours(48)->toDateTimeString(),],
-            'cover_path' => ['nullable','image','mimes:jpeg,png,jpg,webp','max:2048',],
+            'title' => ['required', 'string', 'min:6', 'max:50'],
+            'excerpt' => ['required', 'string', 'min:10', 'max:255'],
+            'body' => ['required', 'string', 'min:30', 'max:50000'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'status' => ['required', Rule::enum(ArticleStatus::class)],
+            'duration' => ['required_if:status,'.ArticleStatus::SCHEDULED->value, 'nullable', 'date', 'after_or_equal:now', 'before_or_equal:'.now()->addHours(48)->toDateTimeString()],
+            'cover_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ]);
 
         $data = collect($values)->only([
-            'title', 'excerpt', 'body', 'category_id', 'status', 'duration'
+            'title', 'excerpt', 'body', 'category_id', 'status', 'duration',
         ])->toArray();
 
         if ($request->hasFile('cover_path')) {
@@ -161,7 +161,7 @@ class ArticleController extends Controller
         $article = Article::withTrashed()->where('slug', $slug)->first();
 
         if (! $article) {
-            return response()->json(['message' => 'Article not found.',], 404);
+            return response()->json(['message' => 'Article not found.'], 404);
         }
 
         Gate::authorize('forceDelete', $article);
@@ -178,7 +178,7 @@ class ArticleController extends Controller
 
     public function adminArticles(Request $request)
     {
-        if (! Auth::user()?->hasRole([UserRole::ADMIN,UserRole::SUPERADMIN])) {
+        if (! Auth::user()?->hasRole([UserRole::ADMIN, UserRole::SUPERADMIN])) {
             return response()->json(['message' => 'This action is unauthorized.'], 403);
         }
 
@@ -222,11 +222,11 @@ class ArticleController extends Controller
 
     public function myArticle()
     {
-        if(! Auth::user()){
+        if (! Auth::user()) {
             return response()->json(['message' => 'This action is unauthorized.'], 403);
         }
 
-        $articles = Auth::user()->articles()->with(['category','views'])->latest()->paginate(12);
+        $articles = Auth::user()->articles()->with(['category', 'views'])->latest()->paginate(12);
 
         return response()->json([
             'bookmarks' => $articles,
@@ -241,7 +241,7 @@ class ArticleController extends Controller
             })->first();
 
         if (! $article) {
-            return response()->json(['message' => 'record not found.',], 404);
+            return response()->json(['message' => 'record not found.'], 404);
         }
 
         $user = Auth::user();
@@ -250,7 +250,7 @@ class ArticleController extends Controller
             'article' => $article,
             'is_liked' => $user ? $article->likes()->where('user_id', $user->id)->exists() : false,
             'is_bookmarked' => $user ? $article->bookmarks()->where('user_id', $user->id)->exists() : false,
-            'comments' => $article->comments() ->latest() ->get(),
+            'comments' => $article->comments()->latest()->get(),
             'likes_count' => $article->likes()->count(),
             'comments_count' => $article->comments()->count(),
         ]);

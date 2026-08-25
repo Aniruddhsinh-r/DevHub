@@ -1,9 +1,7 @@
 <?php
 
-use App\Enums\UserRole;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\Models\Role;
 
 require_once __DIR__.'/../Helpers/ApiHelpers.php';
 

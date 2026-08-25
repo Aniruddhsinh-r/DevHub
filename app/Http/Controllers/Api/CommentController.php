@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
-use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -17,7 +16,7 @@ class CommentController extends Controller
         $article = Article::where('slug', $slug)->first();
 
         if (! $article) {
-            return response()->json(['message' => 'Article not found.',], 404);
+            return response()->json(['message' => 'Article not found.'], 404);
         }
         Gate::authorize('comment', $article);
 
@@ -41,7 +40,7 @@ class CommentController extends Controller
         $article = Article::where('slug', $slug)->first();
 
         if (! $article) {
-            return response()->json(['message' => 'Article not found.',], 404);
+            return response()->json(['message' => 'Article not found.'], 404);
         }
         Gate::authorize('comment', $article);
 

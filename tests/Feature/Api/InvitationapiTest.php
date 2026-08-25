@@ -34,10 +34,10 @@ test('only admin can send an invitation', function () {
 test('an admin cannot send an invitation to a blocked (soft-deleted) user\'s email', function () {
     apiActingAsAdmin(['user.manage']);
     $blockedUser = User::factory()->create(['email' => 'blocked@example.com']);
-    $blockedUser->delete(); 
- 
+    $blockedUser->delete();
+
     $response = $this->postJson('/api/v1/admin/invitation/send', ['email' => 'blocked@example.com']);
- 
+
     $response->assertStatus(422)->assertJsonValidationErrors(['email']);
 });
 

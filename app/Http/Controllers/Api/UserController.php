@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\UserRole;
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-
     public function profile(Request $request)
     {
         $user = Auth::user();
@@ -26,17 +23,18 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $user = Auth::user();
 
         Gate::authorize('update', $user);
 
         $values = $request->validate([
-            'name'     => ['sometimes', 'required', 'string', 'min:4', 'max:50'],
-            'email'    => ['sometimes', 'required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'bio'      => ['nullable', 'string', 'max:255'],
+            'name' => ['sometimes', 'required', 'string', 'min:4', 'max:50'],
+            'email' => ['sometimes', 'required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'bio' => ['nullable', 'string', 'max:255'],
             'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
-            'avatar'   => ['nullable', 'image', 'max:5120'],
+            'avatar' => ['nullable', 'image', 'max:5120'],
         ]);
 
         $data = collect($values)->only(['name', 'email', 'bio'])->toArray();
@@ -56,7 +54,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Profile updated successfully.',
-            'user'    => $user,
+            'user' => $user,
         ], 200);
     }
 
@@ -109,26 +107,27 @@ class UserController extends Controller
             ->paginate($request->get('per_page', 12));
 
         return response()->json([
-            'users' => $users
+            'users' => $users,
         ], 200);
     }
 
     public function show(string $uuid)
     {
-        $user = User::where('uuid',$uuid)->first();
+        $user = User::where('uuid', $uuid)->first();
 
         if (! $user) {
             return response()->json(['message' => 'record not found.'], 404);
         }
 
-        Gate::authorize('view',$user);
+        Gate::authorize('view', $user);
 
         return response()->json([
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
-    public function edit(Request $request, string $uuid) {
+    public function edit(Request $request, string $uuid)
+    {
         $user = User::where('uuid', $uuid)->first();
 
         if (! $user) {
@@ -138,10 +137,10 @@ class UserController extends Controller
         Gate::authorize('update', $user);
 
         $values = $request->validate([
-            'name'     => ['sometimes', 'required', 'string', 'min:4', 'max:50'],
-            'email'    => ['sometimes', 'required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'bio'      => ['nullable', 'string', 'max:255'],
-            'avatar'   => ['nullable', 'image', 'max:5120'],
+            'name' => ['sometimes', 'required', 'string', 'min:4', 'max:50'],
+            'email' => ['sometimes', 'required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'bio' => ['nullable', 'string', 'max:255'],
+            'avatar' => ['nullable', 'image', 'max:5120'],
         ]);
 
         $data = collect($values)->only(['name', 'email', 'bio'])->toArray();
@@ -157,8 +156,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Profile updated successfully.',
-            'user'    => $user,
+            'user' => $user,
         ], 200);
     }
-
 }

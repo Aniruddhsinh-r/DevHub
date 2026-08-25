@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,7 +14,7 @@ class BookmarkController extends Controller
         $article = Article::where('slug', $slug)->first();
 
         if (! $article) {
-            return response()->json(['message' => 'Article not found.',], 404);
+            return response()->json(['message' => 'Article not found.'], 404);
         }
         Gate::authorize('bookmark', $article);
 
@@ -68,7 +67,7 @@ class BookmarkController extends Controller
 
     public function index()
     {
-        if(! Auth::user()){
+        if (! Auth::user()) {
             return response()->json(['message' => 'This action is unauthorized.'], 403);
         }
 

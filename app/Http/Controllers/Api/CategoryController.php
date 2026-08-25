@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Gate;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
@@ -29,13 +29,13 @@ class CategoryController extends Controller
         }
 
         $category = Category::create([
-            'name'    => $data['name'],
-            'slug'    => $slug,
+            'name' => $data['name'],
+            'slug' => $slug,
             'user_id' => Auth::id(),
         ]);
 
         return response()->json([
-            'message'  => 'Category created successfully.',
+            'message' => 'Category created successfully.',
             'category' => $category,
         ], 201);
     }
@@ -61,12 +61,12 @@ class CategoryController extends Controller
         }
 
         $category->update([
-            'name'    => $data['name'],
-            'slug'    => $slug,
+            'name' => $data['name'],
+            'slug' => $slug,
         ]);
 
         return response()->json([
-            'message'  => 'Category updated successfully.',
+            'message' => 'Category updated successfully.',
             'category' => $category,
         ], 200);
     }

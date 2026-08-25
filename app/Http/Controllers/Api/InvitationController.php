@@ -3,27 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\SendInvitation;
-use App\Enums\ArticleStatus;
-use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Article;
 use App\Models\Invitation;
 use App\Models\User;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class InvitationController extends Controller
 {
-    public function store(Request $request,SendInvitation $sendInvitation)
+    public function store(Request $request, SendInvitation $sendInvitation)
     {
         if (! Auth::user()->hasPermissionTo('user.manage')) {
             return response()->json(['message' => 'You do not have permission to send invitations.'], 403);
         }
 
         $values = $request->validate([
-            'email'    => ['required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')],
+            'email' => ['required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')],
         ]);
 
         $existing = Invitation::where('email', $values['email'])
@@ -42,11 +38,11 @@ class InvitationController extends Controller
 
         return response()->json([
             'message' => 'invitation send successfully',
-            'invitation' => $invitation
-        ],200);
+            'invitation' => $invitation,
+        ], 200);
     }
 
-    public function resend(Invitation $invitation,SendInvitation $sendInvitation)
+    public function resend(Invitation $invitation, SendInvitation $sendInvitation)
     {
         if (! Auth::user()->hasPermissionTo('user.manage')) {
             return response()->json(['message' => 'You do not have permission to send invitations.'], 403);
@@ -107,6 +103,6 @@ class InvitationController extends Controller
 
         $invitation->delete();
 
-        return response()->json(['message' => 'Invitation delete successfully.'],200);
+        return response()->json(['message' => 'Invitation delete successfully.'], 200);
     }
 }

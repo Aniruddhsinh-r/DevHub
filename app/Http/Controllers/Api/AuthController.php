@@ -1,11 +1,11 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -23,7 +23,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        
+
         $user->assignRole(UserRole::AUTHOR);
 
         return response()->json([
@@ -74,7 +74,7 @@ class AuthController extends Controller
         }
 
         $user->tokens()->delete();
-        
+
         $token = $user->createToken('api-token')->plainTextToken;
         session(['sanctum_token' => $token]);
 
