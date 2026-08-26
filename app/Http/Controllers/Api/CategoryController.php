@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,10 +45,6 @@ class CategoryController extends Controller
     {
         Gate::authorize('update', $category);
 
-        if (! $category) {
-            return response()->json(['message' => 'category not found.'], 404);
-        }
-
         $data = $request->validate([
             'name' => ['required', 'string', 'min:4', 'max:20', Rule::unique('categories', 'name')->ignore($category->id)],
         ]);
@@ -77,9 +74,7 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return response()->json([
-            'message' => 'category deleted successfully.',
-        ], 200);
+        return response()->noContent();
     }
 
     public function index(Request $request)
@@ -91,7 +86,7 @@ class CategoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 10));
 
-        return response()->json($categories);
+        return CategoryResource::collection($categories);
     }
 
     public function show(Category $category)

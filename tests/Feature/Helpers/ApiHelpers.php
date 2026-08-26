@@ -37,6 +37,7 @@ if (! function_exists('apiActingAsAuthor')) {
         Permission::firstOrCreate(['name' => 'user.forceDelete']);
         Permission::firstOrCreate(['name' => 'article.forceDelete']);
         Permission::firstOrCreate(['name' => 'article.comment']);
+        Permission::firstOrCreate(['name' => 'article.like']);
         Permission::firstOrCreate(['name' => 'article.bookmark']);
         Permission::firstOrCreate(['name' => 'user.manage']);
         Permission::firstOrCreate(['name' => 'user.delete']);
@@ -73,6 +74,7 @@ if (! function_exists('apiActingAsAdmin')) {
     ], array $attributes = []): User
     {
         Permission::firstOrCreate(['name' => 'category.delete']);
+        Permission::firstOrCreate(['name' => 'article.like']);
         Permission::firstOrCreate(['name' => 'user.forceDelete']);
         $role = Role::firstOrCreate(['name' => UserRole::ADMIN->value, 'guard_name' => 'web']);
         apiGivePermissions($role, $permissions);

@@ -130,7 +130,7 @@ test('an author can delete their own article', function () {
 
     $response = $this->deleteJson("/api/v1/article/{$article->slug}/delete");
 
-    $response->assertOk()->assertJson(['message' => 'Article deleted successfully.']);
+    $response->assertNoContent();
     $this->assertSoftDeleted('articles', ['id' => $article->id]);
 });
 
@@ -162,7 +162,7 @@ test('only superadmin can permanently delete a soft-deleted article', function (
 
     $response = $this->deleteJson("/api/v1/article/{$article->slug}/forcedelete");
 
-    $response->assertOk()->assertJson(['message' => 'Article permanently deleted successfully.']);
+    $response->assertNoContent();
     $this->assertDatabaseMissing('articles', ['id' => $article->id]);
 });
 
@@ -195,7 +195,7 @@ test('an admin can view the admin articles listing', function () {
 
     $response = $this->getJson('/api/v1/admin/articles');
 
-    $response->assertOk()->assertJsonStructure(['data', 'current_page']);
+    $response->assertOk()->assertJsonStructure(['data','meta' => ['current_page'],]);
 });
 
 test('a non-admin cannot view the admin articles listing', function () {
@@ -227,7 +227,7 @@ test('author can view the published articles listing', function () {
 
     $response = $this->getJson('/api/v1/articles');
 
-    $response->assertOk()->assertJsonStructure(['data', 'current_page']);
+    $response->assertOk()->assertJsonStructure(['data','meta' => ['current_page'],]);
 });
 
 test('guest cannot access articles listing page', function () {
@@ -250,9 +250,8 @@ test('an author can view their own articles', function () {
     $response = $this->getJson('/api/v1/myarticles');
 
     $response->assertOk();
-    expect($response->json('bookmarks.data'))->toHaveCount(2);
+    expect($response->json('data'))->toHaveCount(2);
 });
-
 // ----------------------------------------------------------------------
 // GET /api/v1/article/{slug}
 // ----------------------------------------------------------------------

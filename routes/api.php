@@ -12,9 +12,12 @@ use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::middleware('throttle:5,2')->group(function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/register', [AuthController::class, 'register']);
+    });
     Route::post('/admin/login', [AuthController::class, 'adminlogin']);
+    Route::get('/articles', [ArticleController::class, 'index']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
@@ -29,7 +32,6 @@ Route::prefix('v1')->group(function () {
         Route::put('/article/{slug}/update', [ArticleController::class, 'update']);
         Route::delete('/article/{slug}/delete', [ArticleController::class, 'delete']);
         Route::delete('/article/{slug}/forcedelete', [ArticleController::class, 'forceDelete']);
-        Route::get('/articles', [ArticleController::class, 'index']);
         Route::get('/admin/articles', [ArticleController::class, 'adminArticles']);
         Route::post('/article/{slug}/like', [LikeController::class, 'store']);
         Route::delete('/article/{slug}/dislike', [LikeController::class, 'destroy']);

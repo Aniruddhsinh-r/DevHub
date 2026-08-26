@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ArticleStatus;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ArticleResource;
 use App\Models\Article;
+use App\Models\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -60,9 +62,11 @@ class ArticleController extends Controller
 
         $article = Auth::user()->articles()->create($data);
 
+        $article->load(['category', 'user']);
+
         return response()->json([
             'message' => 'Article created successfully.',
-            'article' => $article,
+            'article' => ArticleResource::make($article),
         ], 201);
     }
 
@@ -129,9 +133,11 @@ class ArticleController extends Controller
 
         $article->update($data);
 
+        $article->load(['category', 'user']);
+
         return response()->json([
             'message' => 'Article updated successfully.',
-            'article' => $article,
+            'article' => ArticleResource::make($article),
         ], 200);
     }
 
@@ -151,9 +157,7 @@ class ArticleController extends Controller
 
         $article->delete();
 
-        return response()->json([
-            'message' => 'Article deleted successfully.',
-        ], 200);
+        return response()->noContent();
     }
 
     public function forceDelete(string $slug)
@@ -171,9 +175,7 @@ class ArticleController extends Controller
             Storage::disk('public')->delete($article->cover_path);
         }
 
-        return response()->json([
-            'message' => 'Article permanently deleted successfully.',
-        ], 200);
+        return response()->noContent();
     }
 
     public function adminArticles(Request $request)
@@ -183,6 +185,8 @@ class ArticleController extends Controller
         }
 
         $articles = Article::query()
+            ->with(['category', 'user'])
+            ->withCount(['likes', 'comments', 'views'])
             ->when($request->status, function ($query) use ($request) {
                 $query->where('status', $request->status);
             })
@@ -196,7 +200,7 @@ class ArticleController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 12));
 
-        return response()->json($articles);
+        return ArticleResource::collection($articles);
     }
 
     public function index(Request $request)
@@ -207,6 +211,8 @@ class ArticleController extends Controller
 
         $articles = Article::query()
             ->where('status', 'published')
+            ->with(['category', 'user'])
+            ->withCount(['likes', 'comments', 'views'])
             ->when($request->search, function ($q) use ($request) {
                 $q->where(function ($query) use ($request) {
                     $query
@@ -217,7 +223,7 @@ class ArticleController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 12));
 
-        return response()->json($articles);
+        return ArticleResource::collection($articles);
     }
 
     public function myArticle()
@@ -226,16 +232,21 @@ class ArticleController extends Controller
             return response()->json(['message' => 'This action is unauthorized.'], 403);
         }
 
-        $articles = Auth::user()->articles()->with(['category', 'views'])->latest()->paginate(12);
+        $articles = Auth::user()->articles()
+            ->with(['category', 'user'])
+            ->withCount(['likes', 'comments', 'views'])
+            ->latest()
+            ->paginate(12);
 
-        return response()->json([
-            'bookmarks' => $articles,
-        ], 200);
+        return ArticleResource::collection($articles)
+            ->additional(['message' => 'my published']);
     }
 
     public function show(string $slug)
     {
-        $article = Article::with(['category', 'category', 'user', 'likes', 'views'])->where('slug', $slug)
+        $article = Article::with(['category', 'user'])
+            ->withCount(['likes', 'comments'])
+            ->where('slug', $slug)
             ->where(function ($query) {
                 $query->where('status', ArticleStatus::PUBLISHED)->orWhere('user_id', Auth::id());
             })->first();
@@ -246,13 +257,26 @@ class ArticleController extends Controller
 
         $user = Auth::user();
 
+        $published = $article->status === ArticleStatus::PUBLISHED;
+
+        if ($published && $user->hasRole(UserRole::AUTHOR)) {
+            $view = View::firstOrCreate([
+                'user_id' => $user->id,
+                'article_id' => $article->id,
+            ]);
+
+            if ($view->wasRecentlyCreated) {
+                $article->increment('view_count');
+            }
+        }
+
         return response()->json([
-            'article' => $article,
+            'article' => ArticleResource::make($article),
             'is_liked' => $user ? $article->likes()->where('user_id', $user->id)->exists() : false,
             'is_bookmarked' => $user ? $article->bookmarks()->where('user_id', $user->id)->exists() : false,
             'comments' => $article->comments()->latest()->get(),
-            'likes_count' => $article->likes()->count(),
-            'comments_count' => $article->comments()->count(),
+            'likes_count' => $article->likes_count,
+            'comments_count' => $article->comments_count,
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\SendInvitation;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\InvitationResource;
 use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,8 +39,8 @@ class InvitationController extends Controller
 
         return response()->json([
             'message' => 'invitation send successfully',
-            'invitation' => $invitation,
-        ], 200);
+            'invitation' => InvitationResource::make($invitation),
+        ], 201);
     }
 
     public function resend(Invitation $invitation, SendInvitation $sendInvitation)
@@ -60,7 +61,7 @@ class InvitationController extends Controller
 
         return response()->json([
             'message' => 'invitation resend successfully',
-            'invitation' => $invitation,
+            'invitation' => InvitationResource::make($invitation),
         ], 200);
     }
 
@@ -83,7 +84,7 @@ class InvitationController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 12));
 
-        return response()->json($invitation);
+        return InvitationResource::collection($invitation);
     }
 
     public function show(Invitation $invitation)
@@ -92,7 +93,9 @@ class InvitationController extends Controller
             return response()->json(['message' => 'Unauthorized action.'], 403);
         }
 
-        return response()->json($invitation);
+        return response()->json([
+            'invitation' => InvitationResource::make($invitation),
+        ]);
     }
 
     public function delete(Invitation $invitation)
@@ -103,6 +106,6 @@ class InvitationController extends Controller
 
         $invitation->delete();
 
-        return response()->json(['message' => 'Invitation delete successfully.'], 200);
+        return response()->noContent();
     }
 }

@@ -17,7 +17,7 @@ test('a guest cannot like an article', function () {
 });
 
 test('an authorized user can like a published article', function () {
-    apiActingAsAuthor(['article.comment']);
+    apiActingAsAuthor(['article.like']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 
     $response = $this->postJson("/api/v1/article/{$article->slug}/like");
@@ -27,7 +27,7 @@ test('an authorized user can like a published article', function () {
 });
 
 test('liking an article twice returns a conflict', function () {
-    $user = apiActingAsAuthor(['article.comment']);
+    $user = apiActingAsAuthor(['article.like']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 
     $this->postJson("/api/v1/article/{$article->slug}/like")->assertCreated();
@@ -37,7 +37,7 @@ test('liking an article twice returns a conflict', function () {
 });
 
 test('a user cannot like their own article', function () {
-    $user = apiActingAsAuthor(['article.comment']);
+    $user = apiActingAsAuthor(['article.like']);
     $article = Article::factory()->create(['user_id' => $user->id, 'status' => ArticleStatus::PUBLISHED]);
 
     $response = $this->postJson("/api/v1/article/{$article->slug}/like");
@@ -55,7 +55,7 @@ test('a user without permission cannot like an article', function () {
 });
 
 test('liking a draft article is forbidden', function () {
-    apiActingAsAuthor(['article.comment']);
+    apiActingAsAuthor(['article.like']);
     $article = Article::factory()->create(['status' => ArticleStatus::DRAFT]);
 
     $response = $this->postJson("/api/v1/article/{$article->slug}/like");
@@ -64,7 +64,7 @@ test('liking a draft article is forbidden', function () {
 });
 
 test('liking a non-existent article returns a 404', function () {
-    apiActingAsAuthor(['article.comment']);
+    apiActingAsAuthor(['article.like']);
 
     $response = $this->postJson('/api/v1/article/does-not-exist/like');
 
@@ -76,7 +76,7 @@ test('liking a non-existent article returns a 404', function () {
 // ----------------------------------------------------------------------
 
 test('a user can unlike a previously liked article', function () {
-    apiActingAsAuthor(['article.comment']);
+    apiActingAsAuthor(['article.like']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 
     $this->postJson("/api/v1/article/{$article->slug}/like")->assertCreated();
@@ -87,7 +87,7 @@ test('a user can unlike a previously liked article', function () {
 });
 
 test('unliking an article that was never liked returns a 404', function () {
-    apiActingAsAuthor(['article.comment']);
+    apiActingAsAuthor(['article.like']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 
     $response = $this->deleteJson("/api/v1/article/{$article->slug}/dislike");
@@ -96,7 +96,7 @@ test('unliking an article that was never liked returns a 404', function () {
 });
 
 test('unliking a non-existent article returns a 404', function () {
-    apiActingAsAuthor(['article.comment']);
+    apiActingAsAuthor(['article.like']);
 
     $response = $this->deleteJson('/api/v1/article/does-not-exist/dislike');
 

@@ -23,6 +23,7 @@ if (! function_exists('AdminLogin')) {
         'user.update', ])
     {
         Permission::firstOrCreate(['name' => 'category.delete']);
+        Permission::firstOrCreate(['name' => 'article.like']);
         Permission::firstOrCreate(['name' => 'user.forceDelete']);
         Permission::firstOrCreate(['name' => 'article.forceDelete']);
         $adminRole = Role::firstOrCreate(['name' => 'admin']);

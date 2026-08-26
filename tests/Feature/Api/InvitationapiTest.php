@@ -23,10 +23,10 @@ test('a guest cannot send an invitation', function () {
 test('only admin can send an invitation', function () {
     Mail::fake();
     apiActingAsAdmin(['user.manage']);
-
+    
     $response = $this->postJson('/api/v1/admin/invitation/send', ['email' => 'invitee@example.com']);
 
-    $response->assertOk()->assertJsonPath('invitation.email', 'invitee@example.com');
+    $response->assertCreated()->assertJsonPath('invitation.email', 'invitee@example.com');
     $this->assertDatabaseHas('invitations', ['email' => 'invitee@example.com', 'status' => 'pending']);
     Mail::assertQueued(InvitationMail::class);
 });
@@ -70,7 +70,7 @@ test('sending a duplicate pending invitation returns a conflict', function () {
     Mail::fake();
     apiActingAsAdmin(['user.manage']);
 
-    $this->postJson('/api/v1/admin/invitation/send', ['email' => 'invitee@example.com'])->assertOk();
+    $this->postJson('/api/v1/admin/invitation/send', ['email' => 'invitee@example.com'])->assertCreated();
     $response = $this->postJson('/api/v1/admin/invitation/send', ['email' => 'invitee@example.com']);
 
     $response->assertStatus(409);
@@ -134,7 +134,7 @@ test('only admin can see invitation list', function () {
 
     $response = $this->getJson('/api/v1/admin/invitations');
 
-    $response->assertOk()->assertJsonStructure(['data', 'current_page']);
+    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page'],]);
 });
 
 test('author can guest cannot see invitation list', function () {
@@ -166,7 +166,7 @@ test('admin can view a single invitation', function () {
 
     $response = $this->getJson("/api/v1/admin/invitation/{$invitation->id}");
 
-    $response->assertOk()->assertJsonPath('id', $invitation->id);
+    $response->assertOk()->assertJsonPath('invitation.id', $invitation->id);
 });
 
 test('author and user cannot view a single invitation', function () {
@@ -188,7 +188,7 @@ test('asmin can delete an invitation', function () {
 
     $response = $this->deleteJson("/api/v1/admin/invitation/{$invitation->id}/delete");
 
-    $response->assertOk()->assertJson(['message' => 'Invitation delete successfully.']);
+    $response->assertNoContent();
     $this->assertDatabaseMissing('invitations', ['id' => $invitation->id]);
 });
 

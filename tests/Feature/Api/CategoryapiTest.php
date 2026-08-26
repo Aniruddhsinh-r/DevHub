@@ -56,7 +56,7 @@ test('admin can see list of categories', function () {
 
     $response = $this->getJson('/api/v1/categories');
 
-    $response->assertOk()->assertJsonStructure(['data', 'current_page']);
+    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page'],]);
 });
 
 test('author cannot list categories', function () {
@@ -111,7 +111,7 @@ test('superadmin can delete a category', function () {
 
     $response = $this->deleteJson("/api/v1/category/{$category->id}/delete");
 
-    $response->assertOk()->assertJson(['message' => 'category deleted successfully.']);
+    $response->assertNoContent();
     $this->assertDatabaseMissing('categories', ['id' => $category->id]);
 });
 

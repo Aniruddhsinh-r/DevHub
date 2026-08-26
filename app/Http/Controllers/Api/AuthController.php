@@ -47,10 +47,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user->tokens()->delete();
-
         $token = $user->createToken('api-token')->plainTextToken;
-        session(['sanctum_token' => $token]);
 
         return response()->json([
             'user' => $user,

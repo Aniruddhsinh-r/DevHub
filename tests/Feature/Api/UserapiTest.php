@@ -75,7 +75,7 @@ test('an authenticated user can list users', function () {
 
     $response = $this->getJson('/api/v1/admin/users');
 
-    $response->assertOk()->assertJsonStructure(['users' => ['data', 'current_page']]);
+    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page'],]);
 });
 
 test('a guest cannot list users', function () {
@@ -166,7 +166,7 @@ test('a user with permission can delete another user', function () {
 
     $response = $this->deleteJson("/api/v1/users/{$target->uuid}/delete");
 
-    $response->assertOk()->assertJson(['message' => 'User deleted successfully.']);
+    $response->assertNoContent();
     $this->assertSoftDeleted('users', ['id' => $target->id]);
 });
 
@@ -208,7 +208,7 @@ test('a user with permission can permanently delete a soft-deleted user', functi
 
     $response = $this->deleteJson("/api/v1/users/{$target->uuid}/forcedelete");
 
-    $response->assertOk()->assertJson(['message' => 'User permanently deleted successfully.']);
+    $response->assertNoContent();
     $this->assertDatabaseMissing('users', ['id' => $target->id]);
 });
 

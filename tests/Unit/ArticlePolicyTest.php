@@ -18,7 +18,7 @@ beforeEach(function () {
 
     foreach ([
         'article.create', 'article.edit', 'article.delete',
-        'article.bookmark', 'article.comment',
+        'article.bookmark', 'article.comment', 'article.like'
     ] as $permission) {
         Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
     }
@@ -121,22 +121,29 @@ test('an admin can view any draft article', function () {
 });
 
 test('a user with permission can like a published article that is not their own', function () {
-    $user = authorWithPermissions(['article.comment']);
-    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $user = authorWithPermissions(['article.like']);
+    $article = Article::factory()->create([
+        'status' => ArticleStatus::PUBLISHED,
+    ]);
 
     expect($this->policy->like($user, $article))->toBeTrue();
 });
 
 test('a user cannot like their own article even when published', function () {
-    $owner = authorWithPermissions(['article.comment']);
-    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED, 'user_id' => $owner->id]);
+    $owner = authorWithPermissions(['article.like']);
+    $article = Article::factory()->create([
+        'status' => ArticleStatus::PUBLISHED,
+        'user_id' => $owner->id,
+    ]);
 
     expect($this->policy->like($owner, $article))->toBeFalse();
 });
 
 test('a user cannot like a draft article', function () {
-    $user = authorWithPermissions(['article.comment']);
-    $article = Article::factory()->create(['status' => ArticleStatus::DRAFT]);
+    $user = authorWithPermissions(['article.like']);
+    $article = Article::factory()->create([
+        'status' => ArticleStatus::DRAFT,
+    ]);
 
     expect($this->policy->like($user, $article))->toBeFalse();
 });

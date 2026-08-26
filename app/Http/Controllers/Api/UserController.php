@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Profile fetched successfully.',
-            'user' => $user,
+            'user' => UserResource::make($user),
         ]);
     }
 
@@ -54,7 +55,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Profile updated successfully.',
-            'user' => $user,
+            'user' => UserResource::make($user),
         ], 200);
     }
 
@@ -73,9 +74,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        return response()->json([
-            'message' => 'User deleted successfully.',
-        ], 200);
+        return response()->noContent();
     }
 
     public function forceDelete(string $uuid)
@@ -88,9 +87,7 @@ class UserController extends Controller
         Gate::authorize('forceDelete', $user);
         $user->forceDelete();
 
-        return response()->json([
-            'message' => 'User permanently deleted successfully.',
-        ], 200);
+        return response()->noContent();
     }
 
     public function index(Request $request)
@@ -106,9 +103,7 @@ class UserController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 12));
 
-        return response()->json([
-            'users' => $users,
-        ], 200);
+        return UserResource::collection($users);    
     }
 
     public function show(string $uuid)
@@ -122,7 +117,7 @@ class UserController extends Controller
         Gate::authorize('view', $user);
 
         return response()->json([
-            'user' => $user,
+            'user' => UserResource::make($user),
         ]);
     }
 
@@ -156,7 +151,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Profile updated successfully.',
-            'user' => $user,
+            'user' => UserResource::make($user),
         ], 200);
     }
 }
