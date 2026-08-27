@@ -107,7 +107,7 @@ test('admin can update any article', function () {
     apiActingAsAdmin();
     $article = Article::factory()->create();
 
-    $response = $this->putJson("/api/v1/article/{$article->slug}/update", validArticlePayload(['title' => 'Admin Updated Title']));
+    $response = $this->putJson("/api/v1/admin/article/{$article->slug}/update", validArticlePayload(['title' => 'Admin Updated Title']));
 
     $response->assertOk()->assertJsonPath('article.title', 'Admin Updated Title');
 });
@@ -156,21 +156,21 @@ test('deleting a non-existent article returns a 404', function () {
 // ----------------------------------------------------------------------
 
 test('only superadmin can permanently delete a soft-deleted article', function () {
-    $user = apiActingAsAuthor(['article.forceDelete']);
+    $user = apiActingAsAdmin(['article.forceDelete']);
     $article = Article::factory()->create(['user_id' => $user->id]);
     $article->delete();
 
-    $response = $this->deleteJson("/api/v1/article/{$article->slug}/forcedelete");
+    $response = $this->deleteJson("/api/v1/admin/article/{$article->slug}/forcedelete");
 
     $response->assertNoContent();
     $this->assertDatabaseMissing('articles', ['id' => $article->id]);
 });
 
 test('can not delete article that is not soft-deleted', function () {
-    $user = apiActingAsAuthor(['article.forceDelete']);
+    $user = apiActingAsAdmin(['article.forceDelete']);
     $article = Article::factory()->create(['user_id' => $user->id]);
 
-    $response = $this->deleteJson("/api/v1/article/{$article->slug}/forcedelete");
+    $response = $this->deleteJson("/api/v1/admin/article/{$article->slug}/forcedelete");
 
     $response->assertStatus(422);
 });
@@ -180,7 +180,7 @@ test('user without forceDelete permission cannot permanently delete article', fu
     $article = Article::factory()->create(['user_id' => $user->id]);
     $article->delete();
 
-    $response = $this->deleteJson("/api/v1/article/{$article->slug}/forcedelete");
+    $response = $this->deleteJson("/api/v1/admin/article/{$article->slug}/forcedelete");
 
     $response->assertForbidden();
 });

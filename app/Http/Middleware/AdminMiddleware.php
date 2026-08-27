@@ -17,12 +17,18 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! Auth::check()) {
-            return redirect()->route('login')->with('error', 'You must be logged in.');
+        $user = $request->user();
+
+        if (! $user) {
+            return response()->json([
+                'message' => 'Unauthenticated.',
+            ], 401);
         }
 
-        if (! Auth::user()->hasRole([UserRole::ADMIN->value, UserRole::SUPERADMIN->value])) {
-            abort(403, 'Unauthorized action');
+        if (! $user->hasRole([UserRole::ADMIN->value, UserRole::SUPERADMIN->value])) {
+            return response()->json([
+                'message' => 'Unauthorized action.',
+            ], 403);
         }
 
         return $next($request);

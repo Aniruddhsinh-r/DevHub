@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -34,7 +35,7 @@ class UserController extends Controller
             'name' => ['sometimes', 'required', 'string', 'min:4', 'max:50'],
             'email' => ['sometimes', 'required', 'email', 'min:10', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'bio' => ['nullable', 'string', 'max:255'],
-            'password' => ['nullable', 'string', 'min:8', 'max:255', 'confirmed'],
+            'password' => ['sometimes', 'required', 'string', 'min:8', 'max:255', 'confirmed'],
             'avatar' => ['nullable', 'image', 'max:5120'],
         ]);
 
@@ -81,7 +82,7 @@ class UserController extends Controller
     {
         $user = User::withTrashed()->where('uuid', $uuid)->first();
         if (! $user) {
-            return response()->json(['message' => 'record not found.'], 404);
+            return response()->json(['message' => 'record not found.'], 422);
         }
 
         Gate::authorize('forceDelete', $user);
@@ -93,6 +94,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::query()
+            ->whereHas('roles', function ($query) {
+                $query->where('name', UserRole::AUTHOR->value);
+            })
+            ->whereKeyNot(auth()->id())
             ->when($request->search, function ($q) use ($request) {
                 $q->where(function ($query) use ($request) {
                     $query
@@ -103,7 +108,26 @@ class UserController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 12));
 
-        return UserResource::collection($users);    
+        return UserResource::collection($users);
+    }
+
+    public function adminRecords(Request $request) {
+        $users = User::query()
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', UserRole::SUPERADMIN->value);
+            })
+            ->whereKeyNot(auth()->id())
+            ->when($request->search, function ($q) use ($request) {
+                $q->where(function ($query) use ($request) {
+                    $query
+                        ->where('name', 'like', "%{$request->search}%")
+                        ->orWhere('email', 'like', "%{$request->search}%");
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate($request->get('per_page', 12));
+
+        return UserResource::collection($users);
     }
 
     public function show(string $uuid)
