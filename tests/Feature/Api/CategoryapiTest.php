@@ -59,12 +59,23 @@ test('admin can see list of categories', function () {
     $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page']]);
 });
 
-test('author cannot list categories', function () {
-    apiActingAsAuthor([]);
+test('admin cannot fetch user category page', function () {
+    apiActingAsAdmin([]);
 
-    $response = $this->getJson('/api/v1/admin/categories');
+    $response = $this->getJson('/api/v1/categories');
 
     $response->assertForbidden();
+});
+
+test('author can only see id and category name', function () {
+    apiActingAsAuthor([]);
+
+    Category::factory()->create(['name' => 'Technology',]);
+
+    $response = $this->getJson('/api/v1/categories');
+    $firstItem = $response->json('0');
+
+    expect(array_keys($firstItem))->toEqualCanonicalizing(['id', 'name']);
 });
 
 test('admin can update their owned category', function () {

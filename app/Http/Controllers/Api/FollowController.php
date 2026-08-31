@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class FollowController extends Controller
@@ -27,7 +27,7 @@ class FollowController extends Controller
             Auth::user()->following()->attach($user->id);
         } catch (QueryException $e) {
             if ($e->errorInfo[1] === 1062) {
-                return response()->json(['message' => 'You are already following this user.',], 409);
+                return response()->json(['message' => 'You are already following this user.'], 409);
             }
             throw $e;
         }

@@ -60,7 +60,6 @@ test('user cant like draft article', function () {
 
     Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
         ->assertDontSee('Like');
-    // ->assertForbidden();
 });
 
 test('like button label reflects like state and count', function () {

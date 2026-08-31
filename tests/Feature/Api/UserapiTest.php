@@ -15,10 +15,6 @@ beforeEach(function () {
     Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
 });
 
-// ----------------------------------------------------------------------
-// GET /api/v1/profile
-// ----------------------------------------------------------------------
-
 test('a guest cannot view the profile endpoint', function () {
     $response = $this->getJson('/api/v1/profile');
 
@@ -32,10 +28,6 @@ test('an authenticated user can view their own profile', function () {
 
     $response->assertOk()->assertJsonPath('user.email', $user->email);
 });
-
-// ----------------------------------------------------------------------
-// PUT /api/v1/profile/update
-// ----------------------------------------------------------------------
 
 test('a user can update their own profile', function () {
     apiActingAsAuthor([]);
@@ -64,14 +56,6 @@ test('profile update fails when password confirmation does not match', function 
 
     $response->assertStatus(422)->assertJsonValidationErrors(['password']);
 });
-
-// ----------------------------------------------------------------------
-// GET /api/v1/admin/users
-// ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
-// GET /api/v1/users  (author-only listing — index())
-// ----------------------------------------------------------------------
 
 test('a guest cannot list users via the author listing', function () {
     $response = $this->getJson('/api/v1/users');
@@ -119,15 +103,6 @@ test('the author-only user listing never includes the requesting user themself',
 
     expect($uuids)->not->toContain($author->uuid);
 });
-
-// ----------------------------------------------------------------------
-// GET /api/v1/admin/users  (admin-only listing — intended to be adminRecords())
-//
-// NOTE: this currently hits UserController::index() instead of
-// adminRecords() due to the duplicate route registration bug (see routes/api.php).
-// These tests assert the INTENDED behavior once that's fixed: everyone
-// except superadmins and the requester themself.
-// ----------------------------------------------------------------------
 
 test('a guest cannot list users via the admin listing', function () {
     $response = $this->getJson('/api/v1/admin/users');
@@ -186,10 +161,6 @@ test('the admin user listing includes other admins and authors alike', function 
     expect($uuids)->toContain($author->uuid);
 });
 
-// ----------------------------------------------------------------------
-// GET /api/v1/admin/users/{uuid}  (admin viewing another user — show())
-// ----------------------------------------------------------------------
-
 test('an admin can view another (non-superadmin) user', function () {
     apiActingAsAdmin();
     $target = User::factory()->create();
@@ -228,10 +199,6 @@ test('viewing a non-existent user returns a 404', function () {
     $response->assertNotFound();
 });
 
-// ----------------------------------------------------------------------
-// PUT /api/v1/admin/users/{uuid}/edit
-// ----------------------------------------------------------------------
-
 test('a user with permission can edit another user', function () {
     apiActingAsAdmin(['user.update']);
     $target = User::factory()->create();
@@ -257,10 +224,6 @@ test('editing a non-existent user returns a 404', function () {
 
     $response->assertNotFound();
 });
-
-// ----------------------------------------------------------------------
-// DELETE /api/v1/users/{uuid}/delete
-// ----------------------------------------------------------------------
 
 test('a user with permission can delete another user', function () {
     apiActingAsAdmin(['user.delete']);
@@ -298,10 +261,6 @@ test('a user without permission cannot delete another user', function () {
 
     $response->assertForbidden();
 });
-
-// ----------------------------------------------------------------------
-// DELETE /api/v1/users/{uuid}/forcedelete
-// ----------------------------------------------------------------------
 
 test('a user with permission can permanently delete a soft-deleted user', function () {
     apiActingAsAdmin(['user.forceDelete']);

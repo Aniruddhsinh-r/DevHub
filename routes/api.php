@@ -32,6 +32,8 @@ Route::prefix('v1')->group(function () {
             Route::delete('/article/{slug}/remove', [BookmarkController::class, 'destroy']);
             Route::post('/article/{slug}/comment', [CommentController::class, 'store']);
             Route::post('/article/{slug}/comment/reply', [CommentController::class, 'reply']);
+            Route::get('/categories', [CategoryController::class, 'userIndex']);
+            Route::delete('/comment/{comment}/delete', [CommentController::class, 'destroy']);
             Route::delete('/article/{slug}/delete', [ArticleController::class, 'delete']);
             Route::get('/profile', [UserController::class, 'profile']);
             Route::put('/profile/update', [UserController::class, 'update']);
@@ -70,8 +72,3 @@ Route::prefix('v1')->group(function () {
         });
     });
 });
-
-// Route::middleware(['web', 'auth:web'])->prefix('v1')->group(function () {
-//     Route::post('/category/create', [CategoryController::class, 'create']);
-//     Route::post('/categorys', [CategoryController::class, 'show']);
-// });

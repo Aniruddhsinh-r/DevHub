@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -63,5 +65,15 @@ class CommentController extends Controller
             'message' => 'Reply added successfully.',
             'comment' => $reply,
         ], 201);
+    }
+
+    public function destroy(Comment $comment)
+    {
+        if(Auth::user()->hasRole(UserRole::AUTHOR) && Auth::id() === $comment->user_id) {
+            $comment->delete();
+            return response()->noContent();
+        } else {
+            return response()->json(['message' => 'This action is unauthorized.'], 403);
+        }
     }
 }

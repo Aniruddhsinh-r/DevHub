@@ -74,10 +74,6 @@ test('liking a non-existent article returns a 404', function () {
     $response->assertNotFound();
 });
 
-// ----------------------------------------------------------------------
-// DELETE /api/v1/article/{slug}/dislike
-// ----------------------------------------------------------------------
-
 test('a user can unlike a previously liked article', function () {
     apiActingAsAuthor(['article.like']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);

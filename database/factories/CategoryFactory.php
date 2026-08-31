@@ -19,12 +19,12 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->unique()->word(); // Generates a clean single word like "Technology" or "Programming"
-
+        $name = fake()->unique()->word();
+        
         return [
-            'name' => ucfirst($name), // Capitalizes the first letter
+            'name' => ucfirst($name),
             'user_id' => User::factory()->author()->create(),
-            'slug' => Str::slug($name), // Converts it into a clean, matching URL slug: "technology" or "programming"
+            'slug' => Str::slug($name),
         ];
     }
 }
