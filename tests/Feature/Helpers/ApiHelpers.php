@@ -17,10 +17,6 @@ if (! function_exists('apiGivePermissions')) {
 }
 
 if (! function_exists('apiActingAsAuthor')) {
-    /**
-     * Create an Author user, assign given permissions, and authenticate
-     * the test client as that user via Sanctum.
-     */
     function apiActingAsAuthor(array $permissions = [
         'article.create',
         'article.edit',
@@ -120,9 +116,6 @@ if (! function_exists('apiActingAsSuperAdmin')) {
 }
 
 if (! function_exists('apiPlainUser')) {
-    /**
-     * A user with no role/permissions at all (for unauthorized-action checks).
-     */
     function apiPlainUser(array $attributes = []): User
     {
         $user = User::factory()->create($attributes);

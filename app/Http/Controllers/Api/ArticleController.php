@@ -86,7 +86,7 @@ class ArticleController extends Controller
             'body' => ['required', 'string', 'min:30', 'max:50000'],
             'category_id' => ['required', 'exists:categories,id'],
             'status' => ['required', Rule::enum(ArticleStatus::class)],
-            'duration' => ['required_if:status,'.ArticleStatus::SCHEDULED->value,'prohibited_unless:status,'.ArticleStatus::SCHEDULED->value, 'nullable', 'date', 'after_or_equal:now', 'before_or_equal:'.now()->addHours(48)->toDateTimeString()],
+            'duration' => ['required_if:status,'.ArticleStatus::SCHEDULED->value, 'prohibited_unless:status,'.ArticleStatus::SCHEDULED->value, 'nullable', 'date', 'after_or_equal:now', 'before_or_equal:'.now()->addHours(48)->toDateTimeString()],
             'cover_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ]);
 
@@ -205,10 +205,6 @@ class ArticleController extends Controller
 
     public function index(Request $request)
     {
-        if (! Auth::user()?->hasRole([UserRole::AUTHOR])) {
-            return response()->json(['message' => 'This action is unauthorized.'], 403);
-        }
-
         $articles = Article::query()
             ->where('status', 'published')
             ->with(['category', 'user'])

@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Enums\UserRole;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthorMiddleware
@@ -30,6 +29,7 @@ class AuthorMiddleware
                 'message' => 'Unauthorized action.',
             ], 403);
         }
+
         return $next($request);
     }
 }

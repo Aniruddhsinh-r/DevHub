@@ -23,7 +23,7 @@ test('a guest cannot send an invitation', function () {
 test('only admin can send an invitation', function () {
     Mail::fake();
     apiActingAsAdmin(['user.manage']);
-    
+
     $response = $this->postJson('/api/v1/admin/invitation/send', ['email' => 'invitee@example.com']);
 
     $response->assertCreated()->assertJsonPath('invitation.email', 'invitee@example.com');
@@ -134,7 +134,7 @@ test('only admin can see invitation list', function () {
 
     $response = $this->getJson('/api/v1/admin/invitations');
 
-    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page'],]);
+    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page']]);
 });
 
 test('author can guest cannot see invitation list', function () {

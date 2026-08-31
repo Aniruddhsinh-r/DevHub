@@ -56,7 +56,7 @@ test('admin can see list of categories', function () {
 
     $response = $this->getJson('/api/v1/admin/categories');
 
-    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page'],]);
+    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page']]);
 });
 
 test('author cannot list categories', function () {

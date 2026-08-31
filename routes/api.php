@@ -54,9 +54,9 @@ Route::prefix('v1')->group(function () {
             Route::delete('/admin/article/{slug}/delete', [ArticleController::class, 'delete']);
             Route::delete('/admin/article/{slug}/forcedelete', [ArticleController::class, 'forceDelete']);
             Route::get('/admin/articles', [ArticleController::class, 'adminArticles']);
+            Route::get('/admin/profile', [UserController::class, 'profile']);
             Route::put('/admin/profile/update', [UserController::class, 'update']);
             Route::put('/admin/users/{uuid}/edit', [UserController::class, 'edit']);
-            Route::get('/admin/users', [UserController::class, 'index']);
             Route::post('/admin/invitation/send', [InvitationController::class, 'store']);
             Route::post('/admin/invitation/{invitation}/resend', [InvitationController::class, 'resend']);
             Route::get('/admin/invitations', [InvitationController::class, 'index']);
@@ -66,6 +66,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('/admin/users/{uuid}/forcedelete', [UserController::class, 'forceDelete']);
             Route::get('/admin/users', [UserController::class, 'adminRecords']);
             Route::get('/admin/users/{uuid}', [UserController::class, 'show']);
+            Route::post('/admin/logout', [AuthController::class, 'logout']);
         });
     });
 });

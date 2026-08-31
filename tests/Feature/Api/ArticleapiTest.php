@@ -195,7 +195,7 @@ test('an admin can view the admin articles listing', function () {
 
     $response = $this->getJson('/api/v1/admin/articles');
 
-    $response->assertOk()->assertJsonStructure(['data','meta' => ['current_page'],]);
+    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page']]);
 });
 
 test('a non-admin cannot view the admin articles listing', function () {
@@ -227,15 +227,15 @@ test('author can view the published articles listing', function () {
 
     $response = $this->getJson('/api/v1/articles');
 
-    $response->assertOk()->assertJsonStructure(['data','meta' => ['current_page'],]);
+    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page']]);
 });
 
-test('guest cannot access articles listing page', function () {
+test('guest can access articles listing page', function () {
     apiActingAsAdmin();
 
     $response = $this->getJson('/api/v1/articles');
 
-    $response->assertForbidden();
+    $response->assertOk()->assertJsonStructure(['data', 'meta' => ['current_page']]);
 });
 
 // ----------------------------------------------------------------------

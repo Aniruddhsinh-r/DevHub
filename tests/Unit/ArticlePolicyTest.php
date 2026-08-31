@@ -18,7 +18,7 @@ beforeEach(function () {
 
     foreach ([
         'article.create', 'article.edit', 'article.delete',
-        'article.bookmark', 'article.comment', 'article.like'
+        'article.bookmark', 'article.comment', 'article.like',
     ] as $permission) {
         Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
     }

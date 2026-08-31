@@ -111,7 +111,8 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    public function adminRecords(Request $request) {
+    public function adminRecords(Request $request)
+    {
         $users = User::query()
             ->whereDoesntHave('roles', function ($query) {
                 $query->where('name', UserRole::SUPERADMIN->value);
