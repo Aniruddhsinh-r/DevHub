@@ -2,7 +2,9 @@
 
 use App\Enums\UserRole;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 require_once __DIR__.'/../Helpers/ApiHelpers.php';
@@ -17,10 +19,6 @@ function apiOtherAuthor(): User
 
     return $user;
 }
-
-// ----------------------------------------------------------------------
-// POST /api/v1/user/{uuid}/follow
-// ----------------------------------------------------------------------
 
 test('a guest cannot follow a user', function () {
     $target = apiOtherAuthor();
@@ -75,10 +73,6 @@ test('following a non-existent user returns a 404', function () {
     $response->assertNotFound();
 });
 
-// ----------------------------------------------------------------------
-// DELETE /api/v1/user/{uuid}/unfollow
-// ----------------------------------------------------------------------
-
 test('author can unfollow a user they follow', function () {
     apiActingAsAuthor([]);
     $target = apiOtherAuthor();
@@ -105,4 +99,25 @@ test('admin and guest cannot unfollow a user', function () {
     $response = $this->deleteJson("/api/v1/user/{$target->uuid}/unfollow");
 
     $response->assertForbidden();
+});
+
+test('prevents duplicate follows at the database level (race condition)', function () {
+    $user = User::factory()->create();
+    $userToFollow = User::factory()->create();
+
+    DB::table('follows')->insert([
+        'follower_id' => $user->id,
+        'followed_id' => $userToFollow->id,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    expect(fn () => DB::table('follows')->insert([
+        'follower_id' => $user->id,
+        'followed_id' => $userToFollow->id,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]))->toThrow(QueryException::class);
+
+    $this->assertDatabaseCount('follows', 1);
 });

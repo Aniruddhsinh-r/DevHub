@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -18,18 +19,14 @@ class LikeController extends Controller
         }
         Gate::authorize('like', $article);
 
-        $like = $article->likes()->where('user_id', Auth::id())->first();
-
-        if ($like) {
-            return response()->json([
-                'message' => 'Article is already liked.',
-                'like' => $like,
-            ], 409);
+        try {
+            $like = $article->likes()->create(['user_id' => Auth::id()]);
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') { // integrity constraint violation
+                return response()->json(['message' => 'Article is already liked.'], 409);
+            }
+            throw $e;
         }
-
-        $like = $article->likes()->Create([
-            'user_id' => Auth::id(),
-        ]);
 
         return response()->json([
             'message' => 'Article liked successfully.',

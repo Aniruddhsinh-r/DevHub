@@ -2,7 +2,10 @@
 
 use App\Enums\ArticleStatus;
 use App\Models\Article;
+use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 require_once __DIR__.'/../Helpers/ApiHelpers.php';
 
@@ -101,4 +104,25 @@ test('unliking a non-existent article returns a 404', function () {
     $response = $this->deleteJson('/api/v1/article/does-not-exist/dislike');
 
     $response->assertNotFound();
+});
+
+test('prevents duplicate likes at the database level (race condition)', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->create(['slug' => 'test-article']);
+
+    DB::table('likes')->insert([
+        'article_id' => $article->id,
+        'user_id' => $user->id,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    expect(fn () => DB::table('likes')->insert([
+        'article_id' => $article->id,
+        'user_id' => $user->id,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]))->toThrow(QueryException::class);
+
+    $this->assertDatabaseCount('likes', 1);
 });
