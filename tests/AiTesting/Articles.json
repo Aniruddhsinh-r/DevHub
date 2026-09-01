@@ -25,7 +25,7 @@
 
     {
         "title": "The Future of Artificial AI",
-        "excerpt": "AI evolved from theory to essential technology.",
+        "excerpt": "   4   ",
         "body": "Artificial intelligence has rapidly evolved from a theoretical computer science concept into an essential foundation of modern global industry. At its core, AI leverages machine learning algorithms, deep neural networks, and natural language processing to analyze vast amounts of complex data in real time. This technological shift allows businesses to automate routine tasks, streamline supply chains, and make highly accurate, data-driven decisions that were previously impossible. In fields like healthcare, AI models assist medical professionals by detecting early signs of disease in diagnostic imaging with remarkable precision. Meanwhile, in financial services, automated systems detect fraudulent transactions within milliseconds and manage complex investment portfolios. However, the rapid integration of artificial intelligence brings significant societal and ethical considerations. Questions regarding job displacement, algorithmic bias, data privacy, and the responsible deployment of powerful generative models are heavily debated by policy makers and technology leaders alike. the true value of artificial intelligence lies not in replacing human intellect, but in augmenting human capabilities, driving overall productivity, and unlocking creative solutions to some of the world's most pressing challenges."
     },
 
@@ -37,25 +37,61 @@
 
     {
         "title": "PHP 8.4",
-        "excerpt": "8.4 is here",
+        "excerpt": "8.4",
         "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter functions. It also simplifies object creation by letting you chain methods immediately upon instantiation without extra parentheses, alongside adding sharper performance optimizations and newer array helpers. Overall, it gives developers cleaner syntax and faster execution out of the box so building APIs, web apps, and dynamic sites requires less boilerplate code."
     },
 
     {
         "title": "How to Bake Bread",
-        "excerpt": "A simple guide to baking fresh bread at home.",
+        "excerpt": "A simple guide to <script>alert(1)</script> using basic ingredients.",
         "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butter; the milk and butter add essential fats that soften the crust and keep the inside pillowy. Knead the mixture thoroughly until it passes the windowpane test—meaning a small piece stretches so thin it becomes translucent without tearing—which proves you have built a strong network of gluten to trap gas. Let the dough rise in a warm spot until it doubles in size as the yeast produces carbon dioxide, then gently shape it into a loaf and allow it to rise a second time in the pan so it puffs up further. Bake until golden brown, and let it cool completely on a wire rack before slicing so the trapped steam sets the spongy structure instead of turning it gummy."
     },
 
     {
         "title": "anything in title",
-        "excerpt": "this excerpt is contain less then 50 words.",
+        "excerpt": " t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  5 0  w o r d s . ",
         "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter functions. It also simplifies object creation by letting you chain methods immediately upon instantiation without extra parentheses, alongside adding sharper performance optimizations and newer array helpers. Overall, it gives developers cleaner syntax and faster execution out of the box so building APIs, web apps, and dynamic sites requires less boilerplate code."
     },
 
     {
         "title": "empty excerpt testing",
-        "excerpt": "excerpt is all ok no problem",
-        "bosy": "lets test empty excerpt test."
+        "excerpt": "",
+        "body": "lets test empty excerpt test."
+    },
+
+    {
+        "title": "Invisible Padding Attack",
+        "excerpt": "Hi\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b",
+        "body": "This tests an excerpt padded almost entirely with zero-width spaces to fake meeting a minimum length."
+    },
+
+    {
+        "title": "RTL Override Attack",
+        "excerpt": "text \u202Ereversed visually\u202C here",
+        "body": "This tests an excerpt containing directional override characters that can visually scramble displayed text."
+    },
+
+    {
+        "title": "Newline Tab Injection",
+        "excerpt": "Line one\nLine two\tTabbed",
+        "body": "This tests an excerpt with embedded newlines and tabs that could break layout rendering."
+    },
+
+    {
+        "title": "Markdown Injection Attack",
+        "excerpt": "Click here ![img](javascript:alert(1))",
+        "body": "This tests an excerpt containing markdown image/link syntax that could be exploited if rendered unsafely."
+    },
+
+    {
+        "title": "Emoji Only Excerpt",
+        "excerpt": "🔥🔥🔥😀🚀",
+        "body": "This tests an excerpt made up entirely of emoji with no real text content."
+    },
+
+    {
+        "title": "Repeated Title Test",
+        "excerpt": "Repeated Title Test",
+        "body": "This tests an excerpt that is just an exact copy of the article title, offering no real summary value."
     }
 ]
