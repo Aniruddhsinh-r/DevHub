@@ -134,7 +134,7 @@ def fake_ai(article):
     return first_sentence
 
 
-def grade_excerpts(file_path="tests/AiTesting/Articles.json"):
+def grade_excerpts(file_path="Articles.json"):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             cases = json.load(f)
@@ -220,7 +220,7 @@ def grade_excerpts(file_path="tests/AiTesting/Articles.json"):
     return total_critical == 0 and not mismatches and not no_expectation
 
 
-def run_fake_ai_pipeline(file_path="tests/AiTesting/Articles.json"):
+def run_fake_ai_pipeline(file_path="Articles.json"):
     with open(file_path, "r", encoding="utf-8") as f:
         articles = json.load(f)
 
@@ -265,7 +265,7 @@ def run_fake_ai_pipeline(file_path="tests/AiTesting/Articles.json"):
 # a pass-rate per article ("Passed 7/10 runs") plus an overall rate
 # across every article and every run.
 # --------------------------------------------------------------------------
-def run_consistency_check(file_path="tests/AiTesting/Articles.json", runs=10):
+def run_consistency_check(file_path="Articles.json", runs=10):
     with open(file_path, "r", encoding="utf-8") as f:
         articles = json.load(f)
 
@@ -310,7 +310,7 @@ def run_consistency_check(file_path="tests/AiTesting/Articles.json", runs=10):
 
 
 if __name__ == "__main__":
-    file_path = sys.argv[1] if len(sys.argv) > 1 else "tests/AiTesting/Articles.json"
+    file_path = sys.argv[1] if len(sys.argv) > 1 else "Articles.json"
 
     if len(sys.argv) > 2 and sys.argv[2] == "--fake-ai":
         ok = run_fake_ai_pipeline(file_path)
