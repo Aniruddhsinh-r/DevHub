@@ -52,7 +52,7 @@
         "title": "How to Bake Bread",
         "excerpt": "A simple guide to <script>alert(1)</script> using basic ingredients.",
         "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butter; the milk and butter add essential fats that soften the crust and keep the inside pillowy. Knead the mixture thoroughly until it passes the windowpane test—meaning a small piece stretches so thin it becomes translucent without tearing—which proves you have built a strong network of gluten to trap gas. Let the dough rise in a warm spot until it doubles in size as the yeast produces carbon dioxide, then gently shape it into a loaf and allow it to rise a second time in the pan so it puffs up further. Bake until golden brown, and let it cool completely on a wire rack before slicing so the trapped steam sets the spongy structure instead of turning it gummy.",
-        "expected_failures": ["Rule 4"]
+        "expected_failures": ["Rule 4", "Rule 3"]
     },
 
     {
@@ -73,7 +73,7 @@
         "title": "Invisible Padding Attack",
         "excerpt": "Hi\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b",
         "body": "This tests an excerpt padded almost entirely with zero-width spaces to fake meeting a minimum length.",
-        "expected_failures": ["Rule 6"]
+        "expected_failures": ["Rule 2", "Rule 6"]
     },
 
     {
