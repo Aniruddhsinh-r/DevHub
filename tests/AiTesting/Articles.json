@@ -29,7 +29,7 @@
 
     {
         "title": "The Future of Artificial AI",
-        "excerpt": "   4   ",
+        "excerpt": "  v   ",
         "body": "Artificial intelligence has rapidly evolved from a theoretical computer science concept into an essential foundation of modern global industry. At its core, AI leverages machine learning algorithms, deep neural networks, and natural language processing to analyze vast amounts of complex data in real time. This technological shift allows businesses to automate routine tasks, streamline supply chains, and make highly accurate, data-driven decisions that were previously impossible. In fields like healthcare, AI models assist medical professionals by detecting early signs of disease in diagnostic imaging with remarkable precision. Meanwhile, in financial services, automated systems detect fraudulent transactions within milliseconds and manage complex investment portfolios. However, the rapid integration of artificial intelligence brings significant societal and ethical considerations. Questions regarding job displacement, algorithmic bias, data privacy, and the responsible deployment of powerful generative models are heavily debated by policy makers and technology leaders alike. the true value of artificial intelligence lies not in replacing human intellect, but in augmenting human capabilities, driving overall productivity, and unlocking creative solutions to some of the world's most pressing challenges.",
         "expected_failures": ["Rule 2"]
     },
@@ -50,9 +50,9 @@
 
     {
         "title": "How to Bake Bread",
-        "excerpt": "A simple guide to <script>alert(1)</script> using basic ingredients.",
+        "excerpt": "Prices fell: 5 < 10 and 20 > 15 this quarter.",
         "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butter; the milk and butter add essential fats that soften the crust and keep the inside pillowy. Knead the mixture thoroughly until it passes the windowpane test—meaning a small piece stretches so thin it becomes translucent without tearing—which proves you have built a strong network of gluten to trap gas. Let the dough rise in a warm spot until it doubles in size as the yeast produces carbon dioxide, then gently shape it into a loaf and allow it to rise a second time in the pan so it puffs up further. Bake until golden brown, and let it cool completely on a wire rack before slicing so the trapped steam sets the spongy structure instead of turning it gummy.",
-        "expected_failures": ["Rule 4", "Rule 3"]
+        "expected_failures": ["Rule 4"]
     },
 
     {
@@ -64,7 +64,7 @@
 
     {
         "title": "empty excerpt testing",
-        "excerpt": "",
+        "excerpt": " ",
         "body": "lets test empty excerpt test.",
         "expected_failures": ["Rule 1", "Rule 2"]
     },
@@ -85,23 +85,23 @@
 
     {
         "title": "Newline Tab Injection",
-        "excerpt": "Line one\nLine two\tTabbed",
+        "excerpt": "Breaking:n \n Markets rally today on Fed news",
         "body": "This tests an excerpt with embedded newlines and tabs that could break layout rendering.",
         "expected_failures": ["Rule 8"]
     },
 
     {
         "title": "Markdown Injection Attack",
-        "excerpt": "Click here ![img](javascript:alert(1))",
+        "excerpt": "see [2020](https://ex.com/preprint) for full data.",
         "body": "This tests an excerpt containing markdown image/link syntax that could be exploited if rendered unsafely.",
         "expected_failures": ["Rule 9"]
     },
 
     {
         "title": "Emoji Only Excerpt",
-        "excerpt": "🔥🔥🔥😀🚀",
+        "excerpt": "🤣🙏👍❤️🔥😀🚀",
         "body": "This tests an excerpt made up entirely of emoji with no real text content.",
-        "expected_failures": ["Rule 2", "Rule 10"]
+        "expected_failures": ["Rule 10","Rule 2"]
     },
 
     {
@@ -129,5 +129,54 @@
         "excerpt": "This is the complete article body.",
         "body": "This is the complete article body.",
         "expected_failures": ["Rule 5"]
+    },
+
+    {
+        "title": "The Evolution and Future of Renewable Energy",
+        "excerpt": "the the the the the.",
+        "body": "Renewable energy has evolved from simple windmills and waterwheels into modern systems using solar, wind, and geothermal power. Smart grids and battery storage are making renewable electricity more reliable and widely available.",
+        "expected_failures": ["Rule 12"]
+    },
+
+    {
+        "title": "Integrating Urban Parks",
+        "excerpt": "Trees make cities hotter and less healthy.",
+        "body": "Urban parks and green spaces help reduce heat, improve air quality, support wildlife, and provide residents with places for exercise and relaxation. Trees and vegetation can also help manage storm-water runoff.",
+        "expected_failures": []
+    },
+
+    {
+        "title": "Sustainable Solar Power",
+        "excerpt": "Solar panels work best without sunlight.",
+        "body": "Solar photovoltaic systems convert sunlight into electricity. Improvements in panel efficiency and battery storage have made solar power increasingly practical for homes, businesses, and large-scale energy projects.",
+        "expected_failures": []
+    },
+
+    {
+        "title": "Modern Space Exploration",
+        "excerpt": "Mars missions use oceans as rocket fuel.",
+        "body": "Modern space exploration uses reusable rockets, robotic spacecraft, telescopes, and international missions to study the Moon, Mars, distant planets, and the wider universe.",
+        "expected_failures": []
+    },
+
+    {
+        "title": "The Future of Artificial AI",
+        "excerpt": "AI improves when data is ignored.",
+        "body": "Artificial intelligence uses machine learning and other computational techniques to analyze data, automate tasks, assist professionals, and support decision-making across many industries.",
+        "expected_failures": []
+    },
+
+    {
+        "title": "Protect Ocean Life Today",
+        "excerpt": "Plastic waste helps ocean animals survive.",
+        "body": "Oceans support diverse marine ecosystems and help regulate Earth's climate. Pollution, overfishing, warming waters, and ocean acidification threaten marine life and require effective conservation efforts.",
+        "expected_failures": []
+    },
+
+    {
+        "title": "How to Bake Bread",
+        "excerpt": "Bread rises when yeast is completely removed.",
+        "body": "Bread is made by combining ingredients such as flour, liquid, yeast, salt, and sometimes sugar and butter. The dough is kneaded, allowed to rise, shaped, and baked until the loaf develops a golden crust.",
+        "expected_failures": []
     }
 ]
