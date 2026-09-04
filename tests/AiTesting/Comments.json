@@ -1,0 +1,76 @@
+[
+    {
+        "comment": "this is my first comment test",
+        "expected_failures": []
+    },
+
+    {
+        "comment": "",
+        "expected_failures": ["Rule 1"]
+    },
+
+    {
+        "comment": "            ",
+        "expected_failures": ["Rule 1"]
+    },
+
+    {
+        "comment": "Hi\u200b\u200b\u200b hello mr dinesh         ",
+        "expected_failures": ["Rule 3"]
+    },
+
+    {
+        "comment": "see [2020](https://ex.com/preprint) for full data.",
+        "expected_failures": []
+    },
+
+    {
+        "comment": "🤣🙏",
+        "expected_failures": []
+    },
+
+    {
+        "comment": "this will work fell: 5 < 10 and 20 > 15",
+        "expected_failures": []
+    },
+
+    {
+        "comment": "but this fail <p>",
+        "expected_failures": ["Rule 5"]
+    },
+
+    {
+        "comment": "Breaking:n \n Markets rally today on Fed news",
+        "expected_failures": ["Rule 6"]
+    },
+
+    {
+        "comment": "the the the the the.",
+        "expected_failures": ["Rule 7"]
+    },
+
+    {
+        "comment": "Here is a picture: ![fake image](https://example.com/image.png)",
+        "expected_failures": ["Rule 4"]
+    },
+
+    {
+        "body": "This comment has no comment field",
+        "expected_failures": ["Rule A"]
+    },
+
+    {
+        "comment": "you cannot like phone no 9998765432",
+        "expected_failures": ["Rule 8"]
+    },
+
+    {
+        "comment": "you cannot like email aniehjsdfsjk@gmail.com",
+        "expected_failures": ["Rule 8"]
+    },
+
+    {
+        "comment": "this is longer then 5000 and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter functions. It also simplifies object creation by letting you chain methods immediately upon instantiation without extra parentheses, alongside adding sharper performance optimizations and newer array helpers. Overall, it gives developers cleaner syntax and faster execution out of the box so building APIs, web apps, and dynamic sites requires less boilerplate code.",
+        "expected_failures": ["Rule 2"]
+    }
+]

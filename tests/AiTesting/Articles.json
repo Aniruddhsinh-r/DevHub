@@ -50,14 +50,14 @@
 
     {
         "title": "How to Bake Bread",
-        "excerpt": "Prices fell: 5 < 10 and 20 > 15 this quarter.",
+        "excerpt": "Prices tag <pr> this quarter.",
         "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butter; the milk and butter add essential fats that soften the crust and keep the inside pillowy. Knead the mixture thoroughly until it passes the windowpane test—meaning a small piece stretches so thin it becomes translucent without tearing—which proves you have built a strong network of gluten to trap gas. Let the dough rise in a warm spot until it doubles in size as the yeast produces carbon dioxide, then gently shape it into a loaf and allow it to rise a second time in the pan so it puffs up further. Bake until golden brown, and let it cool completely on a wire rack before slicing so the trapped steam sets the spongy structure instead of turning it gummy.",
         "expected_failures": ["Rule 4"]
     },
 
     {
         "title": "anything in title",
-        "excerpt": " t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  5 0  c h a r a c t e r s . ",
+        "excerpt": " t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  2 5 0  c h a r a c t e r s .  t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  2 5 0  c h a r a c t e r s .  t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  2 5 0  c h a r a c t e r s .  t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  2 5 0  c h a r a c t e r s . ",
         "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter functions. It also simplifies object creation by letting you chain methods immediately upon instantiation without extra parentheses, alongside adding sharper performance optimizations and newer array helpers. Overall, it gives developers cleaner syntax and faster execution out of the box so building APIs, web apps, and dynamic sites requires less boilerplate code.",
         "expected_failures": ["Rule 3"]
     },
@@ -71,9 +71,9 @@
 
     {
         "title": "Invisible Padding Attack",
-        "excerpt": "Hi\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b\u200b",
+        "excerpt": "Hi\u200b\u200b\u200b hello mr dinesh         ",
         "body": "This tests an excerpt padded almost entirely with zero-width spaces to fake meeting a minimum length.",
-        "expected_failures": ["Rule 2", "Rule 6"]
+        "expected_failures": ["Rule 6"]
     },
 
     {
@@ -154,7 +154,7 @@
 
     {
         "title": "Modern Space Exploration",
-        "excerpt": "Mars missions use oceans as rocket fuel.",
+        "excerpt": "fell: 5 < 10 and 20 > 15.",
         "body": "Modern space exploration uses reusable rockets, robotic spacecraft, telescopes, and international missions to study the Moon, Mars, distant planets, and the wider universe.",
         "expected_failures": []
     },

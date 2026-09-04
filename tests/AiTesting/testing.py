@@ -51,9 +51,9 @@ RULES = [
         "id": "Rule 3",
         "severity": "warning",
         "desc": lambda excerpt, item: (
-            f"Length ({len(clean_invisible(excerpt))}) exceeds 50 characters"
+            f"Length ({len(clean_invisible(excerpt))}) exceeds 250 characters"
         ),
-        "check": lambda excerpt, item: len(clean_invisible(excerpt)) > 50,
+        "check": lambda excerpt, item: len(clean_invisible(excerpt)) > 250,
     },
     {
         "id": "Rule 4",
@@ -73,14 +73,13 @@ RULES = [
         "id": "Rule 6",
         "severity": "critical",
         "desc": lambda excerpt, item: (
-            f"Excerpt is mostly invisible characters "
-            f"({len(INVISIBLE_CHARS.findall(excerpt))}/{len(excerpt)})"
-        ),
-        "check": lambda excerpt, item: (
-            len(excerpt) > 0
-            and len(INVISIBLE_CHARS.findall(excerpt)) / len(excerpt) > 0.3
-        ),
-    },
+                f"Excerpt contains invisible characters "
+                f"({len(INVISIBLE_CHARS.findall(excerpt))} found)"
+            ),
+            "check": lambda excerpt, item: (
+                len(INVISIBLE_CHARS.findall(excerpt)) > 0
+            ),
+        },
     {
         "id": "Rule 7",
         "severity": "critical",
@@ -161,11 +160,11 @@ def fake_ai(article):
     ])
 
     if outcome == "good":
-        return (first_sentence[:47] + "...") if len(first_sentence) > 47 else first_sentence
+        return (first_sentence[:247] + "...") if len(first_sentence) > 247 else first_sentence
     if outcome == "empty":
         return ""
     if outcome == "too_long":
-        return body[:120]
+        return body[:300]
     if outcome == "html":
         return f"<b>{first_sentence[:30]}</b>"
     if outcome == "emoji_only":
@@ -390,7 +389,7 @@ def generate_random_excerpt():
     generators = [
         lambda: "",
         lambda: " " * random.randint(0, 20),
-        lambda: "".join(chr(random.randint(32, 126)) for _ in range(random.randint(0, 60))),
+        lambda: "".join(chr(random.randint(32, 126)) for _ in range(random.randint(0, 300))),
         lambda: "".join(chr(random.randint(0x00, 0x10FFFF)) for _ in range(random.randint(0, 30))
                          if chr(random.randint(0x00, 0x10FFFF)).isprintable() or True),
         lambda: "x" * random.randint(100, 5000),
@@ -545,14 +544,16 @@ def run_mutation_test(file_path="Articles.json"):
     return len(untested_rules) == 0
 
 
-def _truncate_under_50(excerpt):
-    """Cut an excerpt so clean_invisible(result) is under 50 chars,
+def _truncate_under_250(excerpt):
+    """Cut an excerpt so clean_invisible(result) is under 250 chars,
     trimming at the last word boundary so truncation doesn't itself
     accidentally trip Rule 2 (too few words) as a side effect."""
     cleaned = clean_invisible(excerpt)
-    truncated = cleaned[:45]
+    truncated = cleaned[:245]
     if ' ' in truncated:
-        truncated = truncated[:truncated.rfind(' ')]
+        candidate = truncated[:truncated.rfind(' ')]
+        if len(candidate.split()) >= 2:
+            truncated = candidate
     return truncated
 
 
@@ -576,11 +577,11 @@ def _metamorphic_corpus(file_path):
     dummy_item = {"title": "Same Title Same Title", "body": "some body text here"}
 
     seeds = [
-        "x" * 80,
-        "This sentence is intentionally a bit longer than fifty characters total.",
-        "<b>bold html tag that is long enough to also be too long for rule three</b>",
-        "text " + "\u202e" + "reversed override that also runs long enough to trip length" + "\u202c",
-        "see [2020](https://ex.com/preprint) markdown injection padded out long enough",
+        "x" * 300,
+        "This sentence is intentionally a bit longer than two hundred and fifty characters total. " * 5,
+        "<b>bold html tag that is long enough to also be too long for rule three</b> " * 5,
+        "text " + "\u202e" + "reversed override that also runs long enough to trip length" + "\u202c " * 5,
+        "see [2020](https://ex.com/preprint) markdown injection padded out long enough " * 5,
         "no problems here just a normal short excerpt",
     ]
     for s in seeds:
@@ -630,7 +631,7 @@ def run_metamorphic_test(file_path="Articles.json"):
         # --- Relation 2: truncation ---
         if "Rule 3" in base_set:
             stats["truncation"]["tested"] += 1
-            truncated = _truncate_under_50(excerpt)
+            truncated = _truncate_under_250(excerpt)
             _, trunc_rule_ids = check_excerpt_rules(item, truncated)
             trunc_set = set(trunc_rule_ids)
             new_rules = trunc_set - base_set
@@ -671,7 +672,7 @@ def run_metamorphic_test(file_path="Articles.json"):
 
     for name, label in [
         ("determinism", "Determinism (same excerpt graded twice)"),
-        ("truncation", "Truncation (cut under 50 chars drops Rule 3, nothing new)"),
+        ("truncation", "Truncation (cut under 250 chars drops Rule 3, nothing new)"),
         ("whitespace", "Whitespace (trailing spaces don't change verdict)"),
         ("superstring", "Superstring monotonicity (Rule 4/7/9 can't vanish by appending text)"),
     ]:

@@ -150,7 +150,7 @@ class ArticleInfolist
                     ->label('Add Comment')
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->schema([
-                        Textarea::make('body')->label('Your comment')->required()->maxLength(5000)->rows(3),
+                        Textarea::make('body')->label('Your comment')->required()->maxLength(500)->rows(3),
                     ])
                     ->action(function (array $data, Article $record) {
                         $comment = Comment::create([
