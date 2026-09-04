@@ -6,7 +6,7 @@ import emoji
 from collections import Counter
 
 # Zero-width / invisible Unicode characters that can be used to fake length
-INVISIBLE_CHARS = re.compile(r'[\u200b\u200c\u200d\ufeff\xa0\u2060]')
+INVISIBLE_CHARS = re.compile(r'[\u200b\u200c\u200d\ufeff\u2060]')
 
 # RTL/LTR override & directional control characters (visual scrambling attack)
 DIRECTIONAL_OVERRIDES = re.compile(r'[\u202a-\u202e\u2066-\u2069]')

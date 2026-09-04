@@ -164,6 +164,21 @@ php artisan optimize:clear
 
 ---
 
+## Setup and Usage
+
+The article testing harness uses the `emoji` library, so the required dependencies are listed in `requirements.txt`.
+
+Install the dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
+The `Comments.py` harness uses only Python's standard library and does not require additional packages.
+
+The README also explains what the harness does and how to run each testing mode, including self-check, mutation, fuzz, and metamorphic testing.
+
+
 ## Tech Stack
 
 * Laravel

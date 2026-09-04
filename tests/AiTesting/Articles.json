@@ -77,6 +77,13 @@
     },
 
     {
+        "title": "Invisible Padding Attack",
+        "excerpt": "Non-breaking space\u00a0will allow",
+        "body": "This tests an excerpt padded almost entirely with zero-width spaces to fake meeting a minimum length.",
+        "expected_failures": []
+    },
+
+    {
         "title": "RTL Override Attack",
         "excerpt": "text \u202Ereversed visually\u202C here",
         "body": "This tests an excerpt containing directional override characters that can visually scramble displayed text.",

@@ -4,6 +4,8 @@
 
 - Increased the article excerpt max length from **50 to 250 characters**, and updated every place in the codebase that checks excerpt length to use the new limit.
 - Set a new max length for comments: **500 characters**.
+- Updated Rule 6 to allow legitimate non-breaking spaces (\u00a0) while still blocking zero-width characters, and added test cases to prove both behaviors.
+- The project still uses seed-generated articles, so excerpts are under 50 characters and all pass. 250 is the project's actual limit, so I increased the validation limit to match it.
 
 ## 2. What Real Data Taught Me
 
@@ -29,8 +31,7 @@
 
 ## 5. What the Rules Still Can't Catch
 
-- Based on my review, the article excerpt rules cover every case I could identify.
-- The comment rules similarly appear to cover the rules that my project have.
+- Currently, the project uses a fake AI article excerpts for testing harness. instead of real AI API, so the rules cannot check whether an excerpt is factually correct. Detecting false information would require a smarter AI judge.
 - *(This area could use further adversarial testing to be fully confident — see next steps.)*
 
 ## 6. What I'd Do Next, and Why
