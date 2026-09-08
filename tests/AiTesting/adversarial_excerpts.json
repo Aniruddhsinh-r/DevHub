@@ -1,0 +1,271 @@
+{
+  "timestamp": "2026-09-08T11:50:50.755205",
+  "summary": {
+    "total_generated": 2000,
+    "passed_all_rules": 66,
+    "top_candidates": 20,
+    "pass_rate": 3.3
+  },
+  "adversarial_excerpts": [
+    {
+      "title": "PHP 8.4",
+      "excerpt": "something very really and something very really something very really so something very really something very really something very really something very really and something very really",
+      "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow ...",
+      "strategy": "repetitive",
+      "badness_score": 54.6,
+      "scores": {
+        "repetition": 29.6,
+        "meaninglessness": 88.9,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "How to Bake Bread",
+      "excerpt": "so stuff something really stuff something really stuff something really but stuff something really or stuff something really or stuff something really stuff something really or stuff something really",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "repetitive",
+      "badness_score": 52.6,
+      "scores": {
+        "repetition": 27.6,
+        "meaninglessness": 82.8,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "PHP 8.4",
+      "excerpt": "absolutely something quite absolutely something quite absolutely something quite so absolutely something quite absolutely something quite absolutely something quite absolutely something quite",
+      "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow ...",
+      "strategy": "repetitive",
+      "badness_score": 48.9,
+      "scores": {
+        "repetition": 31.8,
+        "meaninglessness": 63.6,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "PHP 8.4",
+      "excerpt": "absolutely very quite absolutely absolutely very quite absolutely absolutely very quite absolutely so absolutely very quite absolutely but absolutely very quite absolutely",
+      "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow ...",
+      "strategy": "repetitive",
+      "badness_score": 47.7,
+      "scores": {
+        "repetition": 45.5,
+        "meaninglessness": 45.5,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "How to Bake Bread",
+      "excerpt": "practically things went on practically something came up actually something happened practically something occurred",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "meaningless",
+      "badness_score": 44.6,
+      "scores": {
+        "repetition": 21.4,
+        "meaninglessness": 57.1,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Modern Space Exploration",
+      "excerpt": "actually something came up actually something took place literally things happened",
+      "body": "Humanity stands at the threshold of a new era in space exploration, driven by revolutionary technology and unprecedented commercial collaboration. For decades, space travel was the exclusive domain of...",
+      "strategy": "meaningless",
+      "badness_score": 43.2,
+      "scores": {
+        "repetition": 18.2,
+        "meaninglessness": 54.5,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "anything in title",
+      "excerpt": "absolutely quite thing absolutely so absolutely quite thing absolutely absolutely quite thing absolutely absolutely quite thing absolutely",
+      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
+      "strategy": "repetitive",
+      "badness_score": 42.6,
+      "scores": {
+        "repetition": 47.1,
+        "meaninglessness": 23.5,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Emoji Only Excerpt",
+      "excerpt": "actually stuff came up sort of things occurred basically stuff occurred actually something occurred basically something occurred kind of things happened",
+      "body": "This tests an excerpt made up entirely of emoji with no real text content.",
+      "strategy": "meaningless",
+      "badness_score": 41.7,
+      "scores": {
+        "repetition": 19.0,
+        "meaninglessness": 47.6,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "How to Bake Bread",
+      "excerpt": "but absolutely nothing something nothing absolutely nothing something nothing so absolutely nothing something nothing absolutely nothing something nothing so absolutely nothing something nothing absolutely nothing something nothing",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "repetitive",
+      "badness_score": 41.7,
+      "scores": {
+        "repetition": 44.4,
+        "meaninglessness": 22.2,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "anything in title",
+      "excerpt": "or thing very totally something thing very totally something and thing very totally something so thing very totally something and thing very totally something thing very totally something so thing very totally something thing very totally something",
+      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
+      "strategy": "repetitive",
+      "badness_score": 41.2,
+      "scores": {
+        "repetition": 21.6,
+        "meaninglessness": 43.2,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "How to Bake Bread",
+      "excerpt": "practically something happened actually things happened literally stuff occurred literally something came up kind of things took place actually things went on",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "meaningless",
+      "badness_score": 40.9,
+      "scores": {
+        "repetition": 13.6,
+        "meaninglessness": 50.0,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Emoji Only Excerpt",
+      "excerpt": "actually something came up actually things occurred literally things went on literally something took place sort of something occurred",
+      "body": "This tests an excerpt made up entirely of emoji with no real text content.",
+      "strategy": "meaningless",
+      "badness_score": 40.8,
+      "scores": {
+        "repetition": 15.8,
+        "meaninglessness": 47.4,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Modern Space Exploration",
+      "excerpt": "sort of something came up sort of something happened literally anything occurred practically anything occurred basically something happened",
+      "body": "Humanity stands at the threshold of a new era in space exploration, driven by revolutionary technology and unprecedented commercial collaboration. For decades, space travel was the exclusive domain of...",
+      "strategy": "meaningless",
+      "badness_score": 40.3,
+      "scores": {
+        "repetition": 16.7,
+        "meaninglessness": 44.4,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "anything in title",
+      "excerpt": "practically anything took place practically anything took place practically things came up",
+      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
+      "strategy": "meaningless",
+      "badness_score": 40.2,
+      "scores": {
+        "repetition": 25.0,
+        "meaninglessness": 50.0,
+        "padding": 0.0,
+        "off_topic": 85.7
+      }
+    },
+    {
+      "title": "Emoji Only Excerpt",
+      "excerpt": "basically something came up basically stuff went on actually something happened actually anything came up practically things occurred sort of stuff came up",
+      "body": "This tests an excerpt made up entirely of emoji with no real text content.",
+      "strategy": "meaningless",
+      "badness_score": 40.2,
+      "scores": {
+        "repetition": 13.0,
+        "meaninglessness": 47.8,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Emoji Only Excerpt",
+      "excerpt": "actually something occurred basically things went on basically something went on actually things came up kind of something went on",
+      "body": "This tests an excerpt made up entirely of emoji with no real text content.",
+      "strategy": "meaningless",
+      "badness_score": 40.0,
+      "scores": {
+        "repetition": 15.0,
+        "meaninglessness": 45.0,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Emoji Only Excerpt",
+      "excerpt": "sort of things went on literally things occurred literally stuff came up",
+      "body": "This tests an excerpt made up entirely of emoji with no real text content.",
+      "strategy": "meaningless",
+      "badness_score": 39.6,
+      "scores": {
+        "repetition": 16.7,
+        "meaninglessness": 41.7,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "How to Bake Bread",
+      "excerpt": "absolutely nothing very absolutely nothing very absolutely nothing very so absolutely nothing very absolutely nothing very and absolutely nothing very or absolutely nothing very",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "repetitive",
+      "badness_score": 39.6,
+      "scores": {
+        "repetition": 29.2,
+        "meaninglessness": 29.2,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "anything in title",
+      "excerpt": "so thing very totally extremely something thing very totally extremely something thing very totally extremely something thing very totally extremely something",
+      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
+      "strategy": "repetitive",
+      "badness_score": 39.3,
+      "scores": {
+        "repetition": 19.0,
+        "meaninglessness": 38.1,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Modern Space Exploration",
+      "excerpt": "literally stuff took place literally something took place actually anything came up kind of something occurred",
+      "body": "Humanity stands at the threshold of a new era in space exploration, driven by revolutionary technology and unprecedented commercial collaboration. For decades, space travel was the exclusive domain of...",
+      "strategy": "meaningless",
+      "badness_score": 39.1,
+      "scores": {
+        "repetition": 12.5,
+        "meaninglessness": 43.8,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    }
+  ]
+}

@@ -8,16 +8,16 @@
 
     {
         "title": "Integrating Urban Parks",
-        "excerpt": "Urban green improve air quality and boost resident",
+        "excerpt": "This excerpt is not belong to its article.",
         "body": "As urbanization continues to accelerate globally, integrating natural environments into city infrastructure has become a crucial element of modern civil engineering and urban design. Cities naturally absorb and retain immense heat due to vast expanses of asphalt, concrete, and high-density buildings—a phenomenon known as the urban heat island effect. Urban green spaces, including public parks, green roofs, tree-lined avenues, and community gardens, combat this effect by shading surfaces and releasing water vapor through evapotranspiration, significantly cooling surrounding neighborhoods. Beyond thermal control, green infrastructure plays a vital role in urban environmental management and public health. Mature trees and urban plants absorb atmospheric pollutants, filter storm-water runoff to prevent urban flooding, and provide safe habitats for local wildlife. For city residents, easy access to nature provides proven psychological and physical benefits, including reduced stress levels, lower blood pressure, and increased opportunities for physical exercise and social connection. Well-designed urban parks foster stronger communities and reduce health disparities between different socioeconomic neighborhoods, turning dense concrete environments into sustainable, liveable habitats that enhance long-term physical well-being.",
-        "expected_failures": []
+        "expected_failures": [ "Rule 13"]
     },
 
     {
         "title": "Sustainable Solar Power",
-        "excerpt": "Solar power becoming cost-effective and efficient.",
+        "excerpt": "Wrong but not caught by rules.",
         "body": "The global transition toward clean, renewable energy is accelerating rapidly, with solar power leading the charge as one of the most cost-effective and abundant sources of electricity on Earth. Solar photovoltaic systems operate by converting photon energy from sunlight directly into electrical current using specialized semiconductor materials. Over the last decade, advancements in materials science have dramatically increased solar panel efficiency while lowering production costs, making solar installations highly competitive with traditional coal and natural gas power plants across major global markets. Beyond utility-scale solar farms, decentralized rooftop solar installations empower individual homeowners and business owners to generate their own clean electricity, reducing utility bills and providing local energy independence. When combined with modern battery storage solutions, solar installations can supply continuous, reliable power even when the sun is not actively shining, overcoming historical issues with renewable energy intermittency. Furthermore, widespread adoption of solar infrastructure significantly reduces greenhouse gas emissions, improves local air quality by eliminating harmful atmospheric pollutants, and creates millions of green jobs worldwide. As technology continues to improve",
-        "expected_failures": []
+        "expected_failures": [ "Rule 13"]
     },
 
     {
@@ -31,7 +31,7 @@
         "title": "The Future of Artificial AI",
         "excerpt": "  v   ",
         "body": "Artificial intelligence has rapidly evolved from a theoretical computer science concept into an essential foundation of modern global industry. At its core, AI leverages machine learning algorithms, deep neural networks, and natural language processing to analyze vast amounts of complex data in real time. This technological shift allows businesses to automate routine tasks, streamline supply chains, and make highly accurate, data-driven decisions that were previously impossible. In fields like healthcare, AI models assist medical professionals by detecting early signs of disease in diagnostic imaging with remarkable precision. Meanwhile, in financial services, automated systems detect fraudulent transactions within milliseconds and manage complex investment portfolios. However, the rapid integration of artificial intelligence brings significant societal and ethical considerations. Questions regarding job displacement, algorithmic bias, data privacy, and the responsible deployment of powerful generative models are heavily debated by policy makers and technology leaders alike. the true value of artificial intelligence lies not in replacing human intellect, but in augmenting human capabilities, driving overall productivity, and unlocking creative solutions to some of the world's most pressing challenges.",
-        "expected_failures": ["Rule 2"]
+        "expected_failures": ["Rule 2",  "Rule 13"]
     },
 
     {
@@ -52,14 +52,14 @@
         "title": "How to Bake Bread",
         "excerpt": "Prices tag <pr> this quarter.",
         "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butter; the milk and butter add essential fats that soften the crust and keep the inside pillowy. Knead the mixture thoroughly until it passes the windowpane test—meaning a small piece stretches so thin it becomes translucent without tearing—which proves you have built a strong network of gluten to trap gas. Let the dough rise in a warm spot until it doubles in size as the yeast produces carbon dioxide, then gently shape it into a loaf and allow it to rise a second time in the pan so it puffs up further. Bake until golden brown, and let it cool completely on a wire rack before slicing so the trapped steam sets the spongy structure instead of turning it gummy.",
-        "expected_failures": ["Rule 4"]
+        "expected_failures": ["Rule 4", "Rule 13"]
     },
 
     {
         "title": "anything in title",
         "excerpt": " t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  2 5 0  c h a r a c t e r s .  t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  2 5 0  c h a r a c t e r s .  t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  2 5 0  c h a r a c t e r s .  t h i s  e x c e r p t  i s  c o n t a i n  m o r e  t h e n  2 5 0  c h a r a c t e r s . ",
         "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter functions. It also simplifies object creation by letting you chain methods immediately upon instantiation without extra parentheses, alongside adding sharper performance optimizations and newer array helpers. Overall, it gives developers cleaner syntax and faster execution out of the box so building APIs, web apps, and dynamic sites requires less boilerplate code.",
-        "expected_failures": ["Rule 3"]
+        "expected_failures": ["Rule 3", "Rule 13"]
     },
 
     {
@@ -73,11 +73,11 @@
         "title": "Invisible Padding Attack",
         "excerpt": "Hi\u200b\u200b\u200b hello mr dinesh         ",
         "body": "This tests an excerpt padded almost entirely with zero-width spaces to fake meeting a minimum length.",
-        "expected_failures": ["Rule 6"]
+        "expected_failures": ["Rule 6", "Rule 13"]
     },
 
     {
-        "title": "Invisible Padding Attack",
+        "title": "Non-breaking space is allowed",
         "excerpt": "Non-breaking space\u00a0will allow",
         "body": "This tests an excerpt padded almost entirely with zero-width spaces to fake meeting a minimum length.",
         "expected_failures": []
@@ -94,14 +94,14 @@
         "title": "Newline Tab Injection",
         "excerpt": "Breaking:n \n Markets rally today on Fed news",
         "body": "This tests an excerpt with embedded newlines and tabs that could break layout rendering.",
-        "expected_failures": ["Rule 8"]
+        "expected_failures": ["Rule 8", "Rule 13"]
     },
 
     {
         "title": "Markdown Injection Attack",
         "excerpt": "see [2020](https://ex.com/preprint) for full data.",
         "body": "This tests an excerpt containing markdown image/link syntax that could be exploited if rendered unsafely.",
-        "expected_failures": ["Rule 9"]
+        "expected_failures": ["Rule 9", "Rule 13"]
     },
 
     {
@@ -142,7 +142,7 @@
         "title": "The Evolution and Future of Renewable Energy",
         "excerpt": "the the the the the.",
         "body": "Renewable energy has evolved from simple windmills and waterwheels into modern systems using solar, wind, and geothermal power. Smart grids and battery storage are making renewable electricity more reliable and widely available.",
-        "expected_failures": ["Rule 12"]
+        "expected_failures": ["Rule 12", "Rule 15"]
     },
 
     {
@@ -163,7 +163,7 @@
         "title": "Modern Space Exploration",
         "excerpt": "fell: 5 < 10 and 20 > 15.",
         "body": "Modern space exploration uses reusable rockets, robotic spacecraft, telescopes, and international missions to study the Moon, Mars, distant planets, and the wider universe.",
-        "expected_failures": []
+        "expected_failures": ["Rule 13"]
     },
 
     {

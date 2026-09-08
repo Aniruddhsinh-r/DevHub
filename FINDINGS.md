@@ -2,10 +2,15 @@
 
 ## 1. What I Fixed
 
+- Closed a critical security bypass in Rule 6: padding an excerpt with ordinary spaces increased the ratio denominator, allowing invisible characters to fall below the detection threshold.
+- The bypass was discovered by the metamorphic test, which showed that adding ordinary spaces could make the same invisible-character input pass.
+- Updated Rule 6 to allow legitimate non-breaking spaces (`\u00a0`) while still blocking zero-width characters, and added test cases to prove both behaviors.
 - Increased the article excerpt max length from **50 to 250 characters**, and updated every place in the codebase that checks excerpt length to use the new limit.
 - Set a new max length for comments: **500 characters**.
-- Updated Rule 6 to allow legitimate non-breaking spaces (\u00a0) while still blocking zero-width characters, and added test cases to prove both behaviors.
 - The project still uses seed-generated articles, so excerpts are under 50 characters and all pass. 250 is the project's actual limit, so I increased the validation limit to match it.
+- **Task 5 — Real Data:** My system is still running on localhost, so I don't have external real-world data yet.
+- **AI Testing Round 8:** Completed HTML and regex comparison, Hypothesis testing, adversarial search, mutation testing, and rule overlap analysis.
+
 
 ## 2. What Real Data Taught Me
 
@@ -28,6 +33,7 @@
 - Random test data occasionally lands right at the 250-character (excerpt) or 500-character (comment) boundary. When that happens, padding or truncating the text near that boundary *legitimately* flips whether Rule 2 fires — this is expected behavior, not a real bug. Based on the underlying probability, this shows up in roughly **50–90% of test runs**.
 - **Fix:** seed the random number generator for reproducible test runs, and exclude Rule 2 from the two boundary-sensitive invariance checks (truncation and whitespace padding).
 - The same boundary behavior — and the same fix — applies equally to the comment validator.
+- I found that repetitive, meaningless, off-topic, or padded content cannot always be reliably detected with simple rules.
 
 ## 5. What the Rules Still Can't Catch
 

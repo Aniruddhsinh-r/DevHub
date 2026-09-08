@@ -1,0 +1,89 @@
+[
+    {
+        "expected_failures": ["Rule A"]
+    },
+    {
+        "title": "Python Programming Guide",
+        "expected_failures": []
+    },
+    {
+        "title": "",
+        "expected_failures": ["Rule 1", "Rule 2"]
+    },
+    {
+        "title": "     ",
+        "expected_failures": ["Rule 1", "Rule 2"]
+    },
+    {
+        "title": "Hi",
+        "expected_failures": ["Rule 2"]
+    },
+    {
+        "title": "Test",
+        "expected_failures": ["Rule 2"]
+    },
+    {
+        "title": "ABCDE",
+        "expected_failures": ["Rule 2"]
+    },
+    {
+        "title": "This is a very long article title that exceeds the fifty character limit ffffffffffffff",
+        "expected_failures": ["Rule 3"]
+    },
+    {
+        "title": "Python​Programming Guide",
+        "expected_failures": ["Rule 4"]
+    },
+    {
+        "title": "Zero‌Width Character",
+        "expected_failures": ["Rule 4"]
+    },
+    {
+        "title": "![image](https://example.com/pic.png)",
+        "expected_failures": ["Rule 5"]
+    },
+    {
+        "title": "[click here](https://example.com)",
+        "expected_failures": ["Rule 5"]
+    },
+    {
+        "title": "<script>alert(1)</script>",
+        "expected_failures": ["Rule 6"]
+    },
+    {
+        "title": "<b>Breaking News Today</b>",
+        "expected_failures": ["Rule 6"]
+    },
+    {
+        "title": "Important Update\nToday",
+        "expected_failures": ["Rule 7"]
+    },
+    {
+        "title": "Important Update\tToday",
+        "expected_failures": ["Rule 7"]
+    },
+    {
+        "title": "News News News News",
+        "expected_failures": ["Rule 8"]
+    },
+    {
+        "title": "Update Update Update Today",
+        "expected_failures": ["Rule 8"]
+    },
+    {
+        "title": "Contact user@example.com today",
+        "expected_failures": ["Rule 9"]
+    },
+    {
+        "title": "Call 9876543210 for details",
+        "expected_failures": ["Rule 9"]
+    },
+    {
+        "title": "😀🔥🚀💡",
+        "expected_failures": ["Rule 2","Rule 10"]
+    },
+    {
+        "title": "![image](https://example.com/x.png) user@example.com",
+        "expected_failures": ["Rule 5", "Rule 9", "Rule 3"]
+    }
+]

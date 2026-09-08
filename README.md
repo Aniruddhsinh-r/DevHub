@@ -166,18 +166,83 @@ php artisan optimize:clear
 
 ## Setup and Usage
 
-The article testing harness uses the `emoji` library, so the required dependencies are listed in `requirements.txt`.
-
-Install the dependencies with:
+Install the `emoji` library required to run the article testing harness:
 
 ```bash
-pip install -r requirements.txt
+pip install emoji
 ```
 
 The `Comments.py` harness uses only Python's standard library and does not require additional packages.
 
 The README also explains what the harness does and how to run each testing mode, including self-check, mutation, fuzz, and metamorphic testing.
 
+## Running the Test Modes
+
+### Article Excerpt Harness
+
+```bash
+# Self-check
+python tests/AiTesting/testing.py
+
+# Mutation
+python tests/AiTesting/testing.py --mutation
+
+# Fuzz
+python tests/AiTesting/testing.py --fuzz
+
+# Metamorphic
+python tests/AiTesting/testing.py --metamorphic
+```
+
+### Comment Harness
+
+```bash
+# Self-check
+python tests/AiTesting/Comments.py
+
+# Mutation
+python tests/AiTesting/Comments.py tests/AiTesting/Comments.json --mutation
+
+# Fuzz
+python tests/AiTesting/Comments.py --fuzz
+
+# Metamorphic
+python tests/AiTesting/Comments.py tests/AiTesting/Comments.json --metamorphic
+```
+
+## Running the Test Modes
+
+### Article Excerpt Harness
+
+```bash
+# Self-check
+python tests/AiTesting/testing.py
+
+# Mutation
+python tests/AiTesting/testing.py --mutation
+
+# Fuzz
+python tests/AiTesting/testing.py --fuzz
+
+# Metamorphic
+python tests/AiTesting/testing.py --metamorphic
+```
+
+### Comment Harness
+
+```bash
+# Self-check
+python tests/AiTesting/Comments.py
+
+# Mutation
+python tests/AiTesting/Comments.py tests/AiTesting/Comments.json --mutation
+
+# Fuzz
+python tests/AiTesting/Comments.py --fuzz
+
+# Metamorphic
+python tests/AiTesting/Comments.py tests/AiTesting/Comments.json --metamorphic
+```
 
 ## Tech Stack
 
