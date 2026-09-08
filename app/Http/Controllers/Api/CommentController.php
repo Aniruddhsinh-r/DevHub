@@ -69,8 +69,9 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
-        if(Auth::user()->hasRole(UserRole::AUTHOR) && Auth::id() === $comment->user_id) {
+        if (Auth::user()->hasRole(UserRole::AUTHOR) && Auth::id() === $comment->user_id) {
             $comment->delete();
+
             return response()->noContent();
         } else {
             return response()->json(['message' => 'This action is unauthorized.'], 403);

@@ -70,7 +70,7 @@ test('admin cannot fetch user category page', function () {
 test('author can only see id and category name', function () {
     apiActingAsAuthor([]);
 
-    Category::factory()->create(['name' => 'Technology',]);
+    Category::factory()->create(['name' => 'Technology']);
 
     $response = $this->getJson('/api/v1/categories');
     $firstItem = $response->json('0');

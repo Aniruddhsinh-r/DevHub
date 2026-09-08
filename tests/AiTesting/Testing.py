@@ -194,7 +194,7 @@ _OVERLAP_STOPWORDS = {
     "are", "this", "that", "with", "by", "as", "at", "it", "its", "from",
     "be", "was", "were", "has", "have", "had", "not", "but", "into",
     "their", "these", "those", "than", "then", "such", "also", "which",
-}a
+}
 
 _FILLER_WORDS = {
     "click", "here", "read", "more", "find", "out", "below", "today",

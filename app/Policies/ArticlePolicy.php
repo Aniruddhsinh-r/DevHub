@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\ArticleStatus;
 use App\Enums\UserRole;
 use App\Models\Article;
-use App\Models\Comment;
 use App\Models\User;
 
 class ArticlePolicy
@@ -64,7 +63,7 @@ class ArticlePolicy
     {
         return $user->hasPermissionTo('article.comment') && $article->status === ArticleStatus::PUBLISHED;
     }
-    
+
     public function forceDelete(User $user, Article $article): bool
     {
         if (! $article->trashed()) {
