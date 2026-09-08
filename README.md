@@ -166,83 +166,36 @@ php artisan optimize:clear
 
 ## Setup and Usage
 
-Install the `emoji` library required to run the article testing harness:
+Install the `emoji` library required by the article testing harness:
 
 ```bash
 pip install emoji
 ```
 
-The `Comments.py` harness uses only Python's standard library and does not require additional packages.
-
-The README also explains what the harness does and how to run each testing mode, including self-check, mutation, fuzz, and metamorphic testing.
-
-## Running the Test Modes
-
-### Article Excerpt Harness
+The other testing modules use Python's standard library, except for the Hypothesis test suite, which requires:
 
 ```bash
-# Self-check
-python tests/AiTesting/testing.py
-
-# Mutation
-python tests/AiTesting/testing.py --mutation
-
-# Fuzz
-python tests/AiTesting/testing.py --fuzz
-
-# Metamorphic
-python tests/AiTesting/testing.py --metamorphic
+pip install hypothesis pytest
 ```
 
-### Comment Harness
+### Running All Tests
+
+Use the single runner to execute all testing modes for Articles, Comments, and Titles:
 
 ```bash
-# Self-check
-python tests/AiTesting/Comments.py
-
-# Mutation
-python tests/AiTesting/Comments.py tests/AiTesting/Comments.json --mutation
-
-# Fuzz
-python tests/AiTesting/Comments.py --fuzz
-
-# Metamorphic
-python tests/AiTesting/Comments.py tests/AiTesting/Comments.json --metamorphic
+python tests/AiTesting/run_all.py
 ```
 
-## Running the Test Modes
+The runner:
 
-### Article Excerpt Harness
+* Runs all configured testing modes.
+* Generates `results.json` with machine-readable results.
+* Generates `summary.md` with a human-readable summary.
+* Returns a non-zero exit code if any test fails.
 
-```bash
-# Self-check
-python tests/AiTesting/testing.py
+You no longer need to run each testing mode manually.
 
-# Mutation
-python tests/AiTesting/testing.py --mutation
-
-# Fuzz
-python tests/AiTesting/testing.py --fuzz
-
-# Metamorphic
-python tests/AiTesting/testing.py --metamorphic
-```
-
-### Comment Harness
-
-```bash
-# Self-check
-python tests/AiTesting/Comments.py
-
-# Mutation
-python tests/AiTesting/Comments.py tests/AiTesting/Comments.json --mutation
-
-# Fuzz
-python tests/AiTesting/Comments.py --fuzz
-
-# Metamorphic
-python tests/AiTesting/Comments.py tests/AiTesting/Comments.json --metamorphic
-```
+---
 
 ## Tech Stack
 
