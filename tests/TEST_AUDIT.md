@@ -11,13 +11,14 @@
 | `'name' => ['string', 'min:2', 'max:5', change rules — update category` in `CategoryController` | Yes | `Api\CategoryapiTest > admin can update their owned category & superadmin can update any category` | Nothing needed |
 | `$comment->delete()` — comment deletion in `CommentController` | No | — | Add test case in `CommentapiTest` to verify the comment is soft deleted |
 
-- all policy checked by comment out some function and plicy test case fail properly.
-- check comment out some gates and function and add test that not recognise that code or feature.
-- commentout token in invitation and check every single leaks $token = Str::random(32); but all passed.
-- i breake some validation rules and status too but my test throw error on that.
+- Checked all policies by commenting out some functions; the related policy test cases failed as expected. Added test cases for the two UserPolicy methods.
+- Commented out some gates and functions and added tests for code or features that were not previously covered.
+- Commented out the token generation in the invitation flow and checked for any related leaks; all tests still passed.
+- I broke some validation rules and the article status logic, and my tests caught those changes.
+- Created a BookmarkFactory, then checked the bookmark remove method and added a test case for it.
+
+---
 
 ### Additional observation
 
-### Additional observation
-
-* I did my best to test and cover the possible hidden bugs based on my understanding. However, no matter how thoroughly a system is tested, some unexpected bugs may still remain and can only be discovered in real-world production use.
+- I did my best to test and cover the possible hidden bugs based on my understanding. However, no matter how thoroughly a system is tested, some unexpected bugs may still remain and can only be discovered in real-world production use.

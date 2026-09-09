@@ -128,6 +128,25 @@ test('Admin User delete test', function () {
     $this->assertDatabaseMissing('views', ['user_id' => $removeuser->id]);
 });
 
+test('Admin cannot permanently delete user', function () {
+    AdminLogin();
+
+    $user = User::factory()->create();
+    $user->assignRole(UserRole::AUTHOR);
+
+    // First soft delete the user
+    Livewire::test(ListUsers::class)
+        ->callTableAction('delete', $user);
+
+    // Try to permanently delete the already soft-deleted user
+    Livewire::test(ListUsers::class)
+        ->assertTableActionHidden('forceDelete', $user);
+
+    $this->assertSoftDeleted('users', [
+        'id' => $user->id,
+    ]);
+});
+
 test('admin can restore a deleted user', function () {
     AdminLogin();
 

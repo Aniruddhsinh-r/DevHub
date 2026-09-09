@@ -139,11 +139,12 @@ test('prevents duplicate bookmarks at the database level (race condition)', func
     $this->assertDatabaseCount('bookmarks', 1);
 });
 
-test('user cannot bookmark if unauthorized', function () {
+test('user cannot remove article from bookmark if unauthorized', function () {
     apiActingAsAuthor([]);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    Bookmark::factory()->create(['article_id' => $article->id, "user_id" => auth()->id()]);
 
-    $response = $this->postJson("/api/v1/article/{$article->slug}/bookmark");
+    $response = $this->deleteJson("/api/v1/article/{$article->slug}/remove");
 
     $response->assertForbidden();
 });

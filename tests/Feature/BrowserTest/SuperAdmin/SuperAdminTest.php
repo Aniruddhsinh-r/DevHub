@@ -30,6 +30,18 @@ test('SuperAdmin can permanently delete user', function () {
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
 });
 
+test('Admin cannot see force delete action on user list', function () {
+    $user = User::factory()->create(['deleted_at' => '2026-07-09 12:25:56']);
+    $user->assignRole(UserRole::AUTHOR);
+    AdminLogin();
+
+    visit('/admin/users?filters[trashed][value]=0')
+        ->assertSee($user->name)
+        ->assertDontSee('Force delete');
+
+    $this->assertSoftDeleted('users', ['id' => $user->id]);
+});
+
 test('SuperAdmin can cancel permanently delete user request', function () {
     $user = User::factory()->create(['deleted_at' => '2026-07-09 12:25:56']);
     $user->assignRole(UserRole::AUTHOR);

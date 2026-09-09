@@ -29,10 +29,6 @@ test('user can register via the api', function () {
         ->assertJsonStructure(['user', 'token'])
         ->assertJsonPath('user.email', 'johndoe@example.com');
 
-    $this->assertDatabaseHas('users', [
-        'email' => 'johndoe@example.com',
-    ]);
-
     $user = User::where('email', 'johndoe@example.com')->first();
 
     expect($user->hasRole(UserRole::AUTHOR))->toBeTrue();

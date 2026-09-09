@@ -93,4 +93,14 @@ class UserPolicy
 
         return $user->hasPermissionTo('user.forceDelete');
     }
+
+    public function restoreAny(User $user): bool
+    {
+        return $user->hasAnyRole([UserRole::ADMIN, UserRole::SUPERADMIN]);
+    }
+
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->hasRole(UserRole::SUPERADMIN);
+    }
 }

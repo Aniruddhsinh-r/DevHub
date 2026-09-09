@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Database\Factories\BookmarkFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Bookmark extends Model
 {
+    /** @use HasFactory<BookmarkFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'article_id',

@@ -163,3 +163,23 @@ test('a superadmin cannot update a trashed user', function () {
 
     expect($this->policy->update($superAdmin, $target))->toBeFalse();
 });
+
+test('admin and superadmin can restore any user', function () {
+    $admin = roleUser(UserRole::ADMIN);
+    $superAdmin = roleUser(UserRole::SUPERADMIN);
+    $author = roleUser(UserRole::AUTHOR);
+
+    expect($this->policy->restoreAny($admin))->toBeTrue();
+    expect($this->policy->restoreAny($superAdmin))->toBeTrue();
+    expect($this->policy->restoreAny($author))->toBeFalse();
+});
+
+test('only superadmin can force delete any user', function () {
+    $superAdmin = roleUser(UserRole::SUPERADMIN);
+    $admin = roleUser(UserRole::ADMIN);
+    $author = roleUser(UserRole::AUTHOR);
+
+    expect($this->policy->forceDeleteAny($superAdmin))->toBeTrue();
+    expect($this->policy->forceDeleteAny($admin))->toBeFalse();
+    expect($this->policy->forceDeleteAny($author))->toBeFalse();
+});
