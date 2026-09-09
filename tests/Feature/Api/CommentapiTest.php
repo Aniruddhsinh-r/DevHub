@@ -125,3 +125,54 @@ test('replying to a comment on non-existent article returns 404', function () {
 
     $response->assertNotFound();
 });
+
+test('author can delete their own comment', function () {
+    $user = apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create([
+        'article_id' => $article->id,
+        'user_id' => $user->id,
+        'body' => 'This is my comment'
+    ]);
+
+    $response = $this->deleteJson("/api/v1/comment/{$comment->id}/delete");
+
+    $response->assertNoContent();
+    $this->assertSoftDeleted('comments', ['id' => $comment->id]);
+});
+
+test("author cannot delete another author's comment", function () {
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create([
+        'article_id' => $article->id,
+        'body' => 'Someone else\'s comment'
+    ]);
+
+    apiActingAsAuthor(['article.comment']);
+    $response = $this->deleteJson("/api/v1/comment/{$comment->id}/delete");
+
+    $response->assertStatus(403)
+        ->assertJson(['message' => 'This action is unauthorized.']);
+
+    $this->assertDatabaseHas('comments', ['id' => $comment->id]);
+});
+
+test('deleting a comment with invalid id format returns 404', function () {
+    apiActingAsAuthor(['article.comment']);
+
+    $response = $this->deleteJson("/api/v1/comment/4/delete");
+    $response->assertStatus(404);
+});
+
+test('cannot delete a comment that was already deleted', function () {
+    $user = apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create([
+        'article_id' => $article->id,
+        'user_id' => $user->id,
+        'body' => 'To be deleted'
+    ]);
+
+    $this->deleteJson("/api/v1/comment/{$comment}/delete")
+        ->assertStatus(404);
+});

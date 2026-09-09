@@ -107,3 +107,19 @@ test('creating an article with existing title create unique slug', function () {
     $this->assertDatabaseHas('articles', ['title' => 'Duplicate Slug Title', 'slug' => 'duplicate-slug-title']);
     $this->assertDatabaseHas('articles', ['title' => 'Duplicate Slug Title', 'slug' => 'duplicate-slug-title-2']);
 });
+
+test('creating an article sets the default status to draft', function () {
+    UserLogin();
+    $category = Category::factory()->create();
+
+    $formData = [
+        'category_id' => $category->id,
+        'title' => 'Defaulst status draft',
+        'excerpt' => 'this excerpt is definitely long enough to pass validation.',
+        'body' => 'valid body content that is long enough for the rule to accept it easily.',
+    ];
+
+    Livewire::test(CreateArticle::class)->fillForm($formData)->call('create')->assertHasNoFormErrors();
+
+    $this->assertDatabaseHas('articles', ['title' => 'Defaulst status draft', 'status' => ArticleStatus::DRAFT]);
+});

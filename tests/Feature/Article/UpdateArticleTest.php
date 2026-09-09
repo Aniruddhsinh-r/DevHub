@@ -105,3 +105,20 @@ test('unpublishing an article removes its likes and bookmarks', function () {
     $this->assertDatabaseMissing('likes', ['article_id' => $article->id]);
     $this->assertDatabaseMissing('bookmarks', ['article_id' => $article->id]);
 });
+
+test('editarticle status to publishing sets its published_at', function () {
+    $user = UserLogin();
+
+    $article = Article::factory()->create([
+        'user_id' => $user->id,
+        'status' => ArticleStatus::DRAFT,
+        'published_at' => null,
+    ]);
+
+    Livewire::test(EditArticle::class, ['record' => $article->getRouteKey(),])
+        ->fillForm(['status' => ArticleStatus::PUBLISHED,])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($article->fresh()->published_at)->not->toBeNull();
+});

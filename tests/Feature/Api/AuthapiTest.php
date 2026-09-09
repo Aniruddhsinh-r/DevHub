@@ -32,6 +32,14 @@ test('user can register via the api', function () {
     $this->assertDatabaseHas('users', [
         'email' => 'johndoe@example.com',
     ]);
+
+    $user = User::where('email', 'johndoe@example.com')->first();
+
+    expect($user->hasRole(UserRole::AUTHOR))->toBeTrue();
+
+    $this->assertDatabaseHas('users', [
+        'email' => 'johndoe@example.com',
+    ]);
 });
 
 test('register fails when required fields are missing', function () {

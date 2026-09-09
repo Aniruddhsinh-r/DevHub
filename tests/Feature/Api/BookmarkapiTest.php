@@ -2,6 +2,7 @@
 
 use App\Enums\ArticleStatus;
 use App\Models\Article;
+use App\Models\Bookmark;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -136,4 +137,13 @@ test('prevents duplicate bookmarks at the database level (race condition)', func
     ]))->toThrow(QueryException::class);
 
     $this->assertDatabaseCount('bookmarks', 1);
+});
+
+test('user cannot bookmark if unauthorized', function () {
+    apiActingAsAuthor([]);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    $response = $this->postJson("/api/v1/article/{$article->slug}/bookmark");
+
+    $response->assertForbidden();
 });

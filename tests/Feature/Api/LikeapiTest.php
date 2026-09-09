@@ -2,6 +2,7 @@
 
 use App\Enums\ArticleStatus;
 use App\Models\Article;
+use App\Models\Like;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -121,4 +122,16 @@ test('prevents duplicate likes at the database level (race condition)', function
     ]))->toThrow(QueryException::class);
 
     $this->assertDatabaseCount('likes', 1);
+});
+
+test('user cannot remove like if unauthorized', function () {
+    apiActingAsAuthor([]);
+
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED,]);
+
+    Like::factory()->create(['user_id' => auth()->id(),'article_id' => $article->id,]);
+
+    $response = $this->deleteJson("/api/v1/article/{$article->slug}/dislike");
+
+    $response->assertForbidden();
 });

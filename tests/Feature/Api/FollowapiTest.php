@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\UserRole;
+use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -112,4 +113,16 @@ test('prevents duplicate follows at the database level (race condition)', functi
     ]))->toThrow(QueryException::class);
 
     $this->assertDatabaseCount('follows', 1);
+});
+
+test('user cannot unfollow if unauthorized', function () {
+    apiActingAsAuthor([]);
+
+    $target = User::factory()->create();
+
+    Follow::factory()->create(['follower_id' => auth()->id(),'followed_id' => $target->id,]);
+
+    $response = $this->deleteJson("/api/v1/user/{$target->uuid}/unfollow");
+
+    $response->assertForbidden();
 });
