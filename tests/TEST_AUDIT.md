@@ -16,7 +16,7 @@
 - Commented out the token generation in the invitation flow and checked for any related leaks; all tests still passed.
 - I broke some validation rules and the article status logic, and my tests caught those changes.
 - Created a BookmarkFactory, then checked the bookmark remove method and added a test case for it.
-
+- During the audit, two policy methods were temporarily removed for testing and later restored. No permanent application changes were made.
 ---
 
 ### Additional observation

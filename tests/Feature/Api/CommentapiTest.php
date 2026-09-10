@@ -132,7 +132,7 @@ test('author can delete their own comment', function () {
     $comment = Comment::factory()->create([
         'article_id' => $article->id,
         'user_id' => $user->id,
-        'body' => 'This is my comment'
+        'body' => 'This is my comment',
     ]);
 
     $response = $this->deleteJson("/api/v1/comment/{$comment->id}/delete");
@@ -145,7 +145,7 @@ test("author cannot delete another author's comment", function () {
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
     $comment = Comment::factory()->create([
         'article_id' => $article->id,
-        'body' => 'Someone else\'s comment'
+        'body' => 'Someone else\'s comment',
     ]);
 
     apiActingAsAuthor(['article.comment']);
@@ -160,7 +160,7 @@ test("author cannot delete another author's comment", function () {
 test('deleting a comment with invalid id format returns 404', function () {
     apiActingAsAuthor(['article.comment']);
 
-    $response = $this->deleteJson("/api/v1/comment/4/delete");
+    $response = $this->deleteJson('/api/v1/comment/4/delete');
     $response->assertStatus(404);
 });
 
@@ -170,7 +170,7 @@ test('cannot delete a comment that was already deleted', function () {
     $comment = Comment::factory()->create([
         'article_id' => $article->id,
         'user_id' => $user->id,
-        'body' => 'To be deleted'
+        'body' => 'To be deleted',
     ]);
 
     $this->deleteJson("/api/v1/comment/{$comment}/delete")

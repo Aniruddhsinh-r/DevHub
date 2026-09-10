@@ -127,9 +127,9 @@ test('prevents duplicate likes at the database level (race condition)', function
 test('user cannot remove like if unauthorized', function () {
     apiActingAsAuthor([]);
 
-    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED,]);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 
-    Like::factory()->create(['user_id' => auth()->id(),'article_id' => $article->id,]);
+    Like::factory()->create(['user_id' => auth()->id(), 'article_id' => $article->id]);
 
     $response = $this->deleteJson("/api/v1/article/{$article->slug}/dislike");
 

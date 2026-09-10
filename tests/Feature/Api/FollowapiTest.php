@@ -120,7 +120,7 @@ test('user cannot unfollow if unauthorized', function () {
 
     $target = User::factory()->create();
 
-    Follow::factory()->create(['follower_id' => auth()->id(),'followed_id' => $target->id,]);
+    Follow::factory()->create(['follower_id' => auth()->id(), 'followed_id' => $target->id]);
 
     $response = $this->deleteJson("/api/v1/user/{$target->uuid}/unfollow");
 

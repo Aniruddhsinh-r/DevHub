@@ -115,8 +115,8 @@ test('editarticle status to publishing sets its published_at', function () {
         'published_at' => null,
     ]);
 
-    Livewire::test(EditArticle::class, ['record' => $article->getRouteKey(),])
-        ->fillForm(['status' => ArticleStatus::PUBLISHED,])
+    Livewire::test(EditArticle::class, ['record' => $article->getRouteKey()])
+        ->fillForm(['status' => ArticleStatus::PUBLISHED])
         ->call('save')
         ->assertHasNoFormErrors();
 
