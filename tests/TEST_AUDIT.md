@@ -16,7 +16,7 @@
 - Commented out the token generation in the invitation flow and checked for any related leaks; all tests still passed.
 - I broke some validation rules and the article status logic, and my tests caught those changes.
 - Created a BookmarkFactory, then checked the bookmark remove method and added a test case for it.
-- During the audit, two policy methods were temporarily removed for testing and later restored. No permanent application changes were made.
+- During the audit, I deleted two policy methods I thought were unused. Nothing failed, which is how I learned no test covered them. But they control the bulk restore and force delete buttons on the admin Users page, so deleting them broke both buttons for every user, including the superadmin. I restored them and wrote the tests.
 ---
 
 ### Additional observation
