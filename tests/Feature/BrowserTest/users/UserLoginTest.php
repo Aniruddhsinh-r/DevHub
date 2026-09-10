@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 
 require_once __DIR__.'/../../Helpers/UserLogin.php';
-require_once __DIR__.'/../../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 

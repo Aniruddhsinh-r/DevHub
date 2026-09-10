@@ -7,7 +7,6 @@ use Filament\Actions\Testing\TestAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
-require_once __DIR__.'/../Helpers/AdminLogin.php';
 require_once __DIR__.'/../Helpers/UserLogin.php';
 
 uses(RefreshDatabase::class);

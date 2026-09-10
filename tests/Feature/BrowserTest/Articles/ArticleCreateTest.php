@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 require_once __DIR__.'/../../Helpers/UserLogin.php';
-require_once __DIR__.'/../../Helpers/AdminLogin.php';
 
 uses(RefreshDatabase::class);
 

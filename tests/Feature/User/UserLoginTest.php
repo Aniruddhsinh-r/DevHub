@@ -9,7 +9,6 @@ use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 
 require_once __DIR__.'/../Helpers/UserLogin.php';
-require_once __DIR__.'/../Helpers/AdminLogin.php';
 
 beforeEach(function () {
     Role::firstOrCreate(['name' => UserRole::AUTHOR, 'guard_name' => 'web']);
