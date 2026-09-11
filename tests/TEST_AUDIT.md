@@ -19,24 +19,15 @@
 - During the audit, I deleted two policy methods I thought were unused. Nothing failed, which is how I learned no test covered them. But they control the bulk restore and force delete buttons on the admin Users page, so deleting them broke both buttons for every user, including the superadmin. I restored them and wrote the tests.
 ---
 
-## Findings and Changes
+## Findings and Change
 
-# QA Coverage Report
+## QA Coverage Report
 
-## Part 1 — Empty Spaces
+### Empty Spaces
 
 | File / Method | Coverage | Decision | Why |
 |---|---:|---|---|
 | `DashboardStats.php` | 0% | Delete | The widget was not registered or used anywhere. It also had an incorrect Total Likes implementation using `Bookmark::count()`. |
-| `CreateArticle` page | 0% | Needs a test | Added a browser test to execute the Admin Create Article page. |
-| `MyArticles` page | 0% | Needs a test | Added a browser test for the author's My Articles page. |
-| `Profile` page | 0% | Needs a test | Added a browser test for the author's Profile page. |
-| `StatsOverview` widget | 0% | Needs a test | Added a test that visits the Admin dashboard and executes the widget. |
-| `LatestArticles` widget | 0% | Needs a test | Covered by visiting the Admin dashboard. |
-| `TopAuthors` widget | 0% | Needs a test | Covered by visiting the Admin dashboard. |
-| `LikesRelationManager` | 0% | Needs a test | Added a browser test in `tests/Feature/BrowserTest/Admin/AdminArticleTest.php`. |
-| `FollowersRelationManager` | 0% | Needs a test | Added browser coverage for the Followers tab. |
-| `FollowingRelationManager` | 0% | Needs a test | Added browser coverage for the Following tab. |
 | `Bookmark`, `Follow`, `Like`, `View` models | 0% | Fine to leave | Their functionality is already exercised through existing API/feature tests, even though the model files themselves show 0%. |
 
 ## Part 2 — Tests Added
@@ -54,6 +45,24 @@ Installed PCOV for PHP coverage:
 
 ```bash
 pecl install pcov
+
+## API Endpoints
+
+- Reviewed the API endpoints against the existing API test cases.
+- API controllers have test coverage, and no API controller was found with 0% coverage.
+- Existing API tests already cover the endpoint functionality, so no additional endpoint tests were required based on the coverage audit.
+
+## — Short Answers
+
+### 1. What surprised you most in the coverage report?
+
+- After enabling coverage, I found that some files were still not tested directly. I also found one unused/dead file and a bug in the homepage display.
+
+### 2. Name one thing that shows high coverage but is not really protected.
+
+- Admin and user both have FollowTest.php/ProfileUpdateTest.php but no test ever clicks into the Followers/Following tab.
+
+- The similar **Author CreateArticle** page was covered by `ArticleCreateTest.php`, but the Admin CreateArticle page uses a different route and had no test visiting it.
 
 ### Additional observation
 
