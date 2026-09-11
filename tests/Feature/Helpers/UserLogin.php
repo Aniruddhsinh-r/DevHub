@@ -18,6 +18,7 @@ if (! function_exists('UserLogin')) {
         'article.comment'])
     {
         $authorRole = Role::firstOrCreate(['name' => UserRole::AUTHOR]);
+        Permission::firstOrCreate(['name' => 'user.update']);
         foreach ($permissions as $permissionName) {
             $permission = Permission::firstOrCreate(['name' => $permissionName, 'guard_name' => 'web']);
             $authorRole->givePermissionTo($permission);

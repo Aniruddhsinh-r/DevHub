@@ -30,6 +30,14 @@ test('a guest cannot create an article', function () {
     $response->assertStatus(401);
 });
 
+test('admin can create an article via the admin create route', function () {
+    apiActingAsAdmin();
+
+    $response = $this->postJson('/api/v1/admin/article/create', validArticlePayload());
+
+    $response->assertCreated()->assertJson(['message' => 'Article created successfully.']);
+});
+
 test('user with permission can create an article', function () {
     apiActingAsAuthor(['article.create']);
 
@@ -149,6 +157,16 @@ test('deleting a non-existent article returns a 404', function () {
     $response = $this->deleteJson('/api/v1/article/does-not-exist/delete');
 
     $response->assertNotFound();
+});
+
+test('an admin can soft delete an article via the admin delete route', function () {
+    apiActingAsAdmin();
+    $article = Article::factory()->create();
+
+    $response = $this->deleteJson("/api/v1/admin/article/{$article->slug}/delete");
+
+    $response->assertNoContent();
+    $this->assertSoftDeleted('articles', ['id' => $article->id]);
 });
 
 // ----------------------------------------------------------------------
@@ -273,6 +291,15 @@ test('viewing a non-existent article returns a 404', function () {
     $response = $this->getJson('/api/v1/article/does-not-exist');
 
     $response->assertNotFound();
+});
+
+test('an admin can view an article via the admin show route', function () {
+    apiActingAsAdmin();
+    $article = Article::factory()->create();
+
+    $response = $this->getJson("/api/v1/admin/article/{$article->slug}");
+
+    $response->assertOk()->assertJsonPath('article.slug', $article->slug);
 });
 
 test('an author cannot view other draft articles', function () {

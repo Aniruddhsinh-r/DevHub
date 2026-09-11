@@ -54,3 +54,13 @@ test('login fails with an unauthorized role', function () {
         ->click('button[type="submit"][wire\\:target="authenticate"]')
         ->assertSee('These credentials do not match our records.');
 });
+
+test('authors directory lists other authors', function () {
+    UserLogin();
+
+    $otherAuthor = User::factory()->create(['name' => 'Visible Author Name']);
+    $otherAuthor->assignRole(UserRole::AUTHOR);
+
+    visit(route('filament.app.resources.users.index'))
+        ->assertSee('Visible Author Name');
+});

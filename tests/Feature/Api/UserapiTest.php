@@ -281,3 +281,25 @@ test('force deleting a user that is not soft-deleted is rejected', function () {
 
     $response->assertStatus(422);
 });
+
+test('a guest cannot view the admin profile endpoint', function () {
+    $response = $this->getJson('/api/v1/admin/profile');
+
+    $response->assertStatus(401);
+});
+
+test('an admin can view their own profile via the admin profile endpoint', function () {
+    apiActingAsAdmin();
+
+    $response = $this->getJson('/api/v1/admin/profile');
+
+    $response->assertOk()->assertJson(['message' => 'Profile fetched successfully.']);
+});
+
+test('an admin can update their own profile via the admin profile endpoint', function () {
+    apiActingAsAdmin();
+
+    $response = $this->putJson('/api/v1/admin/profile/update', ['name' => 'Updated Admin Name']);
+
+    $response->assertOk()->assertJsonPath('user.name', 'Updated Admin Name');
+});

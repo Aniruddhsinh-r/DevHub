@@ -40,3 +40,12 @@ test('Admin cant access follow button profile page', function () {
     visit(route('filament.app.resources.users.view', ['record' => $user]))
         ->assertSee('403');
 });
+
+test('my profile page always shows the logged in user, never another user via url tampering', function () {
+    $me = UserLogin();
+    $otherUser = User::factory()->create();
+
+    visit(route('filament.app.resources.users.profile'))
+        ->assertSee($me->name)
+        ->assertDontSee($otherUser->name);
+});

@@ -189,3 +189,14 @@ test('article update published to scheduled clears published_at and keeps durati
     expect($article->duration)
         ->not->toBeNull();
 });
+
+test('my articles page only shows the logged in author\'s own articles', function () {
+    $me = UserLogin();
+
+    $mine = Article::factory()->create(['user_id' => $me->id, 'title' => 'My Own Article']);
+    $someoneElses = Article::factory()->create(['title' => 'Someone Elses Article']);
+
+    visit('/articles/my-articles')
+        ->assertSee('My Own Article')
+        ->assertDontSee('Someone Elses Article');
+});

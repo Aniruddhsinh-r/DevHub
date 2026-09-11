@@ -240,6 +240,28 @@ test('logout only revokes the token used for that request, not the user\'s other
         ->assertOk();
 });
 
+test('a guest cannot logout via the admin logout route', function () {
+    $response = $this->postJson('/api/v1/admin/logout');
+
+    $response->assertStatus(401);
+});
+
+test('an admin can logout via the admin logout route and their token is revoked', function () {
+    $user = apiAdminForLogin('adminpass123');
+
+    $token = $this->postJson('/api/v1/admin/login', [
+        'email' => $user->email,
+        'password' => 'adminpass123',
+    ])->assertOk()->json('token');
+
+    $response = $this->withHeader('Authorization', "Bearer {$token}")
+        ->postJson('/api/v1/admin/logout');
+
+    $response->assertOk()->assertJson(['message' => 'Logged out successfully.']);
+
+    $this->assertDatabaseCount('personal_access_tokens', 0);
+});
+
 if (! function_exists('apiAuthorForLogin')) {
     function apiAuthorForLogin(string $password): User
     {

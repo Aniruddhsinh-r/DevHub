@@ -103,3 +103,24 @@ test('user cannot access his public profile to follow themselves', function () {
 
     $this->assertDatabaseMissing('follows', ['follower_id' => $user->id, 'followed_id' => $user->id]);
 });
+
+test('followers and following tabs render correctly on an author profile page', function () {
+    UserLogin();
+
+    $author = User::factory()->create(['name' => 'Profile Owner']);
+    $author->assignRole(UserRole::AUTHOR);
+
+    $follower = User::factory()->create(['name' => 'A Follower Person']);
+    $follower->assignRole(UserRole::AUTHOR);
+    $follower->following()->attach($author);
+
+    $followed = User::factory()->create(['name' => 'A Followed Person']);
+    $followed->assignRole(UserRole::AUTHOR);
+    $author->following()->attach($followed);
+
+    visit(route('filament.app.resources.users.view', ['record' => $author]))
+        ->click('Followers')
+        ->assertSee('A Follower Person')
+        ->click('Followings')
+        ->assertSee('A Followed Person');
+});

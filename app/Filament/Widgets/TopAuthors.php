@@ -3,8 +3,8 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Resources\Users\UserResource;
-use App\Models\Bookmark;
 use App\Models\Comment;
+use App\Models\Like;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -48,7 +48,7 @@ class TopAuthors extends StatsOverviewWidget
 
             Stat::make(
                 'Totle Likes',
-                Bookmark::count()
+                Like::count()
             ),
         ];
     }
