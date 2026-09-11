@@ -42,12 +42,12 @@ class TopAuthors extends StatsOverviewWidget
                 ),
 
             Stat::make(
-                'Totle Comments',
+                'Total Comments',
                 Comment::count()
             ),
 
             Stat::make(
-                'Totle Likes',
+                'Total Likes',
                 Like::count()
             ),
         ];

@@ -2,9 +2,11 @@
 
 use App\Enums\UserRole;
 use App\Models\Article;
+use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Like;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 
@@ -128,4 +130,33 @@ test('likes tab on admin article view shows who liked the article', function () 
     visit('/admin/articles/'.$article->slug)
         ->click('Likes')
         ->assertSee('Someone Who Liked It');
+});
+
+test('top authors widget shows correct top author, comment count and like count', function () {
+    AdminLogin();
+
+    $topByArticles = User::factory()->create(['name' => 'Winner By Articles']);
+    $topByComments = User::factory()->create(['name' => 'Winner By Comments']);
+    $topByLikes = User::factory()->create(['name' => 'Winner By Likes']);
+
+    Article::factory()->count(3)->create(['user_id' => $topByArticles->id]);
+    Article::factory()->create(['user_id' => $topByComments->id]);
+    Article::factory()->create(['user_id' => $topByLikes->id]);
+
+    $engagementArticle = Article::factory()->create();
+
+    Comment::factory()->create(['article_id' => $engagementArticle->id, 'user_id' => $topByArticles->id]);
+    Comment::factory()->count(6)->create(['article_id' => $engagementArticle->id, 'user_id' => $topByComments->id]);
+    Comment::factory()->create(['article_id' => $engagementArticle->id, 'user_id' => $topByLikes->id]);
+
+    Like::factory()->create(['article_id' => $engagementArticle->id, 'user_id' => $topByArticles->id]);
+
+    Bookmark::factory()->count(15)->create(['article_id' => $engagementArticle->id]);
+
+    visit('/admin')
+        ->assertSee('Winner By Articles')
+        ->assertDontSee('Totle Comments')
+        ->assertDontSee('Totle Likes')
+        ->assertSee('8')
+        ->assertSee('1');
 });

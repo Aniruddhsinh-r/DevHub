@@ -48,9 +48,9 @@ pecl install pcov
 
 ## API Endpoints
 
-- Reviewed the API endpoints against the existing API test cases.
-- API controllers have test coverage, and no API controller was found with 0% coverage.
-- Existing API tests already cover the endpoint functionality, so no additional endpoint tests were required based on the coverage audit.
+- Re-reviewed the previous API endpoints against the existing API test cases.
+- Added API tests for `ArticleApiTest`, `AuthApiTest`, and `UserApiTest`, including authentication handling.
+- Added the missing User API test to verify an issue that had already been fixed.
 
 ## — Short Answers
 
