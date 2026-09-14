@@ -63,7 +63,7 @@ class ArticleForm
                     ->schema([
                         Textarea::make('body')
                             ->required()
-                            ->rows(12)
+                            ->minLength(30)
                             ->maxLength(50000),
                     ]),
             ]);

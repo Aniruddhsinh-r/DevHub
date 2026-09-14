@@ -23,7 +23,7 @@ test('check article validation test', function () {
         ->fillForm([
             'title' => '',
             'category_id' => 999999,
-            'excerpt' => str_repeat('A', 256),
+            'excerpt' => "",
             'body' => '',
             'status' => 'draft',
             'duration' => null,
@@ -31,8 +31,46 @@ test('check article validation test', function () {
         ->call('create')
         ->assertHasFormErrors(['title' => 'required'])
         ->assertHasFormErrors(['category_id'])
-        ->assertHasFormErrors(['excerpt' => 'max'])
+        ->assertHasFormErrors(['excerpt' => 'required'])
         ->assertHasFormErrors(['body' => 'required']);
+});
+
+test('check article validation test one above maximum values', function () {
+    UserLogin();
+
+    Livewire::test(CreateArticle::class)
+        ->fillForm([
+            'title' =>  str_repeat('A', 51),
+            'category_id' => 999999,
+            'excerpt' => str_repeat('A', 256),
+            'body' =>  str_repeat('A', 50001),
+            'status' => 'draft',
+            'duration' => null,
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['title' => 'max'])
+        ->assertHasFormErrors(['category_id'])
+        ->assertHasFormErrors(['excerpt' => 'max'])
+        ->assertHasFormErrors(['body' => 'max']);
+});
+
+test('check article validation test one below minimum values', function () {
+    UserLogin();
+
+    Livewire::test(CreateArticle::class)
+        ->fillForm([
+            'title' =>  str_repeat('A', 5),
+            'category_id' => 999999,
+            'excerpt' => str_repeat('A', 19),
+            'body' =>  str_repeat('A', 29),
+            'status' => 'draft',
+            'duration' => null,
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['title' => 'min'])
+        ->assertHasFormErrors(['category_id'])
+        ->assertHasFormErrors(['excerpt' => 'min'])
+        ->assertHasFormErrors(['body' => 'min']);
 });
 
 test('registration fails with a short password', function () {

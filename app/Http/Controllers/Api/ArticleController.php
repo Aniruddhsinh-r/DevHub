@@ -23,7 +23,7 @@ class ArticleController extends Controller
 
         $values = $request->validate([
             'title' => ['required', 'string', 'min:6', 'max:50'],
-            'excerpt' => ['required', 'string', 'min:10', 'max:255'],
+            'excerpt' => ['required', 'string', 'min:20', 'max:255'],
             'body' => ['required', 'string', 'min:30', 'max:50000'],
             'category_id' => ['required', 'exists:categories,id'],
             'status' => ['required', Rule::enum(ArticleStatus::class)],
@@ -82,7 +82,7 @@ class ArticleController extends Controller
 
         $values = $request->validate([
             'title' => ['required', 'string', 'min:6', 'max:50'],
-            'excerpt' => ['required', 'string', 'min:10', 'max:255'],
+            'excerpt' => ['required', 'string', 'min:20', 'max:255'],
             'body' => ['required', 'string', 'min:30', 'max:50000'],
             'category_id' => ['required', 'exists:categories,id'],
             'status' => ['required', Rule::enum(ArticleStatus::class)],

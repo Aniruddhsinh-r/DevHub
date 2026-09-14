@@ -45,6 +45,7 @@ Installed PCOV for PHP coverage:
 
 ```bash
 pecl install pcov
+```
 
 ## API Endpoints
 
@@ -63,6 +64,16 @@ pecl install pcov
 - Admin and user both have FollowTest.php/ProfileUpdateTest.php but no test ever clicks into the Followers/Following tab.
 
 - The similar **Author CreateArticle** page was covered by `ArticleCreateTest.php`, but the Admin CreateArticle page uses a different route and had no test visiting it.
+---
+
+## assertions that match too much
+
+- Added a new test to catch the dashboard bug and removed the old test.
+- Run browser test cases more than 20 times after clearing optimize, routes, cache, views, and config. nothing failed, but `Admin fetch Article details` failes once after each clear, then passed on every subsequent run. I investigated and tried multiple changes but could not fix it, so it may be related to a cold-start issue.
+- Added `Model::preventLazyLoading()` for testing and confirmed all tests pass.
+- Checked Article and Comment validation in Laravel and API. Found two bug Comment max in laravel **500** and in api **1000** and Article set excerpt min to **20** in api which is missing.
+- **Test folder:** Fixed the duplicate `Admin`/`admin` folder issue. Now only `tests/Feature/Admin/` is used.
+---
 
 ### Additional observation
 

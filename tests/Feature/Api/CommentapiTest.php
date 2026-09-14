@@ -54,7 +54,7 @@ test('commenting on a schedule article is forbidden', function () {
     $response->assertForbidden();
 });
 
-test('commenting requires a non-empty body', function () {
+test('check comment validation test One below minimum and empty.', function () {
     apiActingAsAuthor(['article.comment']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 
@@ -69,6 +69,34 @@ test('commenting on a non-existent article returns a 404', function () {
     $response = $this->postJson('/api/v1/article/does-not-exist/comment', ['body' => 'Nice article!']);
 
     $response->assertNotFound();
+});
+
+test('check comment validation test One below Maximum.', function () {
+    apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    $this->postJson("/api/v1/article/{$article->slug}/comment", ['body' => str_repeat('A', 499)])->assertCreated();
+});
+
+test('check comment validation test maximum allowed.', function () {
+    apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    $this->postJson("/api/v1/article/{$article->slug}/comment", ['body' => str_repeat('A', 500)])->assertCreated();
+});
+
+test('check comment validation test minimum allowed.', function () {
+    apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    $this->postJson("/api/v1/article/{$article->slug}/comment", ['body' => 'A'])->assertCreated();
+});
+
+test('check comment validation test One above maximum.', function () {
+    apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    $this->postJson("/api/v1/article/{$article->slug}/comment",['body' => str_repeat('A', 1001)])->assertJsonValidationErrors("body");
 });
 
 // ----------------------------------------------------------------------

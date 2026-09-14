@@ -23,7 +23,7 @@ class CommentController extends Controller
         Gate::authorize('comment', $article);
 
         $values = $request->validate([
-            'body' => ['required', 'string', 'min:1', 'max:1000'],
+            'body' => ['required', 'string', 'min:1', 'max:500'],
         ]);
 
         $comment = $article->comments()->create([

@@ -60,6 +60,42 @@ test('author can post comment on published article', function () {
     Notification::assertSentTo($article->user, CommentNotification::class);
 });
 
+test('check comment validation test One below Maximum.', function () {
+    $user = UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
+        ->callAction(
+            TestAction::make('postComment')->schemaComponent(''),
+            data: ['body' => str_repeat('A', 499)],
+        )
+        ->assertHasNoActionErrors();
+});
+
+test('check comment validation test maximum allowed.', function () {
+    $user = UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
+        ->callAction(
+            TestAction::make('postComment')->schemaComponent(''),
+            data: ['body' => str_repeat('A', 500)],
+        )
+        ->assertHasNoActionErrors();
+});
+
+test('check comment validation test minimum allowed.', function () {
+    $user = UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+
+    Livewire::test(ViewArticle::class, ['record' => $article->getRouteKey()])
+        ->callAction(
+            TestAction::make('postComment')->schemaComponent(''),
+            data: ['body' => 'A'],
+        )
+        ->assertHasNoActionErrors();
+});
+
 test('author is not notified when commenting on their own article', function () {
     Notification::fake();
 

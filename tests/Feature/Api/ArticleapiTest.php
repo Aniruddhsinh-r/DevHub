@@ -30,6 +30,23 @@ test('a guest cannot create an article', function () {
     $response->assertStatus(401);
 });
 
+// test('check article validation test', function () {
+//     $article = ['title' => '', 
+//         'category_id' => 999999, 
+//         'excerpt' => "", 
+//         'body' => '', 
+//         'status' => 'draft', 
+//         'duration' => null];
+
+//     $this->postJson('/api/v1/article/create', $article)
+//         ->assertJsonValidationErrors([
+//             'title' => 'min',
+//             'category_id',
+//             'excerpt' => 'min',
+//             'body' => 'min',
+//         ]);
+// });
+
 test('admin can create an article via the admin create route', function () {
     apiActingAsAdmin();
 
@@ -57,6 +74,59 @@ test('article creation fails validation for missing fields', function () {
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['title', 'excerpt', 'body', 'category_id', 'status']);
+});
+
+test('check article validation test One below Maximum', function () {
+    apiActingAsAuthor(['article.create']);
+    
+    $article = ['title' => str_repeat('A', 49), 
+        'category_id' => Category::factory()->create()->id, 
+        'excerpt' => str_repeat('A', 254), 
+        'body' =>  str_repeat('A', 49999), 
+        'status' => 'draft', 
+        'duration' => null];
+
+    $this->postJson('/api/v1/article/create', $article)->assertCreated();
+}); 
+ 
+test('check article validation test One below minimum', function () {
+    apiActingAsAuthor(['article.create']);
+
+    $article = ['title' =>  str_repeat('A', 5), 
+        'category_id' => 999999, 
+        'excerpt' => str_repeat('A', 19), 
+        'body' =>  str_repeat('A', 29), 
+        'status' => 'draft', 
+        'duration' => null];
+       
+    $this->postJson('/api/v1/article/create', $article)
+        ->assertJsonValidationErrors(['title','category_id','excerpt','body']);
+});
+
+test('check article validation test Maximum allowed', function () {
+    apiActingAsAuthor(['article.create']);
+    
+    $article = ['title' =>  str_repeat('A', 50),
+        'category_id' => Category::factory()->create()->id,
+        'excerpt' => str_repeat('A', 255),
+        'body' =>  str_repeat('A', 50000),
+        'status' => 'draft',
+        'duration' => null];
+
+    $this->postJson('/api/v1/article/create', $article)->assertCreated();
+}); 
+ 
+test('check article validation test Minimum allowed', function () {
+    apiActingAsAuthor(['article.create']);
+
+    $article = ['title' => "titles", 
+        'category_id' => Category::factory()->create()->id, 
+        'excerpt' => str_repeat('A', 20),
+        'body' => str_repeat('A', 30),
+        'status' => 'draft', 
+        'duration' => null];
+       
+    $this->postJson('/api/v1/article/create', $article)->assertCreated();
 });
 
 test('scheduled article creation fails when duration is missing', function () {
