@@ -20,32 +20,11 @@ function validArticlePayload(array $overrides = []): array
     ], $overrides);
 }
 
-// ----------------------------------------------------------------------
-// POST /api/v1/article/create
-// ----------------------------------------------------------------------
-
 test('a guest cannot create an article', function () {
     $response = $this->postJson('/api/v1/article/create', validArticlePayload());
 
     $response->assertStatus(401);
 });
-
-// test('check article validation test', function () {
-//     $article = ['title' => '', 
-//         'category_id' => 999999, 
-//         'excerpt' => "", 
-//         'body' => '', 
-//         'status' => 'draft', 
-//         'duration' => null];
-
-//     $this->postJson('/api/v1/article/create', $article)
-//         ->assertJsonValidationErrors([
-//             'title' => 'min',
-//             'category_id',
-//             'excerpt' => 'min',
-//             'body' => 'min',
-//         ]);
-// });
 
 test('admin can create an article via the admin create route', function () {
     apiActingAsAdmin();
