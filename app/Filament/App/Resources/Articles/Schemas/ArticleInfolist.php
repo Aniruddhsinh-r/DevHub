@@ -214,7 +214,7 @@ class ArticleInfolist
                         ->color('warning')
                         ->modalHeading(fn (Comment $record) => "Reply to {$record->user->name}")
                         ->form([
-                            Textarea::make('body')->label('Your reply')->required()->maxLength(5000)->rows(3),
+                            Textarea::make('body')->label('Your reply')->required()->maxLength(500)->rows(3),
                         ])
                         ->action(function (Comment $record, array $data, Component $livewire) use ($level): void {
                             $body = $data['body'];

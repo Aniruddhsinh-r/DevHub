@@ -58,21 +58,21 @@ class ArticleTable
                         ->limit(100)
                         ->searchable(),
                     Split::make([
-                            TextColumn::make('created_at')
+                        TextColumn::make('created_at')
                             ->since()
                             ->color('gray')
                             ->size('xs'),
-                            TextColumn::make('published_at')
+                        TextColumn::make('published_at')
                             ->date('M d, Y')
                             ->color('gray')
                             ->size('xs')
                             ->alignEnd(),
-                        ]),
+                    ]),
                 ])->space(3),
             ])
             ->recordUrl(fn ($record) => ArticleResource::getUrl('view', [
-                    'record' => $record,
-                ]))
+                'record' => $record,
+            ]))
             ->searchable()
             ->paginated([12, 24, 48]);
     }

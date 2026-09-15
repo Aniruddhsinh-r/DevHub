@@ -62,6 +62,79 @@ test('replying to a top level comment creates a level 2 reply', function () {
     ]);
 });
 
+test('check comment reply validation test One below Maximum.', function () {
+    UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create(['article_id' => $article->id, 'parent_id' => null]);
+    $reply = str_repeat('A', 499);
+
+    visit(route('filament.app.resources.articles.view', ['record' => $article]))
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="reply_1"]')
+        ->type('#mountedActionSchema0\\.body', $reply)
+        ->press('Submit')
+        ->assertSee('Reply posted');
+
+    $this->assertDatabaseHas('comments', [
+        'article_id' => $article->id,
+        'parent_id' => $comment->id,
+        'body' => $reply,
+    ]);
+});
+
+test('check comment reply validation test maximum allowed.', function () {
+    UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create(['article_id' => $article->id, 'parent_id' => null]);
+    $reply = str_repeat('A', 500);
+
+    visit(route('filament.app.resources.articles.view', ['record' => $article]))
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="reply_1"]')
+        ->type('#mountedActionSchema0\\.body', $reply)
+        ->press('Submit')
+        ->assertSee('Reply posted');
+
+    $this->assertDatabaseHas('comments', [
+        'article_id' => $article->id,
+        'parent_id' => $comment->id,
+        'body' => $reply,
+    ]);
+});
+
+test('check comment reply validation test one below minimum.', function () {
+    UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create(['article_id' => $article->id, 'parent_id' => null]);
+
+    visit(route('filament.app.resources.articles.view', ['record' => $article]))
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="reply_1"]')
+        ->type('#mountedActionSchema0\\.body', '')
+        ->press('Submit');
+
+    $this->assertDatabaseMissing('comments', [
+        'article_id' => $article->id,
+        'parent_id' => $comment->id,
+    ]);
+});
+
+test('check comment reply validation test One above Maximum.', function () {
+    UserLogin();
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create(['article_id' => $article->id, 'parent_id' => null]);
+    $reply = str_repeat('A', 501);
+
+    visit(route('filament.app.resources.articles.view', ['record' => $article]))
+        ->click('button[wire\\:click*="mountAction"][wire\\:click*="reply_1"]')
+        ->type('#mountedActionSchema0\\.body', $reply)
+        ->press('Submit')
+        ->assertSee('Reply posted');
+
+    $this->assertDatabaseMissing('comments', [
+        'article_id' => $article->id,
+        'parent_id' => $comment->id,
+        'body' => $reply,
+    ]);
+});
+
 test('replying to 3 comment on article', function () {
     UserLogin();
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);

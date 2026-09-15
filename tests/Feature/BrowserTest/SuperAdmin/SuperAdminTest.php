@@ -59,13 +59,13 @@ test('SuperAdmin can cancel permanently delete user request', function () {
 test('delete category', function () {
     SuperAdminLogin();
 
-    $category = Category::factory()->create();
+    $category = Category::factory()->create(['name' => 'confirm']);
 
     visit('/admin/categories')
-        ->assertSee($category->name)
+        ->assertSee('confirm')
         ->click('Delete')
         ->click('button[wire\:target="callMountedAction"]')
-        ->assertDontSee($category->name);
+        ->assertDontSee('confirm');
 
     $this->assertDatabaseMissing('categories', [
         'name' => $category->name,

@@ -24,9 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // if (app()->environment('testing')) {
-        //     Model::preventLazyLoading();
-        // }
+        if (app()->environment('testing')) {
+            Model::preventLazyLoading();
+        }
 
         Paginator::useTailwind();
 

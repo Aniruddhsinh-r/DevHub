@@ -96,7 +96,7 @@ test('check comment validation test One above maximum.', function () {
     apiActingAsAuthor(['article.comment']);
     $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
 
-    $this->postJson("/api/v1/article/{$article->slug}/comment",['body' => str_repeat('A', 1001)])->assertJsonValidationErrors("body");
+    $this->postJson("/api/v1/article/{$article->slug}/comment", ['body' => str_repeat('A', 1001)])->assertJsonValidationErrors('body');
 });
 
 // ----------------------------------------------------------------------
@@ -115,6 +115,48 @@ test('an authorized user can reply to a comment', function () {
 
     $response->assertCreated()->assertJsonPath('comment.parent_id', $comment->id);
     $this->assertDatabaseHas('comments', ['parent_id' => $comment->id, 'body' => 'Thanks for reading!']);
+});
+
+test('check comment reply validation test below maximum allowed.', function () {
+    apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create(['article_id' => $article->id]);
+    $reply = str_repeat('A', 499);
+
+    $response = $this->postJson("/api/v1/article/{$article->slug}/comment/reply", [
+        'body' => $reply,
+        'parent_id' => $comment->id,
+    ]);
+
+    $response->assertCreated()->assertJsonPath('comment.parent_id', $comment->id);
+    $this->assertDatabaseHas('comments', ['parent_id' => $comment->id, 'body' => $reply]);
+});
+
+test('check comment reply validation test One above maximum.', function () {
+    apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create(['article_id' => $article->id]);
+    $reply = str_repeat('A', 501);
+
+    $response = $this->postJson("/api/v1/article/{$article->slug}/comment/reply", [
+        'body' => $reply,
+        'parent_id' => $comment->id,
+    ]);
+    $response->assertStatus(422)->assertJsonValidationErrors(['body']);
+});
+
+test('check comment reply validation test minimum allowed.', function () {
+    apiActingAsAuthor(['article.comment']);
+    $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+    $comment = Comment::factory()->create(['article_id' => $article->id]);
+
+    $response = $this->postJson("/api/v1/article/{$article->slug}/comment/reply", [
+        'body' => 'A',
+        'parent_id' => $comment->id,
+    ]);
+
+    $response->assertCreated()->assertJsonPath('comment.parent_id', $comment->id);
+    $this->assertDatabaseHas('comments', ['parent_id' => $comment->id, 'body' => 'A']);
 });
 
 test('replying fails when the parent comment does not belong to the article', function () {

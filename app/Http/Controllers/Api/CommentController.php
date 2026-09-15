@@ -47,7 +47,7 @@ class CommentController extends Controller
         Gate::authorize('comment', $article);
 
         $values = $request->validate([
-            'body' => ['required', 'string', 'min:1', 'max:1000'],
+            'body' => ['required', 'string', 'min:1', 'max:500'],
             'parent_id' => ['required', 'integer',
                 Rule::exists('comments', 'id')->where(
                     fn ($query) => $query->where('article_id', $article->id)

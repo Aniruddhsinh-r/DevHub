@@ -23,7 +23,7 @@ test('check article validation test', function () {
         ->fillForm([
             'title' => '',
             'category_id' => 999999,
-            'excerpt' => "",
+            'excerpt' => '',
             'body' => '',
             'status' => 'draft',
             'duration' => null,
@@ -40,10 +40,10 @@ test('check article validation test one above maximum values', function () {
 
     Livewire::test(CreateArticle::class)
         ->fillForm([
-            'title' =>  str_repeat('A', 51),
+            'title' => str_repeat('A', 51),
             'category_id' => 999999,
             'excerpt' => str_repeat('A', 256),
-            'body' =>  str_repeat('A', 50001),
+            'body' => str_repeat('A', 50001),
             'status' => 'draft',
             'duration' => null,
         ])
@@ -59,10 +59,10 @@ test('check article validation test one below minimum values', function () {
 
     Livewire::test(CreateArticle::class)
         ->fillForm([
-            'title' =>  str_repeat('A', 5),
+            'title' => str_repeat('A', 5),
             'category_id' => 999999,
             'excerpt' => str_repeat('A', 19),
-            'body' =>  str_repeat('A', 29),
+            'body' => str_repeat('A', 29),
             'status' => 'draft',
             'duration' => null,
         ])

@@ -70,9 +70,11 @@ pecl install pcov
 
 - Added a new test to catch the dashboard bug and removed the old test.
 - Run browser test cases more than 20 times after clearing optimize, routes, cache, views, and config. nothing failed, but `Admin fetch Article details` failes once after each clear, then passed on every subsequent run. I investigated and tried multiple changes but could not fix it, so it may be related to a cold-start issue.
-- Added `Model::preventLazyLoading()` for testing and confirmed all tests pass.
+- Added `Model::preventLazyLoading()` for testing and confirmed all tests pass also uncomment it.
 - Checked Article and Comment validation in Laravel and API. Found two bug Comment max in laravel **500** and in api **1000** and Article set excerpt min to **20** in api which is missing.
+- set a stable maximum value for replies in both Laravel and the API, and write tests for it check multiple time and it work.
 - **Test folder:** Fixed the duplicate `Admin`/`admin` folder issue. Now only `tests/Feature/Admin/` is used.
+- Remove BrowserTest/Admin/AdminArticleTest.php because those tests are already better handled in BrowserTest/AdminTest/AdminArticleTest.php.
 ---
 
 ### Additional observation
