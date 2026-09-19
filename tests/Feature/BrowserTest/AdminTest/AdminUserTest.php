@@ -19,26 +19,26 @@ beforeEach(function () {
 });
 
 test('Admin fetch user details', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['name' => 'Ashvin']);
     $user->assignRole(UserRole::AUTHOR);
     AdminLogin();
 
     visit('/admin/users')
-        ->assertSee($user->name);
+        ->assertPresent("Ashvin");
 });
 
 test('admin search and soft delete user', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['name' => 'nelson']);
     $user->assignRole(UserRole::AUTHOR);
     Article::factory()->create(['user_id' => $user->id]);
     Comment::factory()->create(['user_id' => $user->id]);
     AdminLogin();
 
     visit('/admin/users')
-        ->assertSee($user->name)
+        ->assertSee('nelson')
         ->click('Delete')
         ->click('button[wire\:target="callMountedAction"]')
-        ->assertDontSee($user->name);
+        ->assertNotPresent('nelson');
 
     $this->assertSoftDeleted('articles', ['user_id' => $user->id]);
     $this->assertDatabaseMissing('likes', ['user_id' => $user->id]);
@@ -113,6 +113,6 @@ test('admin does not see the create article button on a deleted user', function 
     AdminLogin();
 
     visit('/admin/users/'.$user->uuid)
-        ->click('Articles')
-        ->assertDontSee('button[wire\\\\:click*="mountAction"][wire\\\\:click*="create"]');
+        ->click('button[wire\:click*="activeRelationManager"][wire\:click*="0"]')
+        ->assertNotPresent('New Article');
 });

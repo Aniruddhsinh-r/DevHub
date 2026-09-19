@@ -32,7 +32,7 @@ test('comment does not appear on draft article', function () {
     $article = Article::factory()->create(['status' => ArticleStatus::DRAFT, 'user_id' => $user->id]);
 
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->assertDontSee('button[wire\\:click*="mountAction"][wire\\:click*="postComment"]');
+        ->assertNotPresent('button[wire\\:click*="mountAction"][wire\\:click*="postComment"]');
 });
 
 test('comment does not appear on schedule article', function () {
@@ -41,7 +41,7 @@ test('comment does not appear on schedule article', function () {
     $article = Article::factory()->create(['status' => ArticleStatus::SCHEDULED, 'user_id' => $user->id]);
 
     visit(route('filament.app.resources.articles.view', ['record' => $article]))
-        ->assertDontSee('button[wire\\:click*="mountAction"][wire\\:click*="postComment"]');
+        ->assertNotPresent('button[wire\\:click*="mountAction"][wire\\:click*="postComment"]');
 });
 
 test('replying to a top level comment creates a level 2 reply', function () {
