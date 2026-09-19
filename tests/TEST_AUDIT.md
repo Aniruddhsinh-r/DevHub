@@ -75,6 +75,9 @@ pecl install pcov
 - set a stable maximum value for replies in both Laravel and the API, and write tests for it check multiple time and it work.
 - **Test folder:** Fixed the duplicate `Admin`/`admin` folder issue. Now only `tests/Feature/Admin/` is used.
 - Remove BrowserTest/Admin/AdminArticleTest.php because those tests are already better handled in BrowserTest/AdminTest/AdminArticleTest.php.
+- Found duplicate REVERB_APP_KEY entries in .env, commented out the duplicate, and rebuilt the assets. The Pusher JavaScript error no longer appeared. I also verified the tests with BROADCAST_CONNECTION=null; they pass, so no further change to the Echo initialization was necessary.
+
+
 ---
 
 ### Additional observation

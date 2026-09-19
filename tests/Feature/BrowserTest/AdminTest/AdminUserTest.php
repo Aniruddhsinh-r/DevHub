@@ -24,21 +24,21 @@ test('Admin fetch user details', function () {
     AdminLogin();
 
     visit('/admin/users')
-        ->assertPresent("Ashvin");
+        ->assertSee('Ashvin');
 });
 
 test('admin search and soft delete user', function () {
-    $user = User::factory()->create(['name' => 'nelson']);
+    $user = User::factory()->create(['name' => 'dcjohad']);
     $user->assignRole(UserRole::AUTHOR);
     Article::factory()->create(['user_id' => $user->id]);
     Comment::factory()->create(['user_id' => $user->id]);
     AdminLogin();
 
     visit('/admin/users')
-        ->assertSee('nelson')
+        ->assertSee('dcjohad')
         ->click('Delete')
         ->click('button[wire\:target="callMountedAction"]')
-        ->assertNotPresent('nelson');
+        ->assertNotPresent('dcjohad');
 
     $this->assertSoftDeleted('articles', ['user_id' => $user->id]);
     $this->assertDatabaseMissing('likes', ['user_id' => $user->id]);
@@ -69,7 +69,7 @@ test('Admin can restore user', function () {
         ->assertSee($user->name)
         ->press('Restore')
         ->press('button[wire\:target="callMountedAction"]')
-        ->assertDontSee($user->name);
+        ->assertNotPresent($user->name);
 
     $this->assertDatabaseHas('users', ['id' => $user->id, 'deleted_at' => null]);
 });

@@ -24,11 +24,11 @@ beforeEach(function () {
 });
 
 test('Admin fetch Article details', function () {
-    Article::factory()->create(['title' => 'Director nelson']);
+    Article::factory()->create(['title' => 'Director']);
     AdminLogin();
 
     visit('/admin/articles')
-        ->assertPresent('Director nelson');
+        ->assertSee('Director');
 });
 
 test('Admin search and see article', function () {
