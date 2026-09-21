@@ -137,29 +137,29 @@ test('likes tab on admin article view shows who liked the article', function () 
 test('top authors widget returns correct stats', function () {
     AdminLogin();
 
-    $topAuthor = User::factory()->create(['name' => 'Top Test Author',]);
+    $topAuthor = User::factory()->create(['name' => 'Top Test Author']);
 
-    $otherAuthor = User::factory()->create(['name' => 'Other Test Author',]);
+    $otherAuthor = User::factory()->create(['name' => 'Other Test Author']);
 
     // Top author must be selected by article count.
-    Article::factory()->count(3)->create(['user_id' => $topAuthor->id,]);
+    Article::factory()->count(3)->create(['user_id' => $topAuthor->id]);
 
-    Article::factory()->create(['user_id' => $otherAuthor->id,]);
+    Article::factory()->create(['user_id' => $otherAuthor->id]);
 
     $article = Article::factory()->create();
 
     // Total comments = 8
-    Comment::factory()->count(8)->create(['article_id' => $article->id,]);
+    Comment::factory()->count(8)->create(['article_id' => $article->id]);
 
     // Total likes = 3
     $likeUsers = User::factory()->count(3)->create();
 
     foreach ($likeUsers as $user) {
-        Like::factory()->create(['article_id' => $article->id,'user_id' => $user->id,]);
+        Like::factory()->create(['article_id' => $article->id, 'user_id' => $user->id]);
     }
 
     // Deliberately different from likes.
-    Bookmark::factory()->count(20)->create(['article_id' => $article->id,]);
+    Bookmark::factory()->count(20)->create(['article_id' => $article->id]);
 
     $method = new ReflectionMethod(TopAuthors::class, 'getStats');
     $method->setAccessible(true);

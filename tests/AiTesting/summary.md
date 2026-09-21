@@ -2,8 +2,8 @@
 
 **Overall:** ❌ FAIL
 
-**Total:** 16
-**Passed:** 12
+**Total:** 20
+**Passed:** 16
 **Failed:** 4
 
 | Test | Result | Exit Code |
@@ -24,3 +24,7 @@
 | Comments metamorphic | ✅ PASS | 0 |
 | Comments normal | ✅ PASS | 0 |
 | Comments fuzz | ✅ PASS | 0 |
+| HTML comparison | ✅ PASS | 0 |
+| Hypothesis tests | ✅ PASS | 0 |
+| Adversarial search | ✅ PASS | 0 |
+| Adversarial tests | ✅ PASS | 0 |
