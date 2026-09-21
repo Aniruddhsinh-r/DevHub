@@ -2,6 +2,7 @@
 
 use App\Enums\UserRole;
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,14 +31,16 @@ test('Admin fetch user details', function () {
 test('admin search and soft delete user', function () {
     $user = User::factory()->create(['name' => 'dcjohad']);
     $user->assignRole(UserRole::AUTHOR);
-    Article::factory()->create(['user_id' => $user->id]);
-    Comment::factory()->create(['user_id' => $user->id]);
+    $category = Category::factory()->create(['user_id' => $user->id]);
+    $article = Article::factory()->create(['user_id' => $user->id, 'category_id' => $category->id]);
+    Comment::factory()->create(['user_id' => $user->id, 'article_id' => $article->id]);
     AdminLogin();
 
     visit('/admin/users')
         ->assertSee('dcjohad')
         ->click('Delete')
         ->click('button[wire\:target="callMountedAction"]')
+        ->click('user deleted.')
         ->assertNotPresent('dcjohad');
 
     $this->assertSoftDeleted('articles', ['user_id' => $user->id]);
@@ -67,8 +70,8 @@ test('Admin can restore user', function () {
 
     visit('/admin/users?filters[trashed][value]=0')
         ->assertSee($user->name)
-        ->press('Restore')
-        ->press('button[wire\:target="callMountedAction"]')
+        ->click('Restore')
+        ->click('button[wire\:target="callMountedAction"]')
         ->assertNotPresent($user->name);
 
     $this->assertDatabaseHas('users', ['id' => $user->id, 'deleted_at' => null]);
@@ -114,5 +117,6 @@ test('admin does not see the create article button on a deleted user', function 
 
     visit('/admin/users/'.$user->uuid)
         ->click('button[wire\:click*="activeRelationManager"][wire\:click*="0"]')
+        ->click('No article has been posted by this user yet.')
         ->assertNotPresent('New Article');
 });

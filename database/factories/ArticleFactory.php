@@ -25,7 +25,7 @@ class ArticleFactory extends Factory
         $status = ArticleStatus::PUBLISHED;
 
         return [
-            'user_id' => User::factory()->author()->create(),
+            'user_id' =>User::factory()->author(),
             'category_id' => Category::factory(),
             'title' => ($title),
             'slug' => Str::slug($title),

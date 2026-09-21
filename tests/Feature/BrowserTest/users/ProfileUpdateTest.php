@@ -16,7 +16,7 @@ test('it updates user detail', function () {
         ->fill('#form\\.email', 'rathodani@gmail.com')
         ->fill('#form\\.password', 'rathod1290')
         ->fill('#form\\.password_confirmation', 'rathod1290')
-        ->press('Save changes')
+        ->click('Save changes')
         ->assertSee('Saved');
 
     $this->assertDatabaseHas('users', [

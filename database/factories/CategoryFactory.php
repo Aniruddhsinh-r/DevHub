@@ -23,7 +23,7 @@ class CategoryFactory extends Factory
 
         return [
             'name' => ucfirst($name),
-            'user_id' => User::factory()->author()->create(),
+            'user_id' => User::factory()->author(),
             'slug' => Str::slug($name),
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 /*
@@ -13,6 +13,10 @@ use Tests\TestCase;
 | need to change it using the "pest()" function to bind different classes or traits.
 |
 */
+
+beforeEach(function () {
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
+});
 
 pest()->extend(TestCase::class)
  // ->use(RefreshDatabase::class)

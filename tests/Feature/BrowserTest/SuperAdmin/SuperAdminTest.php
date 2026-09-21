@@ -26,6 +26,7 @@ test('SuperAdmin can permanently delete user', function () {
         ->assertSee($user->name)
         ->click('button[wire\:click*="forceDelete"]')
         ->click('button[wire\:target="callMountedAction"]')
+        ->click('Deleted')
         ->assertNotPresent($user->name);
 
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
@@ -65,6 +66,7 @@ test('delete category', function () {
         ->assertSee("confirm")
         ->click('Delete')
         ->click('button[wire\:target="callMountedAction"]')
+        ->click('Category deleted successfully.')
         ->assertNotPresent("confirm");
 
     $this->assertDatabaseMissing('categories', [

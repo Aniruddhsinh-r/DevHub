@@ -75,8 +75,9 @@ pecl install pcov
 - set a stable maximum value for replies in both Laravel and the API, and write tests for it check multiple time and it work.
 - **Test folder:** Fixed the duplicate `Admin`/`admin` folder issue. Now only `tests/Feature/Admin/` is used.
 - Remove BrowserTest/Admin/AdminArticleTest.php because those tests are already better handled in BrowserTest/AdminTest/AdminArticleTest.php.
-- Found duplicate REVERB_APP_KEY entries in .env, commented out the duplicate, and rebuilt the assets. The Pusher JavaScript error no longer appeared. I also verified the tests with BROADCAST_CONNECTION=null; they pass, so no further change to the Echo initialization was necessary.
+- Found duplicate REVERB_APP_KEY entries in .env, commented out the duplicate, and rebuilt the assets. The Pusher JavaScript error no longer appeared. I also verified the tests with BROADCAST_CONNECTION=null; they pass, so no further change to the Echo initialization was necessary and add env check if (import.meta.env.VITE_REVERB_APP_KEY).
 - Updated assertions like assertSee/assertDontSee and reviewed almost all possible test scenarios. Some tests still fails sometime intermittently under high CPU load, mainly while loading results, and these failures cannot be reliably fixed by changing the assertions.
+- Found and fixed some other race conditions after reviewing MakesElementAssertions.php. Used click() instead of assertSee() because assertSee() does not wait, and follows the same pattern as assertNotPresent(). click() is different because it is not a Pest-written assertion.
 
 ---
 
