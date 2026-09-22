@@ -1,215 +1,202 @@
 {
-  "timestamp": "2026-09-21T15:42:02.860710",
+  "timestamp": "2026-09-22T10:08:36.051422",
   "summary": {
     "total_generated": 2000,
-    "passed_all_rules": 69,
+    "passed_all_rules": 66,
     "top_candidates": 20,
-    "pass_rate": 3.5
+    "pass_rate": 3.3
   },
   "adversarial_excerpts": [
     {
-      "title": "PHP 8.4",
-      "excerpt": "something something everything very something something everything very and something something everything very so something something everything very",
-      "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow ...",
+      "title": "anything in title",
+      "excerpt": "very everything really very everything really very everything really very everything really so very everything really very everything really very everything really",
+      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
       "strategy": "repetitive",
-      "badness_score": 58.3,
+      "badness_score": 56.8,
       "scores": {
-        "repetition": 44.4,
-        "meaninglessness": 88.9,
+        "repetition": 31.8,
+        "meaninglessness": 95.5,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
       "title": "anything in title",
-      "excerpt": "thing really everything really very thing really everything really very thing really everything really very but thing really everything really very thing really everything really very so thing really everything really very or thing really everything",
+      "excerpt": "quite very everything and quite very everything but quite very everything but quite very everything quite very everything quite very everything so quite very everything quite very everything",
       "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
       "strategy": "repetitive",
-      "badness_score": 52.1,
+      "badness_score": 53.6,
       "scores": {
-        "repetition": 36.1,
-        "meaninglessness": 72.2,
+        "repetition": 28.6,
+        "meaninglessness": 85.7,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "anything in title",
+      "excerpt": "so everything stuff something everything stuff something or everything stuff something so everything stuff something",
+      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
+      "strategy": "repetitive",
+      "badness_score": 51.7,
+      "scores": {
+        "repetition": 26.7,
+        "meaninglessness": 80.0,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
       "title": "How to Bake Bread",
-      "excerpt": "thing absolutely everything everything thing absolutely everything everything thing absolutely everything everything thing absolutely everything everything so thing absolutely everything everything",
+      "excerpt": "or something absolutely something thing or something absolutely something thing something absolutely something thing but something absolutely something thing so something absolutely something thing",
       "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
       "strategy": "repetitive",
-      "badness_score": 48.8,
+      "badness_score": 45.8,
       "scores": {
-        "repetition": 47.6,
-        "meaninglessness": 47.6,
+        "repetition": 41.7,
+        "meaninglessness": 41.7,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
       "title": "anything in title",
-      "excerpt": "or quite everything totally stuff so quite everything totally stuff quite everything totally stuff quite everything totally stuff so quite everything totally stuff quite everything totally stuff or quite everything totally stuff quite everything",
+      "excerpt": "so really absolutely something or really absolutely something and really absolutely something really absolutely something really absolutely something",
       "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
       "strategy": "repetitive",
-      "badness_score": 47.8,
+      "badness_score": 45.8,
+      "scores": {
+        "repetition": 27.8,
+        "meaninglessness": 55.6,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "How to Bake Bread",
+      "excerpt": "basically stuff went on basically things happened basically stuff came up literally anything happened practically anything happened literally something happened",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "meaningless",
+      "badness_score": 45.0,
+      "scores": {
+        "repetition": 20.0,
+        "meaninglessness": 60.0,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "How to Bake Bread",
+      "excerpt": "actually something went on practically something happened actually stuff happened practically things came up literally something came up",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "meaningless",
+      "badness_score": 43.1,
+      "scores": {
+        "repetition": 16.7,
+        "meaninglessness": 55.6,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "anything in title",
+      "excerpt": "so something everything absolutely thing something everything absolutely thing something everything absolutely thing something everything absolutely thing",
+      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
+      "strategy": "repetitive",
+      "badness_score": 42.6,
       "scores": {
         "repetition": 23.5,
-        "meaninglessness": 67.6,
-        "padding": 0.0,
-        "off_topic": 100.0
-      }
-    },
-    {
-      "title": "PHP 8.4",
-      "excerpt": "very totally something so very totally something very totally something but very totally something very totally something very totally something",
-      "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow ...",
-      "strategy": "repetitive",
-      "badness_score": 47.5,
-      "scores": {
-        "repetition": 30.0,
-        "meaninglessness": 60.0,
-        "padding": 0.0,
-        "off_topic": 100.0
-      }
-    },
-    {
-      "title": "How to Bake Bread",
-      "excerpt": "very something nothing very something nothing very something nothing but very something nothing very something nothing so very something nothing",
-      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
-      "strategy": "repetitive",
-      "badness_score": 47.5,
-      "scores": {
-        "repetition": 30.0,
-        "meaninglessness": 60.0,
+        "meaninglessness": 47.1,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
       "title": "anything in title",
-      "excerpt": "everything extremely something so everything extremely something everything extremely something but everything extremely something everything extremely something everything extremely something or everything extremely something everything extremely",
+      "excerpt": "or very absolutely nothing nothing everything but very absolutely nothing nothing everything and very absolutely nothing nothing everything so very absolutely nothing nothing everything very absolutely nothing nothing everything",
       "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
       "strategy": "repetitive",
-      "badness_score": 47.1,
+      "badness_score": 42.2,
       "scores": {
-        "repetition": 30.8,
-        "meaninglessness": 57.7,
-        "padding": 0.0,
-        "off_topic": 100.0
-      }
-    },
-    {
-      "title": "PHP 8.4",
-      "excerpt": "nothing stuff nothing really so nothing stuff nothing really so nothing stuff nothing really and nothing stuff nothing really",
-      "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow ...",
-      "strategy": "repetitive",
-      "badness_score": 46.1,
-      "scores": {
-        "repetition": 42.1,
-        "meaninglessness": 42.1,
-        "padding": 0.0,
-        "off_topic": 100.0
-      }
-    },
-    {
-      "title": "How to Bake Bread",
-      "excerpt": "stuff nothing totally quite very so stuff nothing totally quite very stuff nothing totally quite very stuff nothing totally quite very",
-      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
-      "strategy": "repetitive",
-      "badness_score": 44.0,
-      "scores": {
-        "repetition": 19.0,
-        "meaninglessness": 57.1,
+        "repetition": 34.5,
+        "meaninglessness": 34.5,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
       "title": "anything in title",
-      "excerpt": "kind of anything happened actually things happened practically things happened literally something happened practically things happened basically things occurred",
-      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
-      "strategy": "meaningless",
-      "badness_score": 43.8,
-      "scores": {
-        "repetition": 26.3,
-        "meaninglessness": 57.9,
-        "padding": 0.0,
-        "off_topic": 90.9
-      }
-    },
-    {
-      "title": "anything in title",
-      "excerpt": "totally really nothing stuff very so totally really nothing stuff very but totally really nothing stuff very totally really nothing stuff very and totally really nothing stuff very totally really nothing stuff very totally really nothing stuff very",
+      "excerpt": "and very thing totally everything very thing totally everything so very thing totally everything very thing totally everything very thing totally everything very thing totally everything very thing totally everything and very thing totally everything",
       "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
       "strategy": "repetitive",
-      "badness_score": 43.4,
-      "scores": {
-        "repetition": 18.4,
-        "meaninglessness": 55.3,
-        "padding": 0.0,
-        "off_topic": 100.0
-      }
-    },
-    {
-      "title": "PHP 8.4",
-      "excerpt": "but extremely really everything very absolutely extremely really everything very absolutely but extremely really everything very absolutely so extremely really everything very absolutely",
-      "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow ...",
-      "strategy": "repetitive",
-      "badness_score": 42.4,
-      "scores": {
-        "repetition": 17.4,
-        "meaninglessness": 52.2,
-        "padding": 0.0,
-        "off_topic": 100.0
-      }
-    },
-    {
-      "title": "Modern Space Exploration",
-      "excerpt": "sort of anything happened basically anything happened actually anything took place practically anything happened kind of anything came up",
-      "body": "Humanity stands at the threshold of a new era in space exploration, driven by revolutionary technology and unprecedented commercial collaboration. For decades, space travel was the exclusive domain of...",
-      "strategy": "meaningless",
       "badness_score": 42.1,
       "scores": {
-        "repetition": 26.3,
-        "meaninglessness": 42.1,
-        "padding": 0.0,
-        "off_topic": 100.0
-      }
-    },
-    {
-      "title": "PHP 8.4",
-      "excerpt": "or quite extremely everything nothing quite extremely everything nothing or quite extremely everything nothing quite extremely everything nothing and quite extremely everything nothing so quite extremely everything nothing quite extremely everything",
-      "body": "PHP 8.4 is the modern update to the popular web programming language that makes writing backend code cleaner, faster, and more efficient. It introduces handy features like property hooks, which allow ...",
-      "strategy": "repetitive",
-      "badness_score": 41.9,
-      "scores": {
-        "repetition": 22.6,
-        "meaninglessness": 45.2,
+        "repetition": 22.9,
+        "meaninglessness": 45.7,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
       "title": "Emoji Only Excerpt",
-      "excerpt": "actually anything went on practically something happened literally things came up practically something came up",
+      "excerpt": "practically stuff took place basically stuff came up literally anything occurred basically something went on basically stuff went on",
       "body": "This tests an excerpt made up entirely of emoji with no real text content.",
       "strategy": "meaningless",
-      "badness_score": 41.7,
+      "badness_score": 42.1,
       "scores": {
-        "repetition": 13.3,
-        "meaninglessness": 53.3,
+        "repetition": 15.8,
+        "meaninglessness": 52.6,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
       "title": "How to Bake Bread",
-      "excerpt": "and really stuff extremely nothing so really stuff extremely nothing really stuff extremely nothing really stuff extremely nothing",
+      "excerpt": "kind of stuff happened kind of stuff happened practically stuff happened actually things took place literally stuff went on literally stuff came up",
       "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
-      "strategy": "repetitive",
-      "badness_score": 41.7,
+      "strategy": "meaningless",
+      "badness_score": 41.3,
       "scores": {
-        "repetition": 22.2,
+        "repetition": 21.7,
+        "meaninglessness": 43.5,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Modern Space Exploration",
+      "excerpt": "practically things came up actually anything occurred practically things occurred actually something occurred literally stuff came up sort of things went on",
+      "body": "Humanity stands at the threshold of a new era in space exploration, driven by revolutionary technology and unprecedented commercial collaboration. For decades, space travel was the exclusive domain of...",
+      "strategy": "meaningless",
+      "badness_score": 40.9,
+      "scores": {
+        "repetition": 13.6,
+        "meaninglessness": 50.0,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Emoji Only Excerpt",
+      "excerpt": "sort of things went on actually things came up basically things went on practically things came up sort of things came up basically things came up",
+      "body": "This tests an excerpt made up entirely of emoji with no real text content.",
+      "strategy": "meaningless",
+      "badness_score": 40.4,
+      "scores": {
+        "repetition": 23.1,
+        "meaninglessness": 38.5,
+        "padding": 0.0,
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "Modern Space Exploration",
+      "excerpt": "literally anything happened literally things came up literally anything occurred kind of something occurred kind of stuff happened",
+      "body": "Humanity stands at the threshold of a new era in space exploration, driven by revolutionary technology and unprecedented commercial collaboration. For decades, space travel was the exclusive domain of...",
+      "strategy": "meaningless",
+      "badness_score": 40.3,
+      "scores": {
+        "repetition": 16.7,
         "meaninglessness": 44.4,
         "padding": 0.0,
         "off_topic": 100.0
@@ -217,54 +204,67 @@
     },
     {
       "title": "How to Bake Bread",
-      "excerpt": "actually something came up basically things took place literally stuff came up sort of stuff occurred literally stuff went on",
+      "excerpt": "kind of something happened kind of anything came up practically something came up practically something went on practically something occurred",
       "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
       "strategy": "meaningless",
       "badness_score": 40.0,
       "scores": {
-        "repetition": 15.0,
-        "meaninglessness": 45.0,
+        "repetition": 20.0,
+        "meaninglessness": 40.0,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
-      "title": "Modern Space Exploration",
-      "excerpt": "basically anything occurred practically anything went on actually things came up sort of things occurred",
-      "body": "Humanity stands at the threshold of a new era in space exploration, driven by revolutionary technology and unprecedented commercial collaboration. For decades, space travel was the exclusive domain of...",
+      "title": "How to Bake Bread",
+      "excerpt": "actually things happened sort of stuff came up actually things took place",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
       "strategy": "meaningless",
-      "badness_score": 40.0,
+      "badness_score": 39.6,
       "scores": {
-        "repetition": 13.3,
-        "meaninglessness": 46.7,
+        "repetition": 16.7,
+        "meaninglessness": 41.7,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
       "title": "Emoji Only Excerpt",
-      "excerpt": "actually things came up actually anything came up kind of stuff came up basically things went on",
+      "excerpt": "actually anything came up practically something happened kind of something went on",
       "body": "This tests an excerpt made up entirely of emoji with no real text content.",
       "strategy": "meaningless",
-      "badness_score": 39.7,
+      "badness_score": 39.6,
       "scores": {
-        "repetition": 17.6,
-        "meaninglessness": 41.2,
+        "repetition": 16.7,
+        "meaninglessness": 41.7,
         "padding": 0.0,
         "off_topic": 100.0
       }
     },
     {
-      "title": "anything in title",
-      "excerpt": "actually things went on practically anything occurred kind of anything happened practically things took place practically things happened",
-      "body": "and more efficient. It introduces handy features like property hooks, which allow developers to transform or validate data directly within class properties without writing repetitive getter and setter...",
-      "strategy": "meaningless",
-      "badness_score": 39.6,
+      "title": "How to Bake Bread",
+      "excerpt": "or nothing everything absolutely nothing everything absolutely nothing everything absolutely or nothing everything absolutely nothing everything absolutely so nothing everything absolutely",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "repetitive",
+      "badness_score": 39.3,
       "scores": {
-        "repetition": 16.7,
-        "meaninglessness": 50.0,
+        "repetition": 28.6,
+        "meaninglessness": 28.6,
         "padding": 0.0,
-        "off_topic": 91.7
+        "off_topic": 100.0
+      }
+    },
+    {
+      "title": "How to Bake Bread",
+      "excerpt": "practically things went on kind of something occurred basically things came up practically stuff took place",
+      "body": "To make soft, spongy bread, you need to create strong, elastic dough that traps air bubbles while staying tender. Start by mixing high-protein bread flour with warm milk, yeast, sugar, salt, and butte...",
+      "strategy": "meaningless",
+      "badness_score": 39.1,
+      "scores": {
+        "repetition": 12.5,
+        "meaninglessness": 43.8,
+        "padding": 0.0,
+        "off_topic": 100.0
       }
     }
   ]
