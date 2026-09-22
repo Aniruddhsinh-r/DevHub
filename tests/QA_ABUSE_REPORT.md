@@ -13,12 +13,12 @@
 | `POST /api/v1/article/{slug}/bookmark`              | Creates a bookmark relationship          | Low         | Existing application/database logic prevents unlimited duplicate bookmarks.                     |
 | `POST /api/v1/user/{uuid}/follow`                   | Creates a follow relationship            | Low         | Existing application/database logic prevents unlimited duplicate follow relationships.          |
 | `POST /api/v1/admin/category/create`                | Creates category records                 | Medium      | Repeated requests can create unnecessary category records.                                      |
-| `PUT /api/v1/admin/category/{category}/update`      | Updates category data                    | Medium      | It changes existing administrative data, so it is included in the category-management limit.    |
-| `DELETE /api/v1/admin/category/{category}/delete`   | Deletes categories                       | critical    | It is an administrative destructive action and is therefore limited.                            |
+| `PUT /api/v1/admin/category/{category}/update`      | Updates category data                    | Medium      | Only superadmins can update all categories, so it is left unlimited as it is considered safe.    |
+| `DELETE /api/v1/admin/category/{category}/delete`   | Deletes categories                       | Critical    | It is an administrative destructive action and is therefore limited.                            |
 | `POST /api/v1/admin/article/create`                 | Creates article records and content      | High        | Repeated requests can create many persistent records and stored content.                        |
 | `DELETE /api/v1/admin/article/{slug}/delete`        | Soft-deletes articles                    | High        | Admins can delete other users' content, so repeated use can have a significant impact.          |
 | `DELETE /api/v1/admin/article/{slug}/forcedelete`   | Permanently deletes articles             | High        | Permanent deletion is destructive and can permanently remove data.                              |
-| `DELETE /api/v1/admin/users/{uuid}/delete`          | Soft-deletes users                       | critical        | Deleting users can also affect their articles and other user-related data, so deletion needs protection.                 |
+| `DELETE /api/v1/admin/users/{uuid}/delete`          | Soft-deletes users                       | Critical        | Deleting users can also affect their articles and other user-related data, so deletion needs protection.                 |
 | `DELETE /api/v1/admin/users/{uuid}/forcedelete`     | Permanently deletes users                | High        | Permanent user deletion is a destructive administrative action.                                 |
 | `POST /api/v1/admin/invitation/send`                | Creates an invitation and sends an email | Critical    | Repeated requests can create invitation records and send large numbers of emails.               |
 | `POST /api/v1/admin/invitation/{invitation}/resend` | Sends another invitation email           | High        | Repeated resends can generate many outgoing emails.                                             |
@@ -32,12 +32,14 @@
 | Author article creation                           |          10 / 24 hours | Prevents an author from creating too many articles.                                                      |
 | Comments + replies                                | 50 / 24 hours combined | Prevents excessive comment/reply creation while allowing normal use.                                     |
 | Like + bookmark + follow                          | 100 / 24 hours         | Limits repeated relationship actions while still allowing normal user activity. |
-| Admin category create/update/delete  | 2 / 24 hours      | Category management normally does not need frequent repeated                            |
-| Admin article creation + user delete/force-delete |          10 / 24 hours | Limits heavy administrative changes and persistent data creation/deletion actions.                               |
+| Admin category create/delete                      | 4 / 24 hours      |  Reassigned category management because creating and deleting categories can cause significant changes to article-related data.  |
+| Admin user delete/force-delete |          10 / 24 hours | Limits heavy administrative changes and persistent data creation/deletion actions.                               |
+| Admin article creation | 5 / 24 hours | Admin article publishing is limited because it is not expected to be a high-priority administrative activity. |
 | Admin article delete + force-delete                 | 50 / 24 hours         | Admins can delete articles in bulk, so the limit reduces the impact of excessive destructive actions.                       |
 | Invitation send + resend                          | 10 / 24 hours combined | Limits the total number of invitation emails an admin can trigger, including both new sends and resends. |
-
+| Pagination | Maximum 100 records per page | Previously, `per_page` had no maximum limit. It is now capped at 100 to reduce database workload. |
 - Added test cases for each rate limit to verify that the request after the allowed limit returns 429 Too Many Requests.
+- Added a pagination test to verify that per_page is capped at 100.
 
 ## What I Deliberately Left Alone
 
@@ -50,13 +52,21 @@
 
 ### Pagination
 
-The endpoint uses:
+The original code was:
 
 ```php
-->paginate($request->get('per_page', 10000))
+->paginate($request->get('per_page', 12))
 ```
 
-Testing with `per_page=10000` in Postman returned **200 OK**. The API accepted the large page-size value, even though the current database has only around 30 articles.
+Testing with `per_page=10000` in Postman returned **200 OK**. The API accepted the large page-size value.
+
+The code was fixed to:
+
+```php
+->paginate(min($request->get('per_page', 12), 100));
+```
+
+This limits the maximum page size to 100 records.
 
 ### Avatar Upload
 

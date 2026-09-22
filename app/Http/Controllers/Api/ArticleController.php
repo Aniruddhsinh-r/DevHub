@@ -198,7 +198,7 @@ class ArticleController extends Controller
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate($request->get('per_page', 12));
+            ->paginate(min($request->get('per_page', 12), 100));
 
         return ArticleResource::collection($articles);
     }
@@ -217,7 +217,7 @@ class ArticleController extends Controller
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate($request->get('per_page', 12));
+            ->paginate(min($request->get('per_page', 12), 100));
 
         return ArticleResource::collection($articles);
     }

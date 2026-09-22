@@ -3,6 +3,7 @@
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Util\Test;
 use Spatie\Permission\Models\Role;
 
 require_once __DIR__.'/../Helpers/ApiHelpers.php';
@@ -309,19 +310,30 @@ test('admin cannot delete more than 10 users per day', function () {
     $users = User::factory()->count(11)->create();
 
     foreach ($users->take(10) as $user) {
-        $this->deleteJson("/api/v1/admin/users/{$user->uuid}/delete");
+        $this->deleteJson("/api/v1/admin/users/{$user->uuid}/delete")->assertStatus(204);
     }
 
     $this->deleteJson("/api/v1/admin/users/{$users[10]->uuid}/delete")->assertStatus(429);
 });
 
 test('admin cannot forcedelete more than 10 users per day', function () {
-    apiActingAsAdmin();
-    $users = User::factory()->count(11)->create();
+    apiActingAsAdmin(['user.forceDelete']);
+    $users = User::factory()->count(11)->create(['deleted_at' => now()]);
 
     foreach ($users->take(10) as $user) {
-        $this->deleteJson("/api/v1/admin/users/{$user->uuid}/forcedelete");
+        $this->deleteJson("/api/v1/admin/users/{$user->uuid}/forcedelete")->assertStatus(204);
     }
 
     $this->deleteJson("/api/v1/admin/users/{$users[10]->uuid}/forcedelete")->assertStatus(429);
+});
+
+test('limits user pagination to 100 records', function () {
+    apiActingAsAdmin();
+
+    User::factory()->count(105)->create();
+
+    $response = $this->getJson('/api/v1/admin/users?per_page=101');
+
+    $response->assertOk()
+        ->assertJsonPath('meta.per_page', 100);
 });

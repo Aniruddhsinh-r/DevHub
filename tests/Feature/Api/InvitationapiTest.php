@@ -205,8 +205,18 @@ test('admin cannot send more than 10 invitations per day', function () {
     apiActingAsAdmin();
 
     for ($i = 0; $i < 10; $i++) {
-        $this->postJson('/api/v1/admin/invitation/send', ['email' => "invite{$i}@example.com"]);
+        $this->postJson('/api/v1/admin/invitation/send', ['email' => "invite{$i}@example.com"])->assertStatus(201);
     }
 
     $this->postJson('/api/v1/admin/invitation/send', ['email' => 'onetoomany@example.com'])->assertStatus(429);
+});
+
+it('limits invitation pagination to 100 records', function () {
+    apiActingAsAdmin();
+    Invitation::factory()->count(105)->create();
+
+    $response = $this->getJson('/api/v1/admin/invitations?per_page=101');
+
+    $response->assertOk()
+        ->assertJsonPath('meta.per_page', 100);
 });

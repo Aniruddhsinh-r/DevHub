@@ -52,9 +52,13 @@ Route::prefix('v1')->group(function () {
 
         Route::middleware('admin')->group(function () {
             Route::get('/admin/categories', [CategoryController::class, 'index']);
-            Route::middleware('throttle:2,1440')->group(function () {
+            Route::middleware('throttle:4,1440')->group(function () {
                 Route::post('/admin/category/create', [CategoryController::class, 'create']);
+            });
+            Route::middleware('throttle:4,1440')->group(function () {
                 Route::put('/admin/category/{category}/update', [CategoryController::class, 'update']);
+            });
+            Route::middleware('throttle:4,1440')->group(function () {
                 Route::delete('/admin/category/{category}/delete', [CategoryController::class, 'delete']);
             });
             Route::get('/admin/category/{category}', [CategoryController::class, 'show']);
@@ -63,6 +67,8 @@ Route::prefix('v1')->group(function () {
             Route::middleware('throttle:10,1440')->group(function () {
                 Route::delete('/admin/users/{uuid}/delete', [UserController::class, 'delete']);
                 Route::delete('/admin/users/{uuid}/forcedelete', [UserController::class, 'forceDelete']);
+            });
+            Route::middleware('throttle:5,1440')->group(function () {
                 Route::post('/admin/article/create', [ArticleController::class, 'create']);
             });
             Route::middleware('throttle:50,1440')->group(function () {

@@ -161,34 +161,44 @@ test('viewing a non-existent category returns a 404', function () {
     $response->assertNotFound();
 });
 
-test('admin cannot create more than 2 categories per day', function () {
+test('admin cannot create more than 4 categories per day', function () {
     apiActingAsAdmin();
 
-    for ($i = 0; $i < 2; $i++) {
-        $this->postJson('/api/v1/admin/category/create', ['name' => 'Category '.$i]);
+    for ($i = 0; $i < 4; $i++) {
+        $this->postJson('/api/v1/admin/category/create', ['name' => 'Category '.$i])->assertStatus(201);
     }
 
     $this->postJson('/api/v1/admin/category/create', ['name' => 'One too many'])->assertStatus(429);
 });
 
-test('admin cannot update more than 2 categories per day', function () {
-    apiActingAsAdmin();
-    $categories = Category::factory()->count(3)->create();
+test('admin cannot update more than 4 categories per day', function () {
+    apiActingAsSuperAdmin();
+    $categories = Category::factory()->count(5)->create();
 
-    foreach ($categories->take(2) as $category) {
-        $this->putJson("/api/v1/admin/category/{$category->id}/update", ['name' => 'Updated']);
+    foreach ($categories->take(4) as $i => $category) {
+        $this->putJson("/api/v1/admin/category/{$category->id}/update", ['name' => 'Updated '.$i])->assertStatus(200);
     }
 
-    $this->putJson("/api/v1/admin/category/{$categories[2]->id}/update", ['name' => 'One too many'])->assertStatus(429);
+    $this->putJson("/api/v1/admin/category/{$categories[4]->id}/update", ['name' => 'One too many'])->assertStatus(429);
 });
 
-test('admin cannot delete more than 2 categories per day', function () {
-    apiActingAsAdmin();
-    $categories = Category::factory()->count(3)->create();
+test('admin cannot delete more than 4 categories per day', function () {
+    apiActingAsAdmin(['category.delete']);
+    $categories = Category::factory()->count(5)->create();
 
-    foreach ($categories->take(2) as $category) {
-        $this->deleteJson("/api/v1/admin/category/{$category->id}/delete");
+    foreach ($categories->take(4) as $category) {
+        $this->deleteJson("/api/v1/admin/category/{$category->id}/delete")->assertStatus(204);
     }
 
-    $this->deleteJson("/api/v1/admin/category/{$categories[2]->id}/delete")->assertStatus(429);
+    $this->deleteJson("/api/v1/admin/category/{$categories[4]->id}/delete")->assertStatus(429);
+});
+
+test('limits category pagination to 100 records', function () {
+    apiActingAsAdmin();
+    Category::factory()->count(105)->create();
+
+    $response = $this->getJson('/api/v1/admin/categories?per_page=101');
+
+    $response->assertOk()
+        ->assertJsonPath('meta.per_page', 100);
 });

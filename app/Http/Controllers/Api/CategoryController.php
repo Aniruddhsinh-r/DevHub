@@ -84,7 +84,7 @@ class CategoryController extends Controller
         $categories = Category::query()
             ->when($request->search, fn ($q) => $q->where('name', 'like', "%{$request->search}%"))
             ->orderBy('created_at', 'desc')
-            ->paginate($request->get('per_page', 10));
+            ->paginate(min($request->get('per_page', 12), 100));
 
         return CategoryResource::collection($categories);
     }
