@@ -78,7 +78,7 @@ class ArticleController extends Controller
             return response()->json(['message' => 'record not found.'], 404);
         }
 
-        // Gate::authorize('update', $article);
+        Gate::authorize('update', $article);
 
         $values = $request->validate([
             'title' => ['required', 'string', 'min:6', 'max:50'],
