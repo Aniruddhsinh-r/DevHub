@@ -262,6 +262,27 @@ test('an admin can logout via the admin logout route and their token is revoked'
     $this->assertDatabaseCount('personal_access_tokens', 0);
 });
 
+test('login is throttled to 5 attempts per 2 minutes', function () {
+    for ($i = 0; $i < 5; $i++) {
+        $this->postJson('/api/v1/login', ['email' => 'x@x.com', 'password' => 'wrong']);
+    }
+    $this->postJson('/api/v1/login', ['email' => 'x@x.com', 'password' => 'wrong'])->assertStatus(429);
+});
+
+test('register is throttled to 5 attempts per 2 minutes', function () {
+    for ($i = 0; $i < 5; $i++) {
+        $this->postJson('/api/v1/register', []);
+    }
+    $this->postJson('/api/v1/register', [])->assertStatus(429);
+});
+
+test('admin login is throttled to 5 attempts per 2 minutes', function () {
+    for ($i = 0; $i < 5; $i++) {
+        $this->postJson('/api/v1/admin/login', ['email' => 'x@x.com', 'password' => 'wrong']);
+    }
+    $this->postJson('/api/v1/admin/login', ['email' => 'x@x.com', 'password' => 'wrong'])->assertStatus(429);
+});
+
 if (! function_exists('apiAuthorForLogin')) {
     function apiAuthorForLogin(string $password): User
     {

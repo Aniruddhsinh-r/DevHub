@@ -200,3 +200,13 @@ test('a user without permission cannot delete an invitation', function () {
 
     $response->assertForbidden();
 });
+
+test('admin cannot send more than 10 invitations per day', function () {
+    apiActingAsAdmin();
+
+    for ($i = 0; $i < 10; $i++) {
+        $this->postJson('/api/v1/admin/invitation/send', ['email' => "invite{$i}@example.com"]);
+    }
+
+    $this->postJson('/api/v1/admin/invitation/send', ['email' => 'onetoomany@example.com'])->assertStatus(429);
+});

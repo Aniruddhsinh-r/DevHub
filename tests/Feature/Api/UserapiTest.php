@@ -303,3 +303,25 @@ test('an admin can update their own profile via the admin profile endpoint', fun
 
     $response->assertOk()->assertJsonPath('user.name', 'Updated Admin Name');
 });
+
+test('admin cannot delete more than 10 users per day', function () {
+    apiActingAsAdmin();
+    $users = User::factory()->count(11)->create();
+
+    foreach ($users->take(10) as $user) {
+        $this->deleteJson("/api/v1/admin/users/{$user->uuid}/delete");
+    }
+
+    $this->deleteJson("/api/v1/admin/users/{$users[10]->uuid}/delete")->assertStatus(429);
+});
+
+test('admin cannot forcedelete more than 10 users per day', function () {
+    apiActingAsAdmin();
+    $users = User::factory()->count(11)->create();
+
+    foreach ($users->take(10) as $user) {
+        $this->deleteJson("/api/v1/admin/users/{$user->uuid}/forcedelete");
+    }
+
+    $this->deleteJson("/api/v1/admin/users/{$users[10]->uuid}/forcedelete")->assertStatus(429);
+});

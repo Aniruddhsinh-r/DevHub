@@ -246,3 +246,14 @@ test('cannot delete a comment that was already deleted', function () {
     $this->deleteJson("/api/v1/comment/{$comment}/delete")
         ->assertStatus(404);
 });
+
+test('author cannot post more than 50 comments per day', function () {
+    apiActingAsAuthor();
+    $article = Article::factory()->create();
+
+    for ($i = 0; $i < 50; $i++) {
+        $this->postJson("/api/v1/article/{$article->slug}/comment", ['body' => 'test comment']);
+    }
+
+    $this->postJson("/api/v1/article/{$article->slug}/comment", ['body' => 'test comment'])->assertStatus(429);
+});

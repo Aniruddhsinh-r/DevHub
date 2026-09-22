@@ -368,3 +368,45 @@ test('an author can view their own draft articles', function () {
 
     $response->assertOk()->assertJsonPath('article.slug', $article->slug);
 });
+
+test('author cannot create more than 10 articles per day', function () {
+    apiActingAsAuthor();
+
+    for ($i = 0; $i < 10; $i++) {
+        $this->postJson('/api/v1/article/create', validArticlePayload())->assertCreated();
+    }
+
+    $this->postJson('/api/v1/article/create', validArticlePayload())->assertStatus(429);
+});
+
+test('admin cannot create more than 10 articles per day', function () {
+    apiActingAsAdmin();
+
+    for ($i = 0; $i < 10; $i++) {
+        $this->postJson('/api/v1/admin/article/create', validArticlePayload())->assertCreated();
+    }
+
+    $this->postJson('/api/v1/admin/article/create', validArticlePayload())->assertStatus(429);
+});
+
+test('admin cannot delete more than 50 articles per day', function () {
+    apiActingAsAdmin();
+    $articles = Article::factory()->count(51)->create();
+
+    foreach ($articles->take(50) as $article) {
+        $this->deleteJson("/api/v1/admin/article/{$article->slug}/delete");
+    }
+
+    $this->deleteJson("/api/v1/admin/article/{$articles[50]->slug}/delete")->assertStatus(429);
+});
+
+test('admin cannot forcedelete more than 50 articles per day', function () {
+    apiActingAsAdmin();
+    $articles = Article::factory()->count(51)->create();
+
+    foreach ($articles->take(50) as $article) {
+        $this->deleteJson("/api/v1/admin/article/{$article->slug}/forcedelete");
+    }
+
+    $this->deleteJson("/api/v1/admin/article/{$articles[50]->slug}/forcedelete")->assertStatus(429);
+});

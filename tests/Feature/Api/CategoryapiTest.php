@@ -160,3 +160,35 @@ test('viewing a non-existent category returns a 404', function () {
 
     $response->assertNotFound();
 });
+
+test('admin cannot create more than 2 categories per day', function () {
+    apiActingAsAdmin();
+
+    for ($i = 0; $i < 2; $i++) {
+        $this->postJson('/api/v1/admin/category/create', ['name' => 'Category '.$i]);
+    }
+
+    $this->postJson('/api/v1/admin/category/create', ['name' => 'One too many'])->assertStatus(429);
+});
+
+test('admin cannot update more than 2 categories per day', function () {
+    apiActingAsAdmin();
+    $categories = Category::factory()->count(3)->create();
+
+    foreach ($categories->take(2) as $category) {
+        $this->putJson("/api/v1/admin/category/{$category->id}/update", ['name' => 'Updated']);
+    }
+
+    $this->putJson("/api/v1/admin/category/{$categories[2]->id}/update", ['name' => 'One too many'])->assertStatus(429);
+});
+
+test('admin cannot delete more than 2 categories per day', function () {
+    apiActingAsAdmin();
+    $categories = Category::factory()->count(3)->create();
+
+    foreach ($categories->take(2) as $category) {
+        $this->deleteJson("/api/v1/admin/category/{$category->id}/delete");
+    }
+
+    $this->deleteJson("/api/v1/admin/category/{$categories[2]->id}/delete")->assertStatus(429);
+});

@@ -135,3 +135,14 @@ test('user cannot remove like if unauthorized', function () {
 
     $response->assertForbidden();
 });
+
+test('author cannot like more than 100 times per day', function () {
+    apiActingAsAuthor();
+    $article = Article::factory()->create();
+
+    for ($i = 0; $i < 100; $i++) {
+        $this->postJson("/api/v1/article/{$article->slug}/like");
+    }
+
+    $this->postJson("/api/v1/article/{$article->slug}/like")->assertStatus(429);
+});
