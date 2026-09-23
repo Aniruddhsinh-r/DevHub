@@ -329,11 +329,14 @@ test('admin cannot forcedelete more than 10 users per day', function () {
 
 test('limits user pagination to 100 records', function () {
     apiActingAsAdmin();
-
     User::factory()->count(105)->create();
 
-    $response = $this->getJson('/api/v1/admin/users?per_page=101');
-
-    $response->assertOk()
-        ->assertJsonPath('meta.per_page', 100);
+    $this->getJson('/api/v1/admin/users?per_page=1')->assertOk()->assertJsonPath('meta.per_page', 1);
+    $this->getJson('/api/v1/admin/users?per_page=93')->assertOk()->assertJsonPath('meta.per_page', 93);
+    $this->getJson('/api/v1/admin/users?per_page=100')->assertOk()->assertJsonPath('meta.per_page', 100);
+    $this->getJson('/api/v1/admin/users?per_page=101')->assertStatus(422)->assertJsonValidationErrors(['per_page']);
+    $this->getJson('/api/v1/admin/users?per_page=abc')->assertStatus(422)->assertJsonValidationErrors(['per_page']);
+    $this->getJson('/api/v1/admin/users?per_page=25abc')->assertStatus(422)->assertJsonValidationErrors(['per_page']);
+    $this->getJson('/api/v1/admin/users?per_page=-1')->assertStatus(422)->assertJsonValidationErrors(['per_page']);
+    $this->getJson('/api/v1/admin/users?per_page=0')->assertStatus(422)->assertJsonValidationErrors(['per_page']);
 });

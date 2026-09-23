@@ -184,6 +184,10 @@ class ArticleController extends Controller
             return response()->json(['message' => 'This action is unauthorized.'], 403);
         }
 
+        $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $articles = Article::query()
             ->with(['category', 'user'])
             ->withCount(['likes', 'comments', 'views'])
@@ -198,13 +202,17 @@ class ArticleController extends Controller
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(min($request->get('per_page', 12), 100));
+            ->paginate($request->get('per_page', 12));
 
         return ArticleResource::collection($articles);
     }
 
     public function index(Request $request)
     {
+        $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $articles = Article::query()
             ->where('status', 'published')
             ->with(['category', 'user'])
@@ -217,7 +225,7 @@ class ArticleController extends Controller
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(min($request->get('per_page', 12), 100));
+            ->paginate($request->get('per_page', 12));
 
         return ArticleResource::collection($articles);
     }

@@ -71,6 +71,10 @@ class InvitationController extends Controller
             return response()->json(['message' => 'Unauthorized action.'], 403);
         }
 
+        $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $invitation = Invitation::query()
             ->when($request->search, function ($q) use ($request) {
                 $search = $request->search;
@@ -82,7 +86,7 @@ class InvitationController extends Controller
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(min($request->get('per_page', 12), 100));
+            ->paginate($request->get('per_page', 12));
 
         return InvitationResource::collection($invitation);
     }

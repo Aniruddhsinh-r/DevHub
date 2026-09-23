@@ -81,10 +81,14 @@ class CategoryController extends Controller
     {
         Gate::authorize('viewAny', Category::class);
 
+        $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $categories = Category::query()
             ->when($request->search, fn ($q) => $q->where('name', 'like', "%{$request->search}%"))
             ->orderBy('created_at', 'desc')
-            ->paginate(min($request->get('per_page', 12), 100));
+            ->paginate($request->get('per_page', 12));
 
         return CategoryResource::collection($categories);
     }

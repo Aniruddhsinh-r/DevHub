@@ -93,6 +93,10 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $users = User::query()
             ->whereHas('roles', function ($query) {
                 $query->where('name', UserRole::AUTHOR->value);
@@ -106,13 +110,17 @@ class UserController extends Controller
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(min($request->get('per_page', 12), 100));
+            ->paginate($request->get('per_page', 12));
 
         return UserResource::collection($users);
     }
 
     public function adminRecords(Request $request)
     {
+        $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $users = User::query()
             ->whereDoesntHave('roles', function ($query) {
                 $query->where('name', UserRole::SUPERADMIN->value);
@@ -126,7 +134,7 @@ class UserController extends Controller
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(min($request->get('per_page', 12), 100));
+            ->paginate($request->get('per_page', 12));
 
         return UserResource::collection($users);
     }

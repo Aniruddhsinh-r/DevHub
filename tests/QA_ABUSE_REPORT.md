@@ -37,9 +37,9 @@
 | Admin article creation | 5 / 24 hours | Admin article publishing is limited because it is not expected to be a high-priority administrative activity. |
 | Admin article delete + force-delete                 | 50 / 24 hours         | Admins can delete articles in bulk, so the limit reduces the impact of excessive destructive actions.                       |
 | Invitation send + resend                          | 10 / 24 hours combined | Limits the total number of invitation emails an admin can trigger, including both new sends and resends. |
-| Pagination | Maximum 100 records per page | Previously, `per_page` had no maximum limit. It is now capped at 100 to reduce database workload. |
+| Pagination | 1–100 records per page | Improved `per_page` validation. It now accepts only integer values from 1 to 100. |
 - Added test cases for each rate limit to verify that the request after the allowed limit returns 429 Too Many Requests.
-- Added a pagination test to verify that per_page is capped at 100.
+- Added pagination tests to verify valid page sizes and reject invalid values such as values above 100, negative numbers, zero, and non-numeric input.
 
 ## What I Deliberately Left Alone
 
@@ -63,10 +63,14 @@ Testing with `per_page=10000` in Postman returned **200 OK**. The API accepted t
 The code was fixed to:
 
 ```php
-->paginate(min($request->get('per_page', 12), 100));
+$request->validate([
+    'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+]);
+
+->paginate($request->get('per_page', 12));
 ```
 
-This limits the maximum page size to 100 records.
+This limits the maximum page size to 100 records and rejects invalid values such as 0, negative numbers, and non-numeric input.
 
 ### Avatar Upload
 
